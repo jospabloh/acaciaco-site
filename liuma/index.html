@@ -3,301 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Liuma — ACACIA Consultoría</title>
-  <meta name="description" content="Liuma: comunicación escolar moderna para familias y escuelas." />
+  <title>Liuma · ACACIA</title>
+  <meta name="description" content="Liuma: plataforma de comunicación escolar." />
 
-  <style>
-    :root{
-      --bg0:#060B14;
-      --bg1:#0A1224;
-      --ink:#EAF2FF;
-      --muted:#A8B5CC;
-      --muted2:#6F7C90;
-
-      --blue0:#0A78B8;
-      --blue1:#2DA4E6;
-      --blue2:#69C7FF;
-
-      --shadow: 0 18px 60px rgba(0,0,0,.45);
-      --radius: 22px;
-    }
-
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color:var(--ink);
-      background:
-        radial-gradient(1200px 700px at 15% 10%, rgba(45,164,230,.30), transparent 60%),
-        radial-gradient(900px 520px at 85% 20%, rgba(10,120,184,.22), transparent 55%),
-        radial-gradient(800px 520px at 50% 90%, rgba(105,199,255,.12), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      overflow-x:hidden;
-    }
-
-    .grid{
-      position:fixed; inset:0;
-      background-image:
-        linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
-      background-size: 42px 42px;
-      mask-image: radial-gradient(420px 260px at 50% 16%, rgba(0,0,0,1), transparent 75%);
-      opacity:.35;
-      pointer-events:none;
-    }
-    .orb{
-      position:fixed;
-      width:540px; height:540px;
-      filter: blur(34px);
-      opacity:.38;
-      border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, rgba(105,199,255,.9), rgba(45,164,230,.25), transparent 70%);
-      left:-180px; top:140px;
-      pointer-events:none;
-    }
-    .orb2{
-      position:fixed;
-      width:520px; height:520px;
-      filter: blur(36px);
-      opacity:.26;
-      border-radius:50%;
-      background: radial-gradient(circle at 70% 30%, rgba(45,164,230,.85), rgba(10,120,184,.25), transparent 70%);
-      right:-200px; top:40px;
-      pointer-events:none;
-    }
-
-    .wrap{
-      min-height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:42px 18px;
-      position:relative;
-    }
-
-    .panel{
-      width:min(1040px, 100%);
-      display:grid;
-      grid-template-columns: 1.12fr .88fr;
-      gap:22px;
-      padding:28px;
-      border-radius: calc(var(--radius) + 8px);
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(255,255,255,.10);
-      backdrop-filter: blur(10px);
-    }
-
-    @media (max-width: 900px){
-      .panel{ grid-template-columns: 1fr; padding:22px; }
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      padding:8px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.08);
-      width:fit-content;
-    }
-    .brand img{
-      width:54px;
-      height:54px;
-      object-fit:contain;
-      border-radius: 12px;
-      background: rgba(255,255,255,.06);
-      padding:6px;
-      border: 1px solid rgba(255,255,255,.08);
-    }
-    .brand .txt{
-      display:flex;
-      flex-direction:column;
-      line-height:1.1;
-    }
-    .brand .txt b{
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      font-size: .92rem;
-    }
-    .brand .txt span{
-      color:var(--muted);
-      font-size:.82rem;
-      letter-spacing:.06em;
-    }
-
-    h1{
-      margin:18px 0 10px;
-      font-size: clamp(1.7rem, 3.3vw, 2.6rem);
-      letter-spacing:-.02em;
-    }
-    .lead{
-      margin:0;
-      color:var(--muted);
-      font-size: 1.04rem;
-      line-height:1.55;
-      max-width: 60ch;
-    }
-
-    .pillrow{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:18px;
-    }
-    .pill{
-      padding:10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(10, 18, 36, .45);
-      color: var(--muted);
-      font-size:.92rem;
-      letter-spacing:.02em;
-    }
-    .pill strong{ color:var(--ink); font-weight:600; }
-
-    .cta{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      margin-top:18px;
-      flex-wrap:wrap;
-    }
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:12px 16px;
-      border-radius: 14px;
-      text-decoration:none;
-      font-weight:700;
-      letter-spacing:.02em;
-      border: 1px solid rgba(255,255,255,.14);
-      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
-      user-select:none;
-    }
-    .btn-primary{
-      color: #07101f;
-      background: linear-gradient(135deg, var(--blue2), var(--blue1), var(--blue0));
-      box-shadow: 0 16px 40px rgba(45,164,230,.22);
-    }
-    .btn-primary:hover{
-      transform: translateY(-2px);
-      filter: brightness(1.03);
-      box-shadow: 0 22px 50px rgba(45,164,230,.30);
-    }
-    .btn-ghost{
-      color: var(--ink);
-      background: rgba(255,255,255,.06);
-    }
-    .btn-ghost:hover{ transform: translateY(-2px); }
-
-    .note{
-      margin-top:12px;
-      color: var(--muted2);
-      font-size:.92rem;
-    }
-
-    /* Tarjeta derecha */
-    .card{
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(10,18,36,.52), rgba(10,18,36,.34));
-      border: 1px solid rgba(255,255,255,.10);
-      padding:18px;
-      position:relative;
-      overflow:hidden;
-      min-height: 260px;
-    }
-    .card::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(380px 180px at 30% 15%, rgba(105,199,255,.20), transparent 60%),
-        radial-gradient(380px 180px at 80% 30%, rgba(45,164,230,.16), transparent 60%);
-      pointer-events:none;
-    }
-
-    .meter{
-      position:relative;
-      margin-top:0;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 14px;
-      padding:14px;
-    }
-    .meter h2{
-      margin:0 0 10px;
-      font-size:1rem;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-      color: var(--muted);
-    }
-
-    .mini{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-      margin-top:12px;
-      position:relative;
-    }
-    .mini .box{
-      padding:12px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.09);
-    }
-    .mini .box b{
-      display:block;
-      font-size: .92rem;
-      letter-spacing:.04em;
-    }
-    .mini .box span{
-      display:block;
-      margin-top:4px;
-      color: var(--muted);
-      font-size: .88rem;
-      line-height:1.35;
-    }
-
-    footer{
-      margin-top:14px;
-      color: var(--muted2);
-      font-size:.86rem;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    .dot{
-      width:6px; height:6px;
-      border-radius:50%;
-      background: rgba(105,199,255,.8);
-      box-shadow: 0 0 18px rgba(105,199,255,.6);
-    }
-
-    footer a{
-      color: var(--muted);
-      text-decoration:none;
-      font-weight:800;
-    }
-    footer a:hover{ text-decoration:underline; }
-  </style>
+  <link rel="stylesheet" href="/assets/css/site.css?v=20260128-4" />
 </head>
 
 <body>
-  <div class="grid" aria-hidden="true"></div>
-  <div class="orb" aria-hidden="true"></div>
-  <div class="orb2" aria-hidden="true"></div>
+  <div class="grid"></div>
+  <div class="orb"></div>
+  <div class="orb2"></div>
 
   <main class="wrap">
-    <section class="panel" role="region" aria-label="Landing Liuma">
+    <section class="panel">
 
-      <!-- Izquierda -->
+      <!-- IZQUIERDA -->
       <div>
         <div class="brand">
-          <img src="../assets/Logo_ACACIA_HighRes.jpg" alt="Logo de ACACIA Consultoría" />
+          <img src="../assets/Logo_ACACIA_HighRes.jpg" alt="ACACIA" />
           <div class="txt">
             <b>LIUMA</b>
             <span>Comunicación escolar</span>
@@ -305,38 +28,30 @@
         </div>
 
         <h1>Comunicación clara entre escuela y familia</h1>
+
         <p class="lead">
-          <strong>Liuma</strong> mejora la comunicación escolar con una experiencia moderna y simple:
-          avisos, seguimiento y coordinación en un solo lugar.
+          <strong>Liuma</strong> centraliza avisos, mensajes y seguimiento
+          escolar en una sola plataforma clara y moderna.
         </p>
 
-        <div class="pillrow" aria-label="Resumen">
-          <div class="pill"><strong>Uso:</strong> Escuelas</div>
-          <div class="pill"><strong>Enfoque:</strong> Comunicación</div>
-          <div class="pill"><strong>Tech:</strong> Experiencia + IA</div>
+        <div class="pillrow">
+          <div class="pill"><strong>Escuelas</strong></div>
+          <div class="pill"><strong>Familias</strong></div>
+          <div class="pill"><strong>Comunicación clara</strong></div>
         </div>
 
         <div class="cta">
-          <a class="btn btn-primary" href="https://liuma.acaciaco.com.mx" target="_blank" rel="noopener">
-            Abrir Liuma <span aria-hidden="true">→</span>
+          <a class="btn btn-primary" href="https://liuma.acaciaco.com.mx" target="_blank">
+            Abrir Liuma →
           </a>
-
-          <a class="btn btn-ghost" href="https://forms.gle/ogkgEMnv7W45Jrcy6" target="_blank" rel="noopener">
-            Contáctanos
+          <a class="btn btn-ghost" href="/apps">
+            Volver a apps
           </a>
-
-          <a class="btn btn-ghost" href="/underconstruction">
-            Inicio
-          </a>
-        </div>
-
-        <div class="note">
-          ¿Eres escuela y quieres implementarlo? Usa <strong>Contáctanos</strong> y te guiamos.
         </div>
 
         <footer>
-          <span class="dot" aria-hidden="true"></span>
-          <span>© <span id="year"></span> ACACIA Consultoría</span>
+          <span class="dot"></span>
+          <span>© <span id="year"></span> ACACIA</span>
           <span>•</span>
           <a href="/privacy">Privacy</a>
           <span>•</span>
@@ -344,23 +59,23 @@
         </footer>
       </div>
 
-      <!-- Derecha -->
-      <aside class="card" aria-label="Características">
+      <!-- DERECHA -->
+      <aside class="card">
         <div class="meter">
-          <h2>¿Qué incluye?</h2>
+          <h2>¿Qué ofrece?</h2>
 
           <div class="mini">
             <div class="box">
               <b>Avisos</b>
-              <span>Comunicados claros y centralizados.</span>
+              <span>Mensajes centralizados por grupo.</span>
             </div>
             <div class="box">
               <b>Seguimiento</b>
-              <span>Control de mensajes y respuestas.</span>
+              <span>Control de comunicación escuela–familia.</span>
             </div>
             <div class="box">
-              <b>Organización</b>
-              <span>Información por grupos, salones o eventos.</span>
+              <b>Orden</b>
+              <span>Información clara y accesible.</span>
             </div>
             <div class="box">
               <b>Soporte</b>
