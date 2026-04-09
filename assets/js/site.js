@@ -17,4 +17,16 @@
     const waMessage = document.body.dataset.waMessage || 'Hola, me interesa conocer más sobre sus apps.';
     waEl.href = `https://wa.me/${waNumber}?text=${encodeURIComponent(waMessage)}`;
   }
+
+  document.querySelectorAll('.testimonials-carousel').forEach((carousel) => {
+    const slides = carousel.querySelectorAll('.testimonial-slide');
+    if (!slides.length) return;
+    let idx = 0;
+    slides[0].classList.add('active');
+    setInterval(() => {
+      slides[idx].classList.remove('active');
+      idx = (idx + 1) % slides.length;
+      slides[idx].classList.add('active');
+    }, 4500);
+  });
 })();
