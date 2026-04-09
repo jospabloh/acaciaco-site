@@ -238,10 +238,175 @@
     });
   };
 
+
+
+  const setupSecretGame = () => {
+    const whisper = document.getElementById('brand-whisper');
+    const shell = document.querySelector('.secret-game');
+    const backdrop = document.getElementById('secret-game-backdrop');
+    const closeBtn = document.getElementById('secret-game-close');
+    const restartBtn = document.getElementById('secret-restart');
+    const scoreEl = document.getElementById('secret-score');
+    const bestEl = document.getElementById('secret-best');
+    const leftBtn = document.getElementById('secret-left');
+    const rightBtn = document.getElementById('secret-right');
+    const dropBtn = document.getElementById('secret-drop');
+    const canvas = document.getElementById('secret-game-canvas');
+    if (!whisper || !shell || !canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const cols = 10;
+    const rows = 15;
+    const cell = Math.floor(canvas.width / cols);
+    const board = Array.from({ length: rows }, () => Array(cols).fill(0));
+    const colors = ['#38bdf8', '#22d3ee', '#818cf8', '#34d399', '#f59e0b'];
+    let clickQueue = [];
+    let gameLoop = null;
+    let score = 0;
+    let best = Number(getStored('acacia_secret_best', '0')) || 0;
+    let piece = null;
+
+    const updateMeta = () => {
+      scoreEl.textContent = String(score);
+      bestEl.textContent = String(best);
+    };
+
+    const randomPiece = () => ({
+      x: Math.floor(cols / 2),
+      y: 0,
+      color: colors[Math.floor(Math.random() * colors.length)]
+    });
+
+    const drawCell = (x, y, fill) => {
+      ctx.fillStyle = fill;
+      ctx.fillRect(x * cell, y * cell, cell - 1, cell - 1);
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let y = 0; y < rows; y += 1) {
+        for (let x = 0; x < cols; x += 1) {
+          if (board[y][x]) drawCell(x, y, board[y][x]);
+          else {
+            ctx.fillStyle = 'rgba(148,163,184,.08)';
+            ctx.fillRect(x * cell, y * cell, cell - 1, cell - 1);
+          }
+        }
+      }
+      if (piece) drawCell(piece.x, piece.y, piece.color);
+    };
+
+    const collides = (x, y) => y >= rows || x < 0 || x >= cols || board[y]?.[x];
+
+    const clearRows = () => {
+      let cleared = 0;
+      for (let y = rows - 1; y >= 0; y -= 1) {
+        if (board[y].every(Boolean)) {
+          board.splice(y, 1);
+          board.unshift(Array(cols).fill(0));
+          cleared += 1;
+          y += 1;
+        }
+      }
+      if (cleared > 0) {
+        score += cleared * 15;
+        if (score > best) {
+          best = score;
+          setStored('acacia_secret_best', String(best));
+        }
+        updateMeta();
+      }
+    };
+
+    const reset = () => {
+      for (let y = 0; y < rows; y += 1) board[y].fill(0);
+      score = 0;
+      piece = randomPiece();
+      updateMeta();
+      draw();
+    };
+
+    const tick = () => {
+      if (!piece) return;
+      if (!collides(piece.x, piece.y + 1)) {
+        piece.y += 1;
+      } else {
+        if (piece.y === 0) {
+          reset();
+          return;
+        }
+        board[piece.y][piece.x] = piece.color;
+        clearRows();
+        piece = randomPiece();
+      }
+      draw();
+    };
+
+    const move = (delta) => {
+      if (!piece) return;
+      const nextX = piece.x + delta;
+      if (!collides(nextX, piece.y)) {
+        piece.x = nextX;
+        draw();
+      }
+    };
+
+    const hardDrop = () => {
+      if (!piece) return;
+      while (!collides(piece.x, piece.y + 1)) piece.y += 1;
+      tick();
+    };
+
+    const close = () => {
+      shell.classList.remove('is-open');
+      document.body.style.overflow = '';
+      if (gameLoop) window.clearInterval(gameLoop);
+      gameLoop = null;
+    };
+
+    const open = () => {
+      shell.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      reset();
+      if (gameLoop) window.clearInterval(gameLoop);
+      gameLoop = window.setInterval(tick, 430);
+    };
+
+    whisper.addEventListener('click', () => {
+      const now = Date.now();
+      clickQueue = clickQueue.filter((t) => now - t < 2100);
+      clickQueue.push(now);
+      if (clickQueue.length >= 5) {
+        clickQueue = [];
+        open();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (!shell.classList.contains('is-open')) return;
+      if (event.key === 'Escape') close();
+      if (event.key === 'ArrowLeft') move(-1);
+      if (event.key === 'ArrowRight') move(1);
+      if (event.key === 'ArrowDown') hardDrop();
+    });
+
+    leftBtn?.addEventListener('click', () => move(-1));
+    rightBtn?.addEventListener('click', () => move(1));
+    dropBtn?.addEventListener('click', hardDrop);
+    closeBtn?.addEventListener('click', close);
+    backdrop?.addEventListener('click', close);
+    restartBtn?.addEventListener('click', reset);
+
+    updateMeta();
+  };
+
   setupDateAndYear();
   applyWhatsAppLink();
   setupThemePicker();
   setupCurrencyPicker();
   setupLanguagePicker();
   setupTestimonials();
+  setupSecretGame();
 })();
