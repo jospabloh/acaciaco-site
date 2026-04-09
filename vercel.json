@@ -1,6 +1,11 @@
 {
   "redirects": [
     {
+      "source": "/finflow",
+      "destination": "/flowfin",
+      "permanent": true
+    },
+    {
       "source": "/",
       "destination": "/apps",
       "permanent": false
