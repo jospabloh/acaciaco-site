@@ -3,207 +3,472 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FlowFin · ACACIA</title>
-  <meta name="description" content="FlowFin: gestión financiera para ingresos, egresos y flujo de efectivo de tu operación." />
+
+  <title>FlowFin | ACACIA</title>
+  <meta
+    name="description"
+    content="ACACIA | Tecnología, consultoría y soluciones digitales. FlowFin ayuda a familias y grupos a organizar ingresos, egresos y flujo financiero con una experiencia clara, colaborativa y profesional."
+  />
+  <meta name="title" content="FlowFin | ACACIA" />
+  <meta name="author" content="ACACIA" />
+  <meta name="theme-color" content="#0a78b8" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="FlowFin | ACACIA" />
+  <meta
+    property="og:description"
+    content="Gestión financiera colaborativa para familias y grupos, con el enfoque claro, profesional y simple de ACACIA."
+  />
+  <meta property="og:site_name" content="ACACIA | Tecnología, consultoría y soluciones digitales" />
+  <meta property="og:image" content="/assets/Logo_ACACIA_HighRes.jpg" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="FlowFin | ACACIA" />
+  <meta
+    name="twitter:description"
+    content="FlowFin de ACACIA: claridad financiera, colaboración y mejor control para familias y grupos."
+  />
+  <meta name="twitter:image" content="/assets/Logo_ACACIA_HighRes.jpg" />
+
   <link rel="icon" type="image/jpeg" href="/assets/Logo_ACACIA_HighRes.jpg" />
-  <link rel="stylesheet" href="/assets/css/site.css?v=20260409-mydoup" />
+  <link rel="stylesheet" href="/assets/css/site.css?v=20260410-clean" />
 </head>
 
-<body data-wa-number="524498958291" data-wa-message="Hola, me interesa probar tu app FlowFin, ¿me puedes dar más información?">
-  <div class="grid"></div>
+<body
+  data-wa-number="524498958291"
+  data-wa-message="Hola, me interesa conocer más sobre FlowFin de ACACIA."
+  data-usd-rate="17"
+>
+  <div class="grid-bg"></div>
   <div class="orb"></div>
-  <div class="orb2"></div>
+  <div class="orb-2"></div>
 
   <header class="topnav">
     <div class="topnav-inner">
-      <a class="brand" href="/apps">
-        <img src="../assets/Logo_ACACIA_HighRes.jpg" alt="ACACIA" />
-        <div class="txt">
+      <a class="topnav-brand" href="/apps" title="ACACIA | Tecnología, consultoría y soluciones digitales" aria-label="ACACIA">
+        <img src="/assets/Logo_ACACIA_HighRes.jpg" alt="Logo ACACIA" />
+        <div class="topnav-brand-copy">
           <b>ACACIA</b>
-          <span>Soluciones Digitales</span>
+          <span>Tecnología, consultoría y soluciones digitales</span>
         </div>
       </a>
+
       <nav class="topnav-links" aria-label="Principal">
         <a href="/apps">Inicio</a>
-        <a href="/apps#consultoria">Consultoría</a>
+        <a href="/apps#servicios">Servicios</a>
+
+        <details class="nav-dropdown">
+          <summary>Apps</summary>
+          <div class="nav-dropdown-menu">
+            <a href="https://flowfin.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">FlowFin</a>
+            <a href="https://stockflow.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">StockFlow</a>
+            <a href="https://liuma.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">LIUMA</a>
+            <a href="https://puntosplus.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">Puntos+</a>
+          </div>
+        </details>
+
         <a href="/apps#bolsa-empleo">Bolsa de empleo</a>
-        <a href="/stockflow">StockFlow</a>
-        <a href="/finflow">FlowFin</a>
-        <a href="/privacy">Privacy</a>
-        <a href="/terms">Terms</a>
-        <a class="btn btn-primary" href="https://forms.gle/ogkgEMnv7W45Jrcy6" target="_blank" rel="noopener noreferrer">Contacto</a>
+        <a href="/apps#faq">FAQ</a>
+        <a class="btn btn-primary" href="/apps#contacto">Contacto</a>
       </nav>
+
+      <div class="topnav-actions" aria-label="Preferencias">
+        <div class="picker">
+          <label for="theme-picker">Tema</label>
+          <select id="theme-picker" name="theme">
+            <option value="system">Sistema</option>
+            <option value="light">Claro</option>
+            <option value="dark">Oscuro</option>
+          </select>
+        </div>
+
+        <div class="picker">
+          <label for="currency-picker">Moneda</label>
+          <select id="currency-picker" name="currency">
+            <option value="MXN">MXN</option>
+            <option value="USD">USD</option>
+          </select>
+        </div>
+
+        <div class="picker">
+          <label for="lang-picker">Idioma</label>
+          <select id="lang-picker" name="language">
+            <option value="es">ES</option>
+            <option value="en">EN</option>
+          </select>
+        </div>
+      </div>
+
+      <details class="mobile-nav">
+        <summary>Menú</summary>
+        <div class="mobile-nav-menu">
+          <a href="/apps">Inicio</a>
+          <a href="/apps#servicios">Servicios</a>
+          <a href="https://flowfin.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">FlowFin</a>
+          <a href="https://stockflow.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">StockFlow</a>
+          <a href="https://liuma.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">LIUMA</a>
+          <a href="https://puntosplus.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">Puntos+</a>
+          <a href="/apps#bolsa-empleo">Bolsa de empleo</a>
+          <a href="/apps#faq">FAQ</a>
+          <a href="/apps#contacto">Contacto</a>
+        </div>
+      </details>
     </div>
   </header>
 
-  <main class="wrap">
-    <section class="panel">
-
-      <!-- IZQUIERDA -->
-      <div>
-        <div class="brand">
-          <img src="/assets/flowfin-logo.svg" alt="Logo FlowFin" />
-          <div class="txt">
-            <b>FLOWFIN</b>
-            <span>Gestión financiera</span>
-          </div>
-        </div>
-
-        <h1>Controla tus finanzas con más claridad</h1>
-
-        <p class="lead">
-          <strong>FlowFin</strong> centraliza ingresos, egresos y seguimiento
-          financiero en un solo lugar para tomar decisiones con mayor precisión.
-        </p>
-
-        <div class="pillrow">
-          <div class="pill"><strong>Ingresos y gastos</strong></div>
-          <div class="pill"><strong>Flujo de caja</strong></div>
-          <div class="pill"><strong>Control operativo</strong></div>
-        </div>
-
-        <div class="cta">
-          <a class="btn btn-primary" href="https://finflow.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">
-            Abrir FlowFin →
-          </a>
-          <a class="btn btn-ghost" href="/apps">
-            Volver a apps
-          </a>
-        </div>
-
-        <div class="section-stack">
-          <div class="content">
-            <h2>Implementación</h2>
-            <p><strong>Desde $3,990 MXN</strong>. Incluye configuración inicial, activación y acompañamiento de arranque.</p>
-            <p>FlowFin está pensado para finanzas familiares y grupos colaborativos, por lo que su rango de entrada es más accesible.</p>
-          </div>
-
-          <div class="content">
-            <h2>Planes mensuales</h2>
-            <div class="pricing-grid">
-              <div class="price-card">
-                <h3>FlowFin Home</h3>
-                <div class="price-tag">$299 MXN / mes</div>
-                <p>De 1 a 4 miembros.</p>
-                <ul class="list-clean">
-                  <li>Gestión financiera básica</li>
-                  <li>Organización por miembros</li>
-                  <li>Visibilidad compartida</li>
-                  <li>Hasta 4 miembros</li>
-                </ul>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-shell">
+          <section class="hero-panel">
+            <div class="hero-brand">
+              <img src="https://flowfin.acaciaco.com.mx/favicon.ico" alt="Logo FlowFin" />
+              <div class="hero-brand-copy">
+                <b>FLOWFIN</b>
+                <span>Gestión financiera colaborativa</span>
               </div>
-              <div class="price-card">
-                <h3>FlowFin Family+</h3>
-                <div class="price-tag">$499 MXN / mes</div>
-                <p>De 5 a 10 miembros.</p>
-                <ul class="list-clean">
-                  <li>Incluye todo lo de Home</li>
-                  <li>Hasta 10 miembros</li>
-                  <li>Mejor organización compartida</li>
-                  <li>Mayor colaboración familiar</li>
-                </ul>
+            </div>
+
+            <h1>Más claridad financiera. Menos fricción en el día a día.</h1>
+
+            <p class="lead">
+              <strong>FlowFin</strong> ayuda a familias y grupos a organizar ingresos, egresos, seguimiento y visibilidad financiera
+              en una sola experiencia simple, clara y profesional.
+            </p>
+
+            <div class="pillrow">
+              <div class="pill"><strong>Ingresos y egresos</strong></div>
+              <div class="pill"><strong>Flujo financiero</strong></div>
+              <div class="pill"><strong>Organización compartida</strong></div>
+              <div class="pill"><strong>Visibilidad clara</strong></div>
+            </div>
+
+            <div class="cta">
+              <a
+                class="btn btn-primary"
+                href="https://flowfin.acaciaco.com.mx"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Abrir FlowFin
+              </a>
+
+              <a class="btn btn-secondary" id="wa-link-hero" href="#contacto-flowfin">
+                Solicitar información
+              </a>
+
+              <a class="btn btn-ghost" href="/apps">
+                Volver a Apps
+              </a>
+            </div>
+
+            <p class="note">
+              Actualizado al <span id="date"></span>. Experiencia visual alineada con el tema del dispositivo y preferencias del usuario.
+            </p>
+          </section>
+
+          <aside class="hero-sidebar">
+            <div class="card">
+              <div class="meter">
+                <h2>¿Qué ofrece?</h2>
+
+                <div class="mini">
+                  <div class="box">
+                    <b>Registro</b>
+                    <span>Captura y organiza ingresos y egresos de forma clara.</span>
+                  </div>
+                  <div class="box">
+                    <b>Seguimiento</b>
+                    <span>Consulta movimientos y comportamiento financiero con mejor visibilidad.</span>
+                  </div>
+                  <div class="box">
+                    <b>Flujo</b>
+                    <span>Observa tendencias para anticiparte a necesidades o ajustes.</span>
+                  </div>
+                  <div class="box">
+                    <b>Colaboración</b>
+                    <span>Ideal para familias y grupos que necesitan una base compartida.</span>
+                  </div>
+                </div>
               </div>
-              <div class="price-card">
-                <h3>FlowFin Circle</h3>
-                <div class="price-tag">$799 MXN / mes</div>
-                <p>De 11 a 20 miembros.</p>
+
+              <div class="content">
+                <h2>Ideal para</h2>
                 <ul class="list-clean">
-                  <li>Incluye todo lo de Family+</li>
-                  <li>Hasta 20 miembros</li>
-                  <li>Mejor ajuste para grupos grandes</li>
-                  <li>Mayor capacidad colaborativa</li>
+                  <li>Familias que desean más orden financiero.</li>
+                  <li>Grupos que comparten gastos u objetivos.</li>
+                  <li>Usuarios que prefieren simplicidad sobre herramientas pesadas.</li>
+                  <li>Escenarios donde claridad y colaboración importan más que complejidad innecesaria.</li>
                 </ul>
               </div>
             </div>
-          </div>
-
-          <div class="content">
-            <h2>Explicación general</h2>
-            <p>FlowFin también se cobra por bloques de miembros, no por miembro individual. Esto simplifica el modelo comercial y evita costos crecientes demasiado rápidos.</p>
-            <h2>Para quién es FlowFin</h2>
-            <ul class="list-clean">
-              <li>Familias que quieren mejor visibilidad financiera</li>
-              <li>Grupos que comparten objetivos o gastos</li>
-              <li>Usuarios que buscan orden y simplicidad colaborativa</li>
-              <li>Hogares que requieren una herramienta práctica y clara</li>
-            </ul>
-          </div>
-
-          <div class="content">
-            <h2>Feedback de usuarios FlowFin</h2>
-            <div class="pricing-grid">
-              <article class="price-card">
-                <div class="stars">★★★★★</div>
-                <p>“Ahora podemos ver nuestros gastos en familia y ponernos metas claras cada mes.”</p>
-                <div class="person">
-                  <img src="https://randomuser.me/api/portraits/men/33.jpg" alt="Foto de cliente FlowFin" />
-                  <div><b>Raúl Méndez</b><span>Usuario principal</span></div>
-                </div>
-              </article>
-              <article class="price-card">
-                <div class="stars">★★★★★</div>
-                <p>“La experiencia es simple y colaborativa, justo lo que necesitábamos en casa.”</p>
-                <div class="person">
-                  <img src="https://randomuser.me/api/portraits/women/54.jpg" alt="Foto de cliente FlowFin" />
-                  <div><b>María Fernanda Gil</b><span>Administradora familiar</span></div>
-                </div>
-              </article>
-              <article class="price-card">
-                <div class="stars">★★★★★</div>
-                <p>“Con FlowFin mejoramos visibilidad y control, sin complicarnos con herramientas pesadas.”</p>
-                <div class="person">
-                  <img src="https://randomuser.me/api/portraits/men/17.jpg" alt="Foto de cliente FlowFin" />
-                  <div><b>Óscar Peña</b><span>Colaborador de grupo</span></div>
-                </div>
-              </article>
-            </div>
-          </div>
+          </aside>
         </div>
-
-        <footer>
-          <span class="dot"></span>
-          <span>© <span id="year"></span> ACACIA</span>
-          <span>•</span>
-          <a href="/privacy">Privacy</a>
-          <span>•</span>
-          <a href="/terms">Terms</a>
-        </footer>
       </div>
+    </section>
 
-      <!-- DERECHA -->
-      <aside class="card">
-        <div class="meter">
-          <h2>¿Qué ofrece?</h2>
+    <section class="section section-tight">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow"><span class="dot"></span> Propuesta de valor</span>
+          <h2 class="h2">Una solución pensada para orden, claridad y coordinación</h2>
+          <p class="copy">
+            FlowFin no busca abrumar. Su valor está en centralizar la información financiera con una experiencia amigable,
+            colaborativa y lo bastante sólida para apoyar mejores decisiones.
+          </p>
+        </div>
 
-          <div class="mini">
-            <div class="box">
-              <b>Registro</b>
-              <span>Captura ingresos y egresos ordenadamente.</span>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <h3>Claridad operativa</h3>
+            <p>
+              La información relevante se entiende rápido, sin depender de procesos complicados ni interfaces saturadas.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <h3>Colaboración natural</h3>
+            <p>
+              Facilita visibilidad compartida entre miembros, sin perder orden ni estructura.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <h3>Experiencia simple</h3>
+            <p>
+              Menos fricción en el uso diario y mejor adopción por parte de usuarios no técnicos.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-tight">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow"><span class="dot"></span> Implementación y planes</span>
+          <h2 class="h2">Modelo comercial claro y accesible</h2>
+          <p class="copy">
+            FlowFin está orientado a hogares y grupos colaborativos, por eso su entrada es más accesible que otras plataformas empresariales.
+          </p>
+        </div>
+
+        <div class="service-grid">
+          <article class="service-card">
+            <h3>Implementación inicial</h3>
+            <p class="copy">
+              Acompañamiento de arranque, configuración y activación para comenzar con una base ordenada desde el inicio.
+            </p>
+            <div class="price-tag">
+              <span class="price-value" data-price-mxn="3990">$3,990 MXN</span>
             </div>
-            <div class="box">
-              <b>Seguimiento</b>
-              <span>Consulta movimientos y tendencias financieras.</span>
+            <ul class="list-clean">
+              <li>Configuración inicial</li>
+              <li>Activación de la solución</li>
+              <li>Acompañamiento de arranque</li>
+            </ul>
+          </article>
+
+          <article class="service-card">
+            <h3>Cómo se cotiza</h3>
+            <p class="copy">
+              Se cobra por bloques de miembros y no por miembro individual. Esto simplifica el modelo y evita crecimiento de costo demasiado agresivo.
+            </p>
+            <ul class="list-clean">
+              <li>Cotización clara antes de iniciar</li>
+              <li>Esquema 50/50 cuando aplique desarrollo o personalización</li>
+              <li>Productos o equipo bajo pedido se cotizan por separado</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="pricing-grid">
+          <article class="price-card">
+            <h3>FlowFin Home</h3>
+            <div class="price-tag">
+              <span class="price-value" data-price-mxn="299">$299 MXN</span> / mes
             </div>
-            <div class="box">
-              <b>Flujo</b>
-              <span>Visualiza tu flujo para anticiparte a necesidades.</span>
+            <p>De 1 a 4 miembros.</p>
+            <ul class="list-clean">
+              <li>Gestión financiera básica</li>
+              <li>Organización por miembros</li>
+              <li>Visibilidad compartida</li>
+              <li>Hasta 4 miembros</li>
+            </ul>
+          </article>
+
+          <article class="price-card">
+            <h3>FlowFin Family+</h3>
+            <div class="price-tag">
+              <span class="price-value" data-price-mxn="499">$499 MXN</span> / mes
             </div>
-            <div class="box">
-              <b>Visibilidad</b>
-              <span>Información financiera clara para decidir mejor.</span>
+            <p>De 5 a 10 miembros.</p>
+            <ul class="list-clean">
+              <li>Incluye todo lo de Home</li>
+              <li>Hasta 10 miembros</li>
+              <li>Mejor colaboración compartida</li>
+              <li>Más orden para familias activas</li>
+            </ul>
+          </article>
+
+          <article class="price-card">
+            <h3>FlowFin Circle</h3>
+            <div class="price-tag">
+              <span class="price-value" data-price-mxn="799">$799 MXN</span> / mes
             </div>
+            <p>De 11 a 20 miembros.</p>
+            <ul class="list-clean">
+              <li>Incluye todo lo de Family+</li>
+              <li>Hasta 20 miembros</li>
+              <li>Mejor ajuste para grupos grandes</li>
+              <li>Mayor capacidad colaborativa</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-tight">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow"><span class="dot"></span> FAQ</span>
+          <h2 class="h2">Preguntas frecuentes sobre FlowFin</h2>
+        </div>
+
+        <div class="faq-grid">
+          <article class="faq-item">
+            <b>¿FlowFin es para empresas?</b>
+            <p>
+              No es su enfoque principal. Está pensado para familias y grupos que necesitan control financiero compartido con una experiencia más simple.
+            </p>
+          </article>
+
+          <article class="faq-item">
+            <b>¿Cómo se define el plan?</b>
+            <p>
+              Principalmente por bloques de miembros. Si se requiere algo adicional, se cotiza con claridad antes de iniciar.
+            </p>
+          </article>
+
+          <article class="faq-item">
+            <b>¿Puedo pedir más información antes de contratar?</b>
+            <p>
+              Sí. Puedes escribir por WhatsApp o correo para que ACACIA revise el caso y proponga la mejor opción.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-tight" id="contacto-flowfin">
+      <div class="container">
+        <div class="contact-strip">
+          <div>
+            <h3>¿Quieres probar FlowFin o cotizar tu caso?</h3>
+            <p>
+              Escríbenos y revisamos contigo alcance, plan recomendado, implementación y forma de arranque.
+              También podemos ayudarte si vienes desde la web principal de ACACIA y quieres comparar soluciones.
+            </p>
+          </div>
+
+          <div class="contact-strip-actions">
+            <a
+              class="btn btn-primary"
+              href="https://flowfin.acaciaco.com.mx"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Abrir app
+            </a>
+
+            <a
+              class="btn btn-secondary"
+              id="wa-link"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-i18n="contact.cta.whatsapp"
+            >
+              Hablar por WhatsApp
+            </a>
+
+            <a
+              class="btn btn-ghost"
+              href="mailto:contacto@acaciaco.com.mx"
+              data-i18n="contact.cta.email"
+            >
+              Escribir por correo
+            </a>
           </div>
         </div>
-      </aside>
-
+      </div>
     </section>
   </main>
-  <a class="wa-float" id="wa-link" target="_blank" rel="noopener noreferrer" href="#">
-    <span class="wa-icon">💬</span>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-brand-head">
+            <img src="/assets/Logo_ACACIA_HighRes.jpg" alt="Logo ACACIA" />
+            <div class="footer-brand-copy">
+              <b>ACACIA</b>
+              <span>Tecnología, consultoría y soluciones digitales</span>
+            </div>
+          </div>
+
+          <p class="footer-copy">
+            Soluciones digitales con enfoque profesional, estructura clara y experiencia cuidada para empresas, familias y proyectos en crecimiento.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Apps</h4>
+          <div class="footer-links">
+            <a href="https://flowfin.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">FlowFin</a>
+            <a href="https://stockflow.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">StockFlow</a>
+            <a href="https://liuma.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">LIUMA</a>
+            <a href="https://puntosplus.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">Puntos+</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contacto</h4>
+          <div class="footer-links">
+            <a href="mailto:contacto@acaciaco.com.mx">contacto@acaciaco.com.mx</a>
+            <a href="https://wa.me/524498958291" target="_blank" rel="noopener noreferrer">WhatsApp: +52 449 895 8291</a>
+            <a href="/apps">Ver sitio principal</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-legal">
+        <span>© <span id="year"></span> ACACIA</span>
+        <span>•</span>
+        <a href="/privacy">Privacy</a>
+        <span>•</span>
+        <a href="/terms">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <a class="wa-float" id="wa-link-float" target="_blank" rel="noopener noreferrer" href="https://wa.me/524498958291">
+    <span class="wa-icon" aria-hidden="true"></span>
     <span>WhatsApp</span>
   </a>
 
-    <script src="/assets/js/site.js" defer></script>
+  <script src="/assets/js/site.js" defer></script>
+  <script>
+    (function () {
+      var heroWa = document.getElementById('wa-link-hero');
+      var mainWa = document.getElementById('wa-link');
+      var floatWa = document.getElementById('wa-link-float');
+      var href = 'https://wa.me/524498958291?text=' + encodeURIComponent('Hola, me interesa conocer más sobre FlowFin de ACACIA.');
 
+      if (heroWa) heroWa.setAttribute('href', href);
+      if (mainWa) mainWa.setAttribute('href', href);
+      if (floatWa) floatWa.setAttribute('href', href);
+    })();
+  </script>
 </body>
 </html>
