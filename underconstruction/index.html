@@ -4,892 +4,106 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ACACIA Consultoría — En construcción</title>
-  <meta name="description" content="Estamos renovando nuestra página para ti. ACACIA Consultoría en Informática y Cómputo." />
-
-  <style>
-    :root{
-      --bg0:#060B14;
-      --bg1:#0A1224;
-      --ink:#EAF2FF;
-      --muted:#A8B5CC;
-      --muted2:#6F7C90;
-
-      --blue0:#0A78B8;
-      --blue1:#2DA4E6;
-      --blue2:#69C7FF;
-
-      --shadow: 0 18px 60px rgba(0,0,0,.45);
-      --radius: 22px;
-    }
-
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color:var(--ink);
-      background:
-        radial-gradient(1200px 700px at 15% 10%, rgba(45,164,230,.30), transparent 60%),
-        radial-gradient(900px 520px at 85% 20%, rgba(10,120,184,.22), transparent 55%),
-        radial-gradient(800px 520px at 50% 90%, rgba(105,199,255,.12), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      overflow-x:hidden;
-    }
-
-    .grid{
-      position:fixed; inset:0;
-      background-image:
-        linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
-      background-size: 42px 42px;
-      mask-image: radial-gradient(420px 260px at 50% 16%, rgba(0,0,0,1), transparent 75%);
-      opacity:.35;
-      pointer-events:none;
-    }
-    .orb{
-      position:fixed;
-      width:540px; height:540px;
-      filter: blur(34px);
-      opacity:.38;
-      border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, rgba(105,199,255,.9), rgba(45,164,230,.25), transparent 70%);
-      left:-180px; top:140px;
-      pointer-events:none;
-    }
-    .orb2{
-      position:fixed;
-      width:520px; height:520px;
-      filter: blur(36px);
-      opacity:.26;
-      border-radius:50%;
-      background: radial-gradient(circle at 70% 30%, rgba(45,164,230,.85), rgba(10,120,184,.25), transparent 70%);
-      right:-200px; top:40px;
-      pointer-events:none;
-    }
-
-    .wrap{
-      min-height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:42px 18px;
-      position:relative;
-    }
-
-    .panel{
-      width:min(1040px, 100%);
-      display:grid;
-      grid-template-columns: 1.12fr .88fr;
-      gap:22px;
-      padding:28px;
-      border-radius: calc(var(--radius) + 8px);
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(255,255,255,.10);
-      backdrop-filter: blur(10px);
-    }
-
-    @media (max-width: 900px){
-      .panel{ grid-template-columns: 1fr; padding:22px; }
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      padding:8px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.08);
-      width:fit-content;
-    }
-    .brand img{
-      width:54px;
-      height:54px;
-      object-fit:contain;
-      border-radius: 12px;
-      background: rgba(255,255,255,.06);
-      padding:6px;
-      border: 1px solid rgba(255,255,255,.08);
-    }
-    .brand .txt{
-      display:flex;
-      flex-direction:column;
-      line-height:1.1;
-    }
-    .brand .txt b{
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      font-size: .92rem;
-    }
-    .brand .txt span{
-      color:var(--muted);
-      font-size:.82rem;
-      letter-spacing:.06em;
-    }
-
-    h1{
-      margin:18px 0 10px;
-      font-size: clamp(1.7rem, 3.3vw, 2.6rem);
-      letter-spacing:-.02em;
-    }
-    .lead{
-      margin:0;
-      color:var(--muted);
-      font-size: 1.04rem;
-      line-height:1.55;
-      max-width: 60ch;
-    }
-
-    .pillrow{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:18px;
-    }
-    .pill{
-      padding:10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(10, 18, 36, .45);
-      color: var(--muted);
-      font-size:.92rem;
-      letter-spacing:.02em;
-    }
-    .pill strong{ color:var(--ink); font-weight:600; }
-
-    .cta{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      margin-top:18px;
-      flex-wrap:wrap;
-    }
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:12px 16px;
-      border-radius: 14px;
-      text-decoration:none;
-      font-weight:700;
-      letter-spacing:.02em;
-      border: 1px solid rgba(255,255,255,.14);
-      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
-      user-select:none;
-    }
-    .btn-primary{
-      color: #07101f;
-      background: linear-gradient(135deg, var(--blue2), var(--blue1), var(--blue0));
-      box-shadow: 0 16px 40px rgba(45,164,230,.22);
-    }
-    .btn-primary:hover{
-      transform: translateY(-2px);
-      filter: brightness(1.03);
-      box-shadow: 0 22px 50px rgba(45,164,230,.30);
-    }
-    .btn-ghost{
-      color: var(--ink);
-      background: rgba(255,255,255,.06);
-    }
-    .btn-ghost:hover{ transform: translateY(-2px); }
-
-    .note{
-      margin-top:12px;
-      color: var(--muted2);
-      font-size:.92rem;
-    }
-
-    /* --- JUEGO (centro) --- */
-    .gamewrap{
-      margin-top:18px;
-      border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(10,18,36,.58), rgba(10,18,36,.28));
-      box-shadow: 0 18px 50px rgba(0,0,0,.25);
-      overflow:hidden;
-      position:relative;
-    }
-    .gamehead{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:12px 14px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-    }
-    .gamehead .hint{
-      color: var(--muted);
-      font-size:.92rem;
-      line-height:1.3;
-    }
-    .gamehead .stats{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      font-size:.9rem;
-      color: var(--muted);
-    }
-    .chip{
-      padding:6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-    }
-    canvas{
-      display:block;
-      width:100%;
-      height:240px;
-      background:
-        radial-gradient(700px 220px at 20% 30%, rgba(105,199,255,.12), transparent 60%),
-        radial-gradient(700px 220px at 80% 10%, rgba(45,164,230,.10), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-    }
-    .gameoverlay{
-      position:absolute; inset:44px 0 0 0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      pointer-events:none;
-      text-align:center;
-      padding:12px;
-    }
-    .gameoverlay .box{
-      pointer-events:none;
-      max-width: 44ch;
-      background: rgba(6,11,20,.58);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 18px;
-      padding:14px 16px;
-      backdrop-filter: blur(10px);
-      color: var(--ink);
-    }
-    .gameoverlay .box p{
-      margin:6px 0 0;
-      color: var(--muted);
-      font-size:.95rem;
-      line-height:1.45;
-    }
-    .kbd{
-      font-weight:800;
-      color:#07101f;
-      background: linear-gradient(135deg, var(--blue2), var(--blue1));
-      border-radius: 10px;
-      padding:2px 8px;
-      display:inline-block;
-      margin:0 2px;
-    }
-
-    /* Tarjeta derecha */
-    .card{
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(10,18,36,.52), rgba(10,18,36,.34));
-      border: 1px solid rgba(255,255,255,.10);
-      padding:18px;
-      position:relative;
-      overflow:hidden;
-      min-height: 260px;
-    }
-    .card::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(380px 180px at 30% 15%, rgba(105,199,255,.20), transparent 60%),
-        radial-gradient(380px 180px at 80% 30%, rgba(45,164,230,.16), transparent 60%);
-      pointer-events:none;
-    }
-
-    .meter{
-      position:relative;
-      margin-top:0;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 14px;
-      padding:14px;
-    }
-    .meter h2{
-      margin:0 0 10px;
-      font-size:1rem;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-      color: var(--muted);
-    }
-    .bar{
-      height:12px;
-      background: rgba(255,255,255,.07);
-      border-radius: 999px;
-      overflow:hidden;
-      border: 1px solid rgba(255,255,255,.10);
-    }
-    .bar > span{
-      display:block;
-      height:100%;
-      width: 68%;
-      background: linear-gradient(90deg, var(--blue0), var(--blue1), var(--blue2));
-      border-radius: 999px;
-      animation: fill 1.2s ease-out both;
-    }
-    @keyframes fill{
-      from{ width: 6%; }
-      to{ width: 68%; }
-    }
-
-    .mini{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-      margin-top:12px;
-      position:relative;
-    }
-    .mini .box{
-      padding:12px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.09);
-    }
-    .mini .box b{
-      display:block;
-      font-size: .92rem;
-      letter-spacing:.04em;
-    }
-    .mini .box span{
-      display:block;
-      margin-top:4px;
-      color: var(--muted);
-      font-size: .88rem;
-      line-height:1.35;
-    }
-
-    footer{
-      margin-top:14px;
-      color: var(--muted2);
-      font-size:.86rem;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    .dot{
-      width:6px; height:6px;
-      border-radius:50%;
-      background: rgba(105,199,255,.8);
-      box-shadow: 0 0 18px rgba(105,199,255,.6);
-    }
-
-    /* Accesibilidad: reduce motion */
-    @media (prefers-reduced-motion: reduce){
-      .bar > span{ animation:none; }
-    }
-  </style>
+  <meta name="description" content="Estamos renovando la experiencia de ACACIA: diseño, productos y contenido." />
+  <link rel="icon" type="image/jpeg" href="/assets/Logo_ACACIA_HighRes.jpg" />
+  <link rel="stylesheet" href="/assets/css/site.css?v=20260409-mydoup" />
 </head>
+<body data-wa-number="524498958291" data-wa-message="Hola, me interesa conocer más sobre sus apps.">
+  <div class="grid"></div>
+  <div class="orb"></div>
+  <div class="orb2"></div>
 
-<body>
-  <div class="grid" aria-hidden="true"></div>
-  <div class="orb" aria-hidden="true"></div>
-  <div class="orb2" aria-hidden="true"></div>
+  <header class="topnav">
+    <div class="topnav-inner">
+      <a class="brand" href="/apps">
+        <img src="../assets/Logo_ACACIA_HighRes.jpg" alt="ACACIA" />
+        <div class="txt">
+          <b>ACACIA</b>
+          <span>Soluciones Digitales</span>
+        </div>
+      </a>
+      <nav class="topnav-links" aria-label="Principal">
+        <a href="/apps">Inicio</a>
+        <a href="/stockflow">StockFlow</a>
+        <a href="/finflow">FlowFin</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a class="btn btn-primary" href="https://forms.gle/ogkgEMnv7W45Jrcy6" target="_blank" rel="noopener noreferrer">Contacto</a>
+      </nav>
+    </div>
+  </header>
 
   <main class="wrap">
-    <section class="panel" role="region" aria-label="Página en construcción">
-      <!-- Izquierda -->
+    <section class="panel">
       <div>
         <div class="brand">
-          <img src="../assets/Logo_ACACIA_HighRes.jpg" alt="Logo de ACACIA Consultoría" />
+          <img src="../assets/Logo_ACACIA_HighRes.jpg" alt="ACACIA" />
           <div class="txt">
             <b>ACACIA</b>
-            <span>Consultoría en Informática y Cómputo</span>
+            <span>Rediseño en progreso</span>
           </div>
         </div>
 
-        <h1>Under construction — we’re renovating our page for you</h1>
+        <h1>Estamos rediseñando toda la experiencia web</h1>
         <p class="lead">
-          <strong>En construcción:</strong> estamos renovando nuestra página para ti.
-          Muy pronto tendrás una experiencia más rápida, clara y tecnológica.
+          Estamos preparando una versión más moderna estilo producto SaaS (inspiración Figma):
+          interfaces limpias, mejor navegación y foco en tus soluciones financieras.
         </p>
 
-        <!-- JUEGO EN MEDIO -->
-        <div class="gamewrap" aria-label="Juego tipo Dino">
-          <div class="gamehead">
-            <div class="hint">
-              <b>Mini-juego:</b> salta obstáculos mientras renovamos 🦖⚡<br/>
-              <span style="color:var(--muted2)">Inicia con <span class="kbd">Espacio</span> o toca la pantalla.</span>
-            </div>
-            <div class="stats">
-              <span class="chip">Score: <b id="score">0</b></span>
-              <span class="chip">Best: <b id="best">0</b></span>
-              <span class="chip" id="stateChip">Ready</span>
-            </div>
-          </div>
-
-          <canvas id="game" width="920" height="240" aria-label="Canvas de juego"></canvas>
-
-          <div class="gameoverlay" id="overlay">
-            <div class="box" id="overlayBox">
-              <div style="font-weight:900; letter-spacing:.02em;">Presiona <span class="kbd">Espacio</span> para comenzar</div>
-              <p>
-                Tip: Mantén el ritmo. Si pierdes, vuelve a iniciar con <span class="kbd">Espacio</span>.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="pillrow" aria-label="Estado del sitio">
-          <div class="pill"><strong>Estado:</strong> Renovación</div>
-          <div class="pill"><strong>Enfoque:</strong> Innovación + IA</div>
-          <div class="pill"><strong>Prioridad:</strong> Experiencia</div>
+        <div class="pillrow">
+          <div class="pill"><strong>Diseño UI renovado</strong></div>
+          <div class="pill"><strong>Contenido actualizado</strong></div>
+          <div class="pill"><strong>Más claridad comercial</strong></div>
         </div>
 
         <div class="cta">
-          <a class="btn btn-primary" href="https://forms.gle/ogkgEMnv7W45Jrcy6" target="_blank" rel="noopener">
-            Contáctanos <span aria-hidden="true">→</span>
-          </a>
-
-          <a class="btn btn-ghost" href="#info">Ver detalles</a>
-        </div>
-
-        <div class="note" id="info">
-          Si necesitas una cotización o soporte, usa el botón <strong>Contáctanos</strong> y te respondemos lo antes posible.
+          <a class="btn btn-primary" href="/apps">Ir a Apps →</a>
+          <a class="btn btn-ghost" href="https://forms.gle/ogkgEMnv7W45Jrcy6" target="_blank" rel="noopener noreferrer">Contáctanos</a>
         </div>
 
         <footer>
-          <span class="dot" aria-hidden="true"></span>
-          <span>© <span id="year"></span> ACACIA Consultoría</span>
+          <span class="dot"></span>
+          <span>© <span id="year"></span> ACACIA</span>
           <span>•</span>
-          <span>Transformación digital · Datos · Automatización · IA</span>
+          <a href="/privacy">Privacy</a>
+          <span>•</span>
+          <a href="/terms">Terms</a>
         </footer>
       </div>
 
-      <!-- Derecha -->
-      <aside class="card" aria-label="Panel de progreso">
+      <aside class="card">
         <div class="meter">
-          <h2>Progreso de renovación</h2>
-          <div class="bar" aria-label="Barra de progreso"><span></span></div>
-
+          <h2>Accesos rápidos</h2>
           <div class="mini">
             <div class="box">
-              <b>Diseño</b>
-              <span>Nuevo estilo moderno y minimalista.</span>
+              <b>StockFlow</b>
+              <span>Control de inventario y trazabilidad.</span>
+              <span><a href="https://stockflow.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">Abrir app</a></span>
             </div>
             <div class="box">
-              <b>Performance</b>
-              <span>Optimización para carga rápida en móvil.</span>
+              <b>FlowFin</b>
+              <span>Gestión financiera y flujo de caja.</span>
+              <span><a href="https://finflow.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">Abrir app</a></span>
             </div>
             <div class="box">
-              <b>Seguridad</b>
-              <span>Buenas prácticas y protección de datos.</span>
+              <b>Landings</b>
+              <span><a href="/stockflow">/stockflow</a> · <a href="/finflow">/finflow</a></span>
             </div>
             <div class="box">
               <b>Contacto</b>
-              <span>Canal directo vía formulario.</span>
+              <span><a href="https://forms.gle/ogkgEMnv7W45Jrcy6" target="_blank" rel="noopener noreferrer">Formulario ACACIA</a></span>
             </div>
           </div>
         </div>
       </aside>
     </section>
   </main>
+  <a class="wa-float" id="wa-link" target="_blank" rel="noopener noreferrer" href="#">
+    <span class="wa-icon">💬</span>
+    <span>WhatsApp</span>
+  </a>
 
-  <script>
-    // Año automático
-    document.getElementById("year").textContent = new Date().getFullYear();
+    <script src="/assets/js/site.js" defer></script>
 
-    // -----------------------------
-    // Juego tipo "Dino runner" (original, inspirado)
-    // -----------------------------
-    const canvas = document.getElementById("game");
-    const ctx = canvas.getContext("2d");
-
-    // Ajuste responsivo: escalar CSS, conservar coordenadas internas
-    function fitCanvasToCSS(){
-      // el canvas ya tiene width/height internos, solo cuidamos nitidez en pantallas HiDPI
-      const dpr = Math.max(1, Math.floor(window.devicePixelRatio || 1));
-      const cssW = canvas.clientWidth;
-      const cssH = canvas.clientHeight;
-      const targetW = Math.round(cssW * dpr);
-      const targetH = Math.round(cssH * dpr);
-
-      if (canvas.width !== targetW || canvas.height !== targetH){
-        canvas.width = targetW;
-        canvas.height = targetH;
-      }
-      // Escalamos el sistema de coordenadas a "unidades CSS"
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-
-    const scoreEl = document.getElementById("score");
-    const bestEl = document.getElementById("best");
-    const stateChip = document.getElementById("stateChip");
-    const overlay = document.getElementById("overlay");
-    const overlayBox = document.getElementById("overlayBox");
-
-    const W = () => canvas.clientWidth;
-    const H = () => canvas.clientHeight;
-
-    const groundY = () => Math.floor(H() * 0.78);
-
-    // Estado
-    let running = false;
-    let gameOver = false;
-    let tPrev = performance.now();
-
-    // Best score (local)
-    const BEST_KEY = "acacia_dino_best_v1";
-    let best = Number(localStorage.getItem(BEST_KEY) || 0);
-    bestEl.textContent = String(best);
-
-    // Jugador (dino estilizado)
-    const player = {
-      x: 90,
-      y: 0,
-      w: 34,
-      h: 40,
-      vy: 0,
-      onGround: true,
-      jumpPower: 520,   // px/s
-      gravity: 1650,    // px/s^2
-      colorA: "rgba(105,199,255,0.95)",
-      colorB: "rgba(10,120,184,0.85)"
-    };
-
-    // Obstáculos
-    let obstacles = [];
-    let spawnTimer = 0;
-    let spawnEvery = 1.05; // seconds (dynamic)
-    let speed = 360; // px/s (dynamic)
-    let score = 0;
-
-    // Nubes / decor
-    const clouds = Array.from({length: 6}, (_,i)=>({
-      x: 140 + i*170,
-      y: 30 + (i%3)*18,
-      s: 0.7 + (i%4)*0.14
-    }));
-
-    function resetGame(){
-      fitCanvasToCSS();
-      running = false;
-      gameOver = false;
-      obstacles = [];
-      spawnTimer = 0;
-      spawnEvery = 1.05;
-      speed = 360;
-      score = 0;
-      scoreEl.textContent = "0";
-      player.y = groundY() - player.h;
-      player.vy = 0;
-      player.onGround = true;
-
-      overlay.style.display = "flex";
-      overlayBox.innerHTML = `
-        <div style="font-weight:900; letter-spacing:.02em;">Presiona <span class="kbd">Espacio</span> para comenzar</div>
-        <p>Tip: también funciona en móvil tocando la pantalla.</p>
-      `;
-      stateChip.textContent = "Ready";
-    }
-
-    function startGame(){
-      if (gameOver) resetGame();
-      running = true;
-      overlay.style.display = "none";
-      stateChip.textContent = "Running";
-    }
-
-    function endGame(){
-      running = false;
-      gameOver = true;
-      stateChip.textContent = "Game Over";
-      overlay.style.display = "flex";
-
-      if (score > best){
-        best = score;
-        localStorage.setItem(BEST_KEY, String(best));
-        bestEl.textContent = String(best);
-      }
-
-      overlayBox.innerHTML = `
-        <div style="font-weight:900; letter-spacing:.02em;">💥 ¡Ups! Te chocaste.</div>
-        <p>Score: <b>${score}</b> · Best: <b>${best}</b><br/>
-        Reinicia con <span class="kbd">Espacio</span> o toca la pantalla.</p>
-      `;
-    }
-
-    function jump(){
-      if (!running && !gameOver){
-        startGame();
-      }
-      if (!running && gameOver){
-        resetGame();
-        startGame();
-        return;
-      }
-      if (running && player.onGround){
-        player.vy = -player.jumpPower;
-        player.onGround = false;
-      }
-    }
-
-    function spawnObstacle(){
-      // Cactus estilo "tech"
-      const baseH = 26 + Math.random()*28;
-      const w = 14 + Math.random()*10;
-      const h = baseH;
-      obstacles.push({
-        x: W() + 20,
-        y: groundY() - h,
-        w,
-        h,
-        // pequeño “glow” azul
-        glow: 0.25 + Math.random()*0.25
-      });
-    }
-
-    function rectsOverlap(a,b){
-      return (a.x < b.x + b.w &&
-              a.x + a.w > b.x &&
-              a.y < b.y + b.h &&
-              a.y + a.h > b.y);
-    }
-
-    function drawBackground(dt){
-      // Nubes
-      for (const c of clouds){
-        c.x -= (speed*0.18) * dt * c.s;
-        if (c.x < -90) c.x = W() + 120;
-        ctx.globalAlpha = 0.35;
-        ctx.fillStyle = "rgba(255,255,255,0.55)";
-        roundedCloud(c.x, c.y, 70*c.s, 18*c.s);
-        ctx.globalAlpha = 1;
-      }
-
-      // “Scanline” sutil
-      ctx.globalAlpha = 0.10;
-      ctx.fillStyle = "rgba(255,255,255,0.25)";
-      for (let y=0; y<H(); y+=10){
-        ctx.fillRect(0, y, W(), 1);
-      }
-      ctx.globalAlpha = 1;
-
-      // Suelo
-      const gy = groundY();
-      ctx.strokeStyle = "rgba(255,255,255,0.18)";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(0, gy+1);
-      ctx.lineTo(W(), gy+1);
-      ctx.stroke();
-
-      // “Ticks” del suelo
-      ctx.strokeStyle = "rgba(105,199,255,0.14)";
-      ctx.lineWidth = 1;
-      const step = 22;
-      const offset = (performance.now()/12) % step;
-      for (let x = -step; x < W()+step; x += step){
-        ctx.beginPath();
-        ctx.moveTo(x - offset, gy+6);
-        ctx.lineTo(x - offset + 10, gy+6);
-        ctx.stroke();
-      }
-    }
-
-    function roundedCloud(x,y,w,h){
-      // nube simple
-      ctx.beginPath();
-      ctx.ellipse(x, y, w*0.22, h*0.55, 0, 0, Math.PI*2);
-      ctx.ellipse(x + w*0.18, y - 4, w*0.24, h*0.65, 0, 0, Math.PI*2);
-      ctx.ellipse(x + w*0.38, y, w*0.20, h*0.55, 0, 0, Math.PI*2);
-      ctx.ellipse(x + w*0.54, y - 3, w*0.22, h*0.62, 0, 0, Math.PI*2);
-      ctx.closePath();
-      ctx.fill();
-    }
-
-    function drawPlayer(){
-      // cuerpo: “capsule” tech
-      const px = player.x;
-      const py = player.y;
-      const r = 10;
-
-      // glow
-      ctx.save();
-      ctx.shadowColor = "rgba(105,199,255,0.35)";
-      ctx.shadowBlur = 18;
-
-      // gradiente
-      const g = ctx.createLinearGradient(px, py, px + player.w, py + player.h);
-      g.addColorStop(0, player.colorA);
-      g.addColorStop(1, player.colorB);
-      ctx.fillStyle = g;
-
-      roundRect(px, py, player.w, player.h, r);
-      ctx.fill();
-
-      ctx.shadowBlur = 0;
-      ctx.restore();
-
-      // ojo
-      ctx.fillStyle = "rgba(7,16,31,0.95)";
-      ctx.beginPath();
-      ctx.arc(px + player.w*0.68, py + player.h*0.32, 2.4, 0, Math.PI*2);
-      ctx.fill();
-
-      // patita (animación mínima)
-      if (running && player.onGround){
-        const phase = (performance.now()/70) % 2;
-        ctx.strokeStyle = "rgba(7,16,31,0.55)";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(px + 10, py + player.h - 2);
-        ctx.lineTo(px + 12 + phase*2, py + player.h + 6);
-        ctx.stroke();
-      }
-    }
-
-    function roundRect(x, y, w, h, r){
-      const rr = Math.min(r, w/2, h/2);
-      ctx.beginPath();
-      ctx.moveTo(x+rr, y);
-      ctx.arcTo(x+w, y, x+w, y+h, rr);
-      ctx.arcTo(x+w, y+h, x, y+h, rr);
-      ctx.arcTo(x, y+h, x, y, rr);
-      ctx.arcTo(x, y, x+w, y, rr);
-      ctx.closePath();
-    }
-
-    function drawObstacles(){
-      for (const o of obstacles){
-        ctx.save();
-        ctx.shadowColor = `rgba(105,199,255,${o.glow})`;
-        ctx.shadowBlur = 18;
-
-        // cactus “modular”
-        const g = ctx.createLinearGradient(o.x, o.y, o.x, o.y + o.h);
-        g.addColorStop(0, "rgba(105,199,255,0.92)");
-        g.addColorStop(1, "rgba(10,120,184,0.72)");
-        ctx.fillStyle = g;
-
-        roundRect(o.x, o.y, o.w, o.h, 8);
-        ctx.fill();
-
-        // “notches”
-        ctx.shadowBlur = 0;
-        ctx.strokeStyle = "rgba(7,16,31,0.30)";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(o.x + 3, o.y + o.h*0.35);
-        ctx.lineTo(o.x + o.w - 3, o.y + o.h*0.35);
-        ctx.moveTo(o.x + 3, o.y + o.h*0.62);
-        ctx.lineTo(o.x + o.w - 3, o.y + o.h*0.62);
-        ctx.stroke();
-
-        ctx.restore();
-      }
-    }
-
-    function drawHUD(){
-      // Etiqueta ligera “Press Space”
-      if (!running && !gameOver){
-        // overlay ya cubre, no hace falta
-      }
-    }
-
-    function update(dt){
-      fitCanvasToCSS();
-
-      // física jugador
-      player.y += player.vy * dt;
-      player.vy += player.gravity * dt;
-
-      const gy = groundY();
-      if (player.y + player.h >= gy){
-        player.y = gy - player.h;
-        player.vy = 0;
-        player.onGround = true;
-      }
-
-      // spawns y dificultad
-      spawnTimer += dt;
-      const difficulty = Math.min(2.25, 1 + score / 420); // sube con score
-      speed = 360 * difficulty;
-      spawnEvery = Math.max(0.62, 1.05 - (difficulty-1)*0.28);
-
-      if (spawnTimer >= spawnEvery){
-        spawnTimer = 0;
-        spawnObstacle();
-      }
-
-      // mover obstáculos
-      for (const o of obstacles){
-        o.x -= speed * dt;
-      }
-      obstacles = obstacles.filter(o => o.x + o.w > -20);
-
-      // colisiones
-      const pRect = {x: player.x, y: player.y, w: player.w, h: player.h};
-      for (const o of obstacles){
-        const oRect = {x:o.x, y:o.y, w:o.w, h:o.h};
-        if (rectsOverlap(pRect, oRect)){
-          endGame();
-          break;
-        }
-      }
-
-      // score
-      score += Math.floor(60 * dt); // ~60 pts por segundo
-      scoreEl.textContent = String(score);
-    }
-
-    function render(dt){
-      ctx.clearRect(0,0,W(),H());
-      drawBackground(dt);
-      drawObstacles();
-      drawPlayer();
-      drawHUD();
-    }
-
-    function loop(now){
-      const dt = Math.min(0.033, (now - tPrev) / 1000); // clamp para estabilidad
-      tPrev = now;
-
-      // Render siempre
-      render(dt);
-
-      // Actualizar solo si está corriendo
-      if (running){
-        update(dt);
-      }
-
-      requestAnimationFrame(loop);
-    }
-
-    // Controles
-    window.addEventListener("keydown", (e)=>{
-      if (e.code === "Space" || e.key === " "){
-        e.preventDefault();
-        jump();
-      }
-      if (e.code === "ArrowUp"){
-        e.preventDefault();
-        jump();
-      }
-      if (e.code === "KeyR"){
-        resetGame();
-      }
-    }, {passive:false});
-
-    // Tap / click
-    canvas.addEventListener("pointerdown", (e)=>{
-      e.preventDefault();
-      jump();
-    });
-
-    // Inicializar
-    resetGame();
-    requestAnimationFrame(loop);
-
-    // Reajuste al cambiar tamaño
-    window.addEventListener("resize", ()=>{
-      // mantener al jugador en el suelo
-      fitCanvasToCSS();
-      player.y = groundY() - player.h;
-    });
-  </script>
 </body>
 </html>

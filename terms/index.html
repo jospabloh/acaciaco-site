@@ -5,410 +5,106 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ACACIA Consultoría — Terms & Conditions</title>
   <meta name="description" content="Términos y condiciones de uso para aplicaciones y servicios de ACACIA." />
-
-  <style>
-    :root{
-      --bg0:#060B14;
-      --bg1:#0A1224;
-      --ink:#EAF2FF;
-      --muted:#A8B5CC;
-      --muted2:#6F7C90;
-
-      --blue0:#0A78B8;
-      --blue1:#2DA4E6;
-      --blue2:#69C7FF;
-
-      --shadow: 0 18px 60px rgba(0,0,0,.45);
-      --radius: 22px;
-    }
-
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color:var(--ink);
-      background:
-        radial-gradient(1200px 700px at 15% 10%, rgba(45,164,230,.30), transparent 60%),
-        radial-gradient(900px 520px at 85% 20%, rgba(10,120,184,.22), transparent 55%),
-        radial-gradient(800px 520px at 50% 90%, rgba(105,199,255,.12), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      overflow-x:hidden;
-    }
-
-    .grid{
-      position:fixed; inset:0;
-      background-image:
-        linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
-      background-size: 42px 42px;
-      mask-image: radial-gradient(420px 260px at 50% 16%, rgba(0,0,0,1), transparent 75%);
-      opacity:.35;
-      pointer-events:none;
-    }
-    .orb{
-      position:fixed;
-      width:540px; height:540px;
-      filter: blur(34px);
-      opacity:.38;
-      border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, rgba(105,199,255,.9), rgba(45,164,230,.25), transparent 70%);
-      left:-180px; top:140px;
-      pointer-events:none;
-    }
-    .orb2{
-      position:fixed;
-      width:520px; height:520px;
-      filter: blur(36px);
-      opacity:.26;
-      border-radius:50%;
-      background: radial-gradient(circle at 70% 30%, rgba(45,164,230,.85), rgba(10,120,184,.25), transparent 70%);
-      right:-200px; top:40px;
-      pointer-events:none;
-    }
-
-    .wrap{
-      min-height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:42px 18px;
-      position:relative;
-    }
-
-    .panel{
-      width:min(1040px, 100%);
-      display:grid;
-      grid-template-columns: 1.12fr .88fr;
-      gap:22px;
-      padding:28px;
-      border-radius: calc(var(--radius) + 8px);
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(255,255,255,.10);
-      backdrop-filter: blur(10px);
-    }
-
-    @media (max-width: 900px){
-      .panel{ grid-template-columns: 1fr; padding:22px; }
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      padding:8px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.08);
-      width:fit-content;
-    }
-    .brand img{
-      width:54px;
-      height:54px;
-      object-fit:contain;
-      border-radius: 12px;
-      background: rgba(255,255,255,.06);
-      padding:6px;
-      border: 1px solid rgba(255,255,255,.08);
-    }
-    .brand .txt{
-      display:flex;
-      flex-direction:column;
-      line-height:1.1;
-    }
-    .brand .txt b{
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      font-size: .92rem;
-    }
-    .brand .txt span{
-      color:var(--muted);
-      font-size:.82rem;
-      letter-spacing:.06em;
-    }
-
-    h1{
-      margin:18px 0 10px;
-      font-size: clamp(1.7rem, 3.3vw, 2.6rem);
-      letter-spacing:-.02em;
-    }
-    .lead{
-      margin:0;
-      color:var(--muted);
-      font-size: 1.04rem;
-      line-height:1.55;
-      max-width: 70ch;
-    }
-
-    .cta{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      margin-top:18px;
-      flex-wrap:wrap;
-    }
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:12px 16px;
-      border-radius: 14px;
-      text-decoration:none;
-      font-weight:700;
-      letter-spacing:.02em;
-      border: 1px solid rgba(255,255,255,.14);
-      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
-      user-select:none;
-    }
-    .btn-primary{
-      color: #07101f;
-      background: linear-gradient(135deg, var(--blue2), var(--blue1), var(--blue0));
-      box-shadow: 0 16px 40px rgba(45,164,230,.22);
-    }
-    .btn-primary:hover{
-      transform: translateY(-2px);
-      filter: brightness(1.03);
-      box-shadow: 0 22px 50px rgba(45,164,230,.30);
-    }
-    .btn-ghost{
-      color: var(--ink);
-      background: rgba(255,255,255,.06);
-    }
-    .btn-ghost:hover{ transform: translateY(-2px); }
-
-    .content{
-      margin-top:18px;
-      border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(10,18,36,.58), rgba(10,18,36,.28));
-      box-shadow: 0 18px 50px rgba(0,0,0,.25);
-      padding:16px 16px 6px;
-    }
-    .content h2{
-      margin:14px 0 8px;
-      font-size:1rem;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-      color: var(--muted);
-    }
-    .content p, .content li{
-      color: var(--muted);
-      line-height:1.65;
-      margin:0 0 10px;
-    }
-    .content ul{
-      margin:8px 0 14px 18px;
-      padding:0;
-    }
-    .content code{
-      color: var(--ink);
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.10);
-      padding:2px 6px;
-      border-radius: 8px;
-      font-weight:700;
-      font-size:.92rem;
-    }
-
-    .card{
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(10,18,36,.52), rgba(10,18,36,.34));
-      border: 1px solid rgba(255,255,255,.10);
-      padding:18px;
-      position:relative;
-      overflow:hidden;
-      min-height: 260px;
-    }
-    .card::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(380px 180px at 30% 15%, rgba(105,199,255,.20), transparent 60%),
-        radial-gradient(380px 180px at 80% 30%, rgba(45,164,230,.16), transparent 60%);
-      pointer-events:none;
-    }
-
-    .meter{
-      position:relative;
-      margin-top:0;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 14px;
-      padding:14px;
-    }
-    .meter h2{
-      margin:0 0 10px;
-      font-size:1rem;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-      color: var(--muted);
-    }
-
-    .mini{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:10px;
-      margin-top:12px;
-      position:relative;
-    }
-    .mini .box{
-      padding:12px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.09);
-    }
-    .mini .box b{
-      display:block;
-      font-size: .92rem;
-      letter-spacing:.04em;
-    }
-    .mini .box span{
-      display:block;
-      margin-top:4px;
-      color: var(--muted);
-      font-size: .88rem;
-      line-height:1.35;
-    }
-    .mini .box a{
-      color: var(--blue2);
-      text-decoration:none;
-      font-weight:800;
-    }
-    .mini .box a:hover{ text-decoration:underline; }
-
-    footer{
-      margin-top:14px;
-      color: var(--muted2);
-      font-size:.86rem;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    .dot{
-      width:6px; height:6px;
-      border-radius:50%;
-      background: rgba(105,199,255,.8);
-      box-shadow: 0 0 18px rgba(105,199,255,.6);
-    }
-  </style>
+  <link rel="icon" type="image/jpeg" href="/assets/Logo_ACACIA_HighRes.jpg" />
+  <link rel="stylesheet" href="/assets/css/site.css?v=20260409-mydoup" />
 </head>
+<body data-wa-number="524498958291" data-wa-message="Hola, me interesa conocer más sobre sus apps.">
+  <div class="grid"></div>
+  <div class="orb"></div>
+  <div class="orb2"></div>
 
-<body>
-  <div class="grid" aria-hidden="true"></div>
-  <div class="orb" aria-hidden="true"></div>
-  <div class="orb2" aria-hidden="true"></div>
+  <header class="topnav">
+    <div class="topnav-inner">
+      <a class="brand" href="/apps">
+        <img src="../assets/Logo_ACACIA_HighRes.jpg" alt="ACACIA" />
+        <div class="txt">
+          <b>ACACIA</b>
+          <span>Soluciones Digitales</span>
+        </div>
+      </a>
+      <nav class="topnav-links" aria-label="Principal">
+        <a href="/apps">Inicio</a>
+        <a href="/stockflow">StockFlow</a>
+        <a href="/finflow">FlowFin</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a class="btn btn-primary" href="https://forms.gle/ogkgEMnv7W45Jrcy6" target="_blank" rel="noopener noreferrer">Contacto</a>
+      </nav>
+    </div>
+  </header>
 
   <main class="wrap">
-    <section class="panel" role="region" aria-label="Terms and Conditions">
-      <!-- Izquierda -->
+    <section class="panel">
       <div>
         <div class="brand">
-          <img src="../assets/Logo_ACACIA_HighRes.jpg" alt="Logo de ACACIA Consultoría" />
+          <img src="../assets/Logo_ACACIA_HighRes.jpg" alt="ACACIA" />
           <div class="txt">
             <b>ACACIA</b>
-            <span>Consultoría en Informática y Cómputo</span>
+            <span>Términos y condiciones</span>
           </div>
         </div>
 
         <h1>Terms &amp; Conditions</h1>
         <p class="lead">
-          Estos términos establecen las reglas generales para usar nuestras aplicaciones.
-          Si no estás de acuerdo, por favor no utilices el servicio.
+          Estos términos establecen las reglas generales para usar nuestras aplicaciones y servicios.
+          Si no estás de acuerdo con estas condiciones, por favor no utilices el servicio.
         </p>
 
         <div class="cta">
-          <a class="btn btn-primary" href="https://forms.gle/ogkgEMnv7W45Jrcy6" target="_blank" rel="noopener">
-            Contáctanos <span aria-hidden="true">→</span>
-          </a>
+          <a class="btn btn-primary" href="https://forms.gle/ogkgEMnv7W45Jrcy6" target="_blank" rel="noopener noreferrer">Contáctanos →</a>
           <a class="btn btn-ghost" href="/privacy">Ver privacidad</a>
-          <a class="btn btn-ghost" href="/underconstruction">Inicio</a>
+          <a class="btn btn-ghost" href="/apps">Volver a apps</a>
         </div>
 
         <div class="content" aria-label="Contenido legal">
           <h2>1. Uso del servicio</h2>
-          <p>
-            Te comprometes a usar el servicio de forma lícita y a no intentar afectar su disponibilidad,
-            seguridad o integridad (por ejemplo: scraping abusivo, ataques, ingeniería inversa, etc.).
-          </p>
+          <p>Te comprometes a usar el servicio de forma lícita y a no afectar su disponibilidad, seguridad o integridad.</p>
 
           <h2>2. Cuentas y acceso</h2>
-          <p>
-            Eres responsable de mantener la confidencialidad de tus credenciales y de las acciones realizadas
-            desde tu cuenta. Podemos suspender accesos ante actividad sospechosa o abuso.
-          </p>
+          <p>Eres responsable de la confidencialidad de tus credenciales y de las acciones realizadas desde tu cuenta.</p>
 
           <h2>3. Disponibilidad y cambios</h2>
-          <p>
-            El servicio se ofrece “tal cual” y puede cambiar en cualquier momento (funciones, límites, precios).
-            Buscamos minimizar interrupciones, pero no garantizamos disponibilidad continua.
-          </p>
+          <p>El servicio se ofrece “tal cual” y puede cambiar en cualquier momento (funciones, límites o políticas).</p>
 
           <h2>4. Propiedad intelectual</h2>
-          <p>
-            El contenido, marcas, diseños y software asociados al servicio pertenecen a ACACIA o a sus licenciantes.
-            No se permite el uso no autorizado.
-          </p>
+          <p>El contenido, marcas, diseños y software asociados al servicio pertenecen a ACACIA o sus licenciantes.</p>
 
           <h2>5. Limitación de responsabilidad</h2>
-          <p>
-            En la máxima medida permitida por la ley, ACACIA no será responsable por daños indirectos,
-            incidentales o consecuenciales derivados del uso del servicio.
-          </p>
+          <p>En la máxima medida permitida por ley, ACACIA no será responsable por daños indirectos derivados del uso del servicio.</p>
 
           <h2>6. Contacto</h2>
-          <p>
-            Para dudas o soporte, contáctanos vía el formulario o al correo:
-            <code>contact@acaciaco.com.mx</code>
-          </p>
+          <p>Para dudas o soporte, contáctanos vía formulario o al correo <code>contacto@acaciaco.com.mx</code>.</p>
 
-          <p style="color: var(--muted2); margin-top:10px;">
-            Última actualización: <span id="date"></span>
-          </p>
+          <p style="color: var(--muted2); margin-top:10px;">Última actualización: <span id="date"></span></p>
         </div>
 
         <footer>
-          <span class="dot" aria-hidden="true"></span>
+          <span class="dot"></span>
           <span>© <span id="year"></span> ACACIA Consultoría</span>
           <span>•</span>
           <span>Términos · Uso aceptable · Seguridad</span>
         </footer>
       </div>
 
-      <!-- Derecha -->
       <aside class="card" aria-label="Resumen">
         <div class="meter">
           <h2>Resumen</h2>
-
           <div class="mini">
-            <div class="box">
-              <b>Uso aceptable</b>
-              <span>Prohibido abusar, atacar o intentar vulnerar el servicio.</span>
-            </div>
-            <div class="box">
-              <b>Disponibilidad</b>
-              <span>Podemos actualizar/cambiar funciones; el servicio es “as is”.</span>
-            </div>
-            <div class="box">
-              <b>Privacidad</b>
-              <span><a href="/privacy">Ver /privacy</a></span>
-            </div>
-            <div class="box">
-              <b>Soporte</b>
-              <span><a href="https://forms.gle/ogkgEMnv7W45Jrcy6" target="_blank" rel="noopener">Contactar</a></span>
-            </div>
+            <div class="box"><b>Uso aceptable</b><span>Prohibido abusar, atacar o vulnerar el servicio.</span></div>
+            <div class="box"><b>Disponibilidad</b><span>Podemos actualizar funciones sin previo aviso.</span></div>
+            <div class="box"><b>Privacidad</b><span><a href="/privacy">Ver /privacy</a></span></div>
+            <div class="box"><b>Soporte</b><span><a href="https://forms.gle/ogkgEMnv7W45Jrcy6" target="_blank" rel="noopener noreferrer">Contactar</a></span></div>
           </div>
         </div>
       </aside>
     </section>
   </main>
+  <a class="wa-float" id="wa-link" target="_blank" rel="noopener noreferrer" href="#">
+    <span class="wa-icon">💬</span>
+    <span>WhatsApp</span>
+  </a>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-    const d = new Date();
-    const pad = (n) => String(n).padStart(2,"0");
-    document.getElementById("date").textContent = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-  </script>
+    <script src="/assets/js/site.js" defer></script>
+
 </body>
 </html>
