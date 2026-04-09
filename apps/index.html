@@ -22,35 +22,35 @@
   <div class="orb"></div>
   <div class="orb2"></div>
 
-  <header class="topnav">
+  <header class="topnav topnav-premium">
     <div class="topnav-inner">
-      <a class="topnav-brand" href="/apps" title="ACACIA | Tecnología, consultoría y soluciones digitales">
+      <a class="topnav-brand" id="brand-trigger" href="/apps" title="ACACIA | Tecnología, consultoría y soluciones digitales">
         <img src="/assets/Logo_ACACIA_HighRes.jpg" alt="ACACIA" />
         <div class="topnav-brand-copy">
           <b>ACACIA</b>
-          <span>Digital solutions & consulting</span>
+          <span id="brand-whisper" aria-label="Digital systems crafted by ACACIA">Systems crafted with intent</span>
         </div>
       </a>
 
       <nav class="topnav-links topnav-links-premium" aria-label="Principal">
         <a href="#inicio">Inicio</a>
-        <a href="#soluciones">Soluciones</a>
-        <a href="#apps-disponibles">Apps disponibles</a>
-        <a href="#whats-next">What's next</a>
+        <a href="#soluciones">Capacidades</a>
+        <a href="#apps-disponibles">Available now</a>
+        <a href="#whats-next">What’s next</a>
         <a href="#contacto">Contacto</a>
       </nav>
 
       <div class="topnav-actions" aria-label="Acción rápida">
-        <a class="btn btn-primary" href="#contacto">Solicitar cotización</a>
+        <a class="btn btn-primary btn-nav-cta" href="#contacto">Iniciar proyecto</a>
       </div>
 
       <details class="mobile-nav">
         <summary>Menú</summary>
         <div class="mobile-nav-menu">
           <a href="#inicio">Inicio</a>
-          <a href="#soluciones">Soluciones</a>
-          <a href="#apps-disponibles">Apps disponibles</a>
-          <a href="#whats-next">What's next</a>
+          <a href="#soluciones">Capacidades</a>
+          <a href="#apps-disponibles">Available now</a>
+          <a href="#whats-next">What’s next</a>
           <a href="#servicios">Servicios</a>
           <a href="#bolsa-empleo">Bolsa de empleo</a>
           <a href="#faq">FAQ</a>
@@ -62,63 +62,50 @@
 
   <main>
     <section class="wrap" id="inicio">
-      <section class="panel hero-premium">
+      <section class="panel hero-premium hero-editorial">
         <div class="hero-copy">
           <span class="eyebrow"><span class="dot"></span> ACACIA · Parent brand</span>
-          <h1>Diseñamos y operamos soluciones digitales que sí se sienten de nivel enterprise.</h1>
+          <h1>Arquitectura digital premium para equipos que exigen claridad, velocidad y control.</h1>
           <p class="lead">
-            ACACIA combina consultoría, implementación y productos propios para convertir procesos dispersos
-            en sistemas claros, medibles y escalables para equipos en crecimiento.
+            Diseñamos ecosistemas de software, consultoría e implementación para convertir operaciones complejas
+            en experiencias fluidas, medibles y listas para escalar.
           </p>
 
           <div class="cta">
-            <a class="btn btn-primary" href="#contacto">Agenda una sesión estratégica</a>
-            <a class="btn btn-ghost" href="#apps-disponibles">Explorar apps disponibles</a>
+            <a class="btn btn-primary" href="#contacto">Agenda una sesión ejecutiva</a>
+            <a class="btn btn-ghost" href="#apps-disponibles">Ver productos disponibles</a>
           </div>
 
-          <div class="hero-stats" aria-label="Indicadores clave">
-            <article>
-              <strong>Consultoría + ejecución</strong>
-              <span>De la estrategia a la implementación real.</span>
-            </article>
-            <article>
-              <strong>Productos propios</strong>
-              <span>Apps diseñadas para operación diaria.</span>
-            </article>
-            <article>
-              <strong>Acompañamiento directo</strong>
-              <span>Soporte cercano, técnico y comercial.</span>
-            </article>
+          <div class="hero-kpis" aria-label="Métricas de valor de ACACIA">
+            <article><strong>Estrategia + ejecución</strong><span>Diseño y delivery en el mismo equipo.</span></article>
+            <article><strong>Productos propios</strong><span>Apps listas para impacto operativo real.</span></article>
+            <article><strong>Evolución continua</strong><span>Iteramos con datos, no con suposiciones.</span></article>
           </div>
         </div>
 
-        <aside class="card hero-side-panel">
-          <div class="meter">
-            <h2>Cómo trabajamos</h2>
-            <div class="mini">
-              <div class="box">
-                <b>1. Diagnóstico</b>
-                <span>Mapeamos tu operación y detectamos cuellos de botella críticos.</span>
-              </div>
-              <div class="box">
-                <b>2. Arquitectura</b>
-                <span>Definimos stack, procesos y ruta de implementación.</span>
-              </div>
-              <div class="box">
-                <b>3. Implementación</b>
-                <span>Desplegamos soluciones con foco en adopción y resultados.</span>
-              </div>
-              <div class="box">
-                <b>4. Evolución</b>
-                <span>Mejoramos de forma continua con métricas y feedback operativo.</span>
-              </div>
-            </div>
+        <aside class="hero-visual" aria-label="Visual abstracto de ecosistema ACACIA">
+          <div class="visual-halo"></div>
+          <div class="visual-plane visual-plane-main">
+            <p>Operations fabric</p>
+            <b>Consultoría · Implementación · Producto</b>
+            <span>Un stack elegante para equipos modernos.</span>
           </div>
+          <div class="visual-plane visual-plane-side">
+            <p>Systems pulse</p>
+            <ul>
+              <li><span></span>Data clarity layer</li>
+              <li><span></span>Automation stream</li>
+              <li><span></span>Human-centered UX</li>
+            </ul>
+          </div>
+          <div class="visual-orbit orbit-a"></div>
+          <div class="visual-orbit orbit-b"></div>
+          <div class="visual-orbit orbit-c"></div>
         </aside>
       </section>
     </section>
 
-    <section class="wrap section-wrap" id="soluciones">
+<section class="wrap section-wrap" id="soluciones">
       <section class="panel panel-single">
         <div class="section-head">
           <span class="eyebrow"><span class="dot"></span> Soluciones ACACIA</span>
@@ -508,93 +495,34 @@
     </div>
   </footer>
 
-  <script>
-    (() => {
-      const root = document.documentElement;
-      const year = document.getElementById('year');
-      if (year) year.textContent = new Date().getFullYear();
 
-      const waLink = document.getElementById('wa-link');
-      const waNumber = document.body.dataset.waNumber || '524498958291';
-      const waMessage = document.body.dataset.waMessage || 'Hola, me interesa conocer más sobre las soluciones de ACACIA.';
-      if (waLink) {
-        waLink.href = `https://wa.me/${waNumber}?text=${encodeURIComponent(waMessage)}`;
-      }
 
-      const themePicker = document.getElementById('theme-picker');
-      const langPicker = document.getElementById('lang-picker');
-      const currencyPicker = document.getElementById('currency-picker');
+  <section class="secret-game" aria-hidden="true">
+    <div class="secret-game-backdrop" id="secret-game-backdrop"></div>
+    <div class="secret-game-modal" id="secret-game-modal" role="dialog" aria-modal="true" aria-labelledby="secret-game-title">
+      <div class="secret-game-head">
+        <div>
+          <p>ACACIA hidden mode</p>
+          <h3 id="secret-game-title">Stack Protocol</h3>
+        </div>
+        <button class="secret-game-close" id="secret-game-close" aria-label="Cerrar mini juego">✕</button>
+      </div>
+      <p class="secret-game-note">Alinea bloques, limpia líneas y mantén estable la señal.</p>
+      <canvas id="secret-game-canvas" width="280" height="420" aria-label="Mini juego de bloques"></canvas>
+      <div class="secret-game-meta">
+        <span>Score: <b id="secret-score">0</b></span>
+        <span>Best: <b id="secret-best">0</b></span>
+      </div>
+      <div class="secret-game-controls">
+        <button class="btn btn-ghost" id="secret-left">◀</button>
+        <button class="btn btn-ghost" id="secret-drop">▼</button>
+        <button class="btn btn-ghost" id="secret-right">▶</button>
+        <button class="btn btn-primary" id="secret-restart">Restart</button>
+      </div>
+    </div>
+  </section>
 
-      const savedTheme = localStorage.getItem('acacia-theme') || 'system';
-      const savedLang = localStorage.getItem('acacia-lang') || 'es';
-      const savedCurrency = localStorage.getItem('acacia-currency') || 'MXN';
 
-      const applyTheme = (theme) => {
-        const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const resolved = theme === 'system' ? (systemDark ? 'dark' : 'light') : theme;
-        root.setAttribute('data-theme', resolved);
-      };
-
-      const formatPrice = (mxn, currency) => {
-        const rates = { MXN: 1, USD: 0.059 };
-        const symbols = { MXN: 'MXN', USD: 'USD' };
-        const value = mxn * (rates[currency] || 1);
-        return new Intl.NumberFormat(savedLang === 'en' ? 'en-US' : 'es-MX', {
-          style: 'currency',
-          currency: currency,
-          maximumFractionDigits: currency === 'USD' ? 0 : 0
-        }).format(value) + ` ${symbols[currency]}`;
-      };
-
-      const applyCurrency = (currency) => {
-        document.querySelectorAll('[data-price-mxn]').forEach(el => {
-          const mxn = Number(el.getAttribute('data-price-mxn'));
-          if (!Number.isNaN(mxn)) {
-            el.textContent = formatPrice(mxn, currency);
-          }
-        });
-      };
-
-      const applyLanguage = (lang) => {
-        document.documentElement.lang = lang;
-      };
-
-      if (themePicker) themePicker.value = savedTheme;
-      if (langPicker) langPicker.value = savedLang;
-      if (currencyPicker) currencyPicker.value = savedCurrency;
-
-      applyTheme(savedTheme);
-      applyLanguage(savedLang);
-      applyCurrency(savedCurrency);
-
-      if (themePicker) {
-        themePicker.addEventListener('change', (e) => {
-          localStorage.setItem('acacia-theme', e.target.value);
-          applyTheme(e.target.value);
-        });
-      }
-
-      if (langPicker) {
-        langPicker.addEventListener('change', (e) => {
-          localStorage.setItem('acacia-lang', e.target.value);
-          applyLanguage(e.target.value);
-          location.reload();
-        });
-      }
-
-      if (currencyPicker) {
-        currencyPicker.addEventListener('change', (e) => {
-          localStorage.setItem('acacia-currency', e.target.value);
-          applyCurrency(e.target.value);
-        });
-      }
-
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => {
-        const theme = localStorage.getItem('acacia-theme') || 'system';
-        if (theme === 'system') applyTheme('system');
-      });
-    })();
-  </script>
 
   <script src="/assets/js/site.js" defer></script>
 </body>
