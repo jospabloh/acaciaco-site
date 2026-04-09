@@ -107,6 +107,15 @@ body{
   min-height:100%;
 }
 
+main{
+  position:relative;
+  z-index:1;
+}
+
+main [id]{
+  scroll-margin-top:calc(var(--nav-height) + 28px);
+}
+
 body{
   margin:0;
   font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
@@ -1230,6 +1239,10 @@ textarea{
   height:20px;
   display:inline-grid;
   place-items:center;
+  flex:0 0 20px;
+  line-height:0;
+  overflow:hidden;
+  text-indent:-9999px;
   border-radius:50%;
   background:rgba(255,255,255,.22);
   background-image:url("https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg");
@@ -1317,6 +1330,18 @@ textarea{
 }
 
 @media (max-width:760px){
+  html{
+    scroll-padding-top:calc(var(--nav-height) + env(safe-area-inset-top) + 16px);
+  }
+
+  body{
+    overflow-x:hidden;
+  }
+
+  .topnav{
+    padding-top:env(safe-area-inset-top);
+  }
+
   .wrap,
   .footer-inner{
     width:min(var(--container), calc(100% - 22px));
@@ -1333,6 +1358,7 @@ textarea{
 
   .topnav-inner{
     min-height:var(--nav-height);
+    gap:12px;
   }
 
   .topnav-brand-copy span{
@@ -1347,6 +1373,44 @@ textarea{
     padding:22px;
     border-radius:24px;
   }
+
+  .hero-editorial{
+    margin-top:calc(var(--nav-height) + env(safe-area-inset-top) + 10px);
+    min-height:auto;
+    padding:24px 20px;
+    gap:18px;
+  }
+
+  .hero-copy{
+    display:grid;
+    gap:10px;
+  }
+
+  .hero-copy h1{
+    max-width:15ch;
+  }
+
+  .hero-kpis{
+    gap:8px;
+    margin-top:16px;
+  }
+
+  .hero-kpis article{
+    padding:10px 2px;
+  }
+
+  .hero-visual{
+    min-height:320px;
+  }
+
+  .visual-halo{
+    width:260px;
+    height:260px;
+  }
+
+  .orbit-a{width:300px;height:300px;}
+  .orbit-b{width:220px;height:220px;}
+  .orbit-c{width:150px;height:150px;}
 
   .mini{
     grid-template-columns:1fr;
@@ -1366,6 +1430,24 @@ textarea{
 
   .section{
     padding:72px 0;
+  }
+
+  .mobile-nav > summary{
+    min-height:42px;
+    padding:10px 12px;
+  }
+
+  .mobile-nav-menu{
+    right:0;
+    max-width:calc(100vw - 22px);
+    padding:8px;
+  }
+
+  .mobile-nav-menu a{
+    min-height:44px;
+    display:flex;
+    align-items:center;
+    padding:11px 10px;
   }
 }
 
@@ -1397,8 +1479,8 @@ textarea{
   }
 
   .wa-float{
-    right:12px;
-    bottom:12px;
+    right:calc(12px + env(safe-area-inset-right));
+    bottom:calc(12px + env(safe-area-inset-bottom));
     padding:10px 12px;
   }
 }
@@ -1465,4 +1547,9 @@ textarea{
   .topnav-inner{width:min(var(--container), calc(100% - 22px));}
   .hero-copy h1{font-size:clamp(2rem,10vw,2.6rem);}
   .secret-game-controls{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .secret-game-modal{
+    top:50%;
+    max-height:calc(100dvh - 26px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    overflow:auto;
+  }
 }

@@ -238,6 +238,17 @@
     });
   };
 
+  const setupMobileNav = () => {
+    const mobileNav = document.querySelector('.mobile-nav');
+    if (!mobileNav) return;
+
+    mobileNav.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileNav.removeAttribute('open');
+      });
+    });
+  };
+
 
 
   const setupSecretGame = () => {
@@ -408,5 +419,6 @@
   setupCurrencyPicker();
   setupLanguagePicker();
   setupTestimonials();
+  setupMobileNav();
   setupSecretGame();
 })();
