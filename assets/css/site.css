@@ -1539,13 +1539,37 @@ textarea{
 
 @media (max-width:980px){
   .hero-editorial{min-height:auto; margin-top:calc(var(--nav-height) + 14px);}
-  .hero-visual{min-height:390px;}
+  .hero-visual{min-height:430px; overflow:hidden; border-radius:20px;}
   .hero-kpis{grid-template-columns:1fr;}
-  .visual-plane-main{transform:none;} .visual-plane-side{right:0; transform:rotate(4deg);}
+  .visual-plane-main{transform:rotate(-2deg) translateY(-10px);}
+  .visual-plane-side{right:50%; bottom:20px; transform:translateX(50%) rotate(3deg);}
+  .orbit-a{width:360px;height:360px;}
+  .orbit-b{width:250px;height:250px;}
+  .orbit-c{width:170px;height:170px;}
 }
 @media (max-width:760px){
   .topnav-inner{width:min(var(--container), calc(100% - 22px));}
   .hero-copy h1{font-size:clamp(2rem,10vw,2.6rem);}
+  .hero-editorial{padding:24px 20px; gap:18px; margin-top:calc(var(--nav-height) + env(safe-area-inset-top) + 10px);}
+  .hero-visual{min-height:380px;}
+  .visual-halo{width:260px; height:260px;}
+  .visual-plane-main{
+    width:min(95%,320px);
+    transform:rotate(-1.5deg) translateY(-8px);
+    padding:16px;
+  }
+  .visual-plane-side{
+    width:min(90%,258px);
+    right:50%;
+    bottom:14px;
+    transform:translateX(50%) rotate(2deg);
+    padding:14px;
+  }
+  .visual-plane-main b{font-size:1.02rem;}
+  .visual-plane-side li{font-size:.8rem;}
+  .orbit-a{width:300px;height:300px;}
+  .orbit-b{width:210px;height:210px;}
+  .orbit-c{width:140px;height:140px;}
   .secret-game-controls{grid-template-columns:repeat(2,minmax(0,1fr));}
   .secret-game-modal{
     top:50%;

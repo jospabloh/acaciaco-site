@@ -252,7 +252,7 @@
 
 
   const setupSecretGame = () => {
-    const whisper = document.getElementById('brand-whisper');
+    const trigger = document.getElementById('brand-trigger');
     const shell = document.querySelector('.secret-game');
     const backdrop = document.getElementById('secret-game-backdrop');
     const closeBtn = document.getElementById('secret-game-close');
@@ -263,7 +263,7 @@
     const rightBtn = document.getElementById('secret-right');
     const dropBtn = document.getElementById('secret-drop');
     const canvas = document.getElementById('secret-game-canvas');
-    if (!whisper || !shell || !canvas) return;
+    if (!trigger || !shell || !canvas) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -273,7 +273,11 @@
     const cell = Math.floor(canvas.width / cols);
     const board = Array.from({ length: rows }, () => Array(cols).fill(0));
     const colors = ['#38bdf8', '#22d3ee', '#818cf8', '#34d399', '#f59e0b'];
-    let clickQueue = [];
+    const triggerWindowMs = 3000;
+    const triggerCount = 5;
+    let pointerQueue = [];
+    let suppressNextBrandClick = false;
+    let keyBuffer = '';
     let gameLoop = null;
     let score = 0;
     let best = Number(getStored('acacia_secret_best', '0')) || 0;
@@ -385,22 +389,59 @@
       gameLoop = window.setInterval(tick, 430);
     };
 
-    whisper.addEventListener('click', () => {
+    const isTypingField = (node) => {
+      if (!(node instanceof HTMLElement)) return false;
+      if (node.isContentEditable) return true;
+      const tag = node.tagName;
+      return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+    };
+
+    const queueTriggerTap = () => {
       const now = Date.now();
-      clickQueue = clickQueue.filter((t) => now - t < 2100);
-      clickQueue.push(now);
-      if (clickQueue.length >= 5) {
-        clickQueue = [];
+      pointerQueue = pointerQueue.filter((t) => now - t < triggerWindowMs);
+      pointerQueue.push(now);
+      if (pointerQueue.length >= triggerCount) {
+        pointerQueue = [];
+        suppressNextBrandClick = true;
         open();
+      }
+    };
+
+    trigger.addEventListener('pointerup', (event) => {
+      if (event.button !== 0 || !event.isPrimary) return;
+      queueTriggerTap();
+    });
+
+    trigger.addEventListener('click', (event) => {
+      if (suppressNextBrandClick) {
+        event.preventDefault();
+        event.stopPropagation();
+        suppressNextBrandClick = false;
+        return;
+      }
+      if (window.location.pathname === '/apps' || window.location.pathname === '/apps/') {
+        event.preventDefault();
       }
     });
 
     document.addEventListener('keydown', (event) => {
-      if (!shell.classList.contains('is-open')) return;
-      if (event.key === 'Escape') close();
-      if (event.key === 'ArrowLeft') move(-1);
-      if (event.key === 'ArrowRight') move(1);
-      if (event.key === 'ArrowDown') hardDrop();
+      if (shell.classList.contains('is-open')) {
+        if (event.key === 'Escape') close();
+        if (event.key === 'ArrowLeft') move(-1);
+        if (event.key === 'ArrowRight') move(1);
+        if (event.key === 'ArrowDown') hardDrop();
+        return;
+      }
+
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
+      if (isTypingField(event.target)) return;
+      if (event.key.length !== 1 || !/[a-z]/i.test(event.key)) return;
+
+      keyBuffer = (keyBuffer + event.key.toUpperCase()).slice(-6);
+      if (keyBuffer.endsWith('ACACIA')) {
+        keyBuffer = '';
+        open();
+      }
     });
 
     leftBtn?.addEventListener('click', () => move(-1));
