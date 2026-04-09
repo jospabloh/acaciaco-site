@@ -1,11 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="FlowFin">
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-label="FlowFin">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0a78b8"/>
-      <stop offset="100%" stop-color="#69c7ff"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2f8a64"/>
+      <stop offset="100%" stop-color="#1e5f4a"/>
+    </linearGradient>
+    <linearGradient id="arrow" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#d79f33"/>
+      <stop offset="100%" stop-color="#f3d77a"/>
     </linearGradient>
   </defs>
-  <rect x="8" y="8" width="112" height="112" rx="24" fill="#0b1730" stroke="#7dd3fc" stroke-width="4"/>
-  <path d="M34 40h58v12H46v14h34v12H46v26H34z" fill="url(#g)"/>
-  <circle cx="90" cy="90" r="10" fill="#38bdf8"/>
+  <rect width="1024" height="1024" rx="64" fill="url(#bg)"/>
+  <path d="M175 713C276 573 370 577 442 646c56 54 104 88 159 64 52-23 94-76 126-149l125 74-20-191-190-5 66 39c-38 72-82 117-130 137-44 19-84-1-141-55-77-74-176-111-262-40z" fill="url(#arrow)"/>
 </svg>
