@@ -142,6 +142,55 @@ textarea{
   margin:0 auto;
 }
 
+
+/* Layout primitives for /apps */
+.wrap{
+  width:min(var(--container), calc(100% - 32px));
+  margin:0 auto;
+}
+
+.panel{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);
+  gap:24px;
+  padding:28px;
+  border:1px solid var(--line);
+  border-radius:var(--radius-xl);
+  background:linear-gradient(160deg, color-mix(in srgb, var(--surface) 94%, transparent), color-mix(in srgb, var(--surface-2) 92%, transparent));
+  box-shadow:var(--shadow-lg);
+}
+
+.panel-single{ grid-template-columns:1fr; }
+.section-wrap{ margin-top:20px; }
+
+.grid,
+.grid-bg{ position:fixed; inset:0; pointer-events:none; opacity:.2; }
+
+.orb2,
+.orb-2{ position:fixed; border-radius:50%; pointer-events:none; filter:blur(34px); opacity:.9; }
+
+.topnav-links-premium a{ position:relative; padding:8px 2px; letter-spacing:.01em; }
+.topnav-links-premium a::after{ content:""; position:absolute; left:0; right:0; bottom:-7px; height:2px; border-radius:999px; background:linear-gradient(90deg, var(--brand-500), var(--brand-400)); opacity:0; transform:scaleX(.35); transition:opacity .18s ease, transform .18s ease; }
+.topnav-links-premium a:hover::after,
+.topnav-links-premium a:focus-visible::after{ opacity:1; transform:scaleX(1); }
+
+.hero-premium{ align-items:stretch; }
+.hero-copy h1{ margin:14px 0 12px; font-size:clamp(2rem,4.2vw,3.7rem); line-height:1.02; letter-spacing:-.04em; }
+.hero-stats{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-top:22px; }
+.hero-stats article{ padding:12px; border:1px solid var(--line); border-radius:14px; background:color-mix(in srgb, var(--surface) 86%, transparent); }
+.hero-stats strong{ display:block; margin-bottom:4px; font-size:.9rem; }
+.hero-stats span{ color:var(--muted); font-size:.85rem; line-height:1.5; }
+.hero-side-panel{ display:block; }
+
+.available-grid,
+.upcoming-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+
+.app-card-preview .btn{ border-style:dashed; }
+.app-card-preview .btn:hover{ transform:none; }
+
+.footer-inner{ width:min(var(--container), calc(100% - 32px)); margin:0 auto; display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+
+
 .section{
   padding:88px 0;
 }
@@ -1230,6 +1279,14 @@ textarea{
     display:none;
   }
 
+  .panel{
+    grid-template-columns:1fr;
+  }
+
+  .hero-stats{
+    grid-template-columns:1fr;
+  }
+
   .mobile-nav{
     display:block;
   }
@@ -1260,6 +1317,16 @@ textarea{
 }
 
 @media (max-width:760px){
+  .wrap,
+  .footer-inner{
+    width:min(var(--container), calc(100% - 22px));
+  }
+
+  .available-grid,
+  .upcoming-grid{
+    grid-template-columns:1fr;
+  }
+
   :root{
     --nav-height:68px;
   }
