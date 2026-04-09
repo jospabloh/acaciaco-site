@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StockFlow · ACACIA</title>
+  <meta name="description" content="StockFlow: control de inventario, entradas, salidas y existencias en tiempo real." />
+
+  <link rel="stylesheet" href="/assets/css/site.css?v=20260128-4" />
+</head>
+
+<body>
+  <div class="grid"></div>
+  <div class="orb"></div>
+  <div class="orb2"></div>
+
+  <main class="wrap">
+    <section class="panel">
+
+      <!-- IZQUIERDA -->
+      <div>
+        <div class="brand">
+          <img src="../assets/Logo_ACACIA_HighRes.jpg" alt="ACACIA" />
+          <div class="txt">
+            <b>STOCKFLOW</b>
+            <span>Control de inventario</span>
+          </div>
+        </div>
+
+        <h1>Inventario claro para operar mejor</h1>
+
+        <p class="lead">
+          <strong>StockFlow</strong> te ayuda a administrar existencias,
+          entradas y salidas con visibilidad en tiempo real para reducir
+          faltantes y mejorar decisiones de compra.
+        </p>
+
+        <div class="pillrow">
+          <div class="pill"><strong>Inventario</strong></div>
+          <div class="pill"><strong>Trazabilidad</strong></div>
+          <div class="pill"><strong>Operación diaria</strong></div>
+        </div>
+
+        <div class="cta">
+          <a class="btn btn-primary" href="https://stockflow.acaciaco.com.mx" target="_blank">
+            Abrir StockFlow →
+          </a>
+          <a class="btn btn-ghost" href="/apps">
+            Volver a apps
+          </a>
+        </div>
+
+        <footer>
+          <span class="dot"></span>
+          <span>© <span id="year"></span> ACACIA</span>
+          <span>•</span>
+          <a href="/privacy">Privacy</a>
+          <span>•</span>
+          <a href="/terms">Terms</a>
+        </footer>
+      </div>
+
+      <!-- DERECHA -->
+      <aside class="card">
+        <div class="meter">
+          <h2>Beneficios</h2>
+
+          <div class="mini">
+            <div class="box">
+              <b>Existencias</b>
+              <span>Consulta stock disponible por producto.</span>
+            </div>
+            <div class="box">
+              <b>Movimientos</b>
+              <span>Registra entradas y salidas con control.</span>
+            </div>
+            <div class="box">
+              <b>Planeación</b>
+              <span>Mejora compras con datos de consumo.</span>
+            </div>
+            <div class="box">
+              <b>Visibilidad</b>
+              <span>Información centralizada para tu equipo.</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </section>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
