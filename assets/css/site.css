@@ -1921,9 +1921,8 @@ textarea{
 .solution-head{display:flex; gap:8px; align-items:center;}
 .solution-head.dual-logos img{width:24px;height:24px;border-radius:6px;}
 .solution-head.dual-logos b{margin-left:2px;}
-.mini-screen{height:86px; border-radius:12px; border:1px solid rgba(87,191,255,.24); background:linear-gradient(135deg, rgba(87,191,255,.22), rgba(87,191,255,.02)); display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; padding:8px;}
-.mini-screen span{border-radius:8px; background:rgba(255,255,255,.14);}
-.mini-screen.warm{border-color:rgba(255,185,121,.32); background:linear-gradient(135deg, rgba(255,185,121,.2), rgba(255,185,121,.03));}
+.solution-highlights{display:flex; flex-wrap:wrap; gap:.45rem; margin:.15rem 0 .2rem;}
+.solution-chip{display:inline-flex; align-items:center; min-height:32px; padding:.4rem .72rem; border-radius:999px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.04); color:var(--text-soft); font-size:.84rem; line-height:1.15; white-space:nowrap;}
 .preview-card{background:linear-gradient(165deg, rgba(26,18,8,.7), rgba(14,17,31,.72));}
 
 .interactive-card{
