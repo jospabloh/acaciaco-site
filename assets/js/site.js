@@ -15,12 +15,67 @@
 
   const root = document.documentElement;
   const body = document.body;
+  const pathName = window.location.pathname.replace(/\/+$/, '') || '/';
+
+  const getAppAnchor = (id) => (pathName === '/apps' ? `#${id}` : `/apps#${id}`);
+
+  const renderSiteHeader = () => {
+    const headerMount = document.getElementById('site-header');
+    if (!headerMount) return;
+
+    headerMount.className = 'topnav topnav-premium';
+    headerMount.innerHTML = `
+    <div class="topnav-inner">
+      <a class="topnav-brand" id="brand-trigger" href="/apps" title="ACACIA | Tecnología, consultoría y soluciones digitales" aria-label="ACACIA">
+        <img src="/assets/Logo_ACACIA_HighRes.jpg" alt="ACACIA" />
+        <div class="topnav-brand-copy">
+          <b>ACACIA</b>
+          <span id="brand-whisper" aria-label="Digital systems crafted by ACACIA">Systems crafted with intent</span>
+        </div>
+      </a>
+
+      <nav class="topnav-links topnav-links-premium" aria-label="Principal">
+        <a href="${getAppAnchor('inicio')}">Inicio</a>
+        <a href="${getAppAnchor('soluciones')}">Capacidades</a>
+        <a href="${getAppAnchor('apps-disponibles')}">Available now</a>
+        <a href="${getAppAnchor('whats-next')}">What’s next</a>
+        <a href="${getAppAnchor('contacto')}">Contacto</a>
+      </nav>
+
+      <div class="topnav-actions topnav-actions-global" aria-label="Controles globales del sitio">
+        <div class="global-pref-shell" aria-label="Moneda">
+          <label class="picker picker-compact" for="currency-picker-top">
+            <span class="picker-icon" aria-hidden="true">💱</span>
+            <span class="picker-text">Moneda</span>
+            <select id="currency-picker-top" name="currency">
+              <option value="MXN">MXN</option>
+              <option value="USD">USD</option>
+            </select>
+          </label>
+        </div>
+        <a class="btn btn-primary btn-nav-cta" href="${getAppAnchor('contacto')}">Iniciar proyecto</a>
+      </div>
+
+      <details class="mobile-nav">
+        <summary>Menú</summary>
+        <div class="mobile-nav-menu">
+          <a href="${getAppAnchor('inicio')}">Inicio</a>
+          <a href="${getAppAnchor('soluciones')}">Capacidades</a>
+          <a href="${getAppAnchor('apps-disponibles')}">Available now</a>
+          <a href="${getAppAnchor('whats-next')}">What’s next</a>
+          <a href="${getAppAnchor('contacto')}">Contacto</a>
+        </div>
+      </details>
+    </div>`;
+  };
+
+  renderSiteHeader();
 
   const yearEl = document.getElementById('year');
   const dateEl = document.getElementById('date');
   const waEl = document.getElementById('wa-link');
   const themePicker = document.getElementById('theme-picker');
-  const currencyPicker = document.getElementById('currency-picker') || document.getElementById('currency-picker-top');
+  let currencyPicker = document.getElementById('currency-picker') || document.getElementById('currency-picker-top');
   let activeUsdRate = DEFAULTS.fallbackUsdRate;
 
   const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -171,6 +226,7 @@
   };
 
   const setupCurrencyPicker = () => {
+    currencyPicker = document.getElementById('currency-picker') || document.getElementById('currency-picker-top');
     if (!currencyPicker) {
       applyCurrency(getStored(STORAGE.currency, DEFAULTS.currency));
       return;
