@@ -1533,8 +1533,8 @@ textarea{
 .secret-game-close{border:1px solid var(--line); background:transparent; color:var(--ink); width:34px; height:34px; border-radius:10px; cursor:pointer;}
 .secret-game-note{margin:10px 0 12px;color:var(--muted);font-size:.92rem;}
 #secret-game-canvas{width:100%; border-radius:14px; border:1px solid var(--line); background:linear-gradient(180deg,#020617,#0f172a);}
-.secret-game-meta{display:flex;justify-content:space-between;margin-top:10px;color:var(--muted);}
-.secret-game-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px;}
+.secret-game-meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;margin-top:10px;color:var(--muted);}
+.secret-game-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px;}
 .secret-game-controls .btn{min-height:38px;padding:8px 10px;}
 
 @media (max-width:980px){
