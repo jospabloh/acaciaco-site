@@ -325,10 +325,10 @@
     socials.className = 'footer-socials';
     socials.innerHTML = `
       <a href="https://www.facebook.com/acaciaconsultoriaic/?locale=es_LA" target="_blank" rel="noopener noreferrer" aria-label="Facebook ACACIA">
-        <span class="social-icon" aria-hidden="true">f</span><span>Facebook</span>
+        <span class="social-icon" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><path d="M13.5 8.5h2V5.2c-.35-.05-1.55-.2-2.95-.2-2.92 0-4.92 1.78-4.92 5.05v2.95H4.5v3.7h3.13V24h3.84v-7.28h3.02l.48-3.7h-3.5v-2.58c0-1.07.3-1.8 2.03-1.8z"/></svg></span><span>Facebook</span>
       </a>
       <a href="https://www.instagram.com/acacia_consultoria/" target="_blank" rel="noopener noreferrer" aria-label="Instagram ACACIA">
-        <span class="social-icon" aria-hidden="true">◎</span><span>Instagram</span>
+        <span class="social-icon" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.9A3.85 3.85 0 0 0 3.9 7.75v8.5a3.85 3.85 0 0 0 3.85 3.85h8.5a3.85 3.85 0 0 0 3.85-3.85v-8.5a3.85 3.85 0 0 0-3.85-3.85zm8.95 1.45a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.9a3.1 3.1 0 1 0 0 6.2 3.1 3.1 0 0 0 0-6.2z"/></svg></span><span>Instagram</span>
       </a>
     `;
     footerInner.append(separator, socials);
