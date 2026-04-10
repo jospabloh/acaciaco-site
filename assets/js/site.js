@@ -274,7 +274,11 @@
 
     const cols = 10;
     const rows = 20;
-    const cell = Math.floor(canvas.width / cols);
+    const cell = Math.floor(Math.min(canvas.width / cols, canvas.height / rows));
+    const boardPixelWidth = cols * cell;
+    const boardPixelHeight = rows * cell;
+    const boardOffsetX = Math.floor((canvas.width - boardPixelWidth) / 2);
+    const boardOffsetY = Math.floor((canvas.height - boardPixelHeight) / 2);
     const board = Array.from({ length: rows }, () => Array(cols).fill(0));
     const pieces = {
       I: { color: '#38bdf8', matrix: [[1, 1, 1, 1]] },
@@ -338,7 +342,7 @@
 
     const drawCell = (x, y, fill) => {
       ctx.fillStyle = fill;
-      ctx.fillRect(x * cell, y * cell, cell - 1, cell - 1);
+      ctx.fillRect(boardOffsetX + (x * cell), boardOffsetY + (y * cell), cell - 1, cell - 1);
     };
 
     const canPlace = (matrix, offsetX, offsetY) => matrix.every((row, y) =>
@@ -369,7 +373,7 @@
           if (board[y][x]) drawCell(x, y, board[y][x]);
           else {
             ctx.fillStyle = 'rgba(148,163,184,.08)';
-            ctx.fillRect(x * cell, y * cell, cell - 1, cell - 1);
+            ctx.fillRect(boardOffsetX + (x * cell), boardOffsetY + (y * cell), cell - 1, cell - 1);
           }
         }
       }
