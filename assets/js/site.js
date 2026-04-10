@@ -37,8 +37,9 @@
       <nav class="topnav-links topnav-links-premium" aria-label="Principal">
         <a href="${getAppAnchor('inicio')}">Inicio</a>
         <a href="${getAppAnchor('soluciones')}">Capacidades</a>
-        <a href="${getAppAnchor('apps-disponibles')}">Available now</a>
-        <a href="${getAppAnchor('whats-next')}">What’s next</a>
+        <a href="${getAppAnchor('apps-destacadas')}">Apps</a>
+        <a href="/servicios">Servicios</a>
+        <a href="/pricing">Pricing</a>
         <a href="${getAppAnchor('contacto')}">Contacto</a>
       </nav>
 
@@ -61,8 +62,9 @@
         <div class="mobile-nav-menu">
           <a href="${getAppAnchor('inicio')}">Inicio</a>
           <a href="${getAppAnchor('soluciones')}">Capacidades</a>
-          <a href="${getAppAnchor('apps-disponibles')}">Available now</a>
-          <a href="${getAppAnchor('whats-next')}">What’s next</a>
+          <a href="${getAppAnchor('apps-destacadas')}">Apps</a>
+          <a href="/servicios">Servicios</a>
+          <a href="/pricing">Pricing</a>
           <a href="${getAppAnchor('contacto')}">Contacto</a>
         </div>
       </details>
@@ -269,6 +271,23 @@
         slides[index].classList.add('active');
       }, 4500);
     });
+  };
+
+
+
+  const setupRevealMotion = () => {
+    const revealNodes = Array.from(document.querySelectorAll('.reveal-up'));
+    if (!revealNodes.length || typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+
+    revealNodes.forEach((node) => observer.observe(node));
   };
 
   const setupMobileNav = () => {
@@ -669,5 +688,6 @@
   refreshExchangeRate();
   setupTestimonials();
   setupMobileNav();
+  setupRevealMotion();
   setupSecretGame();
 })();
