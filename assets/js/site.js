@@ -315,7 +315,81 @@
     });
   };
 
+  const setupFooterSocials = () => {
+    const footerInner = document.querySelector('.site-footer .footer-inner');
+    if (!footerInner || footerInner.querySelector('.footer-socials')) return;
 
+    const separator = document.createElement('span');
+    separator.textContent = '•';
+    const socials = document.createElement('span');
+    socials.className = 'footer-socials';
+    socials.innerHTML = `
+      <a href="https://www.facebook.com/acaciaconsultoriaic/?locale=es_LA" target="_blank" rel="noopener noreferrer" aria-label="Facebook ACACIA">
+        <span class="social-icon" aria-hidden="true">f</span><span>Facebook</span>
+      </a>
+      <a href="https://www.instagram.com/acacia_consultoria/" target="_blank" rel="noopener noreferrer" aria-label="Instagram ACACIA">
+        <span class="social-icon" aria-hidden="true">◎</span><span>Instagram</span>
+      </a>
+    `;
+    footerInner.append(separator, socials);
+  };
+
+  const setupFloatingEgg = () => {
+    const isHomepage = pathName === '/' || pathName === '/bienvenida';
+    if (!isHomepage) return;
+
+    const egg = document.querySelector('[data-floating-egg]');
+    const shell = document.querySelector('.secret-game');
+    if (!egg || !shell) return;
+
+    let consumed = false;
+    let visible = false;
+    let x = 0.8;
+    let y = 0.68;
+    let timerId = null;
+
+    const applyPosition = () => {
+      egg.style.left = `${Math.round(x * 100)}vw`;
+      egg.style.top = `${Math.round(y * 100)}vh`;
+    };
+
+    const nextPosition = () => {
+      x = 0.12 + (Math.random() * 0.74);
+      y = 0.16 + (Math.random() * 0.6);
+      if (window.innerWidth < 640) y = Math.min(y, 0.74);
+      applyPosition();
+    };
+
+    const pulse = () => {
+      if (consumed) return;
+      visible = !visible;
+      if (visible) nextPosition();
+      egg.classList.toggle('is-visible', visible);
+      timerId = window.setTimeout(pulse, visible ? 2600 + (Math.random() * 2200) : 1500 + (Math.random() * 2000));
+    };
+
+    const consumeEgg = () => {
+      consumed = true;
+      visible = false;
+      egg.classList.remove('is-visible');
+      egg.setAttribute('aria-hidden', 'true');
+      egg.disabled = true;
+      if (timerId) window.clearTimeout(timerId);
+    };
+
+    egg.addEventListener('click', () => {
+      if (consumed) return;
+      window.dispatchEvent(new CustomEvent('acacia:open-secret-game'));
+      egg.classList.remove('is-visible');
+    });
+
+    const observer = new MutationObserver(() => {
+      if (!shell.classList.contains('is-open') && !consumed) consumeEgg();
+    });
+    observer.observe(shell, { attributes: true, attributeFilter: ['class'] });
+    window.addEventListener('resize', applyPosition, { passive: true });
+    pulse();
+  };
 
   const setupSecretGame = () => {
     const trigger = document.getElementById('brand-trigger');
@@ -602,6 +676,8 @@
       gameTimer = window.requestAnimationFrame(gameFrame);
     };
 
+    window.addEventListener('acacia:open-secret-game', open);
+
     const isTypingField = (node) => {
       if (!(node instanceof HTMLElement)) return false;
       if (node.isContentEditable) return true;
@@ -705,4 +781,6 @@
   setupRevealMotion();
   setupHeroParallax();
   setupSecretGame();
+  setupFloatingEgg();
+  setupFooterSocials();
 })();
