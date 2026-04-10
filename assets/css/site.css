@@ -1793,3 +1793,48 @@ textarea{
     overflow:auto;
   }
 }
+
+/* Homepage simplification + premium rhythm */
+.tone-shift-panel{
+  background:linear-gradient(160deg, color-mix(in srgb, var(--surface-2) 96%, transparent), color-mix(in srgb, var(--surface) 90%, transparent));
+}
+
+.service-summary-grid,
+.testimonials-compact{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+
+.interactive-card{
+  transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+.interactive-card:hover,
+.interactive-card:focus-within{
+  transform:translateY(-4px);
+  border-color:var(--line-strong);
+  box-shadow:var(--shadow-sm);
+}
+
+.compact-cta-row{
+  margin-top:20px;
+}
+
+.reveal-on-scroll{
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity .55s ease, transform .55s ease;
+}
+
+.reveal-on-scroll.is-visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+@media (max-width: 900px){
+  .service-summary-grid,
+  .testimonials-compact{
+    grid-template-columns:1fr;
+  }
+}

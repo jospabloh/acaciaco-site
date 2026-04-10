@@ -36,9 +36,10 @@
 
       <nav class="topnav-links topnav-links-premium" aria-label="Principal">
         <a href="${getAppAnchor('inicio')}">Inicio</a>
-        <a href="${getAppAnchor('soluciones')}">Capacidades</a>
-        <a href="${getAppAnchor('apps-disponibles')}">Available now</a>
-        <a href="${getAppAnchor('whats-next')}">What’s next</a>
+        <a href="${getAppAnchor('areas')}">Capacidades</a>
+        <a href="${getAppAnchor('apps-destacadas')}">Apps</a>
+        <a href="/services">Servicios</a>
+        <a href="/pricing">Pricing</a>
         <a href="${getAppAnchor('contacto')}">Contacto</a>
       </nav>
 
@@ -60,9 +61,10 @@
         <summary>Menú</summary>
         <div class="mobile-nav-menu">
           <a href="${getAppAnchor('inicio')}">Inicio</a>
-          <a href="${getAppAnchor('soluciones')}">Capacidades</a>
-          <a href="${getAppAnchor('apps-disponibles')}">Available now</a>
-          <a href="${getAppAnchor('whats-next')}">What’s next</a>
+          <a href="${getAppAnchor('areas')}">Capacidades</a>
+          <a href="${getAppAnchor('apps-destacadas')}">Apps</a>
+          <a href="/services">Servicios</a>
+          <a href="/pricing">Pricing</a>
           <a href="${getAppAnchor('contacto')}">Contacto</a>
         </div>
       </details>
@@ -656,6 +658,27 @@
     updateMeta();
   };
 
+
+  const setupRevealOnScroll = () => {
+    const targets = Array.from(document.querySelectorAll('.reveal-on-scroll'));
+    if (!targets.length) return;
+
+    if (!('IntersectionObserver' in window)) {
+      targets.forEach((el) => el.classList.add('is-visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        obs.unobserve(entry.target);
+      });
+    }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+
+    targets.forEach((el) => observer.observe(el));
+  };
+
   setupDateAndYear();
   applyWhatsAppLink();
   setupThemePicker();
@@ -669,5 +692,6 @@
   refreshExchangeRate();
   setupTestimonials();
   setupMobileNav();
+  setupRevealOnScroll();
   setupSecretGame();
 })();
