@@ -40,7 +40,34 @@
         <a href="#contacto">Contacto</a>
       </nav>
 
-      <div class="topnav-actions" aria-label="Acción rápida">
+      <div class="topnav-actions topnav-actions-global" aria-label="Controles globales del sitio">
+        <div class="global-pref-shell" aria-label="Idioma, región y moneda">
+          <label class="picker picker-compact" for="lang-picker-top">
+            <span class="picker-icon" aria-hidden="true">🌐</span>
+            <span class="picker-text">Idioma</span>
+            <select id="lang-picker-top">
+              <option value="es">ES</option>
+              <option value="en">EN</option>
+            </select>
+          </label>
+          <label class="picker picker-compact" for="region-picker-top">
+            <span class="picker-icon" aria-hidden="true">🌍</span>
+            <span class="picker-text">Región</span>
+            <select id="region-picker-top">
+              <option value="mx">MX</option>
+              <option value="latam">LATAM</option>
+              <option value="us">US</option>
+            </select>
+          </label>
+          <label class="picker picker-compact" for="currency-picker-top">
+            <span class="picker-icon" aria-hidden="true">💱</span>
+            <span class="picker-text">Moneda</span>
+            <select id="currency-picker-top">
+              <option value="MXN">MXN</option>
+              <option value="USD">USD</option>
+            </select>
+          </label>
+        </div>
         <a class="btn btn-primary btn-nav-cta" href="#contacto">Iniciar proyecto</a>
       </div>
 
@@ -154,7 +181,7 @@
           <article class="box app-card">
             <img src="https://flowfin.acaciaco.com.mx/favicon.ico" alt="Logo FlowFin" width="30" height="30" />
             <b>FlowFin</b>
-            <span>Finanzas colaborativas para familias y grupos con metas compartidas.</span>
+            <span>Finanzas personales, en pareja, familiares y para pequeños grupos colaborativos.</span>
             <div class="cta app-cta">
               <a class="btn btn-primary" href="https://flowfin.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">Abrir app</a>
               <a class="btn btn-ghost" href="/flowfin">Ver más</a>
@@ -176,53 +203,22 @@
           <article class="box app-card app-card-preview">
             <span class="badge-upcoming">Preview · WIP</span>
             <b>LIUMA</b>
-            <span>Plataforma para comunicación y gestión escolar con enfoque en claridad operativa.</span>
+            <span>Comunicación y gestión escolar con IA habilitada para mejorar seguimiento y coordinación.</span>
             <div class="cta app-cta">
-              <a class="btn btn-ghost" href="/liuma">Ver preview</a>
+              <a class="btn btn-primary" href="https://wa.me/524498958291?text=Hola%2C%20me%20interesa%20solicitar%20preview%20de%20LIUMA%20y%20conocer%20condiciones%2C%20alcance%20y%20disponibilidad." target="_blank" rel="noopener noreferrer">Solicitar preview</a>
             </div>
           </article>
 
           <article class="box app-card app-card-preview">
-            <span class="badge-upcoming">Coming soon</span>
+            <span class="badge-upcoming">Preview · acceso limitado</span>
             <b>Puntos+</b>
             <span>Programa digital de lealtad y recompensas para aumentar recurrencia y engagement.</span>
             <div class="cta app-cta">
-              <a class="btn btn-ghost" href="/puntosplus">Ver preview</a>
+              <a class="btn btn-primary" href="https://wa.me/524498958291?text=Hola%2C%20me%20interesa%20solicitar%20preview%20de%20Puntos%2B%20y%20conocer%20condiciones%2C%20alcance%20y%20disponibilidad." target="_blank" rel="noopener noreferrer">Solicitar preview</a>
             </div>
           </article>
         </div>
-      </section>
-    </section>
-
-    <section class="wrap section-wrap">
-      <section class="panel panel-single">
-        <div class="preferences-inline">
-          <h2>Preferencias de visualización</h2>
-          <p class="lead">Puedes ajustar idioma, moneda y tema sin afectar tu cotización final en MXN.</p>
-          <div class="preferences-controls" aria-label="Preferencias">
-            <label class="picker">Idioma
-              <select id="lang-picker">
-                <option value="es">ES</option>
-                <option value="en">EN</option>
-              </select>
-            </label>
-
-            <label class="picker">Moneda
-              <select id="currency-picker">
-                <option value="MXN">MXN</option>
-                <option value="USD">USD</option>
-              </select>
-            </label>
-
-            <label class="picker">Tema
-              <select id="theme-picker">
-                <option value="system">Sistema</option>
-                <option value="dark">Oscuro</option>
-                <option value="light">Claro</option>
-              </select>
-            </label>
-          </div>
-        </div>
+        <p class="preview-legal-note">Acceso preview sujeto a aprobación y cupo; la disponibilidad puede ser limitada, las funciones pueden cambiar antes de lanzamiento general y el uso puede regirse por condiciones específicas. <a href="/terms#preview-access">Ver términos de preview</a>.</p>
       </section>
     </section>
 
@@ -250,8 +246,8 @@
                 <div class="stars">★★★★★</div>
                 <p>“Con StockFlow dejamos de perder tiempo en conciliaciones manuales. Hoy tenemos inventario en orden.”</p>
                 <div class="person">
-                  <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Foto de testimonial StockFlow" />
-                  <div><b>Mariana López</b><span>Gerente de operaciones</span></div>
+                  <img src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=300&q=80" alt="Foto de testimonial StockFlow" />
+                  <div><b>Mariana López</b><span>Administración y operaciones en pyme comercial</span></div>
                 </div>
               </article>
 
@@ -259,8 +255,8 @@
                 <div class="stars">★★★★★</div>
                 <p>“FlowFin nos ayudó a organizar gastos familiares y metas de ahorro con una interfaz clara.”</p>
                 <div class="person">
-                  <img src="https://randomuser.me/api/portraits/men/55.jpg" alt="Foto de testimonial FlowFin" />
-                  <div><b>Luis Hernández</b><span>Padre de familia</span></div>
+                  <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=300&q=80" alt="Foto de testimonial FlowFin" />
+                  <div><b>Luis Hernández</b><span>Usuario de finanzas personales y familiares</span></div>
                 </div>
               </article>
 
@@ -268,8 +264,8 @@
                 <div class="stars">★★★★★</div>
                 <p>“El acompañamiento de ACACIA fue claro desde cotización hasta implementación.”</p>
                 <div class="person">
-                  <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Foto de testimonial ACACIA" />
-                  <div><b>Daniela Ortega</b><span>Coordinación administrativa</span></div>
+                  <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80" alt="Foto de testimonial ACACIA" />
+                  <div><b>Daniela Ortega</b><span>Coordinación administrativa empresarial</span></div>
                 </div>
               </article>
             </div>
@@ -350,7 +346,7 @@
           <article class="pricing-subsection">
             <div class="pricing-subsection-head">
               <h4>FlowFin</h4>
-              <p>Finanzas colaborativas para familias y grupos con metas compartidas.</p>
+              <p>Finanzas personales, en pareja, familiares y para pequeños grupos colaborativos.</p>
             </div>
 
             <div class="pricing-cards-grid">
@@ -402,8 +398,8 @@
               <p>LIUMA y Puntos+ siguen en fase preview. Se presentan por demostración y evaluación, no como planes públicos activos.</p>
             </div>
             <div class="cta">
-              <a class="btn btn-ghost" href="/liuma">Ver LIUMA</a>
-              <a class="btn btn-ghost" href="/puntosplus">Ver Puntos+</a>
+              <a class="btn btn-primary" href="https://wa.me/524498958291?text=Hola%2C%20me%20interesa%20solicitar%20preview%20de%20LIUMA%20y%20conocer%20condiciones%2C%20alcance%20y%20disponibilidad." target="_blank" rel="noopener noreferrer">Solicitar preview LIUMA</a>
+              <a class="btn btn-primary" href="https://wa.me/524498958291?text=Hola%2C%20me%20interesa%20solicitar%20preview%20de%20Puntos%2B%20y%20conocer%20condiciones%2C%20alcance%20y%20disponibilidad." target="_blank" rel="noopener noreferrer">Solicitar preview Puntos+</a>
             </div>
           </article>
         </div>
