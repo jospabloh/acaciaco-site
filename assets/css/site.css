@@ -1959,3 +1959,24 @@ textarea{
   .solution-showcase{grid-template-columns:1fr;}
   .hero-visual{min-height:280px;}
 }
+
+/* Clarity + socials + floating egg */
+.plan-kicker{margin:0;color:var(--muted);font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;}
+.price-support{margin:0;color:var(--ink-soft);font-size:.93rem;line-height:1.55;}
+.badge-trial{background:rgba(45,164,230,.16);border:1px solid rgba(45,164,230,.38);color:#9fddff;}
+.implementation-note{margin:2px 0 0;padding-top:10px;border-top:1px solid var(--line);color:var(--muted);font-size:.83rem;line-height:1.45;}
+.app-pricing-grid .premium-price-card{display:grid;gap:10px;align-content:start;}
+
+.footer-socials{display:inline-flex;align-items:center;gap:10px;}
+.footer-socials a{display:inline-flex;align-items:center;gap:6px;color:var(--muted);transition:color .2s ease,transform .2s ease;}
+.footer-socials a:hover{color:var(--ink);transform:translateY(-1px);}
+.social-icon{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border:1px solid var(--line);border-radius:999px;font-size:.72rem;line-height:1;}
+
+.floating-egg{position:fixed;z-index:70;opacity:0;transform:translate3d(-50%,-50%,0) scale(.92);pointer-events:none;width:42px;height:54px;border:0;background:transparent;padding:0;transition:opacity .65s ease,transform 1.8s ease;}
+.floating-egg.is-visible{opacity:.95;pointer-events:auto;transform:translate3d(-50%,-50%,0) scale(1);}
+.floating-egg .egg-shell{position:relative;display:block;width:100%;height:100%;border-radius:50% 50% 45% 45% / 60% 60% 40% 40%;background:radial-gradient(circle at 32% 28%, rgba(255,255,255,.88), rgba(196,235,255,.94) 42%, rgba(95,173,222,.78) 100%);box-shadow:0 0 0 1px rgba(255,255,255,.45),0 12px 26px rgba(23,121,184,.34),0 0 30px rgba(76,166,227,.35);}
+.floating-egg .egg-shell::after{content:"";position:absolute;left:10px;top:9px;width:10px;height:15px;border-radius:50%;background:rgba(255,255,255,.55);filter:blur(1px);}
+
+@media (max-width: 640px){
+  .floating-egg{width:38px;height:48px;}
+}
