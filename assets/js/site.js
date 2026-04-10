@@ -396,6 +396,8 @@
       });
     };
 
+    const lineClearRewards = [0, 120, 320, 540, 860];
+
     const clearRows = () => {
       let cleared = 0;
       for (let y = rows - 1; y >= 0; y -= 1) {
@@ -408,8 +410,7 @@
       }
       if (cleared > 0) {
         lines += cleared;
-        const rewards = [0, 100, 300, 500, 800];
-        score += (rewards[cleared] || (cleared * 250)) * level;
+        score += (lineClearRewards[cleared] || (cleared * 260)) * level;
         level = Math.min(18, 1 + Math.floor(lines / 8));
         if (score > best) {
           best = score;
@@ -417,6 +418,7 @@
         }
         updateMeta();
       }
+      return cleared;
     };
 
     const reset = () => {
@@ -484,12 +486,6 @@
       if (!piece || isGameOver) return;
       if (canPlace(piece.matrix, piece.x, piece.y + 1)) {
         piece.y += 1;
-        score += 1;
-        if (score > best) {
-          best = score;
-          setStored('acacia_secret_best', String(best));
-        }
-        updateMeta();
       } else {
         lockPiece();
       }
@@ -500,14 +496,8 @@
       if (!piece || isGameOver) return;
       while (canPlace(piece.matrix, piece.x, piece.y + 1)) {
         piece.y += 1;
-        score += 2;
       }
       lockPiece();
-      if (score > best) {
-        best = score;
-        setStored('acacia_secret_best', String(best));
-      }
-      updateMeta();
       draw();
     };
 
