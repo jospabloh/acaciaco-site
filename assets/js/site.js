@@ -259,9 +259,13 @@
     const restartBtn = document.getElementById('secret-restart');
     const scoreEl = document.getElementById('secret-score');
     const bestEl = document.getElementById('secret-best');
+    const linesEl = document.getElementById('secret-lines');
+    const levelEl = document.getElementById('secret-level');
     const leftBtn = document.getElementById('secret-left');
     const rightBtn = document.getElementById('secret-right');
-    const dropBtn = document.getElementById('secret-drop');
+    const softDropBtn = document.getElementById('secret-soft-drop');
+    const hardDropBtn = document.getElementById('secret-hard-drop');
+    const rotateBtn = document.getElementById('secret-rotate');
     const canvas = document.getElementById('secret-game-canvas');
     if (!trigger || !shell || !canvas) return;
 
@@ -269,34 +273,93 @@
     if (!ctx) return;
 
     const cols = 10;
-    const rows = 15;
+    const rows = 20;
     const cell = Math.floor(canvas.width / cols);
     const board = Array.from({ length: rows }, () => Array(cols).fill(0));
-    const colors = ['#38bdf8', '#22d3ee', '#818cf8', '#34d399', '#f59e0b'];
+    const pieces = {
+      I: { color: '#38bdf8', matrix: [[1, 1, 1, 1]] },
+      O: { color: '#fbbf24', matrix: [[1, 1], [1, 1]] },
+      T: { color: '#a78bfa', matrix: [[0, 1, 0], [1, 1, 1]] },
+      L: { color: '#fb923c', matrix: [[0, 0, 1], [1, 1, 1]] },
+      J: { color: '#60a5fa', matrix: [[1, 0, 0], [1, 1, 1]] },
+      S: { color: '#34d399', matrix: [[0, 1, 1], [1, 1, 0]] },
+      Z: { color: '#f87171', matrix: [[1, 1, 0], [0, 1, 1]] }
+    };
+    const bagTypes = Object.keys(pieces);
+    const baseInterval = 720;
+    const minInterval = 170;
     const triggerWindowMs = 3000;
     const triggerCount = 5;
     let pointerQueue = [];
     let suppressNextBrandClick = false;
     let keyBuffer = '';
-    let gameLoop = null;
+    let gameTimer = null;
+    let lastTick = 0;
     let score = 0;
+    let lines = 0;
+    let level = 1;
     let best = Number(getStored('acacia_secret_best', '0')) || 0;
+    let bag = [];
     let piece = null;
+    let isGameOver = false;
 
     const updateMeta = () => {
       scoreEl.textContent = String(score);
       bestEl.textContent = String(best);
+      if (linesEl) linesEl.textContent = String(lines);
+      if (levelEl) levelEl.textContent = String(level);
     };
 
-    const randomPiece = () => ({
-      x: Math.floor(cols / 2),
-      y: 0,
-      color: colors[Math.floor(Math.random() * colors.length)]
-    });
+    const cloneMatrix = (matrix) => matrix.map((row) => [...row]);
+
+    const shuffleBag = () => {
+      const copy = [...bagTypes];
+      for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      bag = copy;
+    };
+
+    const spawnPiece = () => {
+      if (!bag.length) shuffleBag();
+      const type = bag.pop();
+      const source = pieces[type];
+      const matrix = cloneMatrix(source.matrix);
+      const pieceWidth = matrix[0].length;
+      return {
+        type,
+        matrix,
+        color: source.color,
+        x: Math.floor((cols - pieceWidth) / 2),
+        y: 0
+      };
+    };
 
     const drawCell = (x, y, fill) => {
       ctx.fillStyle = fill;
       ctx.fillRect(x * cell, y * cell, cell - 1, cell - 1);
+    };
+
+    const canPlace = (matrix, offsetX, offsetY) => matrix.every((row, y) =>
+      row.every((value, x) => {
+        if (!value) return true;
+        const boardX = offsetX + x;
+        const boardY = offsetY + y;
+        return boardX >= 0 &&
+          boardX < cols &&
+          boardY >= 0 &&
+          boardY < rows &&
+          !board[boardY][boardX];
+      })
+    );
+
+    const drawPiece = (targetPiece) => {
+      targetPiece.matrix.forEach((row, y) => {
+        row.forEach((value, x) => {
+          if (value) drawCell(targetPiece.x + x, targetPiece.y + y, targetPiece.color);
+        });
+      });
     };
 
     const draw = () => {
@@ -310,10 +373,28 @@
           }
         }
       }
-      if (piece) drawCell(piece.x, piece.y, piece.color);
+      if (piece) drawPiece(piece);
+      if (isGameOver) {
+        ctx.fillStyle = 'rgba(2, 6, 23, 0.72)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#e2e8f0';
+        ctx.font = 'bold 18px system-ui';
+        ctx.textAlign = 'center';
+        ctx.fillText('Signal Lost', canvas.width / 2, canvas.height / 2 - 6);
+        ctx.font = '13px system-ui';
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillText('Tap restart to reconnect', canvas.width / 2, canvas.height / 2 + 18);
+      }
     };
 
-    const collides = (x, y) => y >= rows || x < 0 || x >= cols || board[y]?.[x];
+    const mergePiece = () => {
+      if (!piece) return;
+      piece.matrix.forEach((row, y) => {
+        row.forEach((value, x) => {
+          if (value) board[piece.y + y][piece.x + x] = piece.color;
+        });
+      });
+    };
 
     const clearRows = () => {
       let cleared = 0;
@@ -326,7 +407,10 @@
         }
       }
       if (cleared > 0) {
-        score += cleared * 15;
+        lines += cleared;
+        const rewards = [0, 100, 300, 500, 800];
+        score += (rewards[cleared] || (cleared * 250)) * level;
+        level = Math.min(18, 1 + Math.floor(lines / 8));
         if (score > best) {
           best = score;
           setStored('acacia_secret_best', String(best));
@@ -338,55 +422,124 @@
     const reset = () => {
       for (let y = 0; y < rows; y += 1) board[y].fill(0);
       score = 0;
-      piece = randomPiece();
+      lines = 0;
+      level = 1;
+      bag = [];
+      isGameOver = false;
+      piece = spawnPiece();
+      lastTick = performance.now();
       updateMeta();
       draw();
     };
 
-    const tick = () => {
+    const lockPiece = () => {
+      mergePiece();
+      clearRows();
+      piece = spawnPiece();
+      if (!canPlace(piece.matrix, piece.x, piece.y)) {
+        isGameOver = true;
+        piece = null;
+      }
+    };
+
+    const stepDown = () => {
       if (!piece) return;
-      if (!collides(piece.x, piece.y + 1)) {
+      if (canPlace(piece.matrix, piece.x, piece.y + 1)) {
         piece.y += 1;
       } else {
-        if (piece.y === 0) {
-          reset();
-          return;
-        }
-        board[piece.y][piece.x] = piece.color;
-        clearRows();
-        piece = randomPiece();
+        lockPiece();
       }
       draw();
     };
 
     const move = (delta) => {
-      if (!piece) return;
+      if (!piece || isGameOver) return;
       const nextX = piece.x + delta;
-      if (!collides(nextX, piece.y)) {
+      if (canPlace(piece.matrix, nextX, piece.y)) {
         piece.x = nextX;
         draw();
       }
     };
 
+    const rotateMatrix = (matrix) => matrix[0].map((_, index) =>
+      matrix.map((row) => row[index]).reverse()
+    );
+
+    const rotate = () => {
+      if (!piece || isGameOver || piece.type === 'O') return;
+      const rotated = rotateMatrix(piece.matrix);
+      const kicks = [0, -1, 1, -2, 2];
+      for (let i = 0; i < kicks.length; i += 1) {
+        const offsetX = piece.x + kicks[i];
+        if (canPlace(rotated, offsetX, piece.y)) {
+          piece.matrix = rotated;
+          piece.x = offsetX;
+          draw();
+          return;
+        }
+      }
+    };
+
+    const softDrop = () => {
+      if (!piece || isGameOver) return;
+      if (canPlace(piece.matrix, piece.x, piece.y + 1)) {
+        piece.y += 1;
+        score += 1;
+        if (score > best) {
+          best = score;
+          setStored('acacia_secret_best', String(best));
+        }
+        updateMeta();
+      } else {
+        lockPiece();
+      }
+      draw();
+    };
+
     const hardDrop = () => {
-      if (!piece) return;
-      while (!collides(piece.x, piece.y + 1)) piece.y += 1;
-      tick();
+      if (!piece || isGameOver) return;
+      while (canPlace(piece.matrix, piece.x, piece.y + 1)) {
+        piece.y += 1;
+        score += 2;
+      }
+      lockPiece();
+      if (score > best) {
+        best = score;
+        setStored('acacia_secret_best', String(best));
+      }
+      updateMeta();
+      draw();
+    };
+
+    const getDropInterval = () => {
+      const pace = baseInterval - ((level - 1) * 45);
+      return Math.max(minInterval, pace);
+    };
+
+    const gameFrame = (time) => {
+      if (!shell.classList.contains('is-open')) return;
+      if (!lastTick) lastTick = time;
+      const delta = time - lastTick;
+      if (!isGameOver && delta >= getDropInterval()) {
+        stepDown();
+        lastTick = time;
+      }
+      gameTimer = window.requestAnimationFrame(gameFrame);
     };
 
     const close = () => {
       shell.classList.remove('is-open');
       document.body.style.overflow = '';
-      if (gameLoop) window.clearInterval(gameLoop);
-      gameLoop = null;
+      if (gameTimer) window.cancelAnimationFrame(gameTimer);
+      gameTimer = null;
     };
 
     const open = () => {
       shell.classList.add('is-open');
       document.body.style.overflow = 'hidden';
       reset();
-      if (gameLoop) window.clearInterval(gameLoop);
-      gameLoop = window.setInterval(tick, 430);
+      if (gameTimer) window.cancelAnimationFrame(gameTimer);
+      gameTimer = window.requestAnimationFrame(gameFrame);
     };
 
     const isTypingField = (node) => {
@@ -426,10 +579,30 @@
 
     document.addEventListener('keydown', (event) => {
       if (shell.classList.contains('is-open')) {
-        if (event.key === 'Escape') close();
-        if (event.key === 'ArrowLeft') move(-1);
-        if (event.key === 'ArrowRight') move(1);
-        if (event.key === 'ArrowDown') hardDrop();
+        if (event.key === 'Escape') {
+          close();
+          return;
+        }
+        if (event.key === 'ArrowLeft') {
+          event.preventDefault();
+          move(-1);
+        }
+        if (event.key === 'ArrowRight') {
+          event.preventDefault();
+          move(1);
+        }
+        if (event.key === 'ArrowDown') {
+          event.preventDefault();
+          softDrop();
+        }
+        if (event.key === 'ArrowUp' || event.key === ' ') {
+          event.preventDefault();
+          rotate();
+        }
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          hardDrop();
+        }
         return;
       }
 
@@ -446,7 +619,9 @@
 
     leftBtn?.addEventListener('click', () => move(-1));
     rightBtn?.addEventListener('click', () => move(1));
-    dropBtn?.addEventListener('click', hardDrop);
+    softDropBtn?.addEventListener('click', softDrop);
+    hardDropBtn?.addEventListener('click', hardDrop);
+    rotateBtn?.addEventListener('click', rotate);
     closeBtn?.addEventListener('click', close);
     backdrop?.addEventListener('click', close);
     restartBtn?.addEventListener('click', reset);
