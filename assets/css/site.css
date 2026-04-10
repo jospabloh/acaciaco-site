@@ -423,41 +423,45 @@ textarea{
 }
 
 .topnav-actions-global{
-  gap:10px;
+  gap:12px;
 }
 
 .global-pref-shell{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:6px;
 }
 
 .picker{
   display:flex;
   align-items:center;
   gap:6px;
-  min-height:40px;
-  padding:6px 10px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:color-mix(in srgb, var(--surface) 84%, transparent);
-  color:var(--muted);
-  font-size:.76rem;
+  min-height:38px;
+  padding:5px 9px;
+  border:1px solid color-mix(in srgb, var(--line) 78%, transparent);
+  border-radius:999px;
+  background:color-mix(in srgb, var(--surface) 90%, transparent);
+  box-shadow:0 8px 24px rgba(2,6,23,.16);
+  color:var(--ink-soft);
+  font-size:.75rem;
 }
 
 .picker-compact{
-  gap:7px;
-  padding:6px 8px;
+  gap:8px;
+  padding:5px 10px;
 }
 
 .picker-icon{
-  font-size:.9rem;
-  opacity:.92;
+  font-size:.85rem;
+  opacity:.96;
 }
 
 .picker-text{
-  font-weight:700;
-  letter-spacing:.02em;
+  font-weight:600;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  font-size:.66rem;
+  color:var(--muted);
 }
 
 .picker label{
@@ -473,10 +477,30 @@ textarea{
   background:transparent;
   color:var(--ink);
   font-weight:800;
-  font-size:.8rem;
+  font-size:.78rem;
   outline:none;
   min-width:62px;
   cursor:pointer;
+  padding-right:14px;
+  background-image:linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:calc(100% - 8px) calc(50% - 1px), calc(100% - 4px) calc(50% - 1px);
+  background-size:4px 4px, 4px 4px;
+  background-repeat:no-repeat;
+}
+
+.picker select:focus-visible{
+  outline:2px solid color-mix(in srgb, var(--brand-500) 60%, white 40%);
+  outline-offset:2px;
+  border-radius:8px;
+}
+
+.picker:hover{
+  border-color:color-mix(in srgb, var(--brand-500) 34%, var(--line));
+}
+
+.picker select option{
+  background-color:var(--surface);
+  color:var(--ink);
 }
 
 .mobile-nav{
@@ -1652,18 +1676,18 @@ textarea{
 
   .cta,
   .contact-strip-actions,
-  .preferences-controls,
-  .global-pref-shell{
+  .preferences-controls{
     flex-direction:column;
     align-items:stretch;
   }
 
   .topnav-actions-global{
-    width:100%;
+    width:auto;
+    margin-left:auto;
   }
 
   .picker-compact{
-    justify-content:space-between;
+    justify-content:flex-start;
   }
 
   .btn{

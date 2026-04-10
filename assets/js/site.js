@@ -2,15 +2,13 @@
   const STORAGE = {
     theme: 'acacia_theme',
     currency: 'acacia_currency',
-    language: 'acacia_language',
-    region: 'acacia_region'
+    usdRateCache: 'acacia_usd_rate_cache'
   };
 
   const DEFAULTS = {
     theme: 'system',
     currency: 'MXN',
-    language: 'es',
-    region: 'mx',
+    fallbackUsdRate: 17,
     waNumber: '524498958291',
     waMessage: 'Hola, me interesa conocer más sobre ACACIA y sus soluciones digitales.'
   };
@@ -23,8 +21,7 @@
   const waEl = document.getElementById('wa-link');
   const themePicker = document.getElementById('theme-picker');
   const currencyPicker = document.getElementById('currency-picker') || document.getElementById('currency-picker-top');
-  const langPicker = document.getElementById('lang-picker') || document.getElementById('lang-picker-top');
-  const regionPicker = document.getElementById('region-picker-top');
+  let activeUsdRate = DEFAULTS.fallbackUsdRate;
 
   const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
@@ -45,13 +42,28 @@
   };
 
   const getUsdRate = () => {
-    const rawRate =
-      body?.dataset?.usdRate ||
-      root?.dataset?.usdRate ||
-      '17';
+    const rawRate = body?.dataset?.usdRate || root?.dataset?.usdRate || String(activeUsdRate);
 
     const parsed = Number(rawRate);
-    return Number.isFinite(parsed) && parsed > 0 ? parsed : 17;
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULTS.fallbackUsdRate;
+  };
+
+  const getStoredUsdRate = () => {
+    const cache = getStored(STORAGE.usdRateCache, '');
+    if (!cache) return null;
+
+    try {
+      const parsed = JSON.parse(cache);
+      if (!parsed || !Number.isFinite(parsed.rate) || parsed.rate <= 0) return null;
+      return parsed;
+    } catch (_) {
+      return null;
+    }
+  };
+
+  const setStoredUsdRate = (ratePayload) => {
+    if (!ratePayload || !Number.isFinite(ratePayload.rate) || ratePayload.rate <= 0) return;
+    setStored(STORAGE.usdRateCache, JSON.stringify(ratePayload));
   };
 
   const formatCurrency = (amount, currency) => {
@@ -94,68 +106,31 @@
     setStored(STORAGE.currency, currency);
   };
 
-  const applyRegion = (regionValue) => {
-    const region = ['mx', 'latam', 'us'].includes(regionValue) ? regionValue : DEFAULTS.region;
-    root.setAttribute('data-region', region);
-
-    document.querySelectorAll('[data-region-copy]').forEach((node) => {
-      const copy = node.getAttribute(`data-region-${region}`);
-      if (copy) node.textContent = copy;
-    });
-
-    setStored(STORAGE.region, region);
+  const setupLanguage = () => {
+    root.lang = 'es';
   };
 
-  const translations = {
-    es: {
-      'currency.mxn_suffix': 'MXN',
-      'currency.usd_approx': 'aprox.',
-      'jobs.cta.whatsapp': 'Enviar por WhatsApp',
-      'contact.cta.whatsapp': 'Hablar por WhatsApp',
-      'contact.cta.email': 'Escribir por correo'
-    },
-    en: {
-      'currency.mxn_suffix': 'MXN',
-      'currency.usd_approx': 'approx.',
-      'jobs.cta.whatsapp': 'Send via WhatsApp',
-      'contact.cta.whatsapp': 'Chat on WhatsApp',
-      'contact.cta.email': 'Send an email'
-    }
-  };
-
-  const translateNode = (node, lang) => {
-    const key = node.getAttribute('data-i18n');
-    if (!key) return;
-
-    const dictionary = translations[lang] || translations[DEFAULTS.language];
-    const value = dictionary[key];
-    if (!value) return;
-
-    const attr = node.getAttribute('data-i18n-attr');
-    if (attr) {
-      node.setAttribute(attr, value);
-    } else {
-      node.textContent = value;
-    }
-  };
-
-  const applyLanguage = (langValue) => {
-    const lang = langValue === 'en' ? 'en' : 'es';
-
-    root.lang = lang;
-    document.querySelectorAll('[data-i18n]').forEach((node) => translateNode(node, lang));
-
-    setStored(STORAGE.language, lang);
-
-    if (dateEl) {
-      dateEl.textContent = new Date().toLocaleDateString(lang === 'en' ? 'en-US' : 'es-MX', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+  const refreshExchangeRate = async () => {
+    try {
+      const response = await fetch('/api/exchange-rate', {
+        headers: {
+          Accept: 'application/json'
+        }
       });
-    }
 
-    applyCurrency(getStored(STORAGE.currency, DEFAULTS.currency));
+      if (!response.ok) throw new Error(`exchange-rate-http-${response.status}`);
+      const payload = await response.json();
+      if (!payload || !Number.isFinite(payload.rate) || payload.rate <= 0) throw new Error('exchange-rate-invalid');
+
+      activeUsdRate = payload.rate;
+      setStoredUsdRate(payload);
+      applyCurrency(getStored(STORAGE.currency, DEFAULTS.currency));
+    } catch (_) {
+      const cachedRate = getStoredUsdRate();
+      if (!cachedRate) return;
+      activeUsdRate = cachedRate.rate;
+      applyCurrency(getStored(STORAGE.currency, DEFAULTS.currency));
+    }
   };
 
   const applyWhatsAppLink = () => {
@@ -210,40 +185,13 @@
     });
   };
 
-  const setupLanguagePicker = () => {
-    if (!langPicker) {
-      applyLanguage(getStored(STORAGE.language, DEFAULTS.language));
-      return;
-    }
-
-    const preferredLanguage = getStored(STORAGE.language, DEFAULTS.language);
-    langPicker.value = preferredLanguage;
-    applyLanguage(preferredLanguage);
-
-    langPicker.addEventListener('change', () => {
-      applyLanguage(langPicker.value);
-    });
-  };
-
-  const setupRegionPicker = () => {
-    const preferredRegion = getStored(STORAGE.region, DEFAULTS.region);
-    applyRegion(preferredRegion);
-
-    if (!regionPicker) return;
-    regionPicker.value = preferredRegion;
-    regionPicker.addEventListener('change', () => {
-      applyRegion(regionPicker.value);
-    });
-  };
-
   const setupDateAndYear = () => {
     if (yearEl) {
       yearEl.textContent = String(new Date().getFullYear());
     }
 
     if (dateEl) {
-      const preferredLanguage = getStored(STORAGE.language, DEFAULTS.language);
-      dateEl.textContent = new Date().toLocaleDateString(preferredLanguage === 'en' ? 'en-US' : 'es-MX', {
+      dateEl.textContent = new Date().toLocaleDateString('es-MX', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'
@@ -656,8 +604,13 @@
   applyWhatsAppLink();
   setupThemePicker();
   setupCurrencyPicker();
-  setupLanguagePicker();
-  setupRegionPicker();
+  setupLanguage();
+  const cachedRate = getStoredUsdRate();
+  if (cachedRate) {
+    activeUsdRate = cachedRate.rate;
+    applyCurrency(getStored(STORAGE.currency, DEFAULTS.currency));
+  }
+  refreshExchangeRate();
   setupTestimonials();
   setupMobileNav();
   setupSecretGame();
