@@ -36,7 +36,7 @@
 
 <body
   data-wa-number="524498958291"
-  data-wa-message="Hola, me interesa conocer más sobre Puntos+ de ACACIA."
+  data-wa-message="Hola, me interesa solicitar preview de Puntos+ y conocer condiciones, alcance y disponibilidad."
   data-usd-rate="17"
 >
   <div class="grid-bg"></div>
@@ -62,8 +62,8 @@
           <div class="nav-dropdown-menu">
             <a href="https://flowfin.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">FlowFin</a>
             <a href="https://stockflow.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">StockFlow</a>
-            <a href="https://liuma.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">LIUMA</a>
-            <a href="https://puntosplus.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">Puntos+</a>
+            <a href="/liuma">LIUMA</a>
+            <a href="/puntosplus">Puntos+</a>
           </div>
         </details>
 
@@ -106,8 +106,8 @@
           <a href="/apps#servicios">Servicios</a>
           <a href="https://flowfin.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">FlowFin</a>
           <a href="https://stockflow.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">StockFlow</a>
-          <a href="https://liuma.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">LIUMA</a>
-          <a href="https://puntosplus.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">Puntos+</a>
+          <a href="/liuma">LIUMA</a>
+          <a href="/puntosplus">Puntos+</a>
           <a href="/apps#bolsa-empleo">Bolsa de empleo</a>
           <a href="/apps#faq">FAQ</a>
           <a href="/apps#contacto">Contacto</a>
@@ -146,15 +146,16 @@
             <div class="cta">
               <a
                 class="btn btn-primary"
-                href="https://puntosplus.acaciaco.com.mx"
+                href="#"
+                id="preview-cta-hero"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Abrir Puntos+
+                Solicitar preview
               </a>
 
               <a class="btn btn-secondary" id="wa-link-hero" href="#contacto-puntosplus">
-                Solicitar información
+                Hablar sobre preview
               </a>
 
               <a class="btn btn-ghost" href="/apps">
@@ -165,6 +166,7 @@
             <p class="note">
               Actualizado al <span id="date"></span>. Experiencia visual alineada con el tema del dispositivo y preferencias del usuario.
             </p>
+            <p class="note">Preview sujeto a aprobación y disponibilidad limitada. <a href="/terms#preview-access">Ver condiciones de acceso preview</a>.</p>
           </section>
 
           <aside class="hero-sidebar">
@@ -288,7 +290,7 @@
       <div class="container">
         <div class="section-head">
           <span class="eyebrow"><span class="dot"></span> FAQ</span>
-          <h2 class="h2">Preguntas frecuentes sobre Puntos+</h2>
+          <h2 class="h2">Preguntas frecuentes sobre preview de Puntos+</h2>
         </div>
 
         <div class="faq-grid">
@@ -307,9 +309,9 @@
           </article>
 
           <article class="faq-item">
-            <b>¿Se puede pedir una evaluación antes de contratar?</b>
+            <b>¿Cómo solicito acceso preview?</b>
             <p>
-              Sí. ACACIA puede revisar el caso, entender el objetivo del programa y proponer la mejor ruta de implementación.
+              Por WhatsApp con solicitud de preview. El acceso está sujeto a aprobación, cupo y condiciones de uso.
             </p>
           </article>
         </div>
@@ -320,20 +322,21 @@
       <div class="container">
         <div class="contact-strip">
           <div>
-            <h3>¿Quieres conocer Puntos+ con más detalle?</h3>
+            <h3>¿Quieres solicitar acceso preview de Puntos+?</h3>
             <p>
-              Escríbenos para revisar alcance, tipo de negocio, necesidades de lealtad y la mejor forma de implementación.
+              Revisamos tu perfil de uso y disponibilidad. El acceso preview es por evaluación y puede incluir condiciones específicas antes de liberación general.
             </p>
           </div>
 
           <div class="contact-strip-actions">
             <a
               class="btn btn-primary"
-              href="https://puntosplus.acaciaco.com.mx"
+              href="#"
+              id="preview-cta-main"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Abrir app
+              Solicitar preview
             </a>
 
             <a
@@ -382,8 +385,8 @@
           <div class="footer-links">
             <a href="https://flowfin.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">FlowFin</a>
             <a href="https://stockflow.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">StockFlow</a>
-            <a href="https://liuma.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">LIUMA</a>
-            <a href="https://puntosplus.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">Puntos+</a>
+            <a href="/liuma">LIUMA</a>
+            <a href="/puntosplus">Puntos+</a>
           </div>
         </div>
 
@@ -418,11 +421,16 @@
       var heroWa = document.getElementById('wa-link-hero');
       var mainWa = document.getElementById('wa-link');
       var floatWa = document.getElementById('wa-link-float');
-      var href = 'https://wa.me/524498958291?text=' + encodeURIComponent('Hola, me interesa conocer más sobre Puntos+ de ACACIA.');
+      var href = 'https://wa.me/524498958291?text=' + encodeURIComponent('Hola, me interesa solicitar preview de Puntos+ y conocer condiciones, alcance y disponibilidad.');
+
+      var previewHero = document.getElementById('preview-cta-hero');
+      var previewMain = document.getElementById('preview-cta-main');
 
       if (heroWa) heroWa.setAttribute('href', href);
       if (mainWa) mainWa.setAttribute('href', href);
       if (floatWa) floatWa.setAttribute('href', href);
+      if (previewHero) previewHero.setAttribute('href', href);
+      if (previewMain) previewMain.setAttribute('href', href);
     })();
   </script>
 </body>

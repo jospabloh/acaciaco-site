@@ -2,13 +2,15 @@
   const STORAGE = {
     theme: 'acacia_theme',
     currency: 'acacia_currency',
-    language: 'acacia_language'
+    language: 'acacia_language',
+    region: 'acacia_region'
   };
 
   const DEFAULTS = {
     theme: 'system',
     currency: 'MXN',
     language: 'es',
+    region: 'mx',
     waNumber: '524498958291',
     waMessage: 'Hola, me interesa conocer más sobre ACACIA y sus soluciones digitales.'
   };
@@ -20,8 +22,9 @@
   const dateEl = document.getElementById('date');
   const waEl = document.getElementById('wa-link');
   const themePicker = document.getElementById('theme-picker');
-  const currencyPicker = document.getElementById('currency-picker');
-  const langPicker = document.getElementById('lang-picker');
+  const currencyPicker = document.getElementById('currency-picker') || document.getElementById('currency-picker-top');
+  const langPicker = document.getElementById('lang-picker') || document.getElementById('lang-picker-top');
+  const regionPicker = document.getElementById('region-picker-top');
 
   const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
@@ -91,6 +94,18 @@
     setStored(STORAGE.currency, currency);
   };
 
+  const applyRegion = (regionValue) => {
+    const region = ['mx', 'latam', 'us'].includes(regionValue) ? regionValue : DEFAULTS.region;
+    root.setAttribute('data-region', region);
+
+    document.querySelectorAll('[data-region-copy]').forEach((node) => {
+      const copy = node.getAttribute(`data-region-${region}`);
+      if (copy) node.textContent = copy;
+    });
+
+    setStored(STORAGE.region, region);
+  };
+
   const translations = {
     es: {
       'currency.mxn_suffix': 'MXN',
@@ -153,7 +168,10 @@
   };
 
   const setupThemePicker = () => {
-    if (!themePicker) return;
+    if (!themePicker) {
+      applyTheme(getStored(STORAGE.theme, DEFAULTS.theme));
+      return;
+    }
 
     const preferredTheme = getStored(STORAGE.theme, DEFAULTS.theme);
     themePicker.value = preferredTheme;
@@ -204,6 +222,17 @@
 
     langPicker.addEventListener('change', () => {
       applyLanguage(langPicker.value);
+    });
+  };
+
+  const setupRegionPicker = () => {
+    const preferredRegion = getStored(STORAGE.region, DEFAULTS.region);
+    applyRegion(preferredRegion);
+
+    if (!regionPicker) return;
+    regionPicker.value = preferredRegion;
+    regionPicker.addEventListener('change', () => {
+      applyRegion(regionPicker.value);
     });
   };
 
@@ -628,6 +657,7 @@
   setupThemePicker();
   setupCurrencyPicker();
   setupLanguagePicker();
+  setupRegionPicker();
   setupTestimonials();
   setupMobileNav();
   setupSecretGame();

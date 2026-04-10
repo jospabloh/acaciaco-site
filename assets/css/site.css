@@ -422,6 +422,16 @@ textarea{
   gap:8px;
 }
 
+.topnav-actions-global{
+  gap:10px;
+}
+
+.global-pref-shell{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
 .picker{
   display:flex;
   align-items:center;
@@ -433,6 +443,21 @@ textarea{
   background:color-mix(in srgb, var(--surface) 84%, transparent);
   color:var(--muted);
   font-size:.76rem;
+}
+
+.picker-compact{
+  gap:7px;
+  padding:6px 8px;
+}
+
+.picker-icon{
+  font-size:.9rem;
+  opacity:.92;
+}
+
+.picker-text{
+  font-weight:700;
+  letter-spacing:.02em;
 }
 
 .picker label{
@@ -1159,11 +1184,11 @@ textarea{
 }
 
 .person img{
-  width:50px;
-  height:50px;
-  border-radius:50%;
+  width:56px;
+  height:56px;
+  border-radius:14px;
   object-fit:cover;
-  border:2px solid rgba(96,165,250,.45);
+  border:1px solid rgba(96,165,250,.35);
 }
 
 .person b{
@@ -1252,6 +1277,18 @@ textarea{
   flex-wrap:wrap;
   gap:10px;
   margin-top:12px;
+}
+
+.preview-legal-note{
+  margin:14px 4px 0;
+  color:var(--muted);
+  font-size:.92rem;
+}
+
+.preview-legal-note a{
+  color:var(--ink-soft);
+  text-decoration:underline;
+  text-underline-offset:2px;
 }
 
 /* Footer */
@@ -1394,7 +1431,7 @@ textarea{
 
 /* Responsive */
 @media (max-width:1080px){
-  .topnav-actions{
+  .topnav-actions:not(.topnav-actions-global){
     display:none;
   }
 
@@ -1615,9 +1652,18 @@ textarea{
 
   .cta,
   .contact-strip-actions,
-  .preferences-controls{
+  .preferences-controls,
+  .global-pref-shell{
     flex-direction:column;
     align-items:stretch;
+  }
+
+  .topnav-actions-global{
+    width:100%;
+  }
+
+  .picker-compact{
+    justify-content:space-between;
   }
 
   .btn{
