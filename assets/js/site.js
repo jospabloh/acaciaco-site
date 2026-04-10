@@ -17,7 +17,8 @@
   const body = document.body;
   const pathName = window.location.pathname.replace(/\/+$/, '') || '/';
 
-  const getAppAnchor = (id) => (pathName === '/apps' ? `#${id}` : `/apps#${id}`);
+  const getHomeAnchor = (id) => (pathName === '/' ? `#${id}` : `/#${id}`);
+  const getAppsAnchor = (id) => (pathName === '/apps' ? `#${id}` : `/apps#${id}`);
 
   const renderSiteHeader = () => {
     const headerMount = document.getElementById('site-header');
@@ -26,7 +27,7 @@
     headerMount.className = 'topnav topnav-premium';
     headerMount.innerHTML = `
     <div class="topnav-inner">
-      <a class="topnav-brand" id="brand-trigger" href="/apps" title="ACACIA | Tecnología, consultoría y soluciones digitales" aria-label="ACACIA">
+      <a class="topnav-brand" id="brand-trigger" href="/" title="ACACIA | Tecnología, consultoría y soluciones digitales" aria-label="ACACIA">
         <img src="/assets/Logo_ACACIA_HighRes.jpg" alt="ACACIA" />
         <div class="topnav-brand-copy">
           <b>ACACIA</b>
@@ -35,37 +36,36 @@
       </a>
 
       <nav class="topnav-links topnav-links-premium" aria-label="Principal">
-        <a href="${getAppAnchor('inicio')}">Inicio</a>
-        <a href="${getAppAnchor('soluciones')}">Capacidades</a>
-        <a href="${getAppAnchor('apps-destacadas')}">Apps</a>
+        <a href="${getHomeAnchor('inicio')}">Inicio</a>
+        <a href="${getHomeAnchor('soluciones')}">Capacidades</a>
+        <a href="${getAppsAnchor('apps-destacadas')}">Apps</a>
         <a href="/servicios">Servicios</a>
         <a href="/pricing">Pricing</a>
-        <a href="${getAppAnchor('contacto')}">Contacto</a>
+        <a href="${getHomeAnchor('contacto')}">Contacto</a>
       </nav>
 
       <div class="topnav-actions topnav-actions-global" aria-label="Controles globales del sitio">
         <div class="global-pref-shell" aria-label="Moneda">
           <label class="picker picker-compact" for="currency-picker-top">
             <span class="picker-icon" aria-hidden="true">💱</span>
-            <span class="picker-text">Moneda</span>
             <select id="currency-picker-top" name="currency">
               <option value="MXN">MXN</option>
               <option value="USD">USD</option>
             </select>
           </label>
         </div>
-        <a class="btn btn-primary btn-nav-cta" href="${getAppAnchor('contacto')}">Iniciar proyecto</a>
+        <a class="btn btn-primary btn-nav-cta" href="${getHomeAnchor('contacto')}">Iniciar proyecto</a>
       </div>
 
       <details class="mobile-nav">
         <summary>Menú</summary>
         <div class="mobile-nav-menu">
-          <a href="${getAppAnchor('inicio')}">Inicio</a>
-          <a href="${getAppAnchor('soluciones')}">Capacidades</a>
-          <a href="${getAppAnchor('apps-destacadas')}">Apps</a>
+          <a href="${getHomeAnchor('inicio')}">Inicio</a>
+          <a href="${getHomeAnchor('soluciones')}">Capacidades</a>
+          <a href="${getAppsAnchor('apps-destacadas')}">Apps</a>
           <a href="/servicios">Servicios</a>
           <a href="/pricing">Pricing</a>
-          <a href="${getAppAnchor('contacto')}">Contacto</a>
+          <a href="${getHomeAnchor('contacto')}">Contacto</a>
         </div>
       </details>
     </div>`;
