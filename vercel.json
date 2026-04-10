@@ -6,8 +6,8 @@
       "permanent": true
     },
     {
-      "source": "/",
-      "destination": "/apps",
+      "source": "/bienvenida",
+      "destination": "/",
       "permanent": false
     }
   ],

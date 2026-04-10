@@ -17,7 +17,7 @@
   const body = document.body;
   const pathName = window.location.pathname.replace(/\/+$/, '') || '/';
 
-  const getHomeAnchor = (id) => (pathName === '/' ? `#${id}` : `/#${id}`);
+  const getHomeAnchor = (id) => ((pathName === '/' || pathName === '/bienvenida') ? `#${id}` : `/#${id}`);
   const getAppsAnchor = (id) => (pathName === '/apps' ? `#${id}` : `/apps#${id}`);
 
   const renderSiteHeader = () => {
@@ -288,6 +288,20 @@
     }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
 
     revealNodes.forEach((node) => observer.observe(node));
+  };
+
+
+
+  const setupHeroParallax = () => {
+    const node = document.querySelector('[data-parallax]');
+    if (!node) return;
+
+    const factor = Number(node.getAttribute('data-parallax') || 6);
+    window.addEventListener('pointermove', (event) => {
+      const nx = (event.clientX / window.innerWidth) - 0.5;
+      const ny = (event.clientY / window.innerHeight) - 0.5;
+      node.style.transform = `translate3d(${(nx * factor).toFixed(2)}px, ${(ny * factor).toFixed(2)}px, 0)`;
+    }, { passive: true });
   };
 
   const setupMobileNav = () => {
@@ -618,7 +632,7 @@
         suppressNextBrandClick = false;
         return;
       }
-      if (window.location.pathname === '/apps' || window.location.pathname === '/apps/') {
+      if (window.location.pathname === '/apps' || window.location.pathname === '/apps/' || window.location.pathname === '/bienvenida' || window.location.pathname === '/bienvenida/') {
         event.preventDefault();
       }
     });
@@ -689,5 +703,6 @@
   setupTestimonials();
   setupMobileNav();
   setupRevealMotion();
+  setupHeroParallax();
   setupSecretGame();
 })();
