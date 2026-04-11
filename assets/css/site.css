@@ -8,6 +8,12 @@
   --surface-3:rgba(15,23,42,.9);
   --surface-3-strong:rgba(15,23,42,.94);
 
+  --card-surface-base:rgba(15,23,42,.9);
+  --card-surface-strong:rgba(15,23,42,.96);
+  --card-overlay:linear-gradient(170deg, rgba(8,18,34,.24), rgba(10,24,45,.18));
+  --card-ink:#eaf2ff;
+  --card-muted:#b7c6db;
+
   --ink:#f8fafc;
   --ink-soft:#e2e8f0;
   --muted:#94a3b8;
@@ -50,6 +56,12 @@
     --surface-3:rgba(255,255,255,.94);
     --surface-3-strong:rgba(255,255,255,.98);
 
+    --card-surface-base:rgba(255,255,255,.94);
+    --card-surface-strong:rgba(255,255,255,.98);
+    --card-overlay:linear-gradient(170deg, rgba(255,255,255,.55), rgba(241,245,249,.35));
+    --card-ink:#0f172a;
+    --card-muted:#334155;
+
     --ink:#0f172a;
     --ink-soft:#1e293b;
     --muted:#334155;
@@ -79,6 +91,12 @@
   --surface-2:#f8fafc;
   --surface-3:rgba(255,255,255,.94);
   --surface-3-strong:rgba(255,255,255,.98);
+
+    --card-surface-base:rgba(255,255,255,.94);
+    --card-surface-strong:rgba(255,255,255,.98);
+    --card-overlay:linear-gradient(170deg, rgba(255,255,255,.55), rgba(241,245,249,.35));
+    --card-ink:#0f172a;
+    --card-muted:#334155;
 
   --ink:#0f172a;
   --ink-soft:#1e293b;
@@ -900,6 +918,58 @@ textarea{
   margin-top:auto;
 }
 
+
+.card,
+.app-card,
+.feature-card,
+.service-card,
+.price-card,
+.premium-price-card,
+.solution-card,
+.pillar-card,
+.summary-card,
+.testimonial-slide,
+.faq-item{
+  position:relative;
+  isolation:isolate;
+  background:var(--card-surface-base);
+}
+
+.card > *,
+.app-card > *,
+.feature-card > *,
+.service-card > *,
+.price-card > *,
+.premium-price-card > *,
+.solution-card > *,
+.pillar-card > *,
+.summary-card > *,
+.testimonial-slide > *,
+.faq-item > *{
+  position:relative;
+  z-index:1;
+}
+
+.card::before,
+.app-card::before,
+.feature-card::before,
+.service-card::before,
+.price-card::before,
+.premium-price-card::before,
+.solution-card::before,
+.pillar-card::before,
+.summary-card::before,
+.testimonial-slide::before,
+.faq-item::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  border-radius:inherit;
+  background:var(--card-overlay);
+  pointer-events:none;
+}
+
 /* Trust / differentiators */
 .feature-grid{
   display:grid;
@@ -1213,6 +1283,18 @@ textarea{
 
 .testimonial-slide.active{
   display:block;
+}
+
+.testimonial-slide p{
+  margin:8px 0 0;
+  color:var(--card-ink);
+  line-height:1.72;
+}
+
+.testimonial-slide small{
+  display:block;
+  margin-top:10px;
+  color:var(--card-muted);
 }
 
 .stars{
@@ -1976,13 +2058,13 @@ textarea{
   color:var(--ink-soft);
 }
 
-.solution-showcase{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px;}
+.solution-showcase{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px;}
 .solution-card{padding:16px; border:1px solid rgba(255,255,255,.1); border-radius:16px; background:rgba(2,10,25,.36); display:grid; gap:10px; align-content:start;}
 .solution-head{display:flex; gap:8px; align-items:center;}
 .solution-head.dual-logos img{width:24px;height:24px;border-radius:6px;}
 .solution-head.dual-logos b{margin-left:2px;}
 .solution-highlights{display:flex; flex-wrap:wrap; gap:.45rem; margin:.15rem 0 .2rem;}
-.solution-chip{display:inline-flex; align-items:center; min-height:32px; padding:.4rem .72rem; border-radius:999px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.04); color:var(--text-soft); font-size:.84rem; line-height:1.15; white-space:nowrap;}
+.solution-chip{display:inline-flex; align-items:center; min-height:32px; padding:.4rem .72rem; border-radius:999px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.04); color:var(--ink-soft); font-size:.84rem; line-height:1.15; white-space:nowrap;}
 .preview-card{background:linear-gradient(165deg, rgba(26,18,8,.7), rgba(14,17,31,.72));}
 
 .interactive-card{
@@ -2042,42 +2124,12 @@ textarea{
   .premium-price-card,
   .solution-card,
   .pillar-card,
-  .summary-card{
-    position:relative;
-    isolation:isolate;
-    background-color:var(--surface-3-strong);
+  .summary-card,
+  .testimonial-slide,
+  .faq-item{
+    background-color:var(--card-surface-strong);
   }
 
-  .panel > *,
-  .hero-panel > *,
-  .card > *,
-  .app-card > *,
-  .feature-card > *,
-  .service-card > *,
-  .price-card > *,
-  .pricing-subsection > *,
-  .premium-price-card > *{
-    position:relative;
-    z-index:1;
-  }
-
-  .panel::before,
-  .hero-panel::before,
-  .card::before,
-  .app-card::before,
-  .feature-card::before,
-  .service-card::before,
-  .price-card::before,
-  .pricing-subsection::before,
-  .premium-price-card::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    z-index:0;
-    border-radius:inherit;
-    background:linear-gradient(170deg, rgba(8,18,34,.24), rgba(10,24,45,.18));
-    pointer-events:none;
-  }
 
   .btn-secondary,
   .btn-ghost{
