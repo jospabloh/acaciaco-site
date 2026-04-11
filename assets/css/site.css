@@ -773,7 +773,6 @@ textarea{
   padding:18px;
   border:1px solid var(--line);
   border-radius:var(--radius-lg);
-  background:linear-gradient(180deg, var(--surface), var(--surface-2));
   box-shadow:var(--shadow-md);
 }
 
@@ -931,12 +930,15 @@ textarea{
 .feature-card,
 .service-card,
 .price-card,
+.pricing-subsection,
 .premium-price-card,
 .solution-card,
 .pillar-card,
 .summary-card,
 .testimonial-slide,
-.faq-item{
+.faq-item,
+.contact-strip,
+.jobs-card{
   position:relative;
   isolation:isolate;
   background-color:var(--card-surface-base);
@@ -948,12 +950,15 @@ textarea{
 .feature-card > *,
 .service-card > *,
 .price-card > *,
+.pricing-subsection > *,
 .premium-price-card > *,
 .solution-card > *,
 .pillar-card > *,
 .summary-card > *,
 .testimonial-slide > *,
-.faq-item > *{
+.faq-item > *,
+.contact-strip > *,
+.jobs-card > *{
   position:relative;
   z-index:1;
 }
@@ -963,12 +968,15 @@ textarea{
 .feature-card::before,
 .service-card::before,
 .price-card::before,
+.pricing-subsection::before,
 .premium-price-card::before,
 .solution-card::before,
 .pillar-card::before,
 .summary-card::before,
 .testimonial-slide::before,
-.faq-item::before{
+.faq-item::before,
+.contact-strip::before,
+.jobs-card::before{
   content:"";
   position:absolute;
   inset:0;
@@ -984,13 +992,16 @@ textarea{
 .feature-card h3,
 .service-card h3,
 .price-card h3,
+.pricing-subsection h4,
 .premium-price-card h3,
 .premium-price-card h5,
 .solution-card b,
 .pillar-card h3,
 .summary-card h3,
 .testimonial-slide p,
-.testimonial-slide small{
+.testimonial-slide small,
+.jobs-card h3,
+.contact-strip h3{
   color:var(--card-ink);
 }
 
@@ -999,11 +1010,14 @@ textarea{
 .feature-card p,
 .service-card p,
 .price-card p,
+.pricing-subsection p,
 .premium-price-card p,
 .solution-card p,
 .pillar-card p,
 .summary-card p,
-.price-line small{
+.price-line small,
+.jobs-card p,
+.contact-strip p{
   color:var(--card-muted);
 }
 
@@ -1262,19 +1276,18 @@ textarea{
   padding:22px;
   border:1px solid var(--line);
   border-radius:22px;
-  background:linear-gradient(180deg, var(--surface), var(--surface-2));
   box-shadow:var(--shadow-md);
 }
 
 .jobs-card h3{
   margin:0 0 10px;
   font-size:1.1rem;
-  color:var(--ink);
+  color:var(--card-ink);
 }
 
 .jobs-card p{
   margin:0 0 12px;
-  color:var(--muted);
+  color:var(--card-muted);
   line-height:1.75;
 }
 
@@ -1391,19 +1404,29 @@ textarea{
   padding:22px;
   border:1px solid var(--line);
   border-radius:22px;
-  background:linear-gradient(135deg, rgba(10,120,184,.16), rgba(45,164,230,.1));
   box-shadow:var(--shadow-md);
+}
+
+.contact-strip::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  border-radius:inherit;
+  background:linear-gradient(135deg, rgba(10,120,184,.16), rgba(45,164,230,.1));
+  opacity:.55;
+  pointer-events:none;
 }
 
 .contact-strip h3{
   margin:0 0 8px;
   font-size:1.24rem;
-  color:var(--ink);
+  color:var(--card-ink);
 }
 
 .contact-strip p{
   margin:0;
-  color:var(--muted);
+  color:var(--card-muted);
   line-height:1.75;
 }
 
@@ -2155,7 +2178,9 @@ textarea{
   .pillar-card,
   .summary-card,
   .testimonial-slide,
-  .faq-item{
+  .faq-item,
+  .contact-strip,
+  .jobs-card{
     background:var(--card-surface-strong);
     background-image:none;
   }
@@ -2165,12 +2190,15 @@ textarea{
   .feature-card::before,
   .service-card::before,
   .price-card::before,
+  .pricing-subsection::before,
   .premium-price-card::before,
   .solution-card::before,
   .pillar-card::before,
   .summary-card::before,
   .testimonial-slide::before,
-  .faq-item::before{
+  .faq-item::before,
+  .contact-strip::before,
+  .jobs-card::before{
     opacity:.2;
   }
 
