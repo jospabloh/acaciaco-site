@@ -2199,29 +2199,7 @@ textarea{
     -webkit-backdrop-filter:blur(10px);
   }
 
-  /* Card/surface Safari overrides moved to site-fixes-v3.css to avoid conflicts. */
-
-  .home-hero .hero-panel,
-  .section-surface,
-  .sharp-surface,
-  .alt-surface,
-  .social-surface,
-  .final-cta-surface,
-  .solution-card,
-  .pillar-card,
-  .summary-card{
-    position:relative;
-    isolation:isolate;
-  }
-
-  .home-hero .hero-panel::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    z-index:0;
-    background:linear-gradient(165deg, rgba(6,17,36,.34), rgba(8,23,44,.2));
-    pointer-events:none;
-  }
+  /* Card/surface Safari overrides are defined in site-fixes-v3.css. */
 }
 
 /* Clarity + socials + floating egg */
