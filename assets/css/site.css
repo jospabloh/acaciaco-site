@@ -2242,6 +2242,157 @@ textarea{
   background:#fff;
 }
 
+
+.surface-light .card,
+.surface-light .app-card,
+.surface-light .feature-card,
+.surface-light .service-card,
+.surface-light .price-card,
+.surface-light .premium-price-card,
+.surface-light .solution-card,
+.surface-light .pillar-card,
+.surface-light .summary-card,
+.surface-light .testimonial-slide,
+.surface-light .faq-item,
+.surface-light .contact-strip,
+.final-cta-surface .card,
+.final-cta-surface .app-card,
+.final-cta-surface .feature-card,
+.final-cta-surface .service-card,
+.final-cta-surface .price-card,
+.final-cta-surface .premium-price-card,
+.final-cta-surface .solution-card,
+.final-cta-surface .pillar-card,
+.final-cta-surface .summary-card,
+.final-cta-surface .testimonial-slide,
+.final-cta-surface .faq-item,
+.final-cta-surface .contact-strip{
+  background:linear-gradient(160deg, #F5F7FB, #FFFFFF);
+  border-color:var(--light-border);
+  box-shadow:0 12px 30px rgba(20,35,59,.08);
+}
+
+.surface-light .card::before,
+.surface-light .app-card::before,
+.surface-light .feature-card::before,
+.surface-light .service-card::before,
+.surface-light .price-card::before,
+.surface-light .premium-price-card::before,
+.surface-light .solution-card::before,
+.surface-light .pillar-card::before,
+.surface-light .summary-card::before,
+.surface-light .testimonial-slide::before,
+.surface-light .faq-item::before,
+.surface-light .contact-strip::before,
+.final-cta-surface .card::before,
+.final-cta-surface .app-card::before,
+.final-cta-surface .feature-card::before,
+.final-cta-surface .service-card::before,
+.final-cta-surface .price-card::before,
+.final-cta-surface .premium-price-card::before,
+.final-cta-surface .solution-card::before,
+.final-cta-surface .pillar-card::before,
+.final-cta-surface .summary-card::before,
+.final-cta-surface .testimonial-slide::before,
+.final-cta-surface .faq-item::before,
+.final-cta-surface .contact-strip::before,
+.surface-light .contact-strip::after,
+.final-cta-surface .contact-strip::after{
+  opacity:0;
+}
+
+.surface-light .card h3,
+.surface-light .app-card h3,
+.surface-light .feature-card h3,
+.surface-light .service-card h3,
+.surface-light .price-card h3,
+.surface-light .premium-price-card h3,
+.surface-light .premium-price-card h5,
+.surface-light .solution-card b,
+.surface-light .pillar-card h3,
+.surface-light .summary-card h3,
+.surface-light .testimonial-slide p,
+.surface-light .testimonial-slide small,
+.surface-light .faq-item b,
+.surface-light .contact-strip h3,
+.final-cta-surface .card h3,
+.final-cta-surface .app-card h3,
+.final-cta-surface .feature-card h3,
+.final-cta-surface .service-card h3,
+.final-cta-surface .price-card h3,
+.final-cta-surface .premium-price-card h3,
+.final-cta-surface .premium-price-card h5,
+.final-cta-surface .solution-card b,
+.final-cta-surface .pillar-card h3,
+.final-cta-surface .summary-card h3,
+.final-cta-surface .testimonial-slide p,
+.final-cta-surface .testimonial-slide small,
+.final-cta-surface .faq-item b,
+.final-cta-surface .contact-strip h3{
+  color:var(--light-title);
+}
+
+.surface-light .card p,
+.surface-light .card li,
+.surface-light .app-card p,
+.surface-light .feature-card p,
+.surface-light .service-card p,
+.surface-light .price-card p,
+.surface-light .premium-price-card p,
+.surface-light .solution-card p,
+.surface-light .pillar-card p,
+.surface-light .summary-card p,
+.surface-light .price-line,
+.surface-light .price-line small,
+.surface-light .note,
+.surface-light .faq-item p,
+.surface-light .contact-strip p,
+.surface-light .price-support,
+.surface-light .plan-kicker,
+.surface-light .list-clean li,
+.final-cta-surface .card p,
+.final-cta-surface .card li,
+.final-cta-surface .app-card p,
+.final-cta-surface .feature-card p,
+.final-cta-surface .service-card p,
+.final-cta-surface .price-card p,
+.final-cta-surface .premium-price-card p,
+.final-cta-surface .solution-card p,
+.final-cta-surface .pillar-card p,
+.final-cta-surface .summary-card p,
+.final-cta-surface .price-line,
+.final-cta-surface .price-line small,
+.final-cta-surface .note,
+.final-cta-surface .faq-item p,
+.final-cta-surface .contact-strip p,
+.final-cta-surface .price-support,
+.final-cta-surface .plan-kicker,
+.final-cta-surface .list-clean li{
+  color:var(--light-body);
+}
+
+.surface-light .summary-card span,
+.surface-light .price-value,
+.surface-light .card-badge,
+.final-cta-surface .summary-card span,
+.final-cta-surface .price-value,
+.final-cta-surface .card-badge{
+  color:var(--light-title);
+}
+
+.surface-light .badge-upcoming,
+.final-cta-surface .badge-upcoming{
+  color:var(--light-title);
+  border-color:var(--light-border);
+  background:#eef3fb;
+}
+
+.homepage-root .section-wrap{margin-top:18px;}
+.homepage-root .summary-grid,
+.homepage-root .solution-showcase,
+.homepage-root .pillar-grid,
+.homepage-root .testimonials-carousel{gap:12px;}
+
 @supports (-webkit-touch-callout: none){
   .topnav{
     -webkit-backdrop-filter:blur(16px);
