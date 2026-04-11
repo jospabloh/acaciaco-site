@@ -5,7 +5,8 @@
 
   --surface:#0f172a;
   --surface-2:#111d35;
-  --surface-3:rgba(15,23,42,.78);
+  --surface-3:rgba(15,23,42,.9);
+  --surface-3-strong:rgba(15,23,42,.94);
 
   --ink:#f8fafc;
   --ink-soft:#e2e8f0;
@@ -46,7 +47,8 @@
 
     --surface:#ffffff;
     --surface-2:#f8fafc;
-    --surface-3:rgba(255,255,255,.92);
+    --surface-3:rgba(255,255,255,.94);
+    --surface-3-strong:rgba(255,255,255,.98);
 
     --ink:#0f172a;
     --ink-soft:#1e293b;
@@ -75,7 +77,8 @@
 
   --surface:#ffffff;
   --surface-2:#f8fafc;
-  --surface-3:rgba(255,255,255,.92);
+  --surface-3:rgba(255,255,255,.94);
+  --surface-3-strong:rgba(255,255,255,.98);
 
   --ink:#0f172a;
   --ink-soft:#1e293b;
@@ -165,6 +168,7 @@ textarea{
   padding:32px;
   border:1px solid color-mix(in srgb, var(--line) 72%, transparent);
   border-radius:var(--radius-xl);
+  background:var(--surface);
   background:linear-gradient(160deg, color-mix(in srgb, var(--surface) 94%, transparent), color-mix(in srgb, var(--surface-2) 92%, transparent));
   box-shadow:var(--shadow-lg);
 }
@@ -567,6 +571,7 @@ textarea{
   padding:28px;
   border:1px solid var(--line);
   border-radius:var(--radius-xl);
+  background:var(--surface);
   background:linear-gradient(160deg, color-mix(in srgb, var(--surface) 92%, transparent), color-mix(in srgb, var(--surface-2) 92%, transparent));
   box-shadow:var(--shadow-lg);
 }
@@ -842,6 +847,7 @@ textarea{
   padding:18px;
   border:1px solid var(--line);
   border-radius:20px;
+  background:var(--surface-3-strong);
   background:var(--surface-3);
   box-shadow:var(--shadow-sm);
   transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
@@ -905,6 +911,7 @@ textarea{
   padding:18px;
   border:1px solid var(--line);
   border-radius:18px;
+  background:var(--surface-3-strong);
   background:var(--surface-3);
   box-shadow:var(--shadow-sm);
 }
@@ -948,6 +955,7 @@ textarea{
   padding:20px;
   border:1px solid var(--line);
   border-radius:20px;
+  background:var(--surface-3-strong);
   background:var(--surface-3);
   box-shadow:var(--shadow-sm);
 }
@@ -979,6 +987,7 @@ textarea{
   padding:16px;
   border:1px solid var(--line);
   border-radius:16px;
+  background:var(--surface-3-strong);
   background:var(--surface-3);
 }
 
@@ -1041,6 +1050,7 @@ textarea{
   padding:20px;
   border:1px solid var(--line);
   border-radius:22px;
+  background:var(--surface);
   background:linear-gradient(180deg, color-mix(in srgb,var(--surface) 92%, transparent), var(--surface-2));
   box-shadow:var(--shadow-sm);
   display:grid;
@@ -1074,6 +1084,7 @@ textarea{
   padding:18px;
   border:1px solid var(--line);
   border-radius:18px;
+  background:var(--surface-3-strong);
   background:var(--surface-3);
   box-shadow:var(--shadow-sm);
   display:grid;
@@ -2001,6 +2012,70 @@ textarea{
 }
 
 @supports (-webkit-touch-callout: none){
+  .topnav{
+    -webkit-backdrop-filter:blur(16px);
+  }
+
+  .visual-plane,
+  .secret-game-backdrop{
+    -webkit-backdrop-filter:blur(10px);
+  }
+
+  .panel,
+  .hero-panel,
+  .card,
+  .app-card,
+  .feature-card,
+  .service-card,
+  .price-card,
+  .pricing-subsection,
+  .premium-price-card,
+  .solution-card,
+  .pillar-card,
+  .summary-card{
+    position:relative;
+    isolation:isolate;
+    background-color:var(--surface-3-strong);
+  }
+
+  .panel > *,
+  .hero-panel > *,
+  .card > *,
+  .app-card > *,
+  .feature-card > *,
+  .service-card > *,
+  .price-card > *,
+  .pricing-subsection > *,
+  .premium-price-card > *{
+    position:relative;
+    z-index:1;
+  }
+
+  .panel::before,
+  .hero-panel::before,
+  .card::before,
+  .app-card::before,
+  .feature-card::before,
+  .service-card::before,
+  .price-card::before,
+  .pricing-subsection::before,
+  .premium-price-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:0;
+    border-radius:inherit;
+    background:linear-gradient(170deg, rgba(8,18,34,.24), rgba(10,24,45,.18));
+    pointer-events:none;
+  }
+
+  .btn-secondary,
+  .btn-ghost{
+    color:var(--ink);
+    border-color:var(--line-strong);
+    background:var(--surface-3-strong);
+  }
+
   .home-hero .hero-panel,
   .section-surface,
   .sharp-surface,
