@@ -966,6 +966,16 @@ textarea{
   font-size:1.05rem;
 }
 
+
+.card-section-cluster{
+  display:grid;
+  gap:16px;
+}
+
+.card-section-cluster > .section-head{
+  margin:0;
+}
+
 .list-clean{
   margin:8px 0 0 18px;
   color:var(--muted);
