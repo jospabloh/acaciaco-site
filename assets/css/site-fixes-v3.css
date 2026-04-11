@@ -262,6 +262,104 @@
   opacity:0;
 }
 
+/* LEGAL PAGE OVERRIDES */
+
+.legal-page .hero-shell{
+  grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);
+  gap:18px;
+}
+
+.legal-page .hero-panel,
+.legal-page .hero-sidebar .card,
+.legal-page .section-stack .content,
+.legal-page .contact-strip{
+  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong));
+  border:1px solid var(--ui-border-light);
+  box-shadow:var(--ui-shadow-light);
+}
+
+.legal-page .hero-panel::before,
+.legal-page .hero-sidebar .card::before,
+.legal-page .section-stack .content::before,
+.legal-page .contact-strip::before,
+.legal-page .contact-strip::after{
+  opacity:0;
+}
+
+.legal-page .hero-panel h1,
+.legal-page .hero-panel h2,
+.legal-page .hero-panel h3,
+.legal-page .hero-panel b,
+.legal-page .hero-sidebar .card h1,
+.legal-page .hero-sidebar .card h2,
+.legal-page .hero-sidebar .card h3,
+.legal-page .hero-sidebar .card b,
+.legal-page .section-stack .content h1,
+.legal-page .section-stack .content h2,
+.legal-page .section-stack .content h3,
+.legal-page .section-stack .content b,
+.legal-page .contact-strip h1,
+.legal-page .contact-strip h2,
+.legal-page .contact-strip h3,
+.legal-page .contact-strip b{
+  color:var(--ui-ink-dark);
+}
+
+.legal-page .hero-panel p,
+.legal-page .hero-panel li,
+.legal-page .hero-panel span,
+.legal-page .hero-panel small,
+.legal-page .hero-panel .note,
+.legal-page .hero-panel .lead,
+.legal-page .hero-sidebar .card p,
+.legal-page .hero-sidebar .card li,
+.legal-page .hero-sidebar .card span,
+.legal-page .hero-sidebar .card small,
+.legal-page .section-stack .content p,
+.legal-page .section-stack .content li,
+.legal-page .section-stack .content span,
+.legal-page .section-stack .content small,
+.legal-page .section-stack .content .copy,
+.legal-page .contact-strip p,
+.legal-page .contact-strip li,
+.legal-page .contact-strip span,
+.legal-page .contact-strip small{
+  color:var(--ui-copy-dark);
+}
+
+.legal-page .pill,
+.legal-page .eyebrow{
+  color:var(--ui-meta-dark);
+  border-color:var(--ui-border-light);
+  background:rgba(20,35,59,.03);
+}
+
+.legal-page .section-stack{
+  display:grid;
+  gap:16px;
+}
+
+.legal-page .section-stack .content{
+  padding:28px;
+  border-radius:24px;
+}
+
+.legal-page .section-head .copy{
+  max-width:900px;
+}
+
+.legal-page .btn-secondary,
+.legal-page .btn-ghost{
+  color:var(--ui-ghost-text);
+  border-color:var(--ui-ghost-border);
+  background:#fff;
+}
+
+.legal-page .btn-secondary:hover,
+.legal-page .btn-ghost:hover{
+  background:#f7fbff;
+}
+
 @supports (-webkit-touch-callout: none){
   .card,
   .app-card,
@@ -326,7 +424,11 @@
   .final-cta-surface .testimonial-slide::before,
   .final-cta-surface .faq-item::before,
   .final-cta-surface .contact-strip::before,
-  .final-cta-surface .jobs-card::before{
+  .final-cta-surface .jobs-card::before,
+  .legal-page .hero-panel::before,
+  .legal-page .hero-sidebar .card::before,
+  .legal-page .section-stack .content::before,
+  .legal-page .contact-strip::before{
     opacity:0;
   }
 }
@@ -342,5 +444,13 @@
   .pricing-cards-grid,
   .pricing-grid{
     gap:14px;
+  }
+
+  .legal-page .hero-shell{
+    grid-template-columns:1fr;
+  }
+
+  .legal-page .section-stack .content{
+    padding:22px;
   }
 }
