@@ -15,12 +15,12 @@
   --card-muted:#b7c6db;
   --card-layer-top:rgba(130,170,230,.08);
   --card-layer-bottom:rgba(6,14,28,.18);
-  --card-overlay-opacity:.42;
+  --card-overlay-opacity:.28;
 
   --ink:#f8fafc;
   --ink-soft:#e2e8f0;
-  --muted:#94a3b8;
-  --muted-2:#64748b;
+  --muted:#b6c5da;
+  --muted-2:#9aabc2;
 
   --brand-600:#0a78b8;
   --brand-500:#2da4e6;
@@ -280,7 +280,7 @@ textarea{
   max-width:72ch;
   color:var(--muted);
   font-size:1rem;
-  line-height:1.75;
+  line-height:1.7;
 }
 
 .grid-bg{
@@ -726,12 +726,18 @@ textarea{
 }
 
 .btn-secondary:hover{
-  background:color-mix(in srgb, var(--surface) 88%, white 12%);
+  background:color-mix(in srgb, var(--surface) 84%, white 16%);
+}
+
+.btn:focus-visible{
+  outline:2px solid color-mix(in srgb, var(--brand-400) 70%, white 30%);
+  outline-offset:2px;
 }
 
 .btn-ghost{
-  color:var(--muted);
-  background:transparent;
+  color:var(--ink-soft);
+  background:color-mix(in srgb, var(--surface) 66%, transparent);
+  border-color:color-mix(in srgb, var(--line) 92%, #9dd8ff 8%);
 }
 
 .btn-disabled{
@@ -2208,6 +2214,10 @@ textarea{
     color:var(--ink);
     border-color:var(--line-strong);
     background:var(--surface-3-strong);
+  }
+
+  .contact-strip::after{
+    opacity:.38;
   }
 
   .home-hero .hero-panel,
