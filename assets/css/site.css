@@ -1878,16 +1878,39 @@ textarea{
   --accent-cyan:#57bfff;
   --accent-cyan-strong:#2e9df2;
   --accent-warm:#ffb979;
+  --ink:#f8fbff;
+  --ink-soft:#deebff;
+  --muted:#b6c9e3;
+  --muted-2:#8ea5c2;
+  --line:rgba(189,214,241,.2);
+  --line-strong:rgba(189,214,241,.3);
+  color:var(--ink);
+  isolation:isolate;
 }
 
 .home-hero .hero-panel{
+  position:relative;
   background:var(--bg-hero);
   border-color:rgba(87,191,255,.25);
   box-shadow:0 30px 90px rgba(1,9,25,.55), 0 0 80px rgba(87,191,255,.1);
   overflow:hidden;
+  isolation:isolate;
+}
+.home-hero .hero-panel > *{
+  position:relative;
+  z-index:1;
 }
 .hero-copy .lead{max-width:58ch; color:#bdd0ea; font-size:1.06rem;}
 .hero-actions .btn{min-width:170px;}
+.hero-actions .btn-ghost{
+  color:#e7f1ff;
+  border-color:rgba(169,205,240,.48);
+  background:linear-gradient(165deg, rgba(16,34,58,.72), rgba(9,22,42,.58));
+}
+.hero-actions .btn-ghost:hover{
+  border-color:rgba(196,225,255,.66);
+  background:linear-gradient(165deg, rgba(18,39,66,.8), rgba(10,24,45,.7));
+}
 .hero-metrics{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:24px;}
 .hero-metrics article{padding:12px 14px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:rgba(5,14,30,.48);}
 .hero-metrics strong{display:block; font-size:.88rem; margin-bottom:5px;}
@@ -1915,6 +1938,22 @@ textarea{
 .pillar-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px;}
 .pillar-card{padding:18px; border:1px solid rgba(255,255,255,.1); border-radius:16px; background:rgba(255,255,255,.03);}
 .scan-icon{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; margin-bottom:6px; border:1px solid rgba(87,191,255,.3); color:var(--accent-cyan); font-style:normal;}
+
+.homepage-root .pillar-card h3,
+.homepage-root .solution-card b,
+.homepage-root .summary-card h3,
+.homepage-root .feature-card p,
+.homepage-root .feature-card small{
+  color:var(--ink);
+}
+.homepage-root .pillar-card p,
+.homepage-root .solution-card p,
+.homepage-root .summary-card p{
+  color:var(--muted);
+}
+.homepage-root .summary-card span{
+  color:var(--ink-soft);
+}
 
 .solution-showcase{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px;}
 .solution-card{padding:16px; border:1px solid rgba(255,255,255,.1); border-radius:16px; background:rgba(2,10,25,.36); display:grid; gap:10px; align-content:start;}
@@ -1959,6 +1998,30 @@ textarea{
   .pillar-grid,
   .solution-showcase{grid-template-columns:1fr;}
   .hero-visual{min-height:280px;}
+}
+
+@supports (-webkit-touch-callout: none){
+  .home-hero .hero-panel,
+  .section-surface,
+  .sharp-surface,
+  .alt-surface,
+  .social-surface,
+  .final-cta-surface,
+  .solution-card,
+  .pillar-card,
+  .summary-card{
+    position:relative;
+    isolation:isolate;
+  }
+
+  .home-hero .hero-panel::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:0;
+    background:linear-gradient(165deg, rgba(6,17,36,.34), rgba(8,23,44,.2));
+    pointer-events:none;
+  }
 }
 
 /* Clarity + socials + floating egg */
