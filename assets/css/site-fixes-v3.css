@@ -1,0 +1,346 @@
+:root{
+  --ui-surface-dark:#0d1c34;
+  --ui-surface-dark-elevated:#132746;
+  --ui-surface-dark-strong:#162d50;
+  --ui-surface-light:#f7f9fc;
+  --ui-surface-light-strong:#ffffff;
+  --ui-ink-dark:#14233B;
+  --ui-copy-dark:#33435C;
+  --ui-meta-dark:#52627C;
+  --ui-border-light:#D9E2F0;
+  --ui-ghost-text:#1B5FAF;
+  --ui-ghost-border:#BFD2EA;
+  --ui-ink-light:#F5F8FD;
+  --ui-copy-light:#D9E4F2;
+  --ui-meta-light:#B8CAE2;
+  --ui-border-dark:rgba(189,214,241,.18);
+  --ui-shadow-dark:0 18px 52px rgba(2,8,24,.34);
+  --ui-shadow-light:0 16px 40px rgba(20,35,59,.12);
+}
+
+.section-wrap{margin-top:24px;}
+.card-section-cluster{gap:20px;}
+.hero-shell,
+.panel,
+.feature-grid,
+.service-grid,
+.pricing-grid,
+.summary-grid,
+.solution-showcase,
+.pillar-grid,
+.pricing-cards-grid,
+.hero-metrics,
+.contact-strip-actions{gap:16px;}
+
+.card,
+.app-card,
+.feature-card,
+.service-card,
+.price-card,
+.pricing-subsection,
+.premium-price-card,
+.solution-card,
+.pillar-card,
+.summary-card,
+.testimonial-slide,
+.faq-item,
+.contact-strip,
+.jobs-card,
+.hero-panel,
+.panel{
+  background-color:var(--ui-surface-dark);
+  background-image:linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ui-surface-dark-elevated) 88%, transparent),
+    color-mix(in srgb, var(--ui-surface-dark) 92%, transparent)
+  );
+  border-color:var(--ui-border-dark);
+  box-shadow:var(--ui-shadow-dark);
+}
+
+.card::before,
+.app-card::before,
+.feature-card::before,
+.service-card::before,
+.price-card::before,
+.pricing-subsection::before,
+.premium-price-card::before,
+.solution-card::before,
+.pillar-card::before,
+.summary-card::before,
+.testimonial-slide::before,
+.faq-item::before,
+.contact-strip::before,
+.jobs-card::before{
+  opacity:.12;
+}
+
+.card h1,.card h2,.card h3,.card h4,.card h5,.card b,
+.app-card h1,.app-card h2,.app-card h3,.app-card h4,.app-card h5,.app-card b,
+.feature-card h1,.feature-card h2,.feature-card h3,.feature-card h4,.feature-card h5,.feature-card b,
+.service-card h1,.service-card h2,.service-card h3,.service-card h4,.service-card h5,.service-card b,
+.price-card h1,.price-card h2,.price-card h3,.price-card h4,.price-card h5,.price-card b,
+.pricing-subsection h1,.pricing-subsection h2,.pricing-subsection h3,.pricing-subsection h4,.pricing-subsection h5,.pricing-subsection b,
+.premium-price-card h1,.premium-price-card h2,.premium-price-card h3,.premium-price-card h4,.premium-price-card h5,.premium-price-card b,
+.solution-card h1,.solution-card h2,.solution-card h3,.solution-card h4,.solution-card h5,.solution-card b,
+.pillar-card h1,.pillar-card h2,.pillar-card h3,.pillar-card h4,.pillar-card h5,.pillar-card b,
+.summary-card h1,.summary-card h2,.summary-card h3,.summary-card h4,.summary-card h5,.summary-card b,
+.testimonial-slide h1,.testimonial-slide h2,.testimonial-slide h3,.testimonial-slide h4,.testimonial-slide h5,.testimonial-slide b,
+.faq-item h1,.faq-item h2,.faq-item h3,.faq-item h4,.faq-item h5,.faq-item b,
+.contact-strip h1,.contact-strip h2,.contact-strip h3,.contact-strip h4,.contact-strip h5,.contact-strip b,
+.jobs-card h1,.jobs-card h2,.jobs-card h3,.jobs-card h4,.jobs-card h5,.jobs-card b,
+.hero-panel h1,.hero-panel h2,.hero-panel h3,.hero-panel h4,.hero-panel h5,.hero-panel b,
+.panel h1,.panel h2,.panel h3,.panel h4,.panel h5,.panel b{
+  color:var(--ui-ink-light);
+}
+
+.card p,.card li,.card span,.card small,.card .copy,.card .note,
+.app-card p,.app-card li,.app-card span,.app-card small,.app-card .copy,.app-card .note,
+.feature-card p,.feature-card li,.feature-card span,.feature-card small,.feature-card .copy,.feature-card .note,
+.service-card p,.service-card li,.service-card span,.service-card small,.service-card .copy,.service-card .note,
+.price-card p,.price-card li,.price-card span,.price-card small,.price-card .copy,.price-card .note,
+.pricing-subsection p,.pricing-subsection li,.pricing-subsection span,.pricing-subsection small,.pricing-subsection .copy,.pricing-subsection .note,
+.premium-price-card p,.premium-price-card li,.premium-price-card span,.premium-price-card small,.premium-price-card .copy,.premium-price-card .note,
+.solution-card p,.solution-card li,.solution-card span,.solution-card small,.solution-card .copy,.solution-card .note,
+.pillar-card p,.pillar-card li,.pillar-card span,.pillar-card small,.pillar-card .copy,.pillar-card .note,
+.summary-card p,.summary-card li,.summary-card span,.summary-card small,.summary-card .copy,.summary-card .note,
+.testimonial-slide p,.testimonial-slide li,.testimonial-slide span,.testimonial-slide small,.testimonial-slide .copy,.testimonial-slide .note,
+.faq-item p,.faq-item li,.faq-item span,.faq-item small,.faq-item .copy,.faq-item .note,
+.contact-strip p,.contact-strip li,.contact-strip span,.contact-strip small,.contact-strip .copy,.contact-strip .note,
+.jobs-card p,.jobs-card li,.jobs-card span,.jobs-card small,.jobs-card .copy,.jobs-card .note,
+.hero-panel p,.hero-panel li,.hero-panel span,.hero-panel small,.hero-panel .copy,.hero-panel .note,
+.panel p,.panel li,.panel span,.panel small,.panel .copy,.panel .note{
+  color:var(--ui-copy-light);
+}
+
+.price-value,
+.price-tag,
+.card-badge,
+.plan-kicker,
+.price-support{
+  color:var(--ui-ink-light);
+}
+
+.badge-upcoming,
+.badge-trial{
+  color:var(--ui-ink-light);
+  border-color:rgba(132,190,255,.32);
+  background:rgba(45,164,230,.14);
+}
+
+.btn-secondary,
+.btn-ghost{
+  color:var(--ui-ink-light);
+  border-color:rgba(189,214,241,.26);
+  background:rgba(8,18,35,.46);
+}
+
+.btn-secondary:hover,
+.btn-ghost:hover{
+  border-color:rgba(189,214,241,.44);
+  background:rgba(11,25,46,.72);
+}
+
+.solution-chip,
+.eyebrow,
+.pill{
+  color:var(--ui-copy-light);
+}
+
+.section-surface,
+.sharp-surface,
+.alt-surface,
+.social-surface{
+  background:linear-gradient(180deg, var(--ui-surface-dark), var(--ui-surface-dark-elevated));
+  border-color:var(--ui-border-dark);
+}
+
+.surface-light,
+.final-cta-surface{
+  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong));
+  border-color:var(--ui-border-light);
+  box-shadow:var(--ui-shadow-light);
+}
+
+.surface-light::before,
+.final-cta-surface::before{
+  opacity:0;
+}
+
+.surface-light h1,.surface-light h2,.surface-light h3,.surface-light h4,.surface-light h5,.surface-light b,
+.final-cta-surface h1,.final-cta-surface h2,.final-cta-surface h3,.final-cta-surface h4,.final-cta-surface h5,.final-cta-surface b{
+  color:var(--ui-ink-dark);
+}
+
+.surface-light p,.surface-light li,.surface-light span,.surface-light small,.surface-light .copy,.surface-light .note,
+.final-cta-surface p,.final-cta-surface li,.final-cta-surface span,.final-cta-surface small,.final-cta-surface .copy,.final-cta-surface .note{
+  color:var(--ui-copy-dark);
+}
+
+.surface-light .eyebrow,.surface-light .pill,.surface-light .solution-chip,
+.final-cta-surface .eyebrow,.final-cta-surface .pill,.final-cta-surface .solution-chip{
+  color:var(--ui-meta-dark);
+  background:rgba(20,35,59,.03);
+  border-color:var(--ui-border-light);
+}
+
+.surface-light .btn-secondary,.surface-light .btn-ghost,
+.final-cta-surface .btn-secondary,.final-cta-surface .btn-ghost{
+  color:var(--ui-ghost-text);
+  border-color:var(--ui-ghost-border);
+  background:#fff;
+}
+
+.surface-light .btn-secondary:hover,.surface-light .btn-ghost:hover,
+.final-cta-surface .btn-secondary:hover,.final-cta-surface .btn-ghost:hover{
+  background:#f7fbff;
+}
+
+.surface-light .card,
+.surface-light .app-card,
+.surface-light .feature-card,
+.surface-light .service-card,
+.surface-light .price-card,
+.surface-light .pricing-subsection,
+.surface-light .premium-price-card,
+.surface-light .solution-card,
+.surface-light .pillar-card,
+.surface-light .summary-card,
+.surface-light .testimonial-slide,
+.surface-light .faq-item,
+.surface-light .contact-strip,
+.surface-light .jobs-card,
+.final-cta-surface .card,
+.final-cta-surface .app-card,
+.final-cta-surface .feature-card,
+.final-cta-surface .service-card,
+.final-cta-surface .price-card,
+.final-cta-surface .pricing-subsection,
+.final-cta-surface .premium-price-card,
+.final-cta-surface .solution-card,
+.final-cta-surface .pillar-card,
+.final-cta-surface .summary-card,
+.final-cta-surface .testimonial-slide,
+.final-cta-surface .faq-item,
+.final-cta-surface .contact-strip,
+.final-cta-surface .jobs-card{
+  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong));
+  border-color:var(--ui-border-light);
+  box-shadow:0 12px 30px rgba(20,35,59,.08);
+}
+
+.surface-light .card::before,
+.surface-light .app-card::before,
+.surface-light .feature-card::before,
+.surface-light .service-card::before,
+.surface-light .price-card::before,
+.surface-light .pricing-subsection::before,
+.surface-light .premium-price-card::before,
+.surface-light .solution-card::before,
+.surface-light .pillar-card::before,
+.surface-light .summary-card::before,
+.surface-light .testimonial-slide::before,
+.surface-light .faq-item::before,
+.surface-light .contact-strip::before,
+.surface-light .jobs-card::before,
+.surface-light .contact-strip::after,
+.final-cta-surface .card::before,
+.final-cta-surface .app-card::before,
+.final-cta-surface .feature-card::before,
+.final-cta-surface .service-card::before,
+.final-cta-surface .price-card::before,
+.final-cta-surface .pricing-subsection::before,
+.final-cta-surface .premium-price-card::before,
+.final-cta-surface .solution-card::before,
+.final-cta-surface .pillar-card::before,
+.final-cta-surface .summary-card::before,
+.final-cta-surface .testimonial-slide::before,
+.final-cta-surface .faq-item::before,
+.final-cta-surface .contact-strip::before,
+.final-cta-surface .jobs-card::before,
+.final-cta-surface .contact-strip::after{
+  opacity:0;
+}
+
+@supports (-webkit-touch-callout: none){
+  .card,
+  .app-card,
+  .feature-card,
+  .service-card,
+  .price-card,
+  .pricing-subsection,
+  .premium-price-card,
+  .solution-card,
+  .pillar-card,
+  .summary-card,
+  .testimonial-slide,
+  .faq-item,
+  .contact-strip,
+  .jobs-card,
+  .hero-panel,
+  .panel{
+    background-image:none;
+  }
+
+  .card::before,
+  .app-card::before,
+  .feature-card::before,
+  .service-card::before,
+  .price-card::before,
+  .pricing-subsection::before,
+  .premium-price-card::before,
+  .solution-card::before,
+  .pillar-card::before,
+  .summary-card::before,
+  .testimonial-slide::before,
+  .faq-item::before,
+  .contact-strip::before,
+  .jobs-card::before{
+    opacity:.08;
+  }
+
+  .surface-light .card::before,
+  .surface-light .app-card::before,
+  .surface-light .feature-card::before,
+  .surface-light .service-card::before,
+  .surface-light .price-card::before,
+  .surface-light .pricing-subsection::before,
+  .surface-light .premium-price-card::before,
+  .surface-light .solution-card::before,
+  .surface-light .pillar-card::before,
+  .surface-light .summary-card::before,
+  .surface-light .testimonial-slide::before,
+  .surface-light .faq-item::before,
+  .surface-light .contact-strip::before,
+  .surface-light .jobs-card::before,
+  .final-cta-surface .card::before,
+  .final-cta-surface .app-card::before,
+  .final-cta-surface .feature-card::before,
+  .final-cta-surface .service-card::before,
+  .final-cta-surface .price-card::before,
+  .final-cta-surface .pricing-subsection::before,
+  .final-cta-surface .premium-price-card::before,
+  .final-cta-surface .solution-card::before,
+  .final-cta-surface .pillar-card::before,
+  .final-cta-surface .summary-card::before,
+  .final-cta-surface .testimonial-slide::before,
+  .final-cta-surface .faq-item::before,
+  .final-cta-surface .contact-strip::before,
+  .final-cta-surface .jobs-card::before{
+    opacity:0;
+  }
+}
+
+@media (max-width:980px){
+  .panel,
+  .hero-shell,
+  .summary-grid,
+  .service-grid,
+  .feature-grid,
+  .solution-showcase,
+  .pillar-grid,
+  .pricing-cards-grid,
+  .pricing-grid{
+    gap:14px;
+  }
+}
