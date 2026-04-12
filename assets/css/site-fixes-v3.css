@@ -456,437 +456,9 @@
 }
 
 /* =========================
-   FINAL UNIFORMITY PATCH
-   ========================= */
-
-/* 1) final CTA must not render as a second dark site inside a light shell */
-.final-cta-surface,
-.final-cta-surface.surface-light{
-  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong)) !important;
-  border-color:var(--ui-border-light) !important;
-  box-shadow:var(--ui-shadow-light) !important;
-}
-
-.final-cta-surface .final-cta,
-.final-cta-surface .content.final-cta{
-  background:transparent !important;
-  box-shadow:none !important;
-  border:none !important;
-}
-
-.final-cta-surface .final-cta h1,
-.final-cta-surface .final-cta h2,
-.final-cta-surface .final-cta h3,
-.final-cta-surface .final-cta b,
-.final-cta-surface .content.final-cta h1,
-.final-cta-surface .content.final-cta h2,
-.final-cta-surface .content.final-cta h3,
-.final-cta-surface .content.final-cta b{
-  color:var(--ui-ink-dark) !important;
-}
-
-.final-cta-surface .final-cta p,
-.final-cta-surface .final-cta li,
-.final-cta-surface .final-cta span,
-.final-cta-surface .content.final-cta p,
-.final-cta-surface .content.final-cta li,
-.final-cta-surface .content.final-cta span{
-  color:var(--ui-copy-dark) !important;
-}
-
-/* 2) legal pages: normalize ALL nested visual levels */
-.legal-page .hero-panel,
-.legal-page .hero-sidebar .card,
-.legal-page .section-stack .content,
-.legal-page .contact-strip{
-  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong)) !important;
-  border:1px solid var(--ui-border-light) !important;
-  box-shadow:var(--ui-shadow-light) !important;
-}
-
-.legal-page .hero-sidebar .card .meter,
-.legal-page .hero-sidebar .card .content{
-  background:transparent !important;
-  border:none !important;
-  box-shadow:none !important;
-}
-
-.legal-page .hero-sidebar .card .mini,
-.legal-page .hero-sidebar .card .box,
-.legal-page .hero-sidebar .card .mini .box{
-  background:#eef3fb !important;
-  border:1px solid var(--ui-border-light) !important;
-  box-shadow:none !important;
-}
-
-.legal-page .hero-sidebar .card .mini .box b,
-.legal-page .hero-sidebar .card .box b{
-  color:var(--ui-ink-dark) !important;
-}
-
-.legal-page .hero-sidebar .card .mini .box span,
-.legal-page .hero-sidebar .card .box span,
-.legal-page .hero-sidebar .card .mini .box p,
-.legal-page .hero-sidebar .card .box p{
-  color:var(--ui-copy-dark) !important;
-}
-
-.legal-page .hero-brand{
-  background:#eef3fb !important;
-  border:1px solid var(--ui-border-light) !important;
-  box-shadow:none !important;
-}
-
-.legal-page .hero-brand-copy b{
-  color:var(--ui-ink-dark) !important;
-}
-
-.legal-page .hero-brand-copy span{
-  color:var(--ui-meta-dark) !important;
-}
-
-.legal-page .pillrow{
-  gap:12px !important;
-}
-
-.legal-page .pill{
-  background:#f3f7fd !important;
-  border:1px solid var(--ui-border-light) !important;
-  color:var(--ui-meta-dark) !important;
-  box-shadow:none !important;
-}
-
-.legal-page .pill strong,
-.legal-page .pill b{
-  color:var(--ui-meta-dark) !important;
-}
-
-/* 3) force readable cards inside ANY light surface */
-.surface-light .mini .box,
-.surface-light .card .box,
-.surface-light .card .mini .box,
-.surface-light .feature-card,
-.surface-light .service-card,
-.surface-light .summary-card,
-.surface-light .premium-price-card,
-.final-cta-surface .mini .box,
-.final-cta-surface .card .box,
-.final-cta-surface .card .mini .box{
-  background:#eef3fb !important;
-  border:1px solid var(--ui-border-light) !important;
-  box-shadow:none !important;
-}
-
-.surface-light .mini .box b,
-.surface-light .card .box b,
-.surface-light .card .mini .box b,
-.final-cta-surface .mini .box b,
-.final-cta-surface .card .box b,
-.final-cta-surface .card .mini .box b{
-  color:var(--ui-ink-dark) !important;
-}
-
-.surface-light .mini .box span,
-.surface-light .card .box span,
-.surface-light .card .mini .box span,
-.final-cta-surface .mini .box span,
-.final-cta-surface .card .box span,
-.final-cta-surface .card .mini .box span{
-  color:var(--ui-copy-dark) !important;
-}
-
-/* 5) reduce mobile vertical chaos in cards and buttons */
-@media (max-width:768px){
-  .panel,
-  .hero-panel,
-  .card,
-  .app-card,
-  .feature-card,
-  .service-card,
-  .summary-card,
-  .premium-price-card,
-  .contact-strip{
-    border-radius:24px !important;
-  }
-
-  .cta,
-  .app-cta,
-  .contact-strip-actions{
-    gap:12px !important;
-  }
-
-  .btn,
-  .btn-primary,
-  .btn-secondary,
-  .btn-ghost{
-    width:100%;
-    justify-content:center;
-    min-height:56px;
-  }
-
-  .pricing-cards-grid,
-  .summary-grid,
-  .feature-grid,
-  .service-grid{
-    gap:14px !important;
-  }
-}
-
-/* 6) WhatsApp floating button must not cover content */
-.wa-float{
-  z-index:30 !important;
-}
-
-@media (max-width:768px){
-  .wa-float{
-    right:14px !important;
-    bottom:14px !important;
-    transform:none !important;
-    max-width:calc(100vw - 28px) !important;
-    padding:12px 16px !important;
-  }
-
-  body{
-    padding-bottom:92px !important;
-  }
-}
-
-/* 7) floating egg must never overlap mobile content */
-@media (max-width:768px){
-  .floating-egg{
-    display:none !important;
-  }
-}
-
-/* 8) footer readability / wrapping on mobile */
-@media (max-width:768px){
-  .site-footer .footer-inner,
-  .site-footer .footer-legal,
-  .site-footer .footer-links,
-  .site-footer .footer-socials{
-    row-gap:10px !important;
-    column-gap:10px !important;
-    flex-wrap:wrap !important;
-  }
-
-  .site-footer a,
-  .site-footer span,
-  .site-footer p{
-    line-height:1.45 !important;
-  }
-}
-
-/* 9) defensive contrast normalization for dark unreadable cases */
-.legal-page .card *,
-.legal-page .content *,
-.legal-page .section-stack .content *,
-.surface-light .card *,
-.final-cta-surface .card *{
-  text-shadow:none !important;
-}
-
-/* =========================
-   FINAL MOBILE + UNIFORMITY PATCH
-   ========================= */
-
-/* 1) Global visual priority */
-body{
-  background-color:#071a33;
-}
-
-.homepage-root,
-main{
-  position:relative;
-}
-
-/* 2) Contact / Privacy / Terms must be calm light-content pages */
-body.legal-page .hero-panel,
-body.legal-page .hero-sidebar .card,
-body.legal-page .section-stack .content,
-body.legal-page .contact-strip,
-body[data-page="contacto"] .panel,
-body[data-page="contacto"] .premium-price-card,
-body[data-page="contacto"] .contact-strip{
-  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong)) !important;
-  border:1px solid var(--ui-border-light) !important;
-  box-shadow:var(--ui-shadow-light) !important;
-}
-
-body.legal-page .hero-sidebar .card .meter,
-body.legal-page .hero-sidebar .card .content{
-  background:transparent !important;
-  border:none !important;
-  box-shadow:none !important;
-}
-
-body.legal-page .hero-sidebar .card .mini .box,
-body.legal-page .hero-sidebar .card .box,
-body[data-page="contacto"] .premium-price-card{
-  background:#eef3fb !important;
-  border:1px solid var(--ui-border-light) !important;
-  box-shadow:none !important;
-}
-
-body.legal-page .hero-sidebar .card .mini .box b,
-body.legal-page .hero-sidebar .card .box b,
-body[data-page="contacto"] .premium-price-card h1,
-body[data-page="contacto"] .premium-price-card h2,
-body[data-page="contacto"] .premium-price-card h3,
-body[data-page="contacto"] .premium-price-card b{
-  color:var(--ui-ink-dark) !important;
-}
-
-body.legal-page .hero-sidebar .card .mini .box span,
-body.legal-page .hero-sidebar .card .box span,
-body[data-page="contacto"] .premium-price-card p,
-body[data-page="contacto"] .premium-price-card li,
-body[data-page="contacto"] .premium-price-card span{
-  color:var(--ui-copy-dark) !important;
-}
-
-/* 3) Final CTA must be clean and readable */
-.final-cta-surface,
-.final-cta-surface.surface-light{
-  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong)) !important;
-  border-color:var(--ui-border-light) !important;
-  box-shadow:var(--ui-shadow-light) !important;
-}
-
-.final-cta-surface .final-cta,
-.final-cta-surface .content.final-cta{
-  background:transparent !important;
-  border:none !important;
-  box-shadow:none !important;
-}
-
-.final-cta-surface .final-cta h1,
-.final-cta-surface .final-cta h2,
-.final-cta-surface .final-cta h3,
-.final-cta-surface .content.final-cta h1,
-.final-cta-surface .content.final-cta h2,
-.final-cta-surface .content.final-cta h3{
-  color:var(--ui-ink-dark) !important;
-}
-
-.final-cta-surface .final-cta p,
-.final-cta-surface .content.final-cta p{
-  color:var(--ui-copy-dark) !important;
-}
-
-/* 4) Homepage hero visual is desktop-only if it becomes confusing on mobile */
-@media (max-width:980px){
-  .hero-visual,
-  .product-stage,
-  .floating-chip{
-    display:none !important;
-  }
-
-  .hero-shell{
-    grid-template-columns:1fr !important;
-  }
-
-  .hero-copy{
-    max-width:none !important;
-  }
-}
-
-/* 6) LIUMA + Puntos+ preview cards must look like sibling products */
-.preview-card,
-.app-card-preview{
-  min-height:100%;
-}
-
-.preview-card .btn,
-.app-card-preview .btn{
-  min-height:56px !important;
-}
-
-/* 7) Mobile buttons and cards */
-@media (max-width:768px){
-  .panel,
-  .hero-panel,
-  .card,
-  .app-card,
-  .feature-card,
-  .service-card,
-  .summary-card,
-  .premium-price-card,
-  .contact-strip,
-  .solution-card{
-    border-radius:24px !important;
-  }
-
-  .cta,
-  .app-cta,
-  .contact-strip-actions{
-    gap:12px !important;
-  }
-
-  .btn,
-  .btn-primary,
-  .btn-secondary,
-  .btn-ghost{
-    width:100%;
-    justify-content:center;
-    min-height:56px;
-  }
-
-  .summary-grid,
-  .feature-grid,
-  .service-grid,
-  .pricing-cards-grid,
-  .solution-showcase{
-    gap:14px !important;
-  }
-}
-
-/* 8) Floating WhatsApp must not block content */
-.wa-float{
-  z-index:30 !important;
-}
-
-@media (max-width:768px){
-  .wa-float{
-    right:14px !important;
-    bottom:14px !important;
-    transform:none !important;
-    max-width:calc(100vw - 28px) !important;
-    padding:12px 16px !important;
-  }
-
-  body{
-    padding-bottom:92px !important;
-  }
-}
-
-/* 9) Floating egg off on mobile */
-@media (max-width:768px){
-  .floating-egg{
-    display:none !important;
-  }
-}
-
-/* 10) Footer readability on mobile */
-@media (max-width:768px){
-  .site-footer .footer-inner,
-  .site-footer .footer-legal,
-  .site-footer .footer-links,
-  .site-footer .footer-socials{
-    row-gap:10px !important;
-    column-gap:10px !important;
-    flex-wrap:wrap !important;
-  }
-
-  .site-footer a,
-  .site-footer span,
-  .site-footer p{
-    line-height:1.45 !important;
-  }
-}
-
-
-/* =========================
-   MOBILE HEADER FINAL FIX
+   MOBILE HEADER FINAL FIX (ONLY VALID <=768PX LAYOUT)
+   Row 1: brand (left) + menu (right)
+   Row 2: currency picker (left) + CTA (right)
    ========================= */
 
 @media (max-width:768px){
@@ -939,13 +511,8 @@ body[data-page="contacto"] .premium-price-card span{
     text-overflow:ellipsis !important;
   }
 
-  .topnav-brand-copy span{
-    display:none !important;
-  }
-
-  .topnav-links{
-    display:none !important;
-  }
+  .topnav-brand-copy span{ display:none !important; }
+  .topnav-links{ display:none !important; }
 
   .mobile-nav{
     grid-area:menu !important;
@@ -968,7 +535,8 @@ body[data-page="contacto"] .premium-price-card span{
   .topnav-actions-global{
     grid-area:actions !important;
     display:grid !important;
-    grid-template-columns:minmax(0,1fr) minmax(150px, 1fr) !important;
+    grid-template-columns:minmax(0,1fr) minmax(150px,1fr) !important;
+    grid-template-areas:"currency cta" !important;
     align-items:center !important;
     gap:10px !important;
     width:100% !important;
@@ -982,6 +550,10 @@ body[data-page="contacto"] .premium-price-card span{
     width:100% !important;
   }
 
+  .global-pref-shell,
+  .picker,
+  .picker-compact{ grid-area:currency !important; }
+
   .picker-compact{
     padding-inline:10px !important;
     min-height:48px !important;
@@ -994,6 +566,7 @@ body[data-page="contacto"] .premium-price-card span{
   }
 
   .btn-nav-cta{
+    grid-area:cta !important;
     width:100% !important;
     min-height:48px !important;
     padding:12px 14px !important;
@@ -1020,19 +593,16 @@ body[data-page="contacto"] .premium-price-card span{
     flex:0 0 38px !important;
   }
 
-  .topnav-brand-copy b{
-    font-size:.92rem !important;
-  }
+  .topnav-brand-copy b{ font-size:.92rem !important; }
 
   .topnav-actions,
   .topnav-actions-global{
     grid-template-columns:minmax(0,1fr) minmax(136px,1fr) !important;
+    grid-template-areas:"currency cta" !important;
     gap:8px !important;
   }
 
-  .picker-compact{
-    min-height:46px !important;
-  }
+  .picker-compact{ min-height:46px !important; }
 
   .btn-nav-cta,
   .mobile-nav summary{
