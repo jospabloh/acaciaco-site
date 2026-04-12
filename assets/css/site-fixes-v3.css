@@ -334,6 +334,76 @@
   background:rgba(20,35,59,.03);
 }
 
+.legal-page .hero-sidebar .card,
+.legal-page .hero-sidebar .meter,
+.legal-page .hero-sidebar .mini,
+.legal-page .hero-sidebar .box,
+.legal-page .hero-sidebar .content,
+.legal-page .hero-panel .hero-brand,
+.legal-page .hero-panel .pill,
+.legal-page .hero-sidebar .pill{
+  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong));
+  border:1px solid var(--ui-border-light);
+  box-shadow:none;
+}
+
+.legal-page .hero-sidebar .meter,
+.legal-page .hero-sidebar .mini,
+.legal-page .hero-sidebar .box,
+.legal-page .hero-sidebar .content,
+.legal-page .hero-panel .hero-brand{
+  color:var(--ui-copy-dark);
+}
+
+.legal-page .hero-sidebar .meter h1,
+.legal-page .hero-sidebar .meter h2,
+.legal-page .hero-sidebar .meter h3,
+.legal-page .hero-sidebar .mini h1,
+.legal-page .hero-sidebar .mini h2,
+.legal-page .hero-sidebar .mini h3,
+.legal-page .hero-sidebar .box h1,
+.legal-page .hero-sidebar .box h2,
+.legal-page .hero-sidebar .box h3,
+.legal-page .hero-sidebar .box b,
+.legal-page .hero-sidebar .content h1,
+.legal-page .hero-sidebar .content h2,
+.legal-page .hero-sidebar .content h3,
+.legal-page .hero-sidebar .content b,
+.legal-page .hero-panel .hero-brand b{
+  color:var(--ui-ink-dark);
+}
+
+.legal-page .hero-sidebar .meter p,
+.legal-page .hero-sidebar .meter li,
+.legal-page .hero-sidebar .meter span,
+.legal-page .hero-sidebar .meter small,
+.legal-page .hero-sidebar .mini p,
+.legal-page .hero-sidebar .mini li,
+.legal-page .hero-sidebar .mini span,
+.legal-page .hero-sidebar .mini small,
+.legal-page .hero-sidebar .box p,
+.legal-page .hero-sidebar .box li,
+.legal-page .hero-sidebar .box span,
+.legal-page .hero-sidebar .box small,
+.legal-page .hero-sidebar .content p,
+.legal-page .hero-sidebar .content li,
+.legal-page .hero-sidebar .content span,
+.legal-page .hero-sidebar .content small,
+.legal-page .hero-panel .hero-brand span{
+  color:var(--ui-copy-dark);
+}
+
+.legal-page .hero-sidebar .meter::before,
+.legal-page .hero-sidebar .mini::before,
+.legal-page .hero-sidebar .box::before,
+.legal-page .hero-sidebar .content::before{
+  opacity:0;
+}
+
+.legal-page .floating-egg{
+  display:none !important;
+}
+
 .legal-page .section-stack{
   display:grid;
   gap:16px;
@@ -462,6 +532,10 @@
    ========================= */
 
 @media (max-width:768px){
+  .floating-egg{
+    display:none !important;
+  }
+
   .topnav,
   .topnav-premium{
     position:sticky;

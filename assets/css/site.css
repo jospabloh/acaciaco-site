@@ -57,87 +57,8 @@
   color-scheme:dark;
 }
 
-@media (prefers-color-scheme: light){
-  :root{
-    --bg0:#f8fafc;
-    --bg1:#eef2f7;
-    --bg2:#e2e8f0;
-
-    --surface:#ffffff;
-    --surface-2:#f8fafc;
-    --surface-3:rgba(255,255,255,.94);
-    --surface-3-strong:rgba(255,255,255,.98);
-
-    --card-surface-base:rgba(255,255,255,.94);
-    --card-surface-strong:rgba(255,255,255,.98);
-    --card-overlay:linear-gradient(170deg, rgba(255,255,255,.55), rgba(241,245,249,.35));
-    --card-ink:#0f172a;
-    --card-muted:#334155;
-    --card-layer-top:rgba(255,255,255,.58);
-    --card-layer-bottom:rgba(226,232,240,.28);
-    --card-overlay-opacity:.35;
-
-    --ink:#0f172a;
-    --ink-soft:#1e293b;
-    --muted:#334155;
-    --muted-2:#475569;
-
-    --line:rgba(15,23,42,.14);
-    --line-strong:rgba(15,23,42,.22);
-
-    --shadow-sm:0 10px 28px rgba(15,23,42,.08);
-    --shadow-md:0 16px 42px rgba(15,23,42,.11);
-    --shadow-lg:0 24px 60px rgba(15,23,42,.14);
-
-    --light-surface:#f7f9fc;
-    --light-surface-strong:#ffffff;
-    --light-title:#14233B;
-    --light-body:#33435C;
-    --light-meta:#52627C;
-    --light-border:#D9E2F0;
-    --light-ghost-text:#1B5FAF;
-    --light-ghost-border:#BFD2EA;
-
-    color-scheme:light;
-  }
-}
-
 :root[data-theme="dark"]{
   color-scheme:dark;
-}
-
-:root[data-theme="light"]{
-  --bg0:#f8fafc;
-  --bg1:#eef2f7;
-  --bg2:#e2e8f0;
-
-  --surface:#ffffff;
-  --surface-2:#f8fafc;
-  --surface-3:rgba(255,255,255,.94);
-  --surface-3-strong:rgba(255,255,255,.98);
-
-    --card-surface-base:rgba(255,255,255,.94);
-    --card-surface-strong:rgba(255,255,255,.98);
-    --card-overlay:linear-gradient(170deg, rgba(255,255,255,.55), rgba(241,245,249,.35));
-    --card-ink:#0f172a;
-    --card-muted:#334155;
-    --card-layer-top:rgba(255,255,255,.58);
-    --card-layer-bottom:rgba(226,232,240,.28);
-    --card-overlay-opacity:.35;
-
-  --ink:#0f172a;
-  --ink-soft:#1e293b;
-  --muted:#334155;
-  --muted-2:#475569;
-
-  --line:rgba(15,23,42,.14);
-  --line-strong:rgba(15,23,42,.22);
-
-  --shadow-sm:0 10px 28px rgba(15,23,42,.08);
-  --shadow-md:0 16px 42px rgba(15,23,42,.11);
-  --shadow-lg:0 24px 60px rgba(15,23,42,.14);
-
-  color-scheme:light;
 }
 
 *,
