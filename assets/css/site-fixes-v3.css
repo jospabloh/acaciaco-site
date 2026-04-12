@@ -595,75 +595,6 @@
   color:var(--ui-copy-dark) !important;
 }
 
-/* 4) mobile header cleanup */
-@media (max-width:768px){
-  .topnav-inner{
-    display:grid !important;
-    grid-template-columns:auto minmax(0,1fr) auto auto !important;
-    align-items:center !important;
-    gap:10px !important;
-  }
-
-  .topnav-brand{
-    min-width:0 !important;
-    gap:10px !important;
-  }
-
-  .topnav-brand img{
-    width:40px !important;
-    height:40px !important;
-    flex:0 0 40px !important;
-  }
-
-  .topnav-brand-copy{
-    min-width:0 !important;
-  }
-
-  .topnav-brand-copy b{
-    font-size:1rem !important;
-    line-height:1.1 !important;
-    white-space:nowrap !important;
-    overflow:hidden !important;
-    text-overflow:ellipsis !important;
-  }
-
-  .topnav-brand-copy span{
-    display:none !important;
-  }
-
-  .topnav-actions-global{
-    gap:8px !important;
-  }
-
-  .global-pref-shell,
-  .picker-compact{
-    min-width:0 !important;
-  }
-
-  .picker-compact{
-    padding-inline:10px !important;
-  }
-
-  .picker-compact select{
-    font-size:.95rem !important;
-  }
-
-  .btn-nav-cta{
-    padding:12px 14px !important;
-    min-height:48px !important;
-    border-radius:18px !important;
-    font-size:.98rem !important;
-    white-space:normal !important;
-    text-align:center !important;
-  }
-
-  .mobile-nav summary{
-    min-height:48px !important;
-    padding:12px 14px !important;
-    border-radius:18px !important;
-  }
-}
-
 /* 5) reduce mobile vertical chaos in cards and buttons */
 @media (max-width:768px){
   .panel,
@@ -859,101 +790,6 @@ body[data-page="contacto"] .premium-price-card span{
   }
 }
 
-/* 5) Mobile header must never overlap */
-@media (max-width:768px){
-  .topnav,
-  .topnav-premium{
-    position:sticky;
-    top:0;
-    z-index:60;
-    backdrop-filter:blur(14px);
-  }
-
-  .topnav-inner{
-    display:grid !important;
-    grid-template-columns:minmax(0,1fr) auto auto !important;
-    align-items:center !important;
-    gap:10px !important;
-    padding:10px 12px !important;
-  }
-
-  .topnav-brand{
-    min-width:0 !important;
-    display:flex !important;
-    align-items:center !important;
-    gap:10px !important;
-  }
-
-  .topnav-brand img{
-    width:40px !important;
-    height:40px !important;
-    flex:0 0 40px !important;
-  }
-
-  .topnav-brand-copy{
-    min-width:0 !important;
-    overflow:hidden !important;
-  }
-
-  .topnav-brand-copy b{
-    display:block !important;
-    font-size:1rem !important;
-    line-height:1.1 !important;
-    white-space:nowrap !important;
-    overflow:hidden !important;
-    text-overflow:ellipsis !important;
-  }
-
-  .topnav-brand-copy span{
-    display:none !important;
-  }
-
-  .topnav-links{
-    display:none !important;
-  }
-
-  .topnav-actions-global{
-    display:flex !important;
-    align-items:center !important;
-    gap:8px !important;
-    min-width:0 !important;
-  }
-
-  .global-pref-shell,
-  .picker,
-  .picker-compact{
-    min-width:0 !important;
-  }
-
-  .picker-compact{
-    padding-inline:10px !important;
-    max-width:120px !important;
-  }
-
-  .picker-compact select{
-    font-size:.95rem !important;
-  }
-
-  .btn-nav-cta{
-    min-height:48px !important;
-    padding:12px 14px !important;
-    border-radius:18px !important;
-    white-space:normal !important;
-    text-align:center !important;
-    font-size:.96rem !important;
-  }
-
-  .mobile-nav{
-    display:block !important;
-  }
-
-  .mobile-nav summary{
-    min-height:48px !important;
-    padding:12px 14px !important;
-    border-radius:18px !important;
-  }
-}
-
 /* 6) LIUMA + Puntos+ preview cards must look like sibling products */
 .preview-card,
 .app-card-preview{
@@ -1046,4 +882,161 @@ body[data-page="contacto"] .premium-price-card span{
   .site-footer p{
     line-height:1.45 !important;
   }
+}
+
+
+/* =========================
+   MOBILE HEADER FINAL FIX
+   ========================= */
+
+@media (max-width:768px){
+  .topnav,
+  .topnav-premium{
+    position:sticky;
+    top:0;
+    z-index:70;
+    backdrop-filter:blur(14px);
+  }
+
+  .topnav-inner{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto !important;
+    grid-template-areas:
+      "brand menu"
+      "actions actions" !important;
+    align-items:center !important;
+    gap:10px 12px !important;
+    padding:10px 12px !important;
+  }
+
+  .topnav-brand{
+    grid-area:brand !important;
+    min-width:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    gap:10px !important;
+    overflow:hidden !important;
+  }
+
+  .topnav-brand img{
+    width:40px !important;
+    height:40px !important;
+    flex:0 0 40px !important;
+  }
+
+  .topnav-brand-copy{
+    min-width:0 !important;
+    overflow:hidden !important;
+  }
+
+  .topnav-brand-copy b{
+    display:block !important;
+    font-size:0.98rem !important;
+    line-height:1.1 !important;
+    letter-spacing:.04em !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  .topnav-brand-copy span{
+    display:none !important;
+  }
+
+  .topnav-links{
+    display:none !important;
+  }
+
+  .mobile-nav{
+    grid-area:menu !important;
+    display:block !important;
+    justify-self:end !important;
+    margin:0 !important;
+  }
+
+  .mobile-nav summary{
+    min-height:48px !important;
+    padding:12px 14px !important;
+    border-radius:18px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    white-space:nowrap !important;
+  }
+
+  .topnav-actions,
+  .topnav-actions-global{
+    grid-area:actions !important;
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) minmax(150px, 1fr) !important;
+    align-items:center !important;
+    gap:10px !important;
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+  .global-pref-shell,
+  .picker,
+  .picker-compact{
+    min-width:0 !important;
+    width:100% !important;
+  }
+
+  .picker-compact{
+    padding-inline:10px !important;
+    min-height:48px !important;
+    border-radius:18px !important;
+  }
+
+  .picker-compact select{
+    width:100% !important;
+    font-size:.95rem !important;
+  }
+
+  .btn-nav-cta{
+    width:100% !important;
+    min-height:48px !important;
+    padding:12px 14px !important;
+    border-radius:18px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-align:center !important;
+    font-size:.96rem !important;
+    line-height:1.15 !important;
+    white-space:normal !important;
+  }
+}
+
+@media (max-width:420px){
+  .topnav-inner{
+    gap:8px 10px !important;
+    padding:10px 10px !important;
+  }
+
+  .topnav-brand img{
+    width:38px !important;
+    height:38px !important;
+    flex:0 0 38px !important;
+  }
+
+  .topnav-brand-copy b{
+    font-size:.92rem !important;
+  }
+
+  .topnav-actions,
+  .topnav-actions-global{
+    grid-template-columns:minmax(0,1fr) minmax(136px,1fr) !important;
+    gap:8px !important;
+  }
+
+  .picker-compact{
+    min-height:46px !important;
+  }
+
+  .btn-nav-cta,
+  .mobile-nav summary{
+    min-height:46px !important;
+    padding:10px 12px !important;
+  }
 }
