@@ -922,3 +922,199 @@ body[data-page="terms"] .floating-egg{
   display:none !important;
 }
 
+
+/* =========================
+   PAGE MODE CONSISTENCY FIX
+   ========================= */
+
+/* DARK-CONSISTENT PAGES */
+body[data-page="home"] .panel,
+body[data-page="apps"] .panel,
+body[data-page="pricing"] .panel,
+body[data-page="stockflow"] .panel,
+body[data-page="flowfin"] .panel,
+body[data-page="liuma"] .panel,
+body[data-page="puntosplus"] .panel,
+body[data-page="home"] .premium-price-card,
+body[data-page="apps"] .premium-price-card,
+body[data-page="pricing"] .premium-price-card,
+body[data-page="stockflow"] .premium-price-card,
+body[data-page="flowfin"] .premium-price-card,
+body[data-page="liuma"] .premium-price-card,
+body[data-page="puntosplus"] .premium-price-card,
+body[data-page="home"] .summary-card,
+body[data-page="apps"] .summary-card,
+body[data-page="pricing"] .summary-card,
+body[data-page="stockflow"] .summary-card,
+body[data-page="flowfin"] .summary-card,
+body[data-page="liuma"] .summary-card,
+body[data-page="puntosplus"] .summary-card,
+body[data-page="home"] .solution-card,
+body[data-page="apps"] .solution-card,
+body[data-page="pricing"] .solution-card,
+body[data-page="stockflow"] .solution-card,
+body[data-page="flowfin"] .solution-card,
+body[data-page="liuma"] .solution-card,
+body[data-page="puntosplus"] .solution-card,
+body[data-page="home"] .contact-strip,
+body[data-page="apps"] .contact-strip,
+body[data-page="pricing"] .contact-strip,
+body[data-page="stockflow"] .contact-strip,
+body[data-page="flowfin"] .contact-strip,
+body[data-page="liuma"] .contact-strip,
+body[data-page="puntosplus"] .contact-strip{
+  background:linear-gradient(180deg, var(--ui-surface-dark), var(--ui-surface-dark-elevated)) !important;
+  border-color:var(--ui-border-dark) !important;
+  box-shadow:var(--ui-shadow-dark) !important;
+}
+
+body[data-page="home"] .surface-light,
+body[data-page="home"] .final-cta-surface,
+body[data-page="home"] .alt-surface,
+body[data-page="apps"] .surface-light,
+body[data-page="apps"] .final-cta-surface,
+body[data-page="apps"] .alt-surface,
+body[data-page="pricing"] .surface-light,
+body[data-page="pricing"] .final-cta-surface,
+body[data-page="pricing"] .alt-surface,
+body[data-page="stockflow"] .surface-light,
+body[data-page="stockflow"] .final-cta-surface,
+body[data-page="stockflow"] .alt-surface,
+body[data-page="flowfin"] .surface-light,
+body[data-page="flowfin"] .final-cta-surface,
+body[data-page="flowfin"] .alt-surface,
+body[data-page="liuma"] .surface-light,
+body[data-page="liuma"] .final-cta-surface,
+body[data-page="liuma"] .alt-surface,
+body[data-page="puntosplus"] .surface-light,
+body[data-page="puntosplus"] .final-cta-surface,
+body[data-page="puntosplus"] .alt-surface{
+  background:linear-gradient(180deg, var(--ui-surface-dark), var(--ui-surface-dark-elevated)) !important;
+  border-color:var(--ui-border-dark) !important;
+  box-shadow:var(--ui-shadow-dark) !important;
+}
+
+body[data-page="home"] .surface-light h1,
+body[data-page="home"] .surface-light h2,
+body[data-page="home"] .surface-light h3,
+body[data-page="home"] .surface-light h4,
+body[data-page="home"] .surface-light h5,
+body[data-page="home"] .surface-light b,
+body[data-page="home"] .surface-light p,
+body[data-page="home"] .surface-light li,
+body[data-page="home"] .surface-light span,
+body[data-page="home"] .surface-light small,
+body[data-page="home"] .final-cta-surface h1,
+body[data-page="home"] .final-cta-surface h2,
+body[data-page="home"] .final-cta-surface h3,
+body[data-page="home"] .final-cta-surface h4,
+body[data-page="home"] .final-cta-surface h5,
+body[data-page="home"] .final-cta-surface b,
+body[data-page="home"] .final-cta-surface p,
+body[data-page="home"] .final-cta-surface li,
+body[data-page="home"] .final-cta-surface span,
+body[data-page="home"] .final-cta-surface small,
+body[data-page="apps"] .surface-light h1,
+body[data-page="apps"] .surface-light h2,
+body[data-page="apps"] .surface-light h3,
+body[data-page="apps"] .surface-light h4,
+body[data-page="apps"] .surface-light h5,
+body[data-page="apps"] .surface-light b,
+body[data-page="apps"] .surface-light p,
+body[data-page="apps"] .surface-light li,
+body[data-page="apps"] .surface-light span,
+body[data-page="apps"] .surface-light small,
+body[data-page="pricing"] .surface-light h1,
+body[data-page="pricing"] .surface-light h2,
+body[data-page="pricing"] .surface-light h3,
+body[data-page="pricing"] .surface-light h4,
+body[data-page="pricing"] .surface-light h5,
+body[data-page="pricing"] .surface-light b,
+body[data-page="pricing"] .surface-light p,
+body[data-page="pricing"] .surface-light li,
+body[data-page="pricing"] .surface-light span,
+body[data-page="pricing"] .surface-light small{
+  color:var(--ui-ink-light) !important;
+}
+
+/* LIGHT-CONSISTENT PAGES */
+body[data-page="contacto"] .panel,
+body[data-page="contacto"] .premium-price-card,
+body[data-page="contacto"] .contact-strip,
+body[data-page="privacy"] .panel,
+body[data-page="privacy"] .hero-sidebar .card,
+body[data-page="privacy"] .hero-sidebar .meter,
+body[data-page="privacy"] .hero-sidebar .mini,
+body[data-page="privacy"] .hero-sidebar .box,
+body[data-page="privacy"] .hero-sidebar .content,
+body[data-page="privacy"] .contact-strip,
+body[data-page="terms"] .panel,
+body[data-page="terms"] .hero-sidebar .card,
+body[data-page="terms"] .hero-sidebar .meter,
+body[data-page="terms"] .hero-sidebar .mini,
+body[data-page="terms"] .hero-sidebar .box,
+body[data-page="terms"] .hero-sidebar .content,
+body[data-page="terms"] .contact-strip{
+  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong)) !important;
+  border:1px solid var(--ui-border-light) !important;
+  box-shadow:var(--ui-shadow-light) !important;
+}
+
+body[data-page="contacto"] .panel h1,
+body[data-page="contacto"] .panel h2,
+body[data-page="contacto"] .panel h3,
+body[data-page="contacto"] .panel h4,
+body[data-page="contacto"] .panel h5,
+body[data-page="contacto"] .panel b,
+body[data-page="contacto"] .panel p,
+body[data-page="contacto"] .panel li,
+body[data-page="contacto"] .panel span,
+body[data-page="contacto"] .panel small,
+body[data-page="privacy"] .panel h1,
+body[data-page="privacy"] .panel h2,
+body[data-page="privacy"] .panel h3,
+body[data-page="privacy"] .panel h4,
+body[data-page="privacy"] .panel h5,
+body[data-page="privacy"] .panel b,
+body[data-page="privacy"] .panel p,
+body[data-page="privacy"] .panel li,
+body[data-page="privacy"] .panel span,
+body[data-page="privacy"] .panel small,
+body[data-page="terms"] .panel h1,
+body[data-page="terms"] .panel h2,
+body[data-page="terms"] .panel h3,
+body[data-page="terms"] .panel h4,
+body[data-page="terms"] .panel h5,
+body[data-page="terms"] .panel b,
+body[data-page="terms"] .panel p,
+body[data-page="terms"] .panel li,
+body[data-page="terms"] .panel span,
+body[data-page="terms"] .panel small{
+  color:var(--ui-ink-dark) !important;
+}
+
+body[data-page="privacy"] .hero-sidebar .box *,
+body[data-page="privacy"] .hero-sidebar .content *,
+body[data-page="terms"] .hero-sidebar .box *,
+body[data-page="terms"] .hero-sidebar .content *{
+  color:var(--ui-ink-dark) !important;
+  text-shadow:none !important;
+}
+
+body[data-page="privacy"] .pill,
+body[data-page="terms"] .pill{
+  color:var(--ui-meta-dark) !important;
+  background:#f4f7fc !important;
+  border-color:var(--ui-border-light) !important;
+}
+
+/* NEVER SHOW FLOATING EGG ON MOBILE OR LEGAL PAGES */
+@media (max-width:980px){
+  .floating-egg{
+    display:none !important;
+  }
+}
+body[data-page="privacy"] .floating-egg,
+body[data-page="terms"] .floating-egg{
+  display:none !important;
+}
