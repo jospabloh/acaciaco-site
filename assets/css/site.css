@@ -1509,11 +1509,14 @@ textarea{
   z-index:95;
   display:inline-flex;
   align-items:center;
-  gap:9px;
-  padding:11px 14px;
+  justify-content:center;
+  width:56px;
+  height:56px;
+  padding:0;
   border:1px solid rgba(255,255,255,.38);
   border-radius:999px;
-  color:#fff;
+  color:transparent;
+  font-size:0;
   background:linear-gradient(135deg, var(--success-500), var(--success-600));
   box-shadow:0 12px 30px rgba(24,169,84,.28);
 }
@@ -1523,21 +1526,25 @@ textarea{
   filter:brightness(1.03);
 }
 
+.wa-float span:not(.wa-icon){
+  display:none !important;
+}
+
 .wa-float .wa-icon{
-  width:20px;
-  height:20px;
+  width:24px;
+  height:24px;
   display:inline-grid;
   place-items:center;
-  flex:0 0 20px;
+  flex:0 0 24px;
   line-height:0;
   overflow:hidden;
   text-indent:-9999px;
   border-radius:50%;
-  background:rgba(255,255,255,.22);
+  background:transparent;
   background-image:url("https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg");
   background-repeat:no-repeat;
   background-position:center;
-  background-size:14px 14px;
+  background-size:24px 24px;
 }
 
 /* Generic helpers */
@@ -1797,7 +1804,14 @@ textarea{
   .wa-float{
     right:calc(12px + env(safe-area-inset-right));
     bottom:calc(12px + env(safe-area-inset-bottom));
-    padding:10px 12px;
+    width:52px;
+    height:52px;
+  }
+
+  .wa-float .wa-icon{
+    width:22px;
+    height:22px;
+    background-size:22px 22px;
   }
 }
 
