@@ -103,7 +103,7 @@ body[data-page="terms"] .floating-egg{display:none !important;}
 
 .wa-float span:not(.wa-icon){display:none !important;}
 
-/* Theme consistency */
+/* Theme consistency (explicit light mode) */
 :root[data-theme="light"] body .panel,
 :root[data-theme="light"] body .hero-panel,
 :root[data-theme="light"] body .summary-card,
@@ -137,7 +137,15 @@ body[data-page="terms"] .floating-egg{display:none !important;}
 :root[data-theme="light"] body .content *,
 :root[data-theme="light"] body .hero-sidebar .box *,
 :root[data-theme="light"] body .hero-sidebar .content *,
-:root[data-theme="light"] body .hero-brand *{color:var(--ui-copy-dark) !important;}
+:root[data-theme="light"] body .hero-brand *,
+:root[data-theme="light"] body .copy,
+:root[data-theme="light"] body .price-support,
+:root[data-theme="light"] body .price-line,
+:root[data-theme="light"] body .price-value,
+:root[data-theme="light"] body .plan-kicker,
+:root[data-theme="light"] body .summary-card span,
+:root[data-theme="light"] body .list-clean,
+:root[data-theme="light"] body .note{color:var(--ui-copy-dark) !important;}
 
 :root[data-theme="light"] body h1,
 :root[data-theme="light"] body h2,
@@ -154,6 +162,7 @@ body[data-page="terms"] .floating-egg{display:none !important;}
   background:#fff;
 }
 
+/* Theme consistency (automatic light mode) */
 @media (prefers-color-scheme: light){
   :root:not([data-theme]) body .panel,
   :root:not([data-theme]) body .hero-panel,
@@ -174,6 +183,43 @@ body[data-page="terms"] .floating-egg{display:none !important;}
     border-color:var(--ui-border-light) !important;
     color:var(--ui-ink-dark) !important;
     box-shadow:var(--ui-shadow-light);
+  }
+
+  :root:not([data-theme]) body .panel *,
+  :root:not([data-theme]) body .hero-panel *,
+  :root:not([data-theme]) body .summary-card *,
+  :root:not([data-theme]) body .feature-card *,
+  :root:not([data-theme]) body .service-card *,
+  :root:not([data-theme]) body .premium-price-card *,
+  :root:not([data-theme]) body .price-card *,
+  :root:not([data-theme]) body .contact-strip *,
+  :root:not([data-theme]) body .faq-item *,
+  :root:not([data-theme]) body .content *,
+  :root:not([data-theme]) body .hero-sidebar .box *,
+  :root:not([data-theme]) body .hero-sidebar .content *,
+  :root:not([data-theme]) body .hero-brand *,
+  :root:not([data-theme]) body .copy,
+  :root:not([data-theme]) body .price-support,
+  :root:not([data-theme]) body .price-line,
+  :root:not([data-theme]) body .price-value,
+  :root:not([data-theme]) body .plan-kicker,
+  :root:not([data-theme]) body .summary-card span,
+  :root:not([data-theme]) body .list-clean,
+  :root:not([data-theme]) body .note{color:var(--ui-copy-dark) !important;}
+
+  :root:not([data-theme]) body h1,
+  :root:not([data-theme]) body h2,
+  :root:not([data-theme]) body h3,
+  :root:not([data-theme]) body h4,
+  :root:not([data-theme]) body h5,
+  :root:not([data-theme]) body strong,
+  :root:not([data-theme]) body b{color:var(--ui-ink-dark) !important;}
+
+  :root:not([data-theme]) body .btn-secondary,
+  :root:not([data-theme]) body .btn-ghost{
+    color:var(--ui-ghost-text);
+    border-color:var(--ui-ghost-border);
+    background:#fff;
   }
 }
 
