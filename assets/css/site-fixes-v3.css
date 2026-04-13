@@ -1,36 +1,21 @@
+/* A. shared dark surface system */
 :root{
-  --ui-surface-dark:#0d1c34;
-  --ui-surface-dark-elevated:#132746;
-  --ui-surface-dark-strong:#162d50;
-  --ui-surface-light:#f7f9fc;
-  --ui-surface-light-strong:#ffffff;
-  --ui-ink-dark:#14233B;
-  --ui-copy-dark:#33435C;
-  --ui-meta-dark:#52627C;
-  --ui-border-light:#D9E2F0;
-  --ui-ghost-text:#1B5FAF;
-  --ui-ghost-border:#BFD2EA;
-  --ui-ink-light:#F5F8FD;
-  --ui-copy-light:#D9E4F2;
-  --ui-meta-light:#B8CAE2;
-  --ui-border-dark:rgba(189,214,241,.18);
-  --ui-shadow-dark:0 18px 52px rgba(2,8,24,.34);
-  --ui-shadow-light:0 16px 40px rgba(20,35,59,.12);
-}
+  --fix-dark-bg:#020617;
+  --fix-dark-surface:#0d1c34;
+  --fix-dark-surface-elev:#132746;
+  --fix-dark-border:rgba(189,214,241,.20);
+  --fix-dark-ink:#f5f8fd;
+  --fix-dark-copy:#d9e4f2;
+  --fix-dark-meta:#b8cae2;
 
-.section-wrap{margin-top:24px;}
-.card-section-cluster{gap:20px;}
-.hero-shell,
-.panel,
-.feature-grid,
-.service-grid,
-.pricing-grid,
-.summary-grid,
-.solution-showcase,
-.pillar-grid,
-.pricing-cards-grid,
-.hero-metrics,
-.contact-strip-actions{gap:16px;}
+  --fix-light-bg:#eef3fb;
+  --fix-light-surface:#f7f9fc;
+  --fix-light-surface-strong:#ffffff;
+  --fix-light-border:#d9e2f0;
+  --fix-light-ink:#14233b;
+  --fix-light-copy:#33435c;
+  --fix-light-meta:#52627c;
+}
 
 .card,
 .app-card,
@@ -47,32 +32,14 @@
 .contact-strip,
 .jobs-card,
 .hero-panel,
-.panel{
-  background-color:var(--ui-surface-dark);
-  background-image:linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--ui-surface-dark-elevated) 88%, transparent),
-    color-mix(in srgb, var(--ui-surface-dark) 92%, transparent)
-  );
-  border-color:var(--ui-border-dark);
-  box-shadow:var(--ui-shadow-dark);
-}
-
-.card::before,
-.app-card::before,
-.feature-card::before,
-.service-card::before,
-.price-card::before,
-.pricing-subsection::before,
-.premium-price-card::before,
-.solution-card::before,
-.pillar-card::before,
-.summary-card::before,
-.testimonial-slide::before,
-.faq-item::before,
-.contact-strip::before,
-.jobs-card::before{
-  opacity:.12;
+.panel,
+.hero-sidebar .card,
+.hero-sidebar .meter,
+.hero-sidebar .mini,
+.hero-sidebar .box,
+.hero-sidebar .content{
+  background:linear-gradient(180deg, var(--fix-dark-surface-elev), var(--fix-dark-surface));
+  border-color:var(--fix-dark-border);
 }
 
 .card h1,.card h2,.card h3,.card h4,.card h5,.card b,
@@ -90,9 +57,7 @@
 .contact-strip h1,.contact-strip h2,.contact-strip h3,.contact-strip h4,.contact-strip h5,.contact-strip b,
 .jobs-card h1,.jobs-card h2,.jobs-card h3,.jobs-card h4,.jobs-card h5,.jobs-card b,
 .hero-panel h1,.hero-panel h2,.hero-panel h3,.hero-panel h4,.hero-panel h5,.hero-panel b,
-.panel h1,.panel h2,.panel h3,.panel h4,.panel h5,.panel b{
-  color:var(--ui-ink-light);
-}
+.panel h1,.panel h2,.panel h3,.panel h4,.panel h5,.panel b{color:var(--fix-dark-ink);}
 
 .card p,.card li,.card span,.card small,.card .copy,.card .note,
 .app-card p,.app-card li,.app-card span,.app-card small,.app-card .copy,.app-card .note,
@@ -109,1173 +74,153 @@
 .contact-strip p,.contact-strip li,.contact-strip span,.contact-strip small,.contact-strip .copy,.contact-strip .note,
 .jobs-card p,.jobs-card li,.jobs-card span,.jobs-card small,.jobs-card .copy,.jobs-card .note,
 .hero-panel p,.hero-panel li,.hero-panel span,.hero-panel small,.hero-panel .copy,.hero-panel .note,
-.panel p,.panel li,.panel span,.panel small,.panel .copy,.panel .note{
-  color:var(--ui-copy-light);
+.panel p,.panel li,.panel span,.panel small,.panel .copy,.panel .note,
+.solution-chip,.pill,.eyebrow{color:var(--fix-dark-copy);}
+
+/* B. shared light surface system */
+body[data-page="contacto"],
+body[data-page="privacy"],
+body[data-page="terms"]{
+  color:var(--fix-light-ink);
+  background:linear-gradient(180deg, var(--fix-light-bg), #f8fbff 45%, #f1f6fd);
 }
 
-.price-value,
-.price-tag,
-.card-badge,
-.plan-kicker,
-.price-support{
-  color:var(--ui-ink-light);
+body[data-page="contacto"] .grid,
+body[data-page="privacy"] .grid-bg,
+body[data-page="terms"] .grid-bg,
+body[data-page="contacto"] .orb,
+body[data-page="contacto"] .orb2,
+body[data-page="privacy"] .orb,
+body[data-page="privacy"] .orb-2,
+body[data-page="terms"] .orb,
+body[data-page="terms"] .orb-2{opacity:.08;}
+
+body[data-page="contacto"] .panel,
+body[data-page="contacto"] .card,
+body[data-page="contacto"] .app-card,
+body[data-page="contacto"] .feature-card,
+body[data-page="contacto"] .service-card,
+body[data-page="contacto"] .price-card,
+body[data-page="contacto"] .premium-price-card,
+body[data-page="contacto"] .contact-strip,
+body[data-page="privacy"] .panel,
+body[data-page="privacy"] .card,
+body[data-page="privacy"] .feature-card,
+body[data-page="privacy"] .service-card,
+body[data-page="privacy"] .contact-strip,
+body[data-page="privacy"] .hero-panel,
+body[data-page="terms"] .panel,
+body[data-page="terms"] .card,
+body[data-page="terms"] .feature-card,
+body[data-page="terms"] .service-card,
+body[data-page="terms"] .contact-strip,
+body[data-page="terms"] .hero-panel{
+  background:linear-gradient(160deg, var(--fix-light-surface), var(--fix-light-surface-strong));
+  border-color:var(--fix-light-border);
+  box-shadow:0 14px 34px rgba(20,35,59,.08);
 }
 
-.badge-upcoming,
-.badge-trial{
-  color:var(--ui-ink-light);
-  border-color:rgba(132,190,255,.32);
-  background:rgba(45,164,230,.14);
-}
+body[data-page="contacto"] h1, body[data-page="contacto"] h2, body[data-page="contacto"] h3, body[data-page="contacto"] h4, body[data-page="contacto"] h5, body[data-page="contacto"] b,
+body[data-page="privacy"] h1, body[data-page="privacy"] h2, body[data-page="privacy"] h3, body[data-page="privacy"] h4, body[data-page="privacy"] h5, body[data-page="privacy"] b,
+body[data-page="terms"] h1, body[data-page="terms"] h2, body[data-page="terms"] h3, body[data-page="terms"] h4, body[data-page="terms"] h5, body[data-page="terms"] b{color:var(--fix-light-ink);}
 
-.btn-secondary,
-.btn-ghost{
-  color:var(--ui-ink-light);
-  border-color:rgba(189,214,241,.26);
-  background:rgba(8,18,35,.46);
-}
+body[data-page="contacto"] p, body[data-page="contacto"] li, body[data-page="contacto"] span, body[data-page="contacto"] small,
+body[data-page="privacy"] p, body[data-page="privacy"] li, body[data-page="privacy"] span, body[data-page="privacy"] small,
+body[data-page="terms"] p, body[data-page="terms"] li, body[data-page="terms"] span, body[data-page="terms"] small{color:var(--fix-light-copy);}
 
-.btn-secondary:hover,
-.btn-ghost:hover{
-  border-color:rgba(189,214,241,.44);
-  background:rgba(11,25,46,.72);
-}
-
-.solution-chip,
-.eyebrow,
-.pill{
-  color:var(--ui-copy-light);
-}
-
-.section-surface,
-.sharp-surface,
-.alt-surface,
-.social-surface{
-  background:linear-gradient(180deg, var(--ui-surface-dark), var(--ui-surface-dark-elevated));
-  border-color:var(--ui-border-dark);
-}
-
-.surface-light,
-.final-cta-surface{
-  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong));
-  border-color:var(--ui-border-light);
-  box-shadow:var(--ui-shadow-light);
-}
-
-.surface-light::before,
-.final-cta-surface::before{
-  opacity:0;
-}
-
-.surface-light h1,.surface-light h2,.surface-light h3,.surface-light h4,.surface-light h5,.surface-light b,
-.final-cta-surface h1,.final-cta-surface h2,.final-cta-surface h3,.final-cta-surface h4,.final-cta-surface h5,.final-cta-surface b{
-  color:var(--ui-ink-dark);
-}
-
-.surface-light p,.surface-light li,.surface-light span,.surface-light small,.surface-light .copy,.surface-light .note,
-.final-cta-surface p,.final-cta-surface li,.final-cta-surface span,.final-cta-surface small,.final-cta-surface .copy,.final-cta-surface .note{
-  color:var(--ui-copy-dark);
-}
-
-.surface-light .eyebrow,.surface-light .pill,.surface-light .solution-chip,
-.final-cta-surface .eyebrow,.final-cta-surface .pill,.final-cta-surface .solution-chip{
-  color:var(--ui-meta-dark);
-  background:rgba(20,35,59,.03);
-  border-color:var(--ui-border-light);
-}
-
-.surface-light .btn-secondary,.surface-light .btn-ghost,
-.final-cta-surface .btn-secondary,.final-cta-surface .btn-ghost{
-  color:var(--ui-ghost-text);
-  border-color:var(--ui-ghost-border);
-  background:#fff;
-}
-
-.surface-light .btn-secondary:hover,.surface-light .btn-ghost:hover,
-.final-cta-surface .btn-secondary:hover,.final-cta-surface .btn-ghost:hover{
-  background:#f7fbff;
-}
-
-.surface-light .card,
-.surface-light .app-card,
-.surface-light .feature-card,
-.surface-light .service-card,
-.surface-light .price-card,
-.surface-light .pricing-subsection,
-.surface-light .premium-price-card,
-.surface-light .solution-card,
-.surface-light .pillar-card,
-.surface-light .summary-card,
-.surface-light .testimonial-slide,
-.surface-light .faq-item,
-.surface-light .contact-strip,
-.surface-light .jobs-card,
-.final-cta-surface .card,
-.final-cta-surface .app-card,
-.final-cta-surface .feature-card,
-.final-cta-surface .service-card,
-.final-cta-surface .price-card,
-.final-cta-surface .pricing-subsection,
-.final-cta-surface .premium-price-card,
-.final-cta-surface .solution-card,
-.final-cta-surface .pillar-card,
-.final-cta-surface .summary-card,
-.final-cta-surface .testimonial-slide,
-.final-cta-surface .faq-item,
-.final-cta-surface .contact-strip,
-.final-cta-surface .jobs-card{
-  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong));
-  border-color:var(--ui-border-light);
-  box-shadow:0 12px 30px rgba(20,35,59,.08);
-}
-
-.surface-light .card::before,
-.surface-light .app-card::before,
-.surface-light .feature-card::before,
-.surface-light .service-card::before,
-.surface-light .price-card::before,
-.surface-light .pricing-subsection::before,
-.surface-light .premium-price-card::before,
-.surface-light .solution-card::before,
-.surface-light .pillar-card::before,
-.surface-light .summary-card::before,
-.surface-light .testimonial-slide::before,
-.surface-light .faq-item::before,
-.surface-light .contact-strip::before,
-.surface-light .jobs-card::before,
-.surface-light .contact-strip::after,
-.final-cta-surface .card::before,
-.final-cta-surface .app-card::before,
-.final-cta-surface .feature-card::before,
-.final-cta-surface .service-card::before,
-.final-cta-surface .price-card::before,
-.final-cta-surface .pricing-subsection::before,
-.final-cta-surface .premium-price-card::before,
-.final-cta-surface .solution-card::before,
-.final-cta-surface .pillar-card::before,
-.final-cta-surface .summary-card::before,
-.final-cta-surface .testimonial-slide::before,
-.final-cta-surface .faq-item::before,
-.final-cta-surface .contact-strip::before,
-.final-cta-surface .jobs-card::before,
-.final-cta-surface .contact-strip::after{
-  opacity:0;
-}
-
-/* LEGAL PAGE OVERRIDES */
-
-.legal-page .hero-shell{
-  grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);
-  gap:18px;
-}
-
-.legal-page .hero-panel,
+/* C. legal-page overrides */
+.legal-page .pill,
+.legal-page .pill strong,
+.legal-page .pill b,
+.legal-page .eyebrow,
+.legal-page .hero-brand,
 .legal-page .hero-sidebar .card,
-.legal-page .section-stack .content,
-.legal-page .contact-strip{
-  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong));
-  border:1px solid var(--ui-border-light);
-  box-shadow:var(--ui-shadow-light);
-}
-
-.legal-page .hero-panel::before,
-.legal-page .hero-sidebar .card::before,
-.legal-page .section-stack .content::before,
-.legal-page .contact-strip::before,
-.legal-page .contact-strip::after{
-  opacity:0;
-}
-
-.legal-page .hero-panel h1,
-.legal-page .hero-panel h2,
-.legal-page .hero-panel h3,
-.legal-page .hero-panel b,
-.legal-page .hero-sidebar .card h1,
-.legal-page .hero-sidebar .card h2,
-.legal-page .hero-sidebar .card h3,
-.legal-page .hero-sidebar .card b,
-.legal-page .section-stack .content h1,
-.legal-page .section-stack .content h2,
-.legal-page .section-stack .content h3,
-.legal-page .section-stack .content b,
-.legal-page .contact-strip h1,
-.legal-page .contact-strip h2,
-.legal-page .contact-strip h3,
-.legal-page .contact-strip b{
-  color:var(--ui-ink-dark);
-}
-
-.legal-page .hero-panel p,
-.legal-page .hero-panel li,
-.legal-page .hero-panel span,
-.legal-page .hero-panel small,
-.legal-page .hero-panel .note,
-.legal-page .hero-panel .lead,
-.legal-page .hero-sidebar .card p,
-.legal-page .hero-sidebar .card li,
-.legal-page .hero-sidebar .card span,
-.legal-page .hero-sidebar .card small,
-.legal-page .section-stack .content p,
-.legal-page .section-stack .content li,
-.legal-page .section-stack .content span,
-.legal-page .section-stack .content small,
-.legal-page .section-stack .content .copy,
-.legal-page .contact-strip p,
-.legal-page .contact-strip li,
-.legal-page .contact-strip span,
-.legal-page .contact-strip small{
-  color:var(--ui-copy-dark);
+.legal-page .hero-sidebar .meter,
+.legal-page .hero-sidebar .mini,
+.legal-page .hero-sidebar .box,
+.legal-page .hero-sidebar .content{
+  background:var(--fix-light-surface-strong) !important;
+  color:var(--fix-light-ink) !important;
+  border-color:var(--fix-light-border) !important;
+  text-shadow:none !important;
 }
 
 .legal-page .pill,
-.legal-page .eyebrow{
-  color:var(--ui-meta-dark);
-  border-color:var(--ui-border-light);
-  background:rgba(20,35,59,.03);
+.legal-page .eyebrow,
+.legal-page .hero-brand{box-shadow:none !important;}
+
+.legal-page .hero-sidebar .card *,
+.legal-page .hero-sidebar .meter *,
+.legal-page .hero-sidebar .mini *,
+.legal-page .hero-sidebar .box *,
+.legal-page .hero-sidebar .content *{text-shadow:none !important;}
+
+/* D. mobile header fix */
+@media (max-width:760px){
+  .topnav{padding-top:env(safe-area-inset-top);}
+  .topnav-inner{width:min(var(--container), calc(100% - 20px));}
+  .mobile-nav-menu{right:0;max-width:calc(100vw - 20px);}
 }
 
-.legal-page .hero-sidebar .card,
-.legal-page .hero-sidebar .meter,
-.legal-page .hero-sidebar .mini,
-.legal-page .hero-sidebar .box,
-.legal-page .hero-sidebar .content,
-.legal-page .hero-panel .hero-brand,
-.legal-page .hero-panel .pill,
-.legal-page .hero-sidebar .pill{
-  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong));
-  border:1px solid var(--ui-border-light);
-  box-shadow:none;
+/* E. page-mode consistency rules */
+body[data-page="home"],
+body[data-page="apps"],
+body[data-page="pricing"],
+body[data-page="stockflow"],
+body[data-page="flowfin"],
+body[data-page="liuma"],
+body[data-page="puntosplus"]{
+  background:
+    radial-gradient(860px 460px at 50% 0%, rgba(37,99,235,.18), transparent 65%),
+    radial-gradient(680px 320px at 12% 18%, rgba(45,164,230,.12), transparent 70%),
+    linear-gradient(180deg, var(--fix-dark-bg), #0f172a 42%, #111827);
 }
 
-.legal-page .hero-sidebar .meter,
-.legal-page .hero-sidebar .mini,
-.legal-page .hero-sidebar .box,
-.legal-page .hero-sidebar .content,
-.legal-page .hero-panel .hero-brand{
-  color:var(--ui-copy-dark);
+body[data-page="home"] .surface-light,
+body[data-page="home"] .alt-surface,
+body[data-page="home"] .final-cta-surface,
+body[data-page="apps"] .surface-light,
+body[data-page="apps"] .alt-surface,
+body[data-page="pricing"] .surface-light,
+body[data-page="pricing"] .alt-surface,
+body[data-page="stockflow"] .surface-light,
+body[data-page="stockflow"] .alt-surface,
+body[data-page="flowfin"] .surface-light,
+body[data-page="flowfin"] .alt-surface,
+body[data-page="liuma"] .surface-light,
+body[data-page="liuma"] .alt-surface,
+body[data-page="puntosplus"] .surface-light,
+body[data-page="puntosplus"] .alt-surface,
+body[data-page="home"] .sharp-surface,
+body[data-page="apps"] .sharp-surface,
+body[data-page="pricing"] .sharp-surface,
+body[data-page="stockflow"] .sharp-surface,
+body[data-page="flowfin"] .sharp-surface,
+body[data-page="liuma"] .sharp-surface,
+body[data-page="puntosplus"] .sharp-surface{
+  background:linear-gradient(180deg, var(--fix-dark-surface-elev), var(--fix-dark-surface));
+  border-color:var(--fix-dark-border);
 }
 
-.legal-page .hero-sidebar .meter h1,
-.legal-page .hero-sidebar .meter h2,
-.legal-page .hero-sidebar .meter h3,
-.legal-page .hero-sidebar .mini h1,
-.legal-page .hero-sidebar .mini h2,
-.legal-page .hero-sidebar .mini h3,
-.legal-page .hero-sidebar .box h1,
-.legal-page .hero-sidebar .box h2,
-.legal-page .hero-sidebar .box h3,
-.legal-page .hero-sidebar .box b,
-.legal-page .hero-sidebar .content h1,
-.legal-page .hero-sidebar .content h2,
-.legal-page .hero-sidebar .content h3,
-.legal-page .hero-sidebar .content b,
-.legal-page .hero-panel .hero-brand b{
-  color:var(--ui-ink-dark);
-}
-
-.legal-page .hero-sidebar .meter p,
-.legal-page .hero-sidebar .meter li,
-.legal-page .hero-sidebar .meter span,
-.legal-page .hero-sidebar .meter small,
-.legal-page .hero-sidebar .mini p,
-.legal-page .hero-sidebar .mini li,
-.legal-page .hero-sidebar .mini span,
-.legal-page .hero-sidebar .mini small,
-.legal-page .hero-sidebar .box p,
-.legal-page .hero-sidebar .box li,
-.legal-page .hero-sidebar .box span,
-.legal-page .hero-sidebar .box small,
-.legal-page .hero-sidebar .content p,
-.legal-page .hero-sidebar .content li,
-.legal-page .hero-sidebar .content span,
-.legal-page .hero-sidebar .content small,
-.legal-page .hero-panel .hero-brand span{
-  color:var(--ui-copy-dark);
-}
-
-.legal-page .hero-sidebar .meter::before,
-.legal-page .hero-sidebar .mini::before,
-.legal-page .hero-sidebar .box::before,
-.legal-page .hero-sidebar .content::before{
-  opacity:0;
-}
-
-.legal-page .floating-egg{
-  display:none !important;
-}
-
-.legal-page .section-stack{
+/* F. floating WhatsApp icon-only FAB */
+.wa-float{
+  width:52px;
+  height:52px;
+  border-radius:999px;
+  padding:0;
   display:grid;
-  gap:16px;
+  place-items:center;
+  right:calc(14px + env(safe-area-inset-right));
+  bottom:calc(14px + env(safe-area-inset-bottom));
 }
 
-.legal-page .section-stack .content{
-  padding:28px;
-  border-radius:24px;
-}
+.wa-float .wa-icon{margin:0;}
+.wa-float span:not(.wa-icon){display:none !important;}
 
-.legal-page .section-head .copy{
-  max-width:900px;
-}
-
-.legal-page .btn-secondary,
-.legal-page .btn-ghost{
-  color:var(--ui-ghost-text);
-  border-color:var(--ui-ghost-border);
-  background:#fff;
-}
-
-.legal-page .btn-secondary:hover,
-.legal-page .btn-ghost:hover{
-  background:#f7fbff;
-}
-
-@supports (-webkit-touch-callout: none){
-  .card,
-  .app-card,
-  .feature-card,
-  .service-card,
-  .price-card,
-  .pricing-subsection,
-  .premium-price-card,
-  .solution-card,
-  .pillar-card,
-  .summary-card,
-  .testimonial-slide,
-  .faq-item,
-  .contact-strip,
-  .jobs-card,
-  .hero-panel,
-  .panel{
-    background-image:none;
-  }
-
-  .card::before,
-  .app-card::before,
-  .feature-card::before,
-  .service-card::before,
-  .price-card::before,
-  .pricing-subsection::before,
-  .premium-price-card::before,
-  .solution-card::before,
-  .pillar-card::before,
-  .summary-card::before,
-  .testimonial-slide::before,
-  .faq-item::before,
-  .contact-strip::before,
-  .jobs-card::before{
-    opacity:.08;
-  }
-
-  .surface-light .card::before,
-  .surface-light .app-card::before,
-  .surface-light .feature-card::before,
-  .surface-light .service-card::before,
-  .surface-light .price-card::before,
-  .surface-light .pricing-subsection::before,
-  .surface-light .premium-price-card::before,
-  .surface-light .solution-card::before,
-  .surface-light .pillar-card::before,
-  .surface-light .summary-card::before,
-  .surface-light .testimonial-slide::before,
-  .surface-light .faq-item::before,
-  .surface-light .contact-strip::before,
-  .surface-light .jobs-card::before,
-  .final-cta-surface .card::before,
-  .final-cta-surface .app-card::before,
-  .final-cta-surface .feature-card::before,
-  .final-cta-surface .service-card::before,
-  .final-cta-surface .price-card::before,
-  .final-cta-surface .pricing-subsection::before,
-  .final-cta-surface .premium-price-card::before,
-  .final-cta-surface .solution-card::before,
-  .final-cta-surface .pillar-card::before,
-  .final-cta-surface .summary-card::before,
-  .final-cta-surface .testimonial-slide::before,
-  .final-cta-surface .faq-item::before,
-  .final-cta-surface .contact-strip::before,
-  .final-cta-surface .jobs-card::before,
-  .legal-page .hero-panel::before,
-  .legal-page .hero-sidebar .card::before,
-  .legal-page .section-stack .content::before,
-  .legal-page .contact-strip::before{
-    opacity:0;
-  }
-}
-
-@media (max-width:980px){
-  .panel,
-  .hero-shell,
-  .summary-grid,
-  .service-grid,
-  .feature-grid,
-  .solution-showcase,
-  .pillar-grid,
-  .pricing-cards-grid,
-  .pricing-grid{
-    gap:14px;
-  }
-
-  .legal-page .hero-shell{
-    grid-template-columns:1fr;
-  }
-
-  .legal-page .section-stack .content{
-    padding:22px;
-  }
-}
-
-/* =========================
-   MOBILE HEADER FINAL FIX (ONLY VALID <=768PX LAYOUT)
-   Row 1: brand (left) + menu (right)
-   Row 2: currency picker (left) + CTA (right)
-   ========================= */
-
-@media (max-width:768px){
-  .floating-egg{
-    display:none !important;
-  }
-
-  .topnav,
-  .topnav-premium{
-    position:sticky;
-    top:0;
-    z-index:70;
-    backdrop-filter:blur(14px);
-  }
-
-  .topnav-inner{
-    display:grid !important;
-    grid-template-columns:minmax(0,1fr) auto !important;
-    grid-template-areas:
-      "brand menu"
-      "actions actions" !important;
-    align-items:center !important;
-    gap:10px 12px !important;
-    padding:10px 12px !important;
-  }
-
-  .topnav-brand{
-    grid-area:brand !important;
-    min-width:0 !important;
-    display:flex !important;
-    align-items:center !important;
-    gap:10px !important;
-    overflow:hidden !important;
-  }
-
-  .topnav-brand img{
-    width:40px !important;
-    height:40px !important;
-    flex:0 0 40px !important;
-  }
-
-  .topnav-brand-copy{
-    min-width:0 !important;
-    overflow:hidden !important;
-  }
-
-  .topnav-brand-copy b{
-    display:block !important;
-    font-size:0.98rem !important;
-    line-height:1.1 !important;
-    letter-spacing:.04em !important;
-    white-space:nowrap !important;
-    overflow:hidden !important;
-    text-overflow:ellipsis !important;
-  }
-
-  .topnav-brand-copy span{ display:none !important; }
-  .topnav-links{ display:none !important; }
-
-  .mobile-nav{
-    grid-area:menu !important;
-    display:block !important;
-    justify-self:end !important;
-    margin:0 !important;
-  }
-
-  .mobile-nav summary{
-    min-height:48px !important;
-    padding:12px 14px !important;
-    border-radius:18px !important;
-    display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-    white-space:nowrap !important;
-  }
-
-  .topnav-actions,
-  .topnav-actions-global{
-    grid-area:actions !important;
-    display:grid !important;
-    grid-template-columns:minmax(0,1fr) minmax(150px,1fr) !important;
-    grid-template-areas:"currency cta" !important;
-    align-items:center !important;
-    gap:10px !important;
-    width:100% !important;
-    min-width:0 !important;
-  }
-
-  .global-pref-shell,
-  .picker,
-  .picker-compact{
-    min-width:0 !important;
-    width:100% !important;
-  }
-
-  .global-pref-shell,
-  .picker,
-  .picker-compact{ grid-area:currency !important; }
-
-  .picker-compact{
-    padding-inline:10px !important;
-    min-height:48px !important;
-    border-radius:18px !important;
-  }
-
-  .picker-compact select{
-    width:100% !important;
-    font-size:.95rem !important;
-  }
-
-  .btn-nav-cta{
-    grid-area:cta !important;
-    width:100% !important;
-    min-height:48px !important;
-    padding:12px 14px !important;
-    border-radius:18px !important;
-    display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-    text-align:center !important;
-    font-size:.96rem !important;
-    line-height:1.15 !important;
-    white-space:normal !important;
-  }
-}
-
-@media (max-width:420px){
-  .topnav-inner{
-    gap:8px 10px !important;
-    padding:10px 10px !important;
-  }
-
-  .topnav-brand img{
-    width:38px !important;
-    height:38px !important;
-    flex:0 0 38px !important;
-  }
-
-  .topnav-brand-copy b{ font-size:.92rem !important; }
-
-  .topnav-actions,
-  .topnav-actions-global{
-    grid-template-columns:minmax(0,1fr) minmax(136px,1fr) !important;
-    grid-template-areas:"currency cta" !important;
-    gap:8px !important;
-  }
-
-  .picker-compact{ min-height:46px !important; }
-
-  .btn-nav-cta,
-  .mobile-nav summary{
-    min-height:46px !important;
-    padding:10px 12px !important;
-  }
-}
-
-/* =========================
-   PAGE MODE CONSISTENCY FIX
-   ========================= */
-
-/* DARK PAGES: everything dark-consistent */
-body[data-page="home"] .panel,
-body[data-page="home"] .hero-panel,
-body[data-page="home"] .feature-card,
-body[data-page="home"] .service-card,
-body[data-page="home"] .summary-card,
-body[data-page="home"] .solution-card,
-body[data-page="home"] .premium-price-card,
-body[data-page="home"] .contact-strip,
-body[data-page="apps"] .panel,
-body[data-page="apps"] .hero-panel,
-body[data-page="apps"] .feature-card,
-body[data-page="apps"] .service-card,
-body[data-page="apps"] .summary-card,
-body[data-page="apps"] .solution-card,
-body[data-page="apps"] .premium-price-card,
-body[data-page="apps"] .contact-strip,
-body[data-page="pricing"] .panel,
-body[data-page="pricing"] .hero-panel,
-body[data-page="pricing"] .feature-card,
-body[data-page="pricing"] .service-card,
-body[data-page="pricing"] .summary-card,
-body[data-page="pricing"] .solution-card,
-body[data-page="pricing"] .premium-price-card,
-body[data-page="pricing"] .contact-strip,
-body[data-page="stockflow"] .panel,
-body[data-page="stockflow"] .hero-panel,
-body[data-page="stockflow"] .feature-card,
-body[data-page="stockflow"] .service-card,
-body[data-page="stockflow"] .summary-card,
-body[data-page="stockflow"] .solution-card,
-body[data-page="stockflow"] .premium-price-card,
-body[data-page="stockflow"] .contact-strip,
-body[data-page="flowfin"] .panel,
-body[data-page="flowfin"] .hero-panel,
-body[data-page="flowfin"] .feature-card,
-body[data-page="flowfin"] .service-card,
-body[data-page="flowfin"] .summary-card,
-body[data-page="flowfin"] .solution-card,
-body[data-page="flowfin"] .premium-price-card,
-body[data-page="flowfin"] .contact-strip,
-body[data-page="liuma"] .panel,
-body[data-page="liuma"] .hero-panel,
-body[data-page="liuma"] .feature-card,
-body[data-page="liuma"] .service-card,
-body[data-page="liuma"] .summary-card,
-body[data-page="liuma"] .solution-card,
-body[data-page="liuma"] .premium-price-card,
-body[data-page="liuma"] .contact-strip,
-body[data-page="puntosplus"] .panel,
-body[data-page="puntosplus"] .hero-panel,
-body[data-page="puntosplus"] .feature-card,
-body[data-page="puntosplus"] .service-card,
-body[data-page="puntosplus"] .summary-card,
-body[data-page="puntosplus"] .solution-card,
-body[data-page="puntosplus"] .premium-price-card,
-body[data-page="puntosplus"] .contact-strip{
-  background:linear-gradient(180deg, var(--ui-surface-dark), var(--ui-surface-dark-elevated)) !important;
-  border-color:var(--ui-border-dark) !important;
-  box-shadow:var(--ui-shadow-dark) !important;
-}
-
-body[data-page="home"] .panel *,
-body[data-page="apps"] .panel *,
-body[data-page="pricing"] .panel *,
-body[data-page="stockflow"] .panel *,
-body[data-page="flowfin"] .panel *,
-body[data-page="liuma"] .panel *,
-body[data-page="puntosplus"] .panel *{
-  text-shadow:none !important;
-}
-
-body[data-page="home"] .surface-light,
-body[data-page="home"] .final-cta-surface,
-body[data-page="home"] .alt-surface,
-body[data-page="apps"] .surface-light,
-body[data-page="apps"] .final-cta-surface,
-body[data-page="apps"] .alt-surface,
-body[data-page="pricing"] .surface-light,
-body[data-page="pricing"] .final-cta-surface,
-body[data-page="pricing"] .alt-surface,
-body[data-page="stockflow"] .surface-light,
-body[data-page="stockflow"] .final-cta-surface,
-body[data-page="stockflow"] .alt-surface,
-body[data-page="flowfin"] .surface-light,
-body[data-page="flowfin"] .final-cta-surface,
-body[data-page="flowfin"] .alt-surface,
-body[data-page="liuma"] .surface-light,
-body[data-page="liuma"] .final-cta-surface,
-body[data-page="liuma"] .alt-surface,
-body[data-page="puntosplus"] .surface-light,
-body[data-page="puntosplus"] .final-cta-surface,
-body[data-page="puntosplus"] .alt-surface{
-  background:linear-gradient(180deg, var(--ui-surface-dark), var(--ui-surface-dark-elevated)) !important;
-  border-color:var(--ui-border-dark) !important;
-  box-shadow:var(--ui-shadow-dark) !important;
-}
-
-body[data-page="home"] .surface-light h1,
-body[data-page="home"] .surface-light h2,
-body[data-page="home"] .surface-light h3,
-body[data-page="home"] .surface-light h4,
-body[data-page="home"] .surface-light h5,
-body[data-page="home"] .surface-light b,
-body[data-page="home"] .surface-light p,
-body[data-page="home"] .surface-light li,
-body[data-page="home"] .surface-light span,
-body[data-page="home"] .surface-light small,
-body[data-page="home"] .final-cta-surface h1,
-body[data-page="home"] .final-cta-surface h2,
-body[data-page="home"] .final-cta-surface h3,
-body[data-page="home"] .final-cta-surface h4,
-body[data-page="home"] .final-cta-surface h5,
-body[data-page="home"] .final-cta-surface b,
-body[data-page="home"] .final-cta-surface p,
-body[data-page="home"] .final-cta-surface li,
-body[data-page="home"] .final-cta-surface span,
-body[data-page="home"] .final-cta-surface small,
-body[data-page="apps"] .surface-light h1,
-body[data-page="apps"] .surface-light h2,
-body[data-page="apps"] .surface-light h3,
-body[data-page="apps"] .surface-light h4,
-body[data-page="apps"] .surface-light h5,
-body[data-page="apps"] .surface-light b,
-body[data-page="apps"] .surface-light p,
-body[data-page="apps"] .surface-light li,
-body[data-page="apps"] .surface-light span,
-body[data-page="apps"] .surface-light small,
-body[data-page="pricing"] .surface-light h1,
-body[data-page="pricing"] .surface-light h2,
-body[data-page="pricing"] .surface-light h3,
-body[data-page="pricing"] .surface-light h4,
-body[data-page="pricing"] .surface-light h5,
-body[data-page="pricing"] .surface-light b,
-body[data-page="pricing"] .surface-light p,
-body[data-page="pricing"] .surface-light li,
-body[data-page="pricing"] .surface-light span,
-body[data-page="pricing"] .surface-light small{
-  color:var(--ui-ink-light) !important;
-}
-
-/* LIGHT PAGES: everything light-consistent */
-body[data-page="contacto"] .panel,
-body[data-page="contacto"] .hero-panel,
-body[data-page="contacto"] .feature-card,
-body[data-page="contacto"] .service-card,
-body[data-page="contacto"] .summary-card,
-body[data-page="contacto"] .solution-card,
-body[data-page="contacto"] .premium-price-card,
-body[data-page="contacto"] .contact-strip,
-body[data-page="privacy"] .panel,
-body[data-page="privacy"] .hero-panel,
-body[data-page="privacy"] .feature-card,
-body[data-page="privacy"] .service-card,
-body[data-page="privacy"] .summary-card,
-body[data-page="privacy"] .solution-card,
-body[data-page="privacy"] .premium-price-card,
-body[data-page="privacy"] .contact-strip,
-body[data-page="privacy"] .hero-sidebar .card,
-body[data-page="privacy"] .hero-sidebar .meter,
-body[data-page="privacy"] .hero-sidebar .mini,
-body[data-page="privacy"] .hero-sidebar .box,
-body[data-page="privacy"] .hero-sidebar .content,
-body[data-page="terms"] .panel,
-body[data-page="terms"] .hero-panel,
-body[data-page="terms"] .feature-card,
-body[data-page="terms"] .service-card,
-body[data-page="terms"] .summary-card,
-body[data-page="terms"] .solution-card,
-body[data-page="terms"] .premium-price-card,
-body[data-page="terms"] .contact-strip,
-body[data-page="terms"] .hero-sidebar .card,
-body[data-page="terms"] .hero-sidebar .meter,
-body[data-page="terms"] .hero-sidebar .mini,
-body[data-page="terms"] .hero-sidebar .box,
-body[data-page="terms"] .hero-sidebar .content{
-  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong)) !important;
-  border:1px solid var(--ui-border-light) !important;
-  box-shadow:var(--ui-shadow-light) !important;
-}
-
-body[data-page="contacto"] .panel h1,
-body[data-page="contacto"] .panel h2,
-body[data-page="contacto"] .panel h3,
-body[data-page="contacto"] .panel h4,
-body[data-page="contacto"] .panel h5,
-body[data-page="contacto"] .panel b,
-body[data-page="contacto"] .panel p,
-body[data-page="contacto"] .panel li,
-body[data-page="contacto"] .panel span,
-body[data-page="contacto"] .panel small,
-body[data-page="privacy"] .panel h1,
-body[data-page="privacy"] .panel h2,
-body[data-page="privacy"] .panel h3,
-body[data-page="privacy"] .panel h4,
-body[data-page="privacy"] .panel h5,
-body[data-page="privacy"] .panel b,
-body[data-page="privacy"] .panel p,
-body[data-page="privacy"] .panel li,
-body[data-page="privacy"] .panel span,
-body[data-page="privacy"] .panel small,
-body[data-page="terms"] .panel h1,
-body[data-page="terms"] .panel h2,
-body[data-page="terms"] .panel h3,
-body[data-page="terms"] .panel h4,
-body[data-page="terms"] .panel h5,
-body[data-page="terms"] .panel b,
-body[data-page="terms"] .panel p,
-body[data-page="terms"] .panel li,
-body[data-page="terms"] .panel span,
-body[data-page="terms"] .panel small{
-  color:var(--ui-ink-dark) !important;
-}
-
-body[data-page="privacy"] .hero-sidebar .box *,
-body[data-page="privacy"] .hero-sidebar .content *,
-body[data-page="terms"] .hero-sidebar .box *,
-body[data-page="terms"] .hero-sidebar .content *{
-  color:var(--ui-ink-dark) !important;
-  text-shadow:none !important;
-}
-
-/* no floating egg on mobile or legal pages */
-@media (max-width:980px){
-  .floating-egg{
-    display:none !important;
-  }
-}
+/* G. hide floating egg on mobile and on legal pages */
 body[data-page="privacy"] .floating-egg,
-body[data-page="terms"] .floating-egg{
-  display:none !important;
-}
+body[data-page="terms"] .floating-egg{display:none !important;}
 
-
-/* =========================
-   PAGE MODE CONSISTENCY FIX
-   ========================= */
-
-/* DARK-CONSISTENT PAGES */
-body[data-page="home"] .panel,
-body[data-page="apps"] .panel,
-body[data-page="pricing"] .panel,
-body[data-page="stockflow"] .panel,
-body[data-page="flowfin"] .panel,
-body[data-page="liuma"] .panel,
-body[data-page="puntosplus"] .panel,
-body[data-page="home"] .premium-price-card,
-body[data-page="apps"] .premium-price-card,
-body[data-page="pricing"] .premium-price-card,
-body[data-page="stockflow"] .premium-price-card,
-body[data-page="flowfin"] .premium-price-card,
-body[data-page="liuma"] .premium-price-card,
-body[data-page="puntosplus"] .premium-price-card,
-body[data-page="home"] .summary-card,
-body[data-page="apps"] .summary-card,
-body[data-page="pricing"] .summary-card,
-body[data-page="stockflow"] .summary-card,
-body[data-page="flowfin"] .summary-card,
-body[data-page="liuma"] .summary-card,
-body[data-page="puntosplus"] .summary-card,
-body[data-page="home"] .solution-card,
-body[data-page="apps"] .solution-card,
-body[data-page="pricing"] .solution-card,
-body[data-page="stockflow"] .solution-card,
-body[data-page="flowfin"] .solution-card,
-body[data-page="liuma"] .solution-card,
-body[data-page="puntosplus"] .solution-card,
-body[data-page="home"] .contact-strip,
-body[data-page="apps"] .contact-strip,
-body[data-page="pricing"] .contact-strip,
-body[data-page="stockflow"] .contact-strip,
-body[data-page="flowfin"] .contact-strip,
-body[data-page="liuma"] .contact-strip,
-body[data-page="puntosplus"] .contact-strip{
-  background:linear-gradient(180deg, var(--ui-surface-dark), var(--ui-surface-dark-elevated)) !important;
-  border-color:var(--ui-border-dark) !important;
-  box-shadow:var(--ui-shadow-dark) !important;
-}
-
-body[data-page="home"] .surface-light,
-body[data-page="home"] .final-cta-surface,
-body[data-page="home"] .alt-surface,
-body[data-page="apps"] .surface-light,
-body[data-page="apps"] .final-cta-surface,
-body[data-page="apps"] .alt-surface,
-body[data-page="pricing"] .surface-light,
-body[data-page="pricing"] .final-cta-surface,
-body[data-page="pricing"] .alt-surface,
-body[data-page="stockflow"] .surface-light,
-body[data-page="stockflow"] .final-cta-surface,
-body[data-page="stockflow"] .alt-surface,
-body[data-page="flowfin"] .surface-light,
-body[data-page="flowfin"] .final-cta-surface,
-body[data-page="flowfin"] .alt-surface,
-body[data-page="liuma"] .surface-light,
-body[data-page="liuma"] .final-cta-surface,
-body[data-page="liuma"] .alt-surface,
-body[data-page="puntosplus"] .surface-light,
-body[data-page="puntosplus"] .final-cta-surface,
-body[data-page="puntosplus"] .alt-surface{
-  background:linear-gradient(180deg, var(--ui-surface-dark), var(--ui-surface-dark-elevated)) !important;
-  border-color:var(--ui-border-dark) !important;
-  box-shadow:var(--ui-shadow-dark) !important;
-}
-
-body[data-page="home"] .surface-light h1,
-body[data-page="home"] .surface-light h2,
-body[data-page="home"] .surface-light h3,
-body[data-page="home"] .surface-light h4,
-body[data-page="home"] .surface-light h5,
-body[data-page="home"] .surface-light b,
-body[data-page="home"] .surface-light p,
-body[data-page="home"] .surface-light li,
-body[data-page="home"] .surface-light span,
-body[data-page="home"] .surface-light small,
-body[data-page="home"] .final-cta-surface h1,
-body[data-page="home"] .final-cta-surface h2,
-body[data-page="home"] .final-cta-surface h3,
-body[data-page="home"] .final-cta-surface h4,
-body[data-page="home"] .final-cta-surface h5,
-body[data-page="home"] .final-cta-surface b,
-body[data-page="home"] .final-cta-surface p,
-body[data-page="home"] .final-cta-surface li,
-body[data-page="home"] .final-cta-surface span,
-body[data-page="home"] .final-cta-surface small,
-body[data-page="apps"] .surface-light h1,
-body[data-page="apps"] .surface-light h2,
-body[data-page="apps"] .surface-light h3,
-body[data-page="apps"] .surface-light h4,
-body[data-page="apps"] .surface-light h5,
-body[data-page="apps"] .surface-light b,
-body[data-page="apps"] .surface-light p,
-body[data-page="apps"] .surface-light li,
-body[data-page="apps"] .surface-light span,
-body[data-page="apps"] .surface-light small,
-body[data-page="pricing"] .surface-light h1,
-body[data-page="pricing"] .surface-light h2,
-body[data-page="pricing"] .surface-light h3,
-body[data-page="pricing"] .surface-light h4,
-body[data-page="pricing"] .surface-light h5,
-body[data-page="pricing"] .surface-light b,
-body[data-page="pricing"] .surface-light p,
-body[data-page="pricing"] .surface-light li,
-body[data-page="pricing"] .surface-light span,
-body[data-page="pricing"] .surface-light small{
-  color:var(--ui-ink-light) !important;
-}
-
-/* LIGHT-CONSISTENT PAGES */
-body[data-page="contacto"] .panel,
-body[data-page="contacto"] .premium-price-card,
-body[data-page="contacto"] .contact-strip,
-body[data-page="privacy"] .panel,
-body[data-page="privacy"] .hero-sidebar .card,
-body[data-page="privacy"] .hero-sidebar .meter,
-body[data-page="privacy"] .hero-sidebar .mini,
-body[data-page="privacy"] .hero-sidebar .box,
-body[data-page="privacy"] .hero-sidebar .content,
-body[data-page="privacy"] .contact-strip,
-body[data-page="terms"] .panel,
-body[data-page="terms"] .hero-sidebar .card,
-body[data-page="terms"] .hero-sidebar .meter,
-body[data-page="terms"] .hero-sidebar .mini,
-body[data-page="terms"] .hero-sidebar .box,
-body[data-page="terms"] .hero-sidebar .content,
-body[data-page="terms"] .contact-strip{
-  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong)) !important;
-  border:1px solid var(--ui-border-light) !important;
-  box-shadow:var(--ui-shadow-light) !important;
-}
-
-body[data-page="contacto"] .panel h1,
-body[data-page="contacto"] .panel h2,
-body[data-page="contacto"] .panel h3,
-body[data-page="contacto"] .panel h4,
-body[data-page="contacto"] .panel h5,
-body[data-page="contacto"] .panel b,
-body[data-page="contacto"] .panel p,
-body[data-page="contacto"] .panel li,
-body[data-page="contacto"] .panel span,
-body[data-page="contacto"] .panel small,
-body[data-page="privacy"] .panel h1,
-body[data-page="privacy"] .panel h2,
-body[data-page="privacy"] .panel h3,
-body[data-page="privacy"] .panel h4,
-body[data-page="privacy"] .panel h5,
-body[data-page="privacy"] .panel b,
-body[data-page="privacy"] .panel p,
-body[data-page="privacy"] .panel li,
-body[data-page="privacy"] .panel span,
-body[data-page="privacy"] .panel small,
-body[data-page="terms"] .panel h1,
-body[data-page="terms"] .panel h2,
-body[data-page="terms"] .panel h3,
-body[data-page="terms"] .panel h4,
-body[data-page="terms"] .panel h5,
-body[data-page="terms"] .panel b,
-body[data-page="terms"] .panel p,
-body[data-page="terms"] .panel li,
-body[data-page="terms"] .panel span,
-body[data-page="terms"] .panel small{
-  color:var(--ui-ink-dark) !important;
-}
-
-body[data-page="privacy"] .hero-sidebar .box *,
-body[data-page="privacy"] .hero-sidebar .content *,
-body[data-page="terms"] .hero-sidebar .box *,
-body[data-page="terms"] .hero-sidebar .content *{
-  color:var(--ui-ink-dark) !important;
-  text-shadow:none !important;
-}
-
-body[data-page="privacy"] .pill,
-body[data-page="terms"] .pill{
-  color:var(--ui-meta-dark) !important;
-  background:#f4f7fc !important;
-  border-color:var(--ui-border-light) !important;
-}
-
-/* NEVER SHOW FLOATING EGG ON MOBILE OR LEGAL PAGES */
-@media (max-width:980px){
-  .floating-egg{
-    display:none !important;
-  }
-}
-body[data-page="privacy"] .floating-egg,
-body[data-page="terms"] .floating-egg{
-  display:none !important;
-}
-
-/* =========================
-   FINAL PAGE MODE FIX
-   ========================= */
-
-/* DARK pages: all top-level sections dark */
-body[data-page="home"] .panel,
-body[data-page="apps"] .panel,
-body[data-page="pricing"] .panel,
-body[data-page="stockflow"] .panel,
-body[data-page="flowfin"] .panel,
-body[data-page="liuma"] .panel,
-body[data-page="puntosplus"] .panel{
-  background:linear-gradient(180deg, var(--ui-surface-dark), var(--ui-surface-dark-elevated)) !important;
-  border-color:var(--ui-border-dark) !important;
-  box-shadow:var(--ui-shadow-dark) !important;
-}
-
-body[data-page="home"] .surface-light,
-body[data-page="home"] .final-cta-surface,
-body[data-page="home"] .alt-surface,
-body[data-page="apps"] .surface-light,
-body[data-page="apps"] .final-cta-surface,
-body[data-page="apps"] .alt-surface,
-body[data-page="pricing"] .surface-light,
-body[data-page="pricing"] .final-cta-surface,
-body[data-page="pricing"] .alt-surface,
-body[data-page="stockflow"] .surface-light,
-body[data-page="stockflow"] .final-cta-surface,
-body[data-page="stockflow"] .alt-surface,
-body[data-page="flowfin"] .surface-light,
-body[data-page="flowfin"] .final-cta-surface,
-body[data-page="flowfin"] .alt-surface,
-body[data-page="liuma"] .surface-light,
-body[data-page="liuma"] .final-cta-surface,
-body[data-page="liuma"] .alt-surface,
-body[data-page="puntosplus"] .surface-light,
-body[data-page="puntosplus"] .final-cta-surface,
-body[data-page="puntosplus"] .alt-surface{
-  background:linear-gradient(180deg, var(--ui-surface-dark), var(--ui-surface-dark-elevated)) !important;
-  border-color:var(--ui-border-dark) !important;
-  box-shadow:var(--ui-shadow-dark) !important;
-}
-
-body[data-page="home"] .surface-light h1,
-body[data-page="home"] .surface-light h2,
-body[data-page="home"] .surface-light h3,
-body[data-page="home"] .surface-light h4,
-body[data-page="home"] .surface-light h5,
-body[data-page="home"] .surface-light b,
-body[data-page="home"] .surface-light p,
-body[data-page="home"] .surface-light li,
-body[data-page="home"] .surface-light span,
-body[data-page="home"] .surface-light small,
-body[data-page="home"] .final-cta-surface h1,
-body[data-page="home"] .final-cta-surface h2,
-body[data-page="home"] .final-cta-surface h3,
-body[data-page="home"] .final-cta-surface h4,
-body[data-page="home"] .final-cta-surface h5,
-body[data-page="home"] .final-cta-surface b,
-body[data-page="home"] .final-cta-surface p,
-body[data-page="home"] .final-cta-surface li,
-body[data-page="home"] .final-cta-surface span,
-body[data-page="home"] .final-cta-surface small,
-body[data-page="apps"] .surface-light h1,
-body[data-page="apps"] .surface-light h2,
-body[data-page="apps"] .surface-light h3,
-body[data-page="apps"] .surface-light h4,
-body[data-page="apps"] .surface-light h5,
-body[data-page="apps"] .surface-light b,
-body[data-page="apps"] .surface-light p,
-body[data-page="apps"] .surface-light li,
-body[data-page="apps"] .surface-light span,
-body[data-page="apps"] .surface-light small,
-body[data-page="pricing"] .surface-light h1,
-body[data-page="pricing"] .surface-light h2,
-body[data-page="pricing"] .surface-light h3,
-body[data-page="pricing"] .surface-light h4,
-body[data-page="pricing"] .surface-light h5,
-body[data-page="pricing"] .surface-light b,
-body[data-page="pricing"] .surface-light p,
-body[data-page="pricing"] .surface-light li,
-body[data-page="pricing"] .surface-light span,
-body[data-page="pricing"] .surface-light small{
-  color:var(--ui-ink-light) !important;
-}
-
-/* LIGHT pages: all top-level sections light */
-body[data-page="contacto"] .panel,
-body[data-page="contacto"] .premium-price-card,
-body[data-page="contacto"] .contact-strip,
-body[data-page="privacy"] .panel,
-body[data-page="privacy"] .hero-sidebar .card,
-body[data-page="privacy"] .hero-sidebar .meter,
-body[data-page="privacy"] .hero-sidebar .mini,
-body[data-page="privacy"] .hero-sidebar .box,
-body[data-page="privacy"] .hero-sidebar .content,
-body[data-page="privacy"] .contact-strip,
-body[data-page="terms"] .panel,
-body[data-page="terms"] .hero-sidebar .card,
-body[data-page="terms"] .hero-sidebar .meter,
-body[data-page="terms"] .hero-sidebar .mini,
-body[data-page="terms"] .hero-sidebar .box,
-body[data-page="terms"] .hero-sidebar .content,
-body[data-page="terms"] .contact-strip{
-  background:linear-gradient(160deg, var(--ui-surface-light), var(--ui-surface-light-strong)) !important;
-  border:1px solid var(--ui-border-light) !important;
-  box-shadow:var(--ui-shadow-light) !important;
-}
-
-body[data-page="contacto"] .panel h1,
-body[data-page="contacto"] .panel h2,
-body[data-page="contacto"] .panel h3,
-body[data-page="contacto"] .panel h4,
-body[data-page="contacto"] .panel h5,
-body[data-page="contacto"] .panel b,
-body[data-page="contacto"] .panel p,
-body[data-page="contacto"] .panel li,
-body[data-page="contacto"] .panel span,
-body[data-page="contacto"] .panel small,
-body[data-page="privacy"] .panel h1,
-body[data-page="privacy"] .panel h2,
-body[data-page="privacy"] .panel h3,
-body[data-page="privacy"] .panel h4,
-body[data-page="privacy"] .panel h5,
-body[data-page="privacy"] .panel b,
-body[data-page="privacy"] .panel p,
-body[data-page="privacy"] .panel li,
-body[data-page="privacy"] .panel span,
-body[data-page="privacy"] .panel small,
-body[data-page="terms"] .panel h1,
-body[data-page="terms"] .panel h2,
-body[data-page="terms"] .panel h3,
-body[data-page="terms"] .panel h4,
-body[data-page="terms"] .panel h5,
-body[data-page="terms"] .panel b,
-body[data-page="terms"] .panel p,
-body[data-page="terms"] .panel li,
-body[data-page="terms"] .panel span,
-body[data-page="terms"] .panel small{
-  color:var(--ui-ink-dark) !important;
-}
-
-body[data-page="privacy"] .hero-sidebar .box *,
-body[data-page="privacy"] .hero-sidebar .content *,
-body[data-page="terms"] .hero-sidebar .box *,
-body[data-page="terms"] .hero-sidebar .content *{
-  color:var(--ui-ink-dark) !important;
-  text-shadow:none !important;
-}
-
-/* hide floating egg on mobile and legal pages */
-@media (max-width:980px){
-  .floating-egg{
-    display:none !important;
-  }
-}
-body[data-page="privacy"] .floating-egg,
-body[data-page="terms"] .floating-egg{
-  display:none !important;
+@media (max-width:760px){
+  .floating-egg{display:none !important;}
 }
