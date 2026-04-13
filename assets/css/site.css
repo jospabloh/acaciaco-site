@@ -61,8 +61,6 @@
   color-scheme:dark;
 }
 
-/* Public base theme is dark-only. Light page surfaces are handled in site-fixes-v3.css. */
-
 *,
 *::before,
 *::after{
