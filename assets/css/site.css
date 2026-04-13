@@ -754,6 +754,23 @@ textarea{
   pointer-events:none;
 }
 
+
+:root[data-theme="light"] .btn-secondary,
+:root[data-theme="light"] .btn-ghost{
+  color:var(--light-ghost-text);
+  border-color:var(--light-ghost-border);
+  background:#fff;
+}
+
+@media (prefers-color-scheme: light){
+  :root:not([data-theme]) .btn-secondary,
+  :root:not([data-theme]) .btn-ghost{
+    color:var(--light-ghost-text);
+    border-color:var(--light-ghost-border);
+    background:#fff;
+  }
+}
+
 .note{
   margin-top:12px;
   color:var(--muted-2);
