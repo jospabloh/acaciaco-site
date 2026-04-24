@@ -2132,13 +2132,16 @@ textarea{
 
 
 .brand-principles-panel{
-  background:linear-gradient(160deg, color-mix(in srgb, var(--surface-dark) 90%, transparent), color-mix(in srgb, var(--surface-mid) 92%, transparent));
-  border-color:rgba(87,191,255,.22);
+  background:linear-gradient(160deg, color-mix(in srgb, var(--surface-dark) 78%, transparent), color-mix(in srgb, var(--surface-mid) 84%, transparent));
+  border-color:rgba(87,191,255,.32);
+  box-shadow:0 18px 44px rgba(3,10,24,.38);
 }
+.brand-principles-panel .eyebrow{color:#dff0ff;}
+.brand-principles-panel .h2{color:#f8fbff;}
 .brand-principles-copy{
   margin:0;
   max-width:74ch;
-  color:var(--muted);
+  color:#d6e2f2;
 }
 .brand-principles-grid{
   display:grid;
@@ -2148,18 +2151,20 @@ textarea{
 .brand-principle-item{
   position:relative;
   padding:16px 14px;
-  border:1px solid rgba(255,255,255,.1);
+  border:1px solid rgba(120,185,240,.28);
   border-radius:16px;
-  background:linear-gradient(165deg, rgba(12,27,49,.48), rgba(9,22,42,.3));
+  background:linear-gradient(165deg, rgba(22,44,76,.78), rgba(14,30,56,.62));
   text-align:center;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
 }
 .brand-principle-item h3{
   margin:0 0 6px;
   font-size:1rem;
+  color:#f5f9ff;
 }
 .brand-principle-item p{
   margin:0;
-  color:var(--muted);
+  color:#cbd8ec;
   font-size:.88rem;
   line-height:1.45;
 }
@@ -2273,8 +2278,11 @@ textarea{
   opacity:0;
   transform:translateY(24px);
   transition:opacity .65s ease, transform .65s ease;
+  animation:revealSafety 0s ease 2.2s forwards;
 }
 .reveal-up.is-visible{opacity:1; transform:translateY(0);}
+@keyframes revealSafety{to{opacity:1; transform:translateY(0);}}
+@media (prefers-reduced-motion: reduce){.reveal-up{opacity:1 !important; transform:none !important; animation:none;}}
 
 @keyframes floatChip{
   0%,100%{transform:translateY(0);} 50%{transform:translateY(-7px);}
@@ -2321,10 +2329,57 @@ textarea{
 .social-icon svg{width:12px;height:12px;fill:currentColor;}
 
 .floating-egg{position:fixed;z-index:70;opacity:0;transform:translate3d(-50%,-50%,0) scale(.92);pointer-events:none;width:42px;height:54px;border:0;background:transparent;padding:0;transition:opacity .65s ease,transform 1.8s ease;}
-.floating-egg.is-visible{opacity:.95;pointer-events:auto;transform:translate3d(-50%,-50%,0) scale(1);}
+.floating-egg.is-visible{opacity:.95;pointer-events:auto;transform:translate3d(-50%,-50%,0) scale(1);animation:eggBreathe 5.2s ease-in-out infinite;}
+.floating-egg:hover{animation-play-state:paused;}
 .floating-egg .egg-shell{position:relative;display:block;width:100%;height:100%;border-radius:50% 50% 45% 45% / 60% 60% 40% 40%;background:radial-gradient(circle at 32% 28%, rgba(255,255,255,.88), rgba(196,235,255,.94) 42%, rgba(95,173,222,.78) 100%);box-shadow:0 0 0 1px rgba(255,255,255,.45),0 12px 26px rgba(23,121,184,.34),0 0 30px rgba(76,166,227,.35);}
 .floating-egg .egg-shell::after{content:"";position:absolute;left:10px;top:9px;width:10px;height:15px;border-radius:50%;background:rgba(255,255,255,.55);filter:blur(1px);}
+.floating-egg .egg-shell::before{content:"";position:absolute;inset:-6px;border-radius:inherit;pointer-events:none;background:radial-gradient(circle at 50% 50%, rgba(130,205,255,.35), rgba(130,205,255,0) 68%);opacity:0;animation:eggShimmer 14s ease-in-out infinite;}
+.floating-egg:hover .egg-shell{box-shadow:0 0 0 1px rgba(255,255,255,.6),0 14px 30px rgba(23,121,184,.45),0 0 42px rgba(130,205,255,.65);}
+@keyframes eggBreathe{0%,100%{filter:drop-shadow(0 0 0 rgba(130,205,255,0));}50%{filter:drop-shadow(0 0 6px rgba(130,205,255,.35));}}
+@keyframes eggShimmer{0%,92%,100%{opacity:0;}95%{opacity:.55;}97%{opacity:0;}}
+@media (prefers-reduced-motion: reduce){.floating-egg.is-visible{animation:none;}.floating-egg .egg-shell::before{animation:none;}}
 
 @media (max-width: 640px){
   .floating-egg{width:38px;height:48px;}
+}
+
+/* Social surface (testimonials) — improved contrast */
+.social-surface{
+  background:linear-gradient(160deg, color-mix(in srgb, var(--surface-dark) 80%, transparent), color-mix(in srgb, var(--surface-mid) 86%, transparent));
+  border-color:rgba(87,191,255,.3);
+  box-shadow:0 18px 44px rgba(3,10,24,.36);
+}
+.social-surface .eyebrow{color:#dff0ff;}
+.social-surface .h2{color:#f8fbff;}
+.social-surface .testimonial-slide{
+  border:1px solid rgba(120,185,240,.3);
+  background:linear-gradient(165deg, rgba(22,44,76,.78), rgba(14,30,56,.6));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+}
+.social-surface .testimonial-slide p{color:#f1f6ff;}
+.social-surface .testimonial-slide small{color:#c5d4ea;}
+
+/* Final CTA — elevated button prominence */
+#contacto .final-cta .cta{gap:14px;}
+#contacto .final-cta .btn-primary{
+  padding:16px 28px;
+  font-size:1.02rem;
+  box-shadow:0 20px 44px rgba(45,164,230,.42), 0 0 0 1px rgba(130,205,255,.35) inset;
+}
+#contacto .final-cta .btn-primary:hover{
+  box-shadow:0 22px 50px rgba(45,164,230,.5), 0 0 0 1px rgba(170,220,255,.55) inset;
+}
+#contacto .final-cta .btn-ghost{
+  padding:16px 26px;
+  font-size:1.02rem;
+  color:#eaf4ff;
+  border:1px solid rgba(130,205,255,.55);
+  background:linear-gradient(135deg, rgba(22,44,76,.72), rgba(14,30,56,.58));
+  box-shadow:0 14px 32px rgba(3,10,24,.42);
+}
+#contacto .final-cta .btn-ghost:hover{
+  color:#ffffff;
+  border-color:rgba(170,220,255,.8);
+  background:linear-gradient(135deg, rgba(28,56,96,.82), rgba(18,38,70,.72));
+  box-shadow:0 18px 38px rgba(3,10,24,.5);
 }
