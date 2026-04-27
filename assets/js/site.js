@@ -783,4 +783,59 @@
   setupSecretGame();
   setupFloatingEgg();
   setupFooterSocials();
+
+  const setupCookieConsent = () => {
+    const CONSENT_KEY = 'acacia_cookie_consent';
+    if (localStorage.getItem(CONSENT_KEY)) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'cookie-overlay';
+    overlay.id = 'cookie-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', 'cookie-consent-title');
+    overlay.innerHTML = `
+      <div class="cookie-backdrop" id="cookie-backdrop"></div>
+      <div class="cookie-modal">
+        <div class="cookie-modal-header">
+          <h2 class="cookie-title" id="cookie-consent-title">Gestionar el consentimiento de las cookies</h2>
+          <button class="cookie-close" id="cookie-close" type="button" aria-label="Cerrar">✕</button>
+        </div>
+        <p class="cookie-body">Para ofrecer las mejores experiencias, utilizamos tecnologías como las cookies para almacenar y/o acceder a la información del dispositivo. El consentimiento de estas tecnologías nos permitirá procesar datos como el comportamiento de navegación o las identificaciones únicas en este sitio. No consentir o retirar el consentimiento, puede afectar negativamente a ciertas características y funciones.</p>
+        <div class="cookie-actions">
+          <button class="btn btn-primary" id="cookie-accept" type="button">Aceptar</button>
+          <button class="btn btn-ghost" id="cookie-deny" type="button">Denegar</button>
+          <button class="btn btn-ghost" id="cookie-prefs" type="button">Ver preferencias</button>
+        </div>
+        <div class="cookie-links">
+          <a href="/privacy">Política de cookies</a>
+          <a href="/privacy">Política de privacidad</a>
+          <a href="/terms">Aviso legal</a>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+
+    const dismiss = (value) => {
+      localStorage.setItem(CONSENT_KEY, value);
+      overlay.remove();
+      document.body.style.overflow = '';
+    };
+
+    overlay.querySelector('#cookie-accept').addEventListener('click', () => dismiss('accepted'));
+    overlay.querySelector('#cookie-deny').addEventListener('click', () => dismiss('denied'));
+    overlay.querySelector('#cookie-prefs').addEventListener('click', () => dismiss('preferences'));
+    overlay.querySelector('#cookie-close').addEventListener('click', () => dismiss('dismissed'));
+    overlay.querySelector('#cookie-backdrop').addEventListener('click', () => dismiss('dismissed'));
+
+    document.addEventListener('keydown', function escHandler(e) {
+      if (e.key === 'Escape' && document.getElementById('cookie-overlay')) {
+        dismiss('dismissed');
+        document.removeEventListener('keydown', escHandler);
+      }
+    });
+  };
+
+  setupCookieConsent();
 })();

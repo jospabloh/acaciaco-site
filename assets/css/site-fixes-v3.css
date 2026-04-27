@@ -223,6 +223,167 @@ body[data-page="terms"] .floating-egg{display:none !important;}
   }
 }
 
+/* Certifications section */
+.cert-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;
+}
+.cert-card{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:16px 18px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:var(--surface);
+}
+.cert-badge{
+  flex-shrink:0;
+  width:54px;
+  height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.cert-badge svg{max-width:100%;max-height:100%;width:auto;height:auto;}
+.cert-info h3{margin:0 0 3px;font-size:.92rem;font-weight:600;color:var(--ink);}
+.cert-info p{margin:0;font-size:.82rem;color:var(--brand-500);line-height:1.35;}
+@media (max-width:980px){.cert-grid{grid-template-columns:1fr 1fr;}}
+@media (max-width:540px){.cert-grid{grid-template-columns:1fr;}}
+
+:root[data-theme="light"] body .cert-card,
+:root:not([data-theme]) .cert-card{
+  background:linear-gradient(160deg,var(--ui-surface-light),var(--ui-surface-light-strong)) !important;
+  border-color:var(--ui-border-light) !important;
+  box-shadow:var(--ui-shadow-light);
+}
+:root[data-theme="light"] body .cert-info h3,
+:root:not([data-theme]) .cert-info h3{color:var(--ui-ink-dark) !important;}
+
+@media (prefers-color-scheme:light){
+  :root:not([data-theme]) body .cert-card{
+    background:linear-gradient(160deg,var(--ui-surface-light),var(--ui-surface-light-strong)) !important;
+    border-color:var(--ui-border-light) !important;
+    box-shadow:var(--ui-shadow-light);
+  }
+  :root:not([data-theme]) body .cert-info h3{color:var(--ui-ink-dark) !important;}
+}
+
+/* Cookie consent */
+.cookie-overlay{
+  position:fixed;
+  inset:0;
+  z-index:1200;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+.cookie-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+}
+.cookie-modal{
+  position:relative;
+  z-index:1;
+  background:var(--surface-2);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:28px;
+  max-width:520px;
+  width:100%;
+  box-shadow:0 24px 64px rgba(0,0,0,.45);
+}
+.cookie-modal-header{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  margin-bottom:14px;
+}
+.cookie-title{
+  flex:1;
+  margin:0;
+  font-size:1rem;
+  font-weight:600;
+  color:var(--ink);
+  line-height:1.4;
+}
+.cookie-close{
+  flex-shrink:0;
+  width:30px;
+  height:30px;
+  border:none;
+  background:transparent;
+  color:var(--muted);
+  font-size:1.1rem;
+  cursor:pointer;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:background .2s,color .2s;
+  margin-top:-2px;
+  padding:0;
+}
+.cookie-close:hover{background:var(--surface);color:var(--ink);}
+.cookie-body{
+  font-size:.88rem;
+  color:var(--muted);
+  line-height:1.62;
+  margin:0 0 20px;
+}
+.cookie-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:16px;
+}
+.cookie-actions .btn{min-width:90px;}
+.cookie-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px 14px;
+  font-size:.82rem;
+  justify-content:center;
+}
+.cookie-links a{
+  color:var(--brand-500);
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.cookie-links a:hover{color:var(--brand-400);}
+@media (max-width:540px){
+  .cookie-modal{padding:20px 16px;}
+  .cookie-actions{flex-direction:column;}
+  .cookie-actions .btn{width:100%;text-align:center;}
+}
+
+:root[data-theme="light"] body .cookie-modal,
+:root:not([data-theme]) .cookie-modal{
+  background:var(--ui-surface-light-strong) !important;
+  border-color:var(--ui-border-light) !important;
+  color:var(--ui-ink-dark) !important;
+  box-shadow:var(--ui-shadow-light);
+}
+:root[data-theme="light"] body .cookie-title,
+:root:not([data-theme]) .cookie-title{color:var(--ui-ink-dark) !important;}
+:root[data-theme="light"] body .cookie-body,
+:root:not([data-theme]) .cookie-body{color:var(--ui-copy-dark) !important;}
+
+@media (prefers-color-scheme:light){
+  :root:not([data-theme]) body .cookie-modal{
+    background:var(--ui-surface-light-strong) !important;
+    border-color:var(--ui-border-light) !important;
+    box-shadow:var(--ui-shadow-light);
+  }
+  :root:not([data-theme]) body .cookie-title{color:var(--ui-ink-dark) !important;}
+  :root:not([data-theme]) body .cookie-body{color:var(--ui-copy-dark) !important;}
+}
+
 /* Legal pages in both modes */
 .legal-page .pill strong,
 .legal-page .pill b,
