@@ -1,0 +1,121 @@
+.acacia-intro {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 70% 25%, #FFD89B 0%, transparent 50%),
+    radial-gradient(ellipse at 30% 80%, #F4A09C 0%, transparent 55%),
+    linear-gradient(170deg, #FFE5D4 0%, #FFF4E6 45%, #FCE3CF 100%);
+  animation: introFadeOut 0.9s ease-in-out 4.6s forwards;
+}
+@keyframes introFadeOut { to { opacity: 0; visibility: hidden; } }
+
+.acacia-intro .sun {
+  position: absolute; top: 14%; right: 18%;
+  width: 180px; height: 180px; border-radius: 50%;
+  background: radial-gradient(circle, #FFE5A8 0%, #FFD580 40%, transparent 70%);
+  filter: blur(2px); opacity: 0;
+  animation: sunRise 1.4s ease-out 0.2s forwards,
+             sunBreathe 4s ease-in-out 1.6s infinite;
+}
+@keyframes sunRise {
+  from { opacity: 0; transform: translateY(40px) scale(0.7); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes sunBreathe {
+  0%, 100% { filter: blur(2px) brightness(1); }
+  50%      { filter: blur(3px) brightness(1.08); }
+}
+
+.acacia-intro .cloud {
+  position: absolute; background: rgba(255,255,255,0.7);
+  border-radius: 100px; filter: blur(1px); opacity: 0;
+  animation: cloudDrift 1.2s ease-out forwards;
+}
+.acacia-intro .cloud-1 { width: 120px; height: 30px; top: 22%; left: 12%; animation-delay: 0.5s; }
+.acacia-intro .cloud-2 { width:  80px; height: 22px; top: 32%; left: 60%; animation-delay: 0.7s; }
+.acacia-intro .cloud-3 { width: 100px; height: 26px; top: 18%; left: 45%; animation-delay: 0.9s; }
+@keyframes cloudDrift {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 0.85; transform: translateX(0); }
+}
+
+.acacia-intro .sparkle {
+  position: absolute; width: 4px; height: 4px;
+  background: #FFE5A8; border-radius: 50%;
+  box-shadow: 0 0 8px #FFD580; opacity: 0;
+  animation: twinkle 2s ease-in-out infinite;
+}
+.acacia-intro .sparkle:nth-of-type(1) { top: 25%; left: 25%; animation-delay: 1.2s; }
+.acacia-intro .sparkle:nth-of-type(2) { top: 35%; left: 75%; animation-delay: 1.5s; }
+.acacia-intro .sparkle:nth-of-type(3) { top: 45%; left: 15%; animation-delay: 1.8s; }
+.acacia-intro .sparkle:nth-of-type(4) { top: 28%; left: 85%; animation-delay: 2.1s; }
+@keyframes twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.5); }
+  50%      { opacity: 1; transform: scale(1.3); }
+}
+
+.acacia-intro .ground {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 25%;
+  background: linear-gradient(180deg, transparent 0%,
+              rgba(229,201,165,0.35) 50%, rgba(212,175,130,0.5) 100%);
+  transform: translateY(100%);
+  animation: groundUp 1s ease-out 0.4s forwards;
+}
+@keyframes groundUp { to { transform: translateY(0); } }
+
+.acacia-intro .seesaw-stage {
+  position: relative; width: min(520px, 80vw); height: 240px; margin-top: 40px;
+  opacity: 0; transform: translateY(30px);
+  animation: seesawEnter 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.7s forwards;
+}
+@keyframes seesawEnter { to { opacity: 1; transform: translateY(0); } }
+
+.acacia-intro .seesaw {
+  width: 100%; height: 100%;
+  transform-origin: center 78%;
+  animation: rock 2.6s ease-in-out 1.2s infinite;
+}
+@keyframes rock {
+  0%, 100% { transform: rotate(-9deg); }
+  50%      { transform: rotate(9deg); }
+}
+
+.acacia-intro .legend {
+  position: absolute; bottom: 14%; left: 50%; transform: translateX(-50%);
+  width: min(680px, 88vw); text-align: center; color: #4A2F1A;
+}
+.acacia-intro .legend .line-1 {
+  font-family: 'Fraunces', serif; font-style: italic; font-weight: 500;
+  font-size: clamp(20px, 3.2vw, 32px); letter-spacing: 0.2px; line-height: 1.35;
+  opacity: 0; animation: lineIn 1s ease-out 1.6s forwards;
+}
+.acacia-intro .legend .line-2 {
+  margin-top: 18px; font-family: 'Caveat', cursive; font-weight: 600;
+  font-size: clamp(24px, 3.6vw, 38px); color: #B85450;
+  opacity: 0; animation: lineIn 1s ease-out 2.9s forwards;
+}
+.acacia-intro .legend .ornament {
+  display: inline-block; margin: 14px 0 6px;
+  font-family: 'Fraunces', serif; color: #C8896B; letter-spacing: 8px;
+  opacity: 0; animation: lineIn 0.8s ease-out 2.4s forwards;
+}
+@keyframes lineIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.acacia-intro .brand {
+  position: absolute; top: 7%; left: 50%; transform: translateX(-50%);
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(28px, 4vw, 44px); letter-spacing: 14px; color: #4A2F1A;
+  opacity: 0; animation: brandIn 1.2s ease-out 0.3s forwards;
+}
+.acacia-intro .brand::before, .acacia-intro .brand::after {
+  content: '·'; margin: 0 18px; color: #C8896B;
+}
+@keyframes brandIn {
+  from { opacity: 0; letter-spacing: 4px; }
+  to   { opacity: 1; letter-spacing: 14px; }
+}
