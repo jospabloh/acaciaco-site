@@ -7,7 +7,7 @@
     radial-gradient(ellipse at 70% 25%, #FFD89B 0%, transparent 50%),
     radial-gradient(ellipse at 30% 80%, #F4A09C 0%, transparent 55%),
     linear-gradient(170deg, #FFE5D4 0%, #FFF4E6 45%, #FCE3CF 100%);
-  animation: introFadeOut 0.9s ease-in-out 4.6s forwards;
+  animation: introFadeOut 0.9s ease-in-out 9.1s forwards;
 }
 @keyframes introFadeOut { to { opacity: 0; visibility: hidden; } }
 

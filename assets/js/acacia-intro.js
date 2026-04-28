@@ -15,7 +15,7 @@
 
   try { sessionStorage.setItem('acacia_intro_shown', '1'); } catch (e) {}
 
-  setTimeout(function () { intro.remove(); }, 5600);
+  setTimeout(function () { intro.remove(); }, 10000);
 
   intro.addEventListener('click', function () {
     intro.style.transition = 'opacity 0.4s';
