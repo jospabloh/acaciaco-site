@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>¡Gracias! — ACACIA</title>
+  <meta name="description" content="Tu solicitud fue recibida. El equipo ACACIA te contactará en menos de 24 horas hábiles." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://acaciaco.com.mx/gracias" />
+
+  <link rel="icon" type="image/jpeg" sizes="32x32" href="/assets/acacia-logo.jpg" />
+  <link rel="icon" type="image/jpeg" sizes="192x192" href="/assets/Logo_ACACIA_HighRes.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('acacia-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/styles/base.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
+</head>
+
+<body>
+
+  <!-- NAV (always scrolled state) -->
+  <header class="site-nav scrolled" role="banner" data-scrolled="true">
+    <div class="nav-inner">
+      <a href="/" class="brand" aria-label="ACACIA inicio">
+        <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+        ACACIA
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links" role="list">
+          <li><a href="/#como-trabajamos">Soluciones</a></li>
+          <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="/#apps">Apps</a></li>
+          <li><a href="/servicios">Servicios</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+
+        <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- 1. HERO -->
+    <section class="gracias-hero">
+      <div class="gracias-glow" aria-hidden="true"></div>
+
+      <div class="check-wrap" aria-hidden="true">
+        <svg class="check-svg" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle class="check-circle" cx="26" cy="26" r="24" stroke="var(--primary)" stroke-width="2.5"/>
+          <path class="check-tick" d="M14 27l8 8 16-16" stroke="var(--primary)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <h1 class="gracias-h1" id="graciasH1">¡Gracias por confiar en ACACIA!</h1>
+      <p class="gracias-sub" id="graciasSub">Tu suscripción fue activada. En las próximas 24 horas hábiles te contactamos para arrancar.</p>
+      <div id="graciasNombre" class="gracias-nombre" style="display:none"></div>
+    </section>
+
+    <!-- 2. CONFIRMATION CARD -->
+    <section class="section" id="confirmCard" style="display:none; padding-top:0;">
+      <div class="container">
+        <div class="confirm-card">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Resumen de tu suscripción</span>
+          <div class="confirm-grid" id="confirmGrid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. NEXT STEPS -->
+    <section class="section">
+      <div class="container">
+        <div class="reveal" style="text-align:center; margin-bottom:2.5rem;">
+          <h2>¿Qué sigue ahora?</h2>
+        </div>
+        <div class="gracias-steps-grid" id="graciasSteps"></div>
+      </div>
+    </section>
+
+    <!-- 4. TESTIMONIAL -->
+    <section class="section">
+      <div class="container" style="max-width:640px; text-align:center; margin-inline:auto;">
+        <div style="color:var(--primary); font-size:1rem; letter-spacing:2px; margin-bottom:1.25rem;" aria-label="5 estrellas">★★★★★</div>
+        <p style="font-family:'Space Grotesk',sans-serif; font-size:1rem; color:var(--text); line-height:1.65; font-style:italic; margin-bottom:1.5rem;">
+          “Con StockFlow dejamos de trabajar a ciegas y aceleramos decisiones de compra.”
+        </p>
+        <strong style="font-family:'Space Grotesk',sans-serif; font-size:0.875rem; color:var(--text);">Mariana López</strong>
+        <span style="font-size:0.775rem; color:var(--text-dim); margin-left:8px;">Operaciones</span>
+      </div>
+    </section>
+
+    <!-- 5. SOFT CTAs -->
+    <section class="section" style="padding-top:0;">
+      <div class="container" style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+        <a href="https://wa.me/524498958291?text=Hola,%20acabo%20de%20completar%20una%20transacci%C3%B3n%20en%20acaciaco.com.mx" target="_blank" rel="noopener" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.522 5.851L0 24l6.335-1.501A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.002-1.366l-.36-.214-3.757.89.936-3.657-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
+          Hablar con el equipo
+        </a>
+        <a href="/" class="btn btn-ghost">Volver al inicio</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- COMPACT FOOTER -->
+  <footer class="footer-compact" role="contentinfo">
+    <div class="footer-compact-inner">
+      <span>© 2026 ACACIA · Todos los derechos reservados</span>
+      <a href="mailto:contacto@acaciaco.com.mx" style="color:inherit;">contacto@acaciaco.com.mx</a>
+    </div>
+  </footer>
+
+  <!-- COOKIE BANNER -->
+  <div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Aviso de cookies" aria-live="polite">
+    <h4>Cookies y privacidad</h4>
+    <p>Usamos cookies para mejorar tu experiencia. Consulta nuestra <a href="/legal/privacidad">política de privacidad</a>.</p>
+    <div class="actions">
+      <button class="btn btn-primary btn-sm" data-cookies="all">Aceptar</button>
+      <button class="btn btn-ghost btn-sm" data-cookies="essential">Solo esenciales</button>
+    </div>
+  </div>
+
+  <script src="/scripts/shared.js"></script>
+
+  <script>
+  (function () {
+    var params  = new URLSearchParams(window.location.search);
+    var from    = params.get('from') || 'pago';
+    var plan    = params.get('plan');
+    var monto   = params.get('monto');
+    var moneda  = params.get('moneda') || 'MXN';
+    var nombre  = params.get('nombre');
+
+    var headlineMap = {
+      'pago':                     ['¡Gracias por confiar en ACACIA!',  'Tu suscripción fue activada. En las próximas 24 horas hábiles te contactamos para arrancar.'],
+      'contacto':                 ['¡Mensaje recibido!',               'Te respondemos en menos de 24 horas hábiles. Estamos revisando tu consulta.'],
+      'puntos-plus-invitation':   ['¡Solicitud recibida, gracias!',    'Revisamos cada solicitud manualmente. Te respondemos sobre tu acceso a Puntos+ en 3 a 5 días hábiles.'],
+      'liuma-invitation':         ['¡Solicitud recibida, gracias!',    'Revisamos cada solicitud manualmente. Te respondemos sobre tu acceso a LIUMA en 3 a 5 días hábiles.']
+    };
+    var pair = headlineMap[from] || headlineMap['pago'];
+    document.getElementById('graciasH1').textContent = pair[0];
+    document.getElementById('graciasSub').textContent = pair[1];
+    document.title = pair[0] + ' — ACACIA';
+
+    if (nombre) {
+      var elN = document.getElementById('graciasNombre');
+      elN.textContent = 'Bienvenido, ' + decodeURIComponent(nombre) + ' 👋';
+      elN.style.display = '';
+    }
+
+    if (plan || monto) {
+      document.getElementById('confirmCard').style.display = '';
+      var rows = [];
+      if (plan)  rows.push(['Plan',  decodeURIComponent(plan)]);
+      if (monto) {
+        var n = parseInt(monto, 10);
+        if (!isNaN(n)) rows.push(['Monto', '$' + n.toLocaleString('es-MX') + ' ' + moneda + ' / mes']);
+      }
+      rows.push(['Fecha de activación', new Date().toLocaleDateString('es-MX', {day:'numeric', month:'long', year:'numeric'})]);
+      rows.push(['Soporte', 'contacto@acaciaco.com.mx']);
+      document.getElementById('confirmGrid').innerHTML = rows.map(function (r) {
+        return '<div class="confirm-row"><span class="confirm-key">' + r[0] + '</span><span class="confirm-val">' + r[1] + '</span></div>';
+      }).join('');
+    }
+
+    var WA = 'https://wa.me/524498958291?text=Hola,%20tuve%20una%20transacci%C3%B3n%20en%20acaciaco.com.mx';
+    var waBtn = '<a href="' + WA + '" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="margin-top:1rem; align-self:flex-start;">Abrir WhatsApp</a>';
+    var stepsMap = {
+      'pago': [
+        { n: '01', title: 'Revisa tu correo',     desc: 'Te enviamos la confirmación de tu suscripción. Si no lo ves, revisa la carpeta de spam.' },
+        { n: '02', title: 'Te contactamos pronto', desc: 'El equipo ACACIA te escribe en las próximas 24 horas hábiles para coordinar el arranque.' },
+        { n: '03', title: '¿Tienes dudas?',        desc: 'Estamos en WhatsApp en horario hábil.', wa: true }
+      ],
+      'contacto': [
+        { n: '01', title: 'Mensaje recibido',      desc: 'Lo estamos leyendo. Respondemos en menos de 24 horas hábiles.' },
+        { n: '02', title: 'Respuesta por correo',  desc: 'Te respondemos al correo que nos dejaste con toda la información.' },
+        { n: '03', title: '¿Es urgente?',          desc: 'Escríbenos directo por WhatsApp.', wa: true }
+      ],
+      'puntos-plus-invitation': [
+        { n: '01', title: 'Revisión en curso',     desc: 'Evaluamos cada solicitud para garantizar el fit correcto con Puntos+.' },
+        { n: '02', title: 'Respuesta en 3-5 días', desc: 'Te escribimos con la decisión y, si aplicas, con los próximos pasos.' },
+        { n: '03', title: '¿Tienes preguntas?',    desc: 'Escríbenos mientras esperas.', wa: true }
+      ],
+      'liuma-invitation': [
+        { n: '01', title: 'Revisión en curso',     desc: 'Evaluamos cada solicitud para confirmar el fit institucional con LIUMA.' },
+        { n: '02', title: 'Respuesta en 3-5 días', desc: 'Te escribimos con la decisión y los siguientes pasos de onboarding.' },
+        { n: '03', title: '¿Tienes preguntas?',    desc: 'Escríbenos mientras esperas.', wa: true }
+      ]
+    };
+    var steps = stepsMap[from] || stepsMap['pago'];
+    document.getElementById('graciasSteps').innerHTML = steps.map(function (s) {
+      return '<div class="gracias-step-card reveal">' +
+        '<span class="step-num">PASO ' + s.n + '</span>' +
+        '<h3>' + s.title + '</h3>' +
+        '<p>' + s.desc + '</p>' +
+        (s.wa ? waBtn : '') +
+      '</div>';
+    }).join('');
+
+    var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.addEventListener('load', function () {
+      if (prefersReduced) return;
+      if (typeof confetti === 'undefined') return;
+      try {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.4 },
+          colors: ['#3B6EF8', '#FFB800', '#4A9C6D', '#ffffff'],
+          gravity: 1.2,
+          scalar: 0.9
+        });
+        setTimeout(function () { if (confetti.reset) confetti.reset(); }, 4000);
+      } catch (e) {}
+    });
+  })();
+  </script>
+
+</body>
+</html>
