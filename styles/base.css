@@ -1796,3 +1796,86 @@ details.faq-item[open] { border-color: var(--primary); }
   text-decoration: none;
 }
 .migration-note a:hover { text-decoration: underline; }
+
+/* ── PROSE (legal pages) ──────────────────────────── */
+.prose {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--section-py) var(--section-px);
+}
+.prose h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700; font-size: clamp(1.8rem, 4vw, 2.8rem);
+  letter-spacing: -0.03em; color: var(--text);
+  margin-bottom: 0.5rem;
+}
+.prose .last-updated {
+  font-size: 0.82rem; color: var(--text-dim);
+  margin-bottom: 3rem; display: block;
+}
+.prose h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600; font-size: 1.1rem;
+  color: var(--text); margin: 2.5rem 0 0.75rem;
+  letter-spacing: -0.01em;
+}
+.prose p {
+  font-size: 0.9375rem; color: var(--text-muted);
+  line-height: 1.75; font-weight: 300;
+  margin-bottom: 1rem;
+}
+.prose a { color: var(--primary); text-decoration: none; }
+.prose a:hover { text-decoration: underline; }
+.prose hr {
+  border: none; border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+
+/* ── JOBS (trabaja con nosotros) ─────────────────── */
+.jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+@media (max-width: 960px) { .jobs-grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; } }
+.job-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 2rem;
+  display: flex; flex-direction: column; gap: 0;
+  transition: border-color 0.25s, transform 0.25s;
+}
+.job-card:hover { border-color: var(--border-hover); transform: translateY(-4px); }
+.job-area {
+  display: inline-flex; align-items: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.65rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.06em; padding: 3px 10px;
+  border-radius: var(--radius-pill); margin-bottom: 1rem;
+}
+.job-modality {
+  font-size: 0.775rem; color: var(--text-dim);
+  margin-bottom: 1rem;
+}
+.job-card h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700; font-size: 1.15rem;
+  color: var(--text); margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+.job-card p {
+  font-size: 0.875rem; color: var(--text-muted);
+  line-height: 1.65; font-weight: 300; flex: 1;
+  margin-bottom: 1.5rem;
+}
+.job-skills {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.5rem;
+}
+.job-skill {
+  font-size: 0.7rem; color: var(--text-dim);
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+  padding: 3px 8px; border-radius: var(--radius-pill);
+  font-family: 'Space Grotesk', sans-serif;
+}
