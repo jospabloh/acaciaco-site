@@ -137,11 +137,15 @@
 
 html{
   scroll-behavior:smooth;
+  overflow-x:clip;
+  -webkit-text-size-adjust:100%;
 }
 
 html,
 body{
   min-height:100%;
+  max-width:100vw;
+  overflow-x:clip;
 }
 
 main{
