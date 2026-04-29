@@ -55,7 +55,7 @@
   .topnav-brand img{width:40px !important; height:40px !important; flex:0 0 40px !important;}
   .topnav-brand-copy{min-width:0 !important; overflow:hidden !important;}
   .topnav-brand-copy b{font-size:0.98rem !important; line-height:1.1 !important; white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important;}
-  .topnav-brand-copy span,
+  .topnav-brand-copy span{display:block !important; font-size:.62rem !important; line-height:1.15 !important; letter-spacing:.04em !important; white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important; opacity:.78;}
   .topnav-links{display:none !important;}
 
   .mobile-nav{grid-area:menu !important; display:block !important; justify-self:end !important; margin:0 !important;}
