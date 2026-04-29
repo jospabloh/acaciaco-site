@@ -1103,3 +1103,154 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .balance-row { grid-template-columns: 1fr; }
   .cat-row { grid-template-columns: 90px 1fr 70px; }
 }
+
+/* ---------- Mock stat cards (Puntos+ / LIUMA) ---------- */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+.stat-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.65rem 0.7rem;
+  background: var(--bg);
+}
+.stat-card .lbl {
+  font-size: 0.66rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+.stat-card .val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-top: 2px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.stat-card .delta { color: var(--success); font-size: 0.72rem; font-weight: 600; }
+
+.mini-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 70px;
+  padding: 0.35rem 0.2rem 0;
+  border-top: 1px solid var(--border);
+  margin-top: 0.4rem;
+}
+.mini-bars .bar {
+  flex: 1;
+  background: linear-gradient(to top, var(--primary), oklch(72% 0.22 248));
+  border-radius: 4px 4px 0 0;
+  min-height: 12%;
+  opacity: 0.85;
+}
+
+.mock-corner-pill {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.55rem;
+  border-radius: var(--radius-pill);
+}
+.mock { position: relative; }
+
+/* ---------- 4-step "How it works" ---------- */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+.step {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.step:hover { transform: translateY(-4px); border-color: var(--border-hover); }
+.step .num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+}
+.step h3 { font-size: 1.05rem; }
+.step p { color: var(--text-muted); font-size: 0.92rem; line-height: 1.55; }
+
+/* ---------- Access request card ---------- */
+.request-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: clamp(2rem, 4vw, 3.25rem);
+  max-width: 880px;
+  margin-inline: auto;
+  overflow: hidden;
+}
+.request-card::before {
+  content: "";
+  position: absolute;
+  inset: -40% -10% auto auto;
+  width: 60%;
+  height: 80%;
+  background: radial-gradient(closest-side, var(--glow), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.request-card > * { position: relative; z-index: 1; }
+.request-card h2 { margin-bottom: 0.75rem; }
+.request-card .body {
+  color: var(--text-muted);
+  max-width: 60ch;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+.request-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.7rem 1.25rem;
+  list-style: none;
+  margin-bottom: 1.5rem;
+}
+.request-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+.request-list li::before {
+  content: "✓";
+  color: var(--success);
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.request-card .form-note {
+  margin-top: 0.85rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 540px) {
+  .stat-row { grid-template-columns: 1fr; }
+  .request-card .btn { width: 100%; }
+}
