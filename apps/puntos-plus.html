@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Puntos+ · Programa de fidelización para marcas — ACACIA</title>
+  <meta name="description" content="Plataforma de fidelización de clientes en preview privado. Puntos que se ganan, se canjean y generan datos accionables para tu marca. Solicita acceso anticipado." />
+  <link rel="canonical" href="https://acaciaco.com.mx/apps/puntos-plus" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_MX" />
+  <meta property="og:url" content="https://acaciaco.com.mx/apps/puntos-plus" />
+  <meta property="og:title" content="Puntos+ · Programa de fidelización para marcas — ACACIA" />
+  <meta property="og:description" content="Plataforma de fidelización de clientes en preview privado. Solicita acceso anticipado." />
+  <meta property="og:image" content="https://acaciaco.com.mx/assets/puntosplus-logo.png" />
+  <meta property="og:site_name" content="ACACIA Consultoría" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Puntos+ · Programa de fidelización para marcas — ACACIA" />
+  <meta name="twitter:description" content="Plataforma de fidelización de clientes en preview privado. Solicita acceso anticipado." />
+  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/puntosplus-logo.png" />
+
+  <link rel="icon" type="image/jpeg" sizes="32x32" href="/assets/acacia-logo.jpg" />
+  <link rel="icon" type="image/jpeg" sizes="192x192" href="/assets/Logo_ACACIA_HighRes.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('acacia-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/styles/base.css" />
+
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Puntos+",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "availability": "https://schema.org/PreOrder", "description": "Acceso por invitación — preview privado" },
+      "provider": { "@type": "Organization", "name": "ACACIA Consultoría", "url": "https://acaciaco.com.mx" },
+      "description": "Solución de fidelización de clientes para marcas seleccionadas. Puntos, recompensas y datos de comportamiento en una sola plataforma."
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://acaciaco.com.mx/" },
+        { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://acaciaco.com.mx/#apps" },
+        { "@type": "ListItem", "position": 3, "name": "Puntos+", "item": "https://acaciaco.com.mx/apps/puntos-plus" }
+      ]
+    }
+  ]
+  </script>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <header class="site-nav" role="banner">
+    <div class="nav-inner">
+      <a href="/" class="brand" aria-label="ACACIA inicio">
+        <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+        ACACIA
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links" role="list">
+          <li><a href="/#como-trabajamos">Soluciones</a></li>
+          <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="/#apps" aria-current="page">Apps</a></li>
+          <li><a href="/#servicios">Servicios</a></li>
+          <li><a href="/#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+
+        <div class="currency-toggle" role="group" aria-label="Moneda">
+          <button data-currency="MXN" aria-pressed="true" class="active">MXN</button>
+          <button data-currency="USD" aria-pressed="false">USD</button>
+        </div>
+
+        <a href="/contacto" class="btn btn-primary btn-sm nav-cta">Iniciar</a>
+
+        <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero section product-hero" aria-labelledby="pp-h1">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-copy reveal">
+            <div class="product-mark">
+              <img src="/assets/puntosplus-logo.png" alt="Puntos+" width="72" height="72" />
+              <span class="name">Puntos+</span>
+            </div>
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Preview privado · Acceso por invitación</span>
+            <h1 id="pp-h1"><span class="accent">Fidelización</span> inteligente para marcas que quieren conocer a sus clientes.</h1>
+            <p class="lead">Puntos+ te da las herramientas para recompensar, retener y entender a tus clientes. Disponible por invitación para marcas seleccionadas.</p>
+            <div class="hero-ctas">
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLSc6LCLpVMhWtcW2U7-k-fUKNmdrScFKsZck-NPeeiLSLn9ghw/viewform" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Solicitar acceso anticipado →</a>
+              <a href="/#apps" class="btn btn-ghost">← Volver a soluciones</a>
+            </div>
+          </div>
+
+          <div class="hero-visual reveal" aria-hidden="true">
+            <div class="mock">
+              <span class="mock-corner-pill">Preview</span>
+              <div class="mock-head">
+                <div class="dots"><span></span><span></span><span></span></div>
+                <span class="title">Puntos+ · Panel de marca</span>
+              </div>
+              <div class="stat-row">
+                <div class="stat-card"><div class="lbl">Clientes activos</div><div class="val">1,240</div></div>
+                <div class="stat-card"><div class="lbl">Puntos canjeados</div><div class="val">48,500</div></div>
+                <div class="stat-card"><div class="lbl">Retención</div><div class="val">+18%</div></div>
+              </div>
+              <div class="mini-bars" aria-hidden="true">
+                <div class="bar" style="height:42%"></div>
+                <div class="bar" style="height:58%"></div>
+                <div class="bar" style="height:50%"></div>
+                <div class="bar" style="height:75%"></div>
+                <div class="bar" style="height:64%"></div>
+                <div class="bar" style="height:88%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VALUE PROPS -->
+    <section class="section" id="capacidades" aria-labelledby="pp-vp-h2">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Capacidades</span>
+          <h2 id="pp-vp-h2">Todo lo que necesitas para fidelizar con datos reales.</h2>
+          <p>Una plataforma diseñada para marcas que entienden el valor de mantener cerca a sus clientes.</p>
+        </div>
+        <div class="features-grid">
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
+            <h3>Puntos configurables</h3>
+            <p>Define cómo se ganan, cuánto valen y cómo se canjean. Tus reglas, tu marca.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg></span>
+            <h3>Datos de comportamiento</h3>
+            <p>Sabe qué compran, cuándo vuelven y qué los motiva. Información real para decisiones reales.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.39 4.84L20 8l-4 3.91L17 18l-5-2.6L7 18l1-6.09L4 8l5.61-1.16z"/></svg></span>
+            <h3>Experiencia de marca</h3>
+            <p>Tus clientes ven tu logo, tus colores y tu nombre. No el nuestro.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+            <h3>Integración simple</h3>
+            <p>API y webhooks para conectar con tu punto de venta o e-commerce existente.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><rect x="14" y="6" width="6" height="6" rx="1"/></svg></span>
+            <h3>Multi-canal</h3>
+            <p>Puntos en tienda física, e-commerce y app móvil, todos sincronizados.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/></svg></span>
+            <h3>Soporte dedicado</h3>
+            <p>Cada marca en preview tiene un contacto directo en ACACIA durante el onboarding.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section" id="como-funciona" aria-labelledby="pp-hw-h2">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Proceso</span>
+          <h2 id="pp-hw-h2">De la solicitud al lanzamiento en 4 pasos.</h2>
+        </div>
+        <div class="steps-grid">
+          <article class="step reveal">
+            <span class="num">PASO 01</span>
+            <h3>Solicita acceso</h3>
+            <p>Completa el formulario. Revisamos cada solicitud manualmente para asegurar el fit.</p>
+          </article>
+          <article class="step reveal">
+            <span class="num">PASO 02</span>
+            <h3>Onboarding personalizado</h3>
+            <p>Te asignamos un contacto en ACACIA y configuramos tu cuenta juntos.</p>
+          </article>
+          <article class="step reveal">
+            <span class="num">PASO 03</span>
+            <h3>Configura tu programa</h3>
+            <p>Define tus reglas de puntos, recompensas y apariencia de marca.</p>
+          </article>
+          <article class="step reveal">
+            <span class="num">PASO 04</span>
+            <h3>Lanza con tus clientes</h3>
+            <p>Invita a tus primeros clientes y empieza a recolectar datos reales.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACCESS REQUEST -->
+    <section class="section" id="solicitar" aria-labelledby="pp-req-h2">
+      <div class="container">
+        <div class="request-card reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Acceso anticipado</span>
+          <h2 id="pp-req-h2">Aplicar para acceso anticipado</h2>
+          <p class="body">Revisamos cada solicitud de forma manual para garantizar el ajuste entre Puntos+ y tu operación. Respondemos en un plazo de 3 a 5 días hábiles.</p>
+          <ul class="request-list">
+            <li>Acceso completo a todas las funciones</li>
+            <li>Soporte directo con el equipo de ACACIA</li>
+            <li>Influencia en el roadmap del producto</li>
+            <li>Precio especial al lanzamiento oficial</li>
+          </ul>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSc6LCLpVMhWtcW2U7-k-fUKNmdrScFKsZck-NPeeiLSLn9ghw/viewform" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Completar solicitud →</a>
+          <p class="form-note">El formulario abre en Google Forms. Tus datos van directamente al equipo de ACACIA.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-grid">
+      <div class="col-brand">
+        <a href="/" class="brand" aria-label="ACACIA inicio">
+          <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+          ACACIA
+        </a>
+        <p>Tecnología, consultoría y soluciones digitales para operaciones que buscan claridad y crecimiento.</p>
+      </div>
+      <div>
+        <h4>Apps</h4>
+        <ul>
+          <li><a href="/apps/stockflow">StockFlow</a></li>
+          <li><a href="/apps/flowfin">FlowFin</a></li>
+          <li><a href="/apps/puntos-plus">Puntos+</a></li>
+          <li><a href="/apps/liuma">LIUMA</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="/#servicios">Consultoría</a></li>
+          <li><a href="/#servicios">Implementación</a></li>
+          <li><a href="/#servicios">Desarrollo</a></li>
+          <li><a href="/#servicios">Precios</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>ACACIA</h4>
+        <ul>
+          <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+          <li><a href="/legal/privacidad">Privacidad</a></li>
+          <li><a href="/legal/terminos">Términos</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 ACACIA · Todos los derechos reservados</span>
+      <a href="mailto:contacto@acaciaco.com.mx">contacto@acaciaco.com.mx</a>
+    </div>
+  </footer>
+
+  <!-- COOKIE BANNER -->
+  <div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Aviso de cookies" aria-live="polite">
+    <h4>Cookies y privacidad</h4>
+    <p>Usamos cookies para mejorar tu experiencia. Consulta nuestra <a href="/legal/privacidad">política de privacidad</a>.</p>
+    <div class="actions">
+      <button class="btn btn-primary btn-sm" data-cookies="all">Aceptar</button>
+      <button class="btn btn-ghost btn-sm" data-cookies="essential">Solo esenciales</button>
+    </div>
+  </div>
+
+  <script src="/scripts/shared.js"></script>
+</body>
+</html>
