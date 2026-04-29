@@ -134,9 +134,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   top: 0; left: 0; right: 0;
   z-index: 100;
   padding: 1rem var(--section-px);
-  background: transparent;
+  padding-top: calc(1rem + env(safe-area-inset-top, 0px));
+  background: var(--nav-bg);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
   transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
-  border-bottom: 1px solid transparent;
+  border-bottom: 1px solid var(--border);
 }
 
 .site-nav.scrolled {
@@ -170,6 +173,30 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 32px; height: 32px;
   border-radius: 8px;
   object-fit: cover;
+}
+
+.brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  line-height: 1.05;
+}
+.brand-copy b {
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+}
+.brand-whisper {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 0.66rem;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  text-transform: none;
+}
+@media (max-width: 420px) {
+  .brand-whisper { display: none; }
 }
 
 .brand-mark {
@@ -805,19 +832,25 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 @media (max-width: 768px) {
+  .site-nav { padding: 0.75rem var(--section-px); padding-top: calc(0.75rem + env(safe-area-inset-top, 0px)); }
+  .nav-inner { gap: 0.75rem; }
+  .brand img { width: 28px; height: 28px; }
+  .brand-copy b { font-size: 0.92rem; }
+  .brand-whisper { font-size: 0.62rem; }
   .nav-links {
     position: fixed;
-    inset: 64px 0 auto 0;
+    inset: calc(60px + env(safe-area-inset-top, 0px)) 0 auto 0;
     flex-direction: column;
     background: var(--nav-bg);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
     border-bottom: 1px solid var(--border);
-    padding: 1.5rem var(--section-px);
-    gap: 1.25rem;
+    padding: 1.25rem var(--section-px);
+    gap: 1.1rem;
     align-items: flex-start;
-    transform: translateY(-110%);
+    transform: translateY(-130%);
     transition: transform 0.3s ease;
+    box-shadow: 0 12px 28px -18px rgba(0,0,0,0.35);
   }
   .nav-links.open { transform: translateY(0); }
   .menu-toggle { display: inline-flex; }
