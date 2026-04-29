@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FlowFin · Finanzas personales y familiares — ACACIA</title>
+  <meta name="description" content="Visualiza ingresos, gastos y metas financieras con seguimiento personal o compartido en tiempo real. Prueba FlowFin gratis 30 días." />
+  <link rel="canonical" href="https://acaciaco.com.mx/apps/flowfin" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_MX" />
+  <meta property="og:url" content="https://acaciaco.com.mx/apps/flowfin" />
+  <meta property="og:title" content="FlowFin · Finanzas personales y familiares — ACACIA" />
+  <meta property="og:description" content="Visualiza ingresos, gastos y metas financieras con seguimiento personal o compartido en tiempo real. Prueba FlowFin gratis 30 días." />
+  <meta property="og:image" content="https://acaciaco.com.mx/assets/flowfin-logo.png" />
+  <meta property="og:site_name" content="ACACIA Consultoría" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="FlowFin · Finanzas personales y familiares — ACACIA" />
+  <meta name="twitter:description" content="Visualiza ingresos, gastos y metas financieras con seguimiento personal o compartido en tiempo real. Prueba FlowFin gratis 30 días." />
+  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/flowfin-logo.png" />
+
+  <link rel="icon" type="image/jpeg" sizes="32x32" href="/assets/acacia-logo.jpg" />
+  <link rel="icon" type="image/jpeg" sizes="192x192" href="/assets/Logo_ACACIA_HighRes.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('acacia-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/styles/base.css" />
+
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "FlowFin",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "MXN",
+        "description": "30 días de prueba gratuita"
+      },
+      "provider": {
+        "@type": "Organization",
+        "name": "ACACIA Consultoría",
+        "url": "https://acaciaco.com.mx"
+      },
+      "description": "App de finanzas personales, de pareja y familiares con presupuesto, metas de ahorro y seguimiento compartido en tiempo real."
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://acaciaco.com.mx/" },
+        { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://acaciaco.com.mx/#apps" },
+        { "@type": "ListItem", "position": 3, "name": "FlowFin", "item": "https://acaciaco.com.mx/apps/flowfin" }
+      ]
+    }
+  ]
+  </script>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <header class="site-nav" role="banner">
+    <div class="nav-inner">
+      <a href="/" class="brand" aria-label="ACACIA inicio">
+        <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+        ACACIA
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links" role="list">
+          <li><a href="/#como-trabajamos">Soluciones</a></li>
+          <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="/#apps" aria-current="page">Apps</a></li>
+          <li><a href="/#servicios">Servicios</a></li>
+          <li><a href="/#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+
+        <div class="currency-toggle" role="group" aria-label="Moneda">
+          <button data-currency="MXN" aria-pressed="true" class="active">MXN</button>
+          <button data-currency="USD" aria-pressed="false">USD</button>
+        </div>
+
+        <a href="/contacto" class="btn btn-primary btn-sm nav-cta">Iniciar</a>
+
+        <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero section product-hero" aria-labelledby="ff-h1">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-copy reveal">
+            <div class="product-mark">
+              <img src="/assets/flowfin-logo.png" alt="FlowFin logo" width="56" height="56" />
+              <span class="name">FlowFin</span>
+            </div>
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Disponible · 30 días gratis</span>
+            <h1 id="ff-h1"><span class="accent">Claridad</span> financiera para ti, tu pareja o tu familia.</h1>
+            <p class="lead">Registra ingresos, categoriza gastos y visualiza tu salud financiera en tiempo real. Solo o en equipo.</p>
+            <div class="hero-ctas">
+              <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20FlowFin%2030%20d%C3%ADas%20gratis" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Empezar gratis 30 días</a>
+              <a href="/#apps" class="btn btn-ghost">← Volver a soluciones</a>
+            </div>
+          </div>
+
+          <div class="hero-visual reveal" aria-hidden="true">
+            <div class="mock">
+              <div class="mock-head">
+                <div class="dots"><span></span><span></span><span></span></div>
+                <span class="title">FlowFin · Presupuesto Abril 2026</span>
+              </div>
+              <div class="balance-row">
+                <div class="balance-card income">
+                  <div class="lbl">Ingresos</div>
+                  <div class="val">$20,000</div>
+                </div>
+                <div class="balance-card expense">
+                  <div class="lbl">Gastos</div>
+                  <div class="val">$20,000</div>
+                </div>
+                <div class="balance-card balance">
+                  <div class="lbl">Saldo</div>
+                  <div class="val">$0</div>
+                </div>
+              </div>
+              <div class="cat-row">
+                <span class="lbl">Vivienda</span>
+                <span class="bar"><span style="width:32%"></span></span>
+                <span class="amt">$6,400</span>
+              </div>
+              <div class="cat-row">
+                <span class="lbl">Alimentación</span>
+                <span class="bar c2"><span style="width:22%"></span></span>
+                <span class="amt">$4,400</span>
+              </div>
+              <div class="cat-row">
+                <span class="lbl">Transporte</span>
+                <span class="bar c3"><span style="width:14%"></span></span>
+                <span class="amt">$2,800</span>
+              </div>
+              <div class="cat-row">
+                <span class="lbl">Salud</span>
+                <span class="bar c4"><span style="width:9%"></span></span>
+                <span class="amt">$1,800</span>
+              </div>
+              <div class="cat-row">
+                <span class="lbl">Entretenimiento</span>
+                <span class="bar c5"><span style="width:7%"></span></span>
+                <span class="amt">$1,400</span>
+              </div>
+              <div class="cat-row">
+                <span class="lbl">Ahorro</span>
+                <span class="bar c6"><span style="width:16%"></span></span>
+                <span class="amt">$3,200</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section" id="features" aria-labelledby="ff-feat-h2">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Funcionalidades</span>
+          <h2 id="ff-feat-h2">Finanzas claras, sin complicaciones.</h2>
+          <p>Una herramienta diseñada para que entiendas a dónde va tu dinero y hacia dónde quieres llevarlo.</p>
+        </div>
+        <div class="features-grid">
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+            <h3>Presupuesto mensual</h3>
+            <p>Define cuánto puedes gastar en cada categoría y visualiza tu avance en tiempo real.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+            <h3>Cuenta compartida</h3>
+            <p>Ideal para parejas y familias. Todos ven el mismo tablero, sin conflictos de información.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
+            <h3>Metas de ahorro</h3>
+            <p>Define una meta, asigna un monto mensual y sigue tu progreso hasta llegar.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
+            <h3>Categorías personalizables</h3>
+            <p>Crea tus propias categorías o usa las predefinidas. Tu sistema, tus reglas.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8L13 13.7l-3-3L6 14.7"/></svg></span>
+            <h3>Histórico completo</h3>
+            <p>Revisa cualquier mes anterior para entender cómo han evolucionado tus finanzas.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+            <h3>Sin conexión bancaria</h3>
+            <p>No necesita acceso a tu banco. Tú registras, tú controlas.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="section" id="pricing" aria-labelledby="ff-price-h2">
+      <div class="container">
+        <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Precio</span>
+          <h2 id="ff-price-h2">Precio simple, sin sorpresas.</h2>
+        </div>
+        <div class="price-card price-single featured reveal">
+          <span class="badge-top">Más popular</span>
+          <h3>FlowFin</h3>
+          <div class="amount">
+            <span data-price="190">$190 MXN</span>
+            <span class="unit"> / mes</span>
+          </div>
+          <p class="sub">o <span data-price="1900">$1,900 MXN</span> / año (2 meses gratis)</p>
+          <ul class="features">
+            <li>Cuentas ilimitadas</li>
+            <li>Hasta 3 usuarios</li>
+            <li>Metas de ahorro</li>
+            <li>Historial completo</li>
+            <li>30 días gratis</li>
+          </ul>
+          <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20FlowFin%2030%20d%C3%ADas%20gratis" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Empezar gratis</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIAL -->
+    <section class="section" aria-labelledby="ff-test-h2">
+      <div class="container">
+        <h2 id="ff-test-h2" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Testimonio</h2>
+        <div class="testimonial-single reveal">
+          <blockquote>“FlowFin nos dio claridad financiera en semanas con una interfaz simple.”</blockquote>
+          <cite><strong>Luis Hernández</strong> Usuario final</cite>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA STRIP -->
+    <section class="cta-section section" id="contacto" aria-labelledby="ff-cta-h2">
+      <div class="container">
+        <div class="reveal">
+          <h2 id="ff-cta-h2">¿Listo para arrancar?</h2>
+          <p>Empieza con tu cuenta personal o invita a tu pareja o familia. 30 días gratis, sin tarjeta.</p>
+          <div class="btns">
+            <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20FlowFin%2030%20d%C3%ADas%20gratis" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Hablar por WhatsApp</a>
+            <a href="mailto:contacto@acaciaco.com.mx" class="btn btn-ghost">Escribir por correo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-grid">
+      <div class="col-brand">
+        <a href="/" class="brand" aria-label="ACACIA inicio">
+          <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+          ACACIA
+        </a>
+        <p>Tecnología, consultoría y soluciones digitales para operaciones que buscan claridad y crecimiento.</p>
+      </div>
+      <div>
+        <h4>Apps</h4>
+        <ul>
+          <li><a href="/apps/stockflow">StockFlow</a></li>
+          <li><a href="/apps/flowfin">FlowFin</a></li>
+          <li><a href="/apps/puntos-plus">Puntos+</a></li>
+          <li><a href="/apps/liuma">LIUMA</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="/#servicios">Consultoría</a></li>
+          <li><a href="/#servicios">Implementación</a></li>
+          <li><a href="/#servicios">Desarrollo</a></li>
+          <li><a href="/#servicios">Precios</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>ACACIA</h4>
+        <ul>
+          <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+          <li><a href="/legal/privacidad">Privacidad</a></li>
+          <li><a href="/legal/terminos">Términos</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 ACACIA · Todos los derechos reservados</span>
+      <a href="mailto:contacto@acaciaco.com.mx">contacto@acaciaco.com.mx</a>
+    </div>
+  </footer>
+
+  <!-- COOKIE BANNER -->
+  <div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Aviso de cookies" aria-live="polite">
+    <h4>Cookies y privacidad</h4>
+    <p>Usamos cookies para mejorar tu experiencia. Consulta nuestra <a href="/legal/privacidad">política de privacidad</a>.</p>
+    <div class="actions">
+      <button class="btn btn-primary btn-sm" data-cookies="all">Aceptar</button>
+      <button class="btn btn-ghost btn-sm" data-cookies="essential">Solo esenciales</button>
+    </div>
+  </div>
+
+  <script src="/scripts/shared.js"></script>
+</body>
+</html>

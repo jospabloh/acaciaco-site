@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StockFlow · Control de inventario y cotizaciones — ACACIA</title>
+  <meta name="description" content="Controla inventario, cotizaciones y movimientos con trazabilidad completa. Prueba StockFlow gratis 30 días. Solución para operaciones comerciales en México." />
+  <link rel="canonical" href="https://acaciaco.com.mx/apps/stockflow" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_MX" />
+  <meta property="og:url" content="https://acaciaco.com.mx/apps/stockflow" />
+  <meta property="og:title" content="StockFlow · Control de inventario y cotizaciones — ACACIA" />
+  <meta property="og:description" content="Controla inventario, cotizaciones y movimientos con trazabilidad completa. Prueba StockFlow gratis 30 días." />
+  <meta property="og:image" content="https://acaciaco.com.mx/assets/stockflow-logo.png" />
+  <meta property="og:site_name" content="ACACIA Consultoría" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="StockFlow · Control de inventario y cotizaciones — ACACIA" />
+  <meta name="twitter:description" content="Controla inventario, cotizaciones y movimientos con trazabilidad completa. Prueba StockFlow gratis 30 días." />
+  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/stockflow-logo.png" />
+
+  <link rel="icon" type="image/jpeg" sizes="32x32" href="/assets/acacia-logo.jpg" />
+  <link rel="icon" type="image/jpeg" sizes="192x192" href="/assets/Logo_ACACIA_HighRes.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('acacia-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/styles/base.css" />
+
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "StockFlow",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "MXN",
+        "description": "30 días de prueba gratuita"
+      },
+      "provider": {
+        "@type": "Organization",
+        "name": "ACACIA Consultoría",
+        "url": "https://acaciaco.com.mx"
+      },
+      "description": "Sistema de control de inventario, cotizaciones y movimientos con trazabilidad completa para operaciones comerciales."
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://acaciaco.com.mx/" },
+        { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://acaciaco.com.mx/#apps" },
+        { "@type": "ListItem", "position": 3, "name": "StockFlow", "item": "https://acaciaco.com.mx/apps/stockflow" }
+      ]
+    }
+  ]
+  </script>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <header class="site-nav" role="banner">
+    <div class="nav-inner">
+      <a href="/" class="brand" aria-label="ACACIA inicio">
+        <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+        ACACIA
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links" role="list">
+          <li><a href="/#como-trabajamos">Soluciones</a></li>
+          <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="/#apps" aria-current="page">Apps</a></li>
+          <li><a href="/#servicios">Servicios</a></li>
+          <li><a href="/#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+
+        <div class="currency-toggle" role="group" aria-label="Moneda">
+          <button data-currency="MXN" aria-pressed="true" class="active">MXN</button>
+          <button data-currency="USD" aria-pressed="false">USD</button>
+        </div>
+
+        <a href="/contacto" class="btn btn-primary btn-sm nav-cta">Iniciar</a>
+
+        <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero section product-hero" aria-labelledby="sf-h1">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-copy reveal">
+            <div class="product-mark">
+              <img src="/assets/stockflow-logo.png" alt="StockFlow logo" width="56" height="56" />
+              <span class="name">StockFlow</span>
+            </div>
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Disponible · 30 días gratis</span>
+            <h1 id="sf-h1">Control de inventario y cotizaciones con <span class="accent">trazabilidad</span> completa.</h1>
+            <p class="lead">Deja de trabajar a ciegas. StockFlow te da visibilidad real sobre tu stock, movimientos y cotizaciones desde el primer día.</p>
+            <div class="hero-ctas">
+              <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20StockFlow%2030%20d%C3%ADas%20gratis" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Empezar gratis 30 días</a>
+              <a href="/#apps" class="btn btn-ghost">← Volver a soluciones</a>
+            </div>
+          </div>
+
+          <div class="hero-visual reveal" aria-hidden="true">
+            <div class="mock">
+              <div class="mock-head">
+                <div class="dots"><span></span><span></span><span></span></div>
+                <span class="title">StockFlow · Inventario</span>
+                <span class="search">🔍 Buscar</span>
+                <span class="pill">+ Agregar</span>
+              </div>
+              <table class="mock-table">
+                <thead>
+                  <tr>
+                    <th>SKU</th>
+                    <th>Producto</th>
+                    <th class="num">Stock</th>
+                    <th class="num">Mín</th>
+                    <th>Estado</th>
+                    <th class="num">Precio</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>SF-001</td><td>Laptop Pro 14"</td><td class="num">24</td><td class="num">5</td><td><span class="tag ok">En stock</span></td><td class="num">$18,500</td></tr>
+                  <tr><td>SF-002</td><td>Monitor 27" 4K</td><td class="num">3</td><td class="num">5</td><td><span class="tag warn">Stock bajo</span></td><td class="num">$8,200</td></tr>
+                  <tr><td>SF-003</td><td>Teclado inalámbrico</td><td class="num">0</td><td class="num">10</td><td><span class="tag danger">Agotado</span></td><td class="num">$1,490</td></tr>
+                  <tr><td>SF-004</td><td>Mouse ergonómico</td><td class="num">41</td><td class="num">8</td><td><span class="tag ok">En stock</span></td><td class="num">$890</td></tr>
+                  <tr><td>SF-005</td><td>Docking Station</td><td class="num">7</td><td class="num">3</td><td><span class="tag ok">En stock</span></td><td class="num">$4,200</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section" id="features" aria-labelledby="sf-feat-h2">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Funcionalidades</span>
+          <h2 id="sf-feat-h2">Todo lo que necesitas para operar con claridad.</h2>
+          <p>Sin hojas de cálculo dispersas, sin números sin actualizar, sin sorpresas en cierre de mes.</p>
+        </div>
+        <div class="features-grid">
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+            <h3>Inventario en tiempo real</h3>
+            <p>Consulta stock disponible, mínimos y movimientos sin depender de hojas de cálculo.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg></span>
+            <h3>Cotizaciones integradas</h3>
+            <p>Genera cotizaciones desde el inventario y conviértelas en órdenes con un clic.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+            <h3>Trazabilidad completa</h3>
+            <p>Historial de cada movimiento: entradas, salidas, ajustes y quién los hizo.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
+            <h3>Alertas de reposición</h3>
+            <p>Notificaciones automáticas cuando un producto baja de su mínimo definido.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+            <h3>Multi-sucursal</h3>
+            <p>Gestiona varios almacenes o puntos de venta desde una sola cuenta.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
+            <h3>Migración incluida</h3>
+            <p>Importamos tu inventario actual sin costo. Arrancas con tu data, no desde cero.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="section" id="pricing" aria-labelledby="sf-price-h2">
+      <div class="container">
+        <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Precio</span>
+          <h2 id="sf-price-h2">Precio simple, sin sorpresas.</h2>
+        </div>
+        <div class="price-card price-single featured reveal">
+          <span class="badge-top">Más popular</span>
+          <h3>StockFlow</h3>
+          <div class="amount">
+            <span data-price="490">$490 MXN</span>
+            <span class="unit"> / mes</span>
+          </div>
+          <p class="sub">o <span data-price="4900">$4,900 MXN</span> / año (2 meses gratis)</p>
+          <ul class="features">
+            <li>Inventario ilimitado</li>
+            <li>Cotizaciones ilimitadas</li>
+            <li>Multi-usuario (hasta 5)</li>
+            <li>Soporte por WhatsApp</li>
+            <li>30 días gratis</li>
+            <li>Migración incluida</li>
+          </ul>
+          <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20StockFlow%2030%20d%C3%ADas%20gratis" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Empezar gratis</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIAL -->
+    <section class="section" aria-labelledby="sf-test-h2">
+      <div class="container">
+        <h2 id="sf-test-h2" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Testimonio</h2>
+        <div class="testimonial-single reveal">
+          <blockquote>“Con StockFlow dejamos de trabajar a ciegas y aceleramos decisiones de compra.”</blockquote>
+          <cite><strong>Mariana López</strong> Operaciones</cite>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA STRIP -->
+    <section class="cta-section section" id="contacto" aria-labelledby="sf-cta-h2">
+      <div class="container">
+        <div class="reveal">
+          <h2 id="sf-cta-h2">¿Listo para arrancar?</h2>
+          <p>Te acompañamos en la activación, importamos tu data y arrancas con tu equipo desde el primer día.</p>
+          <div class="btns">
+            <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20StockFlow%2030%20d%C3%ADas%20gratis" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Hablar por WhatsApp</a>
+            <a href="mailto:contacto@acaciaco.com.mx" class="btn btn-ghost">Escribir por correo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-grid">
+      <div class="col-brand">
+        <a href="/" class="brand" aria-label="ACACIA inicio">
+          <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+          ACACIA
+        </a>
+        <p>Tecnología, consultoría y soluciones digitales para operaciones que buscan claridad y crecimiento.</p>
+      </div>
+      <div>
+        <h4>Apps</h4>
+        <ul>
+          <li><a href="/apps/stockflow">StockFlow</a></li>
+          <li><a href="/apps/flowfin">FlowFin</a></li>
+          <li><a href="/apps/puntos-plus">Puntos+</a></li>
+          <li><a href="/apps/liuma">LIUMA</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="/#servicios">Consultoría</a></li>
+          <li><a href="/#servicios">Implementación</a></li>
+          <li><a href="/#servicios">Desarrollo</a></li>
+          <li><a href="/#servicios">Precios</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>ACACIA</h4>
+        <ul>
+          <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+          <li><a href="/legal/privacidad">Privacidad</a></li>
+          <li><a href="/legal/terminos">Términos</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 ACACIA · Todos los derechos reservados</span>
+      <a href="mailto:contacto@acaciaco.com.mx">contacto@acaciaco.com.mx</a>
+    </div>
+  </footer>
+
+  <!-- COOKIE BANNER -->
+  <div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Aviso de cookies" aria-live="polite">
+    <h4>Cookies y privacidad</h4>
+    <p>Usamos cookies para mejorar tu experiencia. Consulta nuestra <a href="/legal/privacidad">política de privacidad</a>.</p>
+    <div class="actions">
+      <button class="btn btn-primary btn-sm" data-cookies="all">Aceptar</button>
+      <button class="btn btn-ghost btn-sm" data-cookies="essential">Solo esenciales</button>
+    </div>
+  </div>
+
+  <script src="/scripts/shared.js"></script>
+</body>
+</html>
