@@ -786,7 +786,7 @@
 
   const setupCookieConsent = () => {
     const CONSENT_KEY = 'acacia_cookie_consent';
-    if (localStorage.getItem(CONSENT_KEY)) return;
+    if (getStored(CONSENT_KEY, '')) return;
 
     const overlay = document.createElement('div');
     overlay.className = 'cookie-overlay';
@@ -818,7 +818,7 @@
     document.body.style.overflow = 'hidden';
 
     const dismiss = (value) => {
-      localStorage.setItem(CONSENT_KEY, value);
+      setStored(CONSENT_KEY, value);
       overlay.remove();
       document.body.style.overflow = '';
     };
