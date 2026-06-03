@@ -11,6 +11,36 @@
       "source": "/bienvenida",
       "destination": "/",
       "permanent": false
+    },
+    {
+      "source": "/stockflow",
+      "destination": "/apps/stockflow",
+      "permanent": true
+    },
+    {
+      "source": "/flowfin",
+      "destination": "/apps/flowfin",
+      "permanent": true
+    },
+    {
+      "source": "/liuma",
+      "destination": "/apps/liuma",
+      "permanent": true
+    },
+    {
+      "source": "/puntosplus",
+      "destination": "/apps/puntos-plus",
+      "permanent": true
+    },
+    {
+      "source": "/privacy",
+      "destination": "/legal/privacidad",
+      "permanent": true
+    },
+    {
+      "source": "/terms",
+      "destination": "/legal/terminos",
+      "permanent": true
     }
   ],
   "headers": [
@@ -28,6 +58,15 @@
         {
           "key": "X-Frame-Options",
           "value": "SAMEORIGIN"
+        }
+      ]
+    },
+    {
+      "source": "/(pricing|trial|faq|apps|bolsa-empleo|underconstruction)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
         }
       ]
     },
