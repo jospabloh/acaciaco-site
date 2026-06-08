@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Herramientas gratis · Software libre y útil — ACACIA</title>
+  <meta name="description" content="Herramientas web gratis hechas por ACACIA: úsalas sin instalar y sin cuenta. Empezando por Plink FX, un conversor de divisas para viajes con registro de gastos." />
+  <link rel="canonical" href="https://acaciaco.com.mx/freeware" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_MX" />
+  <meta property="og:url" content="https://acaciaco.com.mx/freeware" />
+  <meta property="og:title" content="Herramientas gratis · Software libre y útil — ACACIA" />
+  <meta property="og:description" content="Herramientas web gratis hechas por ACACIA: úsalas sin instalar y sin cuenta." />
+  <meta property="og:image" content="https://acaciaco.com.mx/assets/acacia-logo.jpg" />
+  <meta property="og:site_name" content="ACACIA Consultoría" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Herramientas gratis · Software libre y útil — ACACIA" />
+  <meta name="twitter:description" content="Herramientas web gratis hechas por ACACIA: úsalas sin instalar y sin cuenta." />
+  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/acacia-logo.jpg" />
+
+  <link rel="icon" type="image/jpeg" sizes="32x32" href="/assets/acacia-logo.jpg" />
+  <link rel="icon" type="image/jpeg" sizes="192x192" href="/assets/Logo_ACACIA_HighRes.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('acacia-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/styles/base.css" />
+
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Herramientas gratis de ACACIA",
+      "url": "https://acaciaco.com.mx/freeware",
+      "description": "Colección de herramientas web gratuitas creadas por ACACIA Consultoría.",
+      "isPartOf": { "@type": "WebSite", "name": "ACACIA Consultoría", "url": "https://acaciaco.com.mx" }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "url": "https://acaciaco.com.mx/freeware/plink-fx",
+          "name": "Plink FX — Conversor de divisas para viajes"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://acaciaco.com.mx/" },
+        { "@type": "ListItem", "position": 2, "name": "Herramientas gratis", "item": "https://acaciaco.com.mx/freeware" }
+      ]
+    }
+  ]
+  </script>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <header class="site-nav" role="banner">
+    <div class="nav-inner">
+      <a href="/" class="brand" aria-label="ACACIA inicio">
+        <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+        ACACIA
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links" role="list">
+          <li><a href="/#como-trabajamos">Soluciones</a></li>
+          <li><a href="/#apps">Apps</a></li>
+          <li><a href="/freeware" aria-current="page">Gratis</a></li>
+          <li><a href="/servicios">Servicios</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+
+        <a href="/contacto" class="btn btn-primary btn-sm nav-cta">Iniciar</a>
+
+        <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero section" aria-labelledby="fw-h1">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Herramientas gratis</span>
+          <h1 id="fw-h1">Software útil, <span class="accent">gratis</span> y sin complicaciones.</h1>
+          <p>Pequeñas herramientas web hechas por ACACIA. Las usas directo en el navegador, sin instalar y sin cuenta. Viven en nuestro dominio, así que siempre están disponibles aquí.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOOLS GRID -->
+    <section class="section" aria-labelledby="fw-tools-h2">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Disponible ahora</span>
+          <h2 id="fw-tools-h2">Elige una herramienta y empieza.</h2>
+        </div>
+        <div class="apps-grid">
+          <a href="/freeware/plink-fx" class="app-card reveal">
+            <div class="head">
+              <div class="logo">
+                <img src="/freeware/plink-fx/favicon.svg" alt="Plink FX" width="40" height="40" />
+              </div>
+              <span class="badge available">Gratis</span>
+            </div>
+            <h3>Plink FX</h3>
+            <p>Conversor de divisas rápido para viajes, con registro de gastos opcional. Ideal para llevar tus cuentas en otra moneda.</p>
+            <span class="more">Abrir herramienta →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-grid">
+      <div class="col-brand">
+        <a href="/" class="brand" aria-label="ACACIA inicio">
+          <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+          ACACIA
+        </a>
+        <p>Tecnología, consultoría y soluciones digitales para operaciones que buscan claridad y crecimiento.</p>
+      </div>
+      <div>
+        <h4>Gratis</h4>
+        <ul>
+          <li><a href="/freeware/plink-fx">Plink FX</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Apps</h4>
+        <ul>
+          <li><a href="/apps/stockflow">StockFlow</a></li>
+          <li><a href="/apps/flowfin">FlowFin</a></li>
+          <li><a href="/apps/puntos-plus">Puntos+</a></li>
+          <li><a href="/apps/liuma">LIUMA</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>ACACIA</h4>
+        <ul>
+          <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+          <li><a href="/legal/privacidad">Privacidad</a></li>
+          <li><a href="/legal/terminos">Términos</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 ACACIA · Todos los derechos reservados</span>
+      <a href="mailto:contacto@acaciaco.com.mx">contacto@acaciaco.com.mx</a>
+    </div>
+  </footer>
+
+  <!-- COOKIE BANNER -->
+  <div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Aviso de cookies" aria-live="polite">
+    <h4>Cookies y privacidad</h4>
+    <p>Usamos cookies para mejorar tu experiencia. Consulta nuestra <a href="/legal/privacidad">política de privacidad</a>.</p>
+    <div class="actions">
+      <button class="btn btn-primary btn-sm" data-cookies="all">Aceptar</button>
+      <button class="btn btn-ghost btn-sm" data-cookies="essential">Solo esenciales</button>
+    </div>
+  </div>
+
+  <script src="/scripts/shared.js"></script>
+</body>
+</html>
