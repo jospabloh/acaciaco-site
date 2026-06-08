@@ -226,10 +226,64 @@
   .lang-seg button { padding: 7px 10px; font-size: 12.5px; min-width: 36px; }
   .section-title { margin: 30px 0 8px; font-size: 18px; }
   @media (max-width: 480px) { .topbar-actions .ghost-link { display: none; } }
+
+  /* Contenido estático rastreable por buscadores */
+  .seo-article { max-width: 760px; margin: 0 auto; padding: 8px 20px 56px; }
+  .seo-article h2 { font-size: 22px; letter-spacing: -0.02em; margin: 34px 0 10px; }
+  .seo-article h3 { font-size: 16px; margin: 22px 0 6px; }
+  .seo-article p, .seo-article li { color: var(--ink-2); font-size: 14.5px; line-height: 1.65; }
+  .seo-article ul { padding-left: 18px; }
+  .seo-article .formula { display: block; background: var(--paper-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin: 10px 0; font-variant-numeric: tabular-nums; color: var(--ink); font-size: 14px; }
+  .seo-article table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+  .seo-article th, .seo-article td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+  .seo-article th { color: var(--ink); font-weight: 600; }
+  .seo-article td { color: var(--ink-2); }
+  .seo-article caption { caption-side: bottom; color: var(--ink-3); font-size: 12px; padding-top: 8px; text-align: left; }
 </style>
 </head>
 <body>
   <div id="root"></div>
+
+  <article class="seo-article">
+    <h2>Cómo calcular tu finiquito, aguinaldo y vacaciones en 2026</h2>
+    <p>Esta <strong>calculadora de finiquito</strong> gratuita estima de forma rápida lo que te corresponde por ley al terminar una relación laboral en México: <strong>finiquito</strong>, <strong>aguinaldo</strong> proporcional, <strong>vacaciones</strong> no disfrutadas y <strong>prima vacacional</strong>, conforme a la Ley Federal del Trabajo (LFT) y los valores oficiales de 2026. Todo el cálculo ocurre en tu navegador: tus datos no se guardan ni se envían a ningún servidor.</p>
+
+    <h3>¿Qué incluye el finiquito por renuncia?</h3>
+    <p>Cuando renuncias o termina tu contrato, el patrón debe pagarte un <strong>finiquito</strong> que incluye:</p>
+    <ul>
+      <li>Los días de salario pendientes del último periodo trabajado.</li>
+      <li>El <strong>aguinaldo proporcional</strong> a los días trabajados en el año.</li>
+      <li>Las <strong>vacaciones no disfrutadas</strong> y su <strong>prima vacacional</strong> (mínimo 25%).</li>
+    </ul>
+    <p>El finiquito es distinto de la <strong>liquidación</strong>: esta última solo aplica en un despido injustificado e incluye además tres meses de salario, 20 días por año trabajado y la prima de antigüedad.</p>
+
+    <h3>¿Cómo se calcula el aguinaldo?</h3>
+    <p>El aguinaldo mínimo es de 15 días de salario (LFT, art. 87) y se paga a más tardar el 20 de diciembre. Si no trabajaste el año completo, se paga proporcional:</p>
+    <span class="formula">Aguinaldo = salario diario × 15 × (días trabajados ÷ 365)</span>
+    <p>Ejemplo: con un sueldo mensual de $12,000 (salario diario de $400) y un año completo trabajado, el aguinaldo es 400 × 15 = <strong>$6,000</strong>.</p>
+
+    <h3>¿Cuántos días de vacaciones me corresponden? (Tabla 2026)</h3>
+    <p>Con la reforma de «Vacaciones Dignas» (LFT, art. 76), desde el primer año te corresponden 12 días, que aumentan 2 por año hasta llegar a 20 en el quinto año; después suben 2 días por cada 5 años de antigüedad. Además se paga una prima vacacional mínima del 25%.</p>
+    <table>
+      <caption>Días de vacaciones por antigüedad conforme a la Ley Federal del Trabajo (2026).</caption>
+      <thead><tr><th scope="col">Antigüedad</th><th scope="col">Días de vacaciones</th></tr></thead>
+      <tbody>
+        <tr><td>1 año</td><td>12 días</td></tr>
+        <tr><td>2 años</td><td>14 días</td></tr>
+        <tr><td>3 años</td><td>16 días</td></tr>
+        <tr><td>4 años</td><td>18 días</td></tr>
+        <tr><td>5 años</td><td>20 días</td></tr>
+        <tr><td>6 a 10 años</td><td>22 días</td></tr>
+        <tr><td>11 a 15 años</td><td>24 días</td></tr>
+        <tr><td>16 a 20 años</td><td>26 días</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Salario mínimo 2026 (referencia)</h3>
+    <p>Los salarios mínimos vigentes desde el 1 de enero de 2026 (CONASAMI) son de <strong>$315.04</strong> diarios en la zona general y <strong>$440.87</strong> diarios en la Zona Libre de la Frontera Norte.</p>
+
+    <p><em>Aviso: esta herramienta ofrece una estimación informativa basada en la LFT y no sustituye la asesoría de un profesional. Para casos de ISR, prima de antigüedad o despido, consulta a un contador o abogado laboral.</em></p>
+  </article>
 
   <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
