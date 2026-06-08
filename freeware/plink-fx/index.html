@@ -48,6 +48,15 @@
       { "@type": "ListItem", "position": 2, "name": "Herramientas gratis", "item": "https://acaciaco.com.mx/freeware" },
       { "@type": "ListItem", "position": 3, "name": "Plink FX", "item": "https://acaciaco.com.mx/freeware/plink-fx" }
     ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "¿Cómo funciona el conversor de divisas para viajes?", "acceptedAnswer": { "@type": "Answer", "text": "Eliges hasta cinco monedas y escribes una cantidad: Plink FX la convierte al instante con el tipo de cambio más reciente. Puedes registrar tus gastos del viaje para llevar el control en tu propia moneda." } },
+      { "@type": "Question", "name": "¿Necesito instalar algo o crear una cuenta?", "acceptedAnswer": { "@type": "Answer", "text": "No. Plink FX funciona directamente en el navegador, gratis, sin instalar nada y sin necesidad de crear una cuenta." } },
+      { "@type": "Question", "name": "¿Funciona sin conexión?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Una vez cargados los tipos de cambio, puedes seguir convirtiendo aunque te quedes sin internet durante el viaje; las tasas se actualizan cuando vuelves a conectarte." } }
+    ]
   }
 ]
 </script>
@@ -1931,12 +1940,39 @@
     .region-bar-inner  { padding-inline: 14px; }
     .trip-header       { padding-inline: 14px; }
   }
+  /* Contenido estático rastreable por buscadores (auto claro/oscuro) */
+  .seo-article { max-width: 720px; margin: 0 auto; padding: 10px 24px 48px;
+    font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #41434a; }
+  .seo-article h2 { font-size: 22px; letter-spacing: -0.01em; margin: 30px 0 10px; color: #1f2127; }
+  .seo-article h3 { font-size: 16px; margin: 22px 0 6px; color: #1f2127; }
+  .seo-article p, .seo-article li { font-size: 14.5px; line-height: 1.65; }
+  .seo-article ul { padding-left: 18px; }
+  @media (prefers-color-scheme: dark) {
+    .seo-article { color: #b9bcc4; }
+    .seo-article h2, .seo-article h3 { color: #eef0f4; }
+  }
 </style>
 </head>
 <body>
   <div id="root"></div>
 
   <div id="acacia-promo" style="padding-bottom:28px"></div>
+
+  <article class="seo-article">
+    <h2>Conversor de divisas para viajes, gratis y sin cuenta</h2>
+    <p>Plink FX convierte entre varias monedas al instante con el tipo de cambio más reciente, pensado para viajeros: lleva el control de tus gastos en tu propia moneda y planea tu presupuesto sin sorpresas. Funciona en el navegador, sin instalar nada y sin crear una cuenta.</p>
+    <h3>¿Para qué sirve?</h3>
+    <ul>
+      <li><strong>Convertir precios al vuelo</strong> mientras compras o comes en el extranjero.</li>
+      <li><strong>Registrar gastos del viaje</strong> y ver cuánto llevas en tu moneda local.</li>
+      <li><strong>Comparar hasta cinco monedas</strong> a la vez en un solo lugar.</li>
+    </ul>
+    <h3>¿Funciona sin conexión?</h3>
+    <p>Sí. Una vez cargadas las tasas, puedes seguir convirtiendo aunque te quedes sin internet; los tipos de cambio se actualizan cuando vuelves a conectarte.</p>
+    <h3>¿Es gratis?</h3>
+    <p>Totalmente. Plink FX es una de las herramientas gratuitas de ACACIA: sin costo, sin marcas de agua y sin necesidad de registro.</p>
+  </article>
 
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
