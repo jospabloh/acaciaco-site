@@ -33,6 +33,16 @@
       "permanent": true
     },
     {
+      "source": "/plink-fx",
+      "destination": "/freeware/plink-fx",
+      "permanent": true
+    },
+    {
+      "source": "/freeware/plink-FX",
+      "destination": "/freeware/plink-fx",
+      "permanent": true
+    },
+    {
       "source": "/privacy",
       "destination": "/legal/privacidad",
       "permanent": true
