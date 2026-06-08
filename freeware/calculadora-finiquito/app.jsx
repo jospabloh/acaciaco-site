@@ -17,7 +17,7 @@ const STRINGS = {
     theme_label: "Cambiar tema",
     lang_label: "Idioma",
     eyebrow: "Herramienta gratis",
-    h1_a: "Calculadora de finiquito, aguinaldo y vacaciones ",
+    h1_a: "Calculadora de finiquito y liquidación ",
     hero_p: "Estima lo que te corresponde conforme a la Ley Federal del Trabajo. Sin instalar, sin cuenta y sin compartir tus datos.",
     privacy_chip: "Todo se calcula en tu navegador. Nada se sube a internet.",
     tab_finiquito: "Finiquito",
@@ -74,6 +74,16 @@ const STRINGS = {
     total_finiquito: "Total del finiquito",
     fin_invalid: "Captura una fecha de ingreso y de baja válidas para ver el cálculo.",
     fin_disclaimer_html: "<strong>Finiquito ≠ Liquidación.</strong> Este cálculo es para <strong>renuncia o término de contrato</strong> e incluye lo que el patrón te debe (salarios, aguinaldo y vacaciones proporcionales + prima). La <strong>liquidación</strong> aplica solo en despido injustificado e incluye además 3 meses de salario, 20 días por año y prima de antigüedad.",
+    tab_liquidacion: "Liquidación",
+    liq_zona: "Zona (salario mínimo)", liq_zona_g: "General", liq_zona_f: "Frontera norte",
+    liq_include20: "Incluir 20 días por año", liq_include20_hint: "aplica en ciertos despidos",
+    group_finiquito: "Partes proporcionales (finiquito)",
+    r_sdi: "Salario diario integrado (SDI)",
+    r_indemn3: "3 meses de salario (90 días)", r_sdi_sub: "sobre el SDI",
+    r_20dias: "20 días por año de servicio",
+    r_prima_antig: "Prima de antigüedad", r_prima_antig_sub: "12 días/año, tope 2× SM",
+    total_liquidacion: "Total de la liquidación",
+    liq_note: "La liquidación aplica en despido injustificado: suma las partes proporcionales (finiquito) más la indemnización de 3 meses (90 días), 20 días por año de servicio y la prima de antigüedad. La indemnización se calcula sobre el salario diario integrado (SDI); la prima de antigüedad topa el salario a 2 veces el salario mínimo.",
     disclaimer_html: "<strong>Aviso:</strong> esta calculadora ofrece una estimación informativa basada en la LFT y los valores 2026 (salario mínimo general $315.04, frontera norte $440.87). No constituye asesoría legal ni contable. Para casos específicos —ISR, prima de antigüedad o despido— consulta a un profesional.",
     cta_h3: "¿Manejas nómina o RH en tu empresa?",
     cta_p: "En ACACIA automatizamos cálculos de nómina, finiquitos y prestaciones para PyMEs. Hablemos.",
@@ -97,7 +107,7 @@ const STRINGS = {
     theme_label: "Toggle theme",
     lang_label: "Language",
     eyebrow: "Free tool",
-    h1_a: "Severance, year-end bonus & vacation calculator ",
+    h1_a: "Severance & layoff pay calculator ",
     hero_p: "Estimate what you're owed under Mexico's Federal Labor Law (LFT). No install, no account, and your data stays private.",
     privacy_chip: "Everything is calculated in your browser. Nothing is uploaded.",
     tab_finiquito: "Severance",
@@ -151,6 +161,16 @@ const STRINGS = {
     total_finiquito: "Total severance",
     fin_invalid: "Enter valid start and end dates to see the result.",
     fin_disclaimer_html: "<strong>Severance (finiquito) ≠ Layoff pay (liquidación).</strong> This calculation is for <strong>resignation or end of contract</strong> and covers what the employer owes you (wages, prorated bonus and vacation + premium). <strong>Layoff pay</strong> applies only to unjustified dismissal and additionally includes 3 months of salary, 20 days per year and a seniority premium.",
+    tab_liquidacion: "Layoff pay",
+    liq_zona: "Zone (minimum wage)", liq_zona_g: "General", liq_zona_f: "Northern border",
+    liq_include20: "Include 20 days per year", liq_include20_hint: "applies in certain dismissals",
+    group_finiquito: "Prorated amounts (severance)",
+    r_sdi: "Integrated daily wage (SDI)",
+    r_indemn3: "3 months of salary (90 days)", r_sdi_sub: "on the SDI",
+    r_20dias: "20 days per year of service",
+    r_prima_antig: "Seniority premium", r_prima_antig_sub: "12 days/year, capped at 2× MW",
+    total_liquidacion: "Total layoff pay",
+    liq_note: "Layoff pay applies to unjustified dismissal: it adds the prorated amounts (severance) plus the 3-month indemnity (90 days), 20 days per year of service and the seniority premium. The indemnity is computed on the integrated daily wage (SDI); the seniority premium caps the wage at twice the minimum wage.",
     disclaimer_html: "<strong>Disclaimer:</strong> this calculator provides an informational estimate based on Mexico's LFT and 2026 figures (minimum wage $315.04 general, $440.87 northern border). It is not legal or accounting advice. For specific cases —income tax, seniority premium or dismissal— consult a professional.",
     cta_h3: "Do you run payroll or HR at your company?",
     cta_p: "At ACACIA we automate payroll, severance and benefits calculations for SMBs. Let's talk.",
@@ -437,6 +457,114 @@ function Finiquito() {
   );
 }
 
+/* ---------- Tab: Liquidación (despido injustificado) ---------- */
+function Liquidacion() {
+  const t = useT();
+  const [monto, setMonto] = useState("");
+  const [modo, setModo] = useState("mensual");
+  const [ingreso, setIngreso] = useState("");
+  const [baja, setBaja] = useState(todayISO());
+  const [diasSalario, setDiasSalario] = useState("0");
+  const [primaPct, setPrimaPct] = useState(String(PRIMA_VACACIONAL_MIN));
+  const [zona, setZona] = useState("general");
+  const [inc20, setInc20] = useState(true);
+  const [vacOverride, setVacOverride] = useState(null);
+
+  const sd = modo === "mensual" ? num(monto) / 30 : num(monto);
+  const dIng = parseDate(ingreso);
+  const dBaja = parseDate(baja);
+  const valid = dIng && dBaja && dBaja >= dIng;
+
+  const calc = useMemo(() => {
+    if (!valid) return null;
+    const antigYears = daysBetween(dIng, dBaja) / 365.25;
+    const antigEnt = Math.floor(antigYears);
+    const yearStart = new Date(dBaja.getFullYear(), 0, 1);
+    const start = dIng > yearStart ? dIng : yearStart;
+    const diasAnio = Math.min(366, Math.max(0, daysBetween(start, dBaja) + 1));
+    const entitlement = diasVacaciones(antigEnt >= 1 ? antigEnt : 1);
+    const lastAnniv = new Date(dIng); lastAnniv.setFullYear(dIng.getFullYear() + antigEnt);
+    const fracDays = Math.max(0, daysBetween(lastAnniv, dBaja));
+    const vacSug = Math.round(entitlement * (fracDays / 365) * 10) / 10;
+    return { antigYears, antigEnt, diasAnio, entitlement, vacSug };
+  }, [valid, ingreso, baja]);
+
+  const vacPendNum = vacOverride !== null ? num(vacOverride) : (calc ? calc.vacSug : 0);
+  const vacPendDisplay = vacOverride !== null ? vacOverride : (calc ? String(calc.vacSug) : "0");
+
+  const aguinaldoProp = calc ? sd * AGUINALDO_DIAS_MIN * (calc.diasAnio / 365) : 0;
+  const pagoVac = sd * vacPendNum;
+  const prima = pagoVac * (num(primaPct) / 100);
+  const salariosPend = sd * num(diasSalario);
+  const subFiniquito = salariosPend + aguinaldoProp + pagoVac + prima;
+
+  // Indemnización (sobre salario diario integrado) + prima de antigüedad (tope 2x SM)
+  const sdi = calc ? sd * (1 + AGUINALDO_DIAS_MIN / 365 + (calc.entitlement * (num(primaPct) / 100)) / 365) : sd;
+  const indemn3 = 90 * sdi;
+  const dias20 = inc20 && calc ? 20 * calc.antigYears * sdi : 0;
+  const sm = SALARIO_MINIMO_2026[zona === "frontera" ? "frontera" : "general"];
+  const salarioTopado = Math.min(sd, 2 * sm);
+  const primaAntig = calc ? 12 * calc.antigYears * salarioTopado : 0;
+
+  const total = subFiniquito + indemn3 + dias20 + primaAntig;
+
+  const rows = [
+    { k: t("r_seniority"), v: calc ? t("r_years", { y: calc.antigYears.toFixed(2) }) : "—" },
+    { k: t("group_finiquito"), sub: t("r_days_sub", { d: vacPendNum }) + " · " + t("tab_vacaciones").toLowerCase(), v: money(subFiniquito) },
+    { k: t("r_sdi"), v: money(sdi) },
+    { k: t("r_indemn3"), sub: t("r_sdi_sub"), v: money(indemn3) },
+  ];
+  if (inc20) rows.push({ k: t("r_20dias"), sub: t("r_sdi_sub"), v: money(dias20) });
+  rows.push({ k: t("r_prima_antig"), sub: t("r_prima_antig_sub"), v: money(primaAntig) });
+
+  const buildText = () =>
+    `${t("total_liquidacion")} 2026 (LFT)\n${t("r_seniority")}: ${calc ? calc.antigYears.toFixed(2) : 0}\n${t("group_finiquito")}: ${money(subFiniquito)}\n${t("r_sdi")}: ${money(sdi)}\n${t("r_indemn3")}: ${money(indemn3)}\n${inc20 ? t("r_20dias") + ": " + money(dias20) + "\n" : ""}${t("r_prima_antig")}: ${money(primaAntig)}\n${t("total_liquidacion")}: ${money(total)}\n\nacaciaco.com.mx/freeware/calculadora-finiquito`;
+
+  return (
+    <div className="card">
+      <div className="grid">
+        <SalaryInput monto={monto} setMonto={setMonto} modo={modo} setModo={setModo} />
+        <Field label={t("date_in")}>
+          <input type="date" value={ingreso} max={baja} onChange={(e) => { setIngreso(e.target.value); setVacOverride(null); }} />
+        </Field>
+        <Field label={t("date_out")} hint={t("date_out_hint")}>
+          <input type="date" value={baja} onChange={(e) => { setBaja(e.target.value); setVacOverride(null); }} />
+        </Field>
+        <Field label={t("days_pending")} hint={t("days_pending_hint")}>
+          <input type="number" inputMode="numeric" min="0" value={diasSalario} onChange={(e) => setDiasSalario(e.target.value)} />
+        </Field>
+        <Field label={t("vac_pending")} hint={t("vac_pending_hint")}>
+          <input type="number" inputMode="decimal" min="0" value={vacPendDisplay} onChange={(e) => setVacOverride(e.target.value)} />
+        </Field>
+        <Field label={t("liq_zona")}>
+          <select value={zona} onChange={(e) => setZona(e.target.value)}>
+            <option value="general">{t("liq_zona_g")}</option>
+            <option value="frontera">{t("liq_zona_f")}</option>
+          </select>
+        </Field>
+        <Field label={t("prima")} hint={t("prima_hint")}>
+          <input type="number" inputMode="decimal" min="25" value={primaPct} onChange={(e) => setPrimaPct(e.target.value)} />
+        </Field>
+        <div className="field" style={{ flexDirection: "row", alignItems: "center", gap: 9, alignSelf: "end" }}>
+          <input id="inc20" type="checkbox" checked={inc20} onChange={(e) => setInc20(e.target.checked)} style={{ width: "auto" }} />
+          <label htmlFor="inc20">{t("liq_include20")} <span className="hint">· {t("liq_include20_hint")}</span></label>
+        </div>
+      </div>
+
+      {valid ? (
+        <div className="result">
+          <Breakdown rows={rows} />
+          <div className="total"><span className="k">{t("total_liquidacion")}</span><span className="v mono">{money(total)}</span></div>
+          <ResultActions buildText={buildText} />
+          <p className="note">{t("liq_note")}</p>
+        </div>
+      ) : (
+        <p className="note" style={{ marginTop: 16 }}>{t("fin_invalid")}</p>
+      )}
+    </div>
+  );
+}
+
 /* ---------- FAQ ---------- */
 function FAQ() {
   const t = useT();
@@ -454,6 +582,7 @@ function FAQ() {
 /* ---------- App ---------- */
 const TABS = [
   { id: "finiquito", key: "tab_finiquito" },
+  { id: "liquidacion", key: "tab_liquidacion" },
   { id: "aguinaldo", key: "tab_aguinaldo" },
   { id: "vacaciones", key: "tab_vacaciones" },
 ];
@@ -523,6 +652,7 @@ function App() {
           </div>
 
           {tab === "finiquito" && <Finiquito />}
+          {tab === "liquidacion" && <Liquidacion />}
           {tab === "aguinaldo" && <Aguinaldo />}
           {tab === "vacaciones" && <Vacaciones />}
 
