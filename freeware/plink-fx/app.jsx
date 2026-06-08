@@ -188,6 +188,7 @@ const STRINGS = {
     foot_by: "by",
     mark_credit: "crafted with care by",
     mark_free: "Free for everyone",
+    nav_more: "← More tools",
     rates_live_prefix: "Rates from",
     rates_last: "last updated",
     rates_fallback: "Couldn't reach rate provider — showing cached rates",
@@ -282,6 +283,7 @@ const STRINGS = {
     foot_by: "por",
     mark_credit: "hecho con cariño por",
     mark_free: "Gratis para todos",
+    nav_more: "← Más herramientas",
     rates_live_prefix: "Tasas de",
     rates_last: "actualizadas hace",
     rates_fallback: "No se pudo conectar — mostrando tasas en caché",
@@ -1575,6 +1577,7 @@ function App() {
     <div className={"app theme-" + t.theme} style={cssVars}>
       <header className="trip-header">
         <div className="trip-mark">
+          <a href="/freeware" style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "12px", fontWeight: 600, color: "var(--ink-2)", textDecoration: "none", marginBottom: "4px", width: "fit-content" }}>{tt("nav_more")}</a>
           <div className="trip-credit">
             {tt("mark_credit")} <a href="https://acaciaco.com.mx/" target="_blank" rel="noopener noreferrer">ACACIA Consultoria</a>
             <span className="trip-free">{tt("mark_free")}</span>
