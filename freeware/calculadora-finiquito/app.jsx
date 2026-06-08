@@ -1,6 +1,7 @@
 // Calculadora de Finiquito, Aguinaldo y Vacaciones — ACACIA freeware.
 // 100% en el navegador: ningún dato sale del dispositivo.
 // Reglas conforme a la Ley Federal del Trabajo (LFT) vigente y valores 2026.
+// Bilingüe ES/EN con toggle visible.
 
 const { useState, useEffect, useMemo, useCallback } = React;
 
@@ -8,6 +9,177 @@ const { useState, useEffect, useMemo, useCallback } = React;
 const SALARIO_MINIMO_2026 = { general: 315.04, frontera: 440.87 }; // CONASAMI, vigentes 01/01/2026
 const AGUINALDO_DIAS_MIN = 15;   // LFT art. 87
 const PRIMA_VACACIONAL_MIN = 25; // % — LFT art. 80
+
+/* ---------- i18n ---------- */
+const STRINGS = {
+  es: {
+    nav_more: "← Más herramientas",
+    theme_label: "Cambiar tema",
+    lang_label: "Idioma",
+    eyebrow: "Herramienta gratis",
+    h1_a: "Calculadora de finiquito, aguinaldo y vacaciones ",
+    hero_p: "Estima lo que te corresponde conforme a la Ley Federal del Trabajo. Sin instalar, sin cuenta y sin compartir tus datos.",
+    privacy_chip: "Todo se calcula en tu navegador. Nada se sube a internet.",
+    tab_finiquito: "Finiquito",
+    tab_aguinaldo: "Aguinaldo",
+    tab_vacaciones: "Vacaciones",
+    salary: "Salario",
+    salary_hint: "bruto, sin descuentos",
+    monthly: "Mensual",
+    daily: "Diario",
+    copy: "Copiar desglose",
+    print: "Imprimir / PDF",
+    copied: "¡Copiado!",
+    // Aguinaldo
+    ag_days_worked: "Días trabajados en el año",
+    ag_days_worked_hint: "365 = año completo",
+    ag_days: "Días de aguinaldo",
+    ag_days_hint: "por contrato",
+    r_salary_daily: "Salario diario",
+    r_ag_days: "Días de aguinaldo",
+    r_ag_days_sub: "mínimo legal: 15",
+    r_proportion: "Proporción del año",
+    r_proportion_sub: "{d} de 365 días",
+    total_aguinaldo: "Aguinaldo",
+    ag_note: "El aguinaldo es de al menos 15 días de salario y se paga a más tardar el 20 de diciembre. Los primeros 30 días de UMA están exentos de ISR; el resto es gravable.",
+    // Vacaciones
+    vac_years: "Antigüedad",
+    vac_years_hint: "años cumplidos",
+    prima: "Prima vacacional",
+    prima_hint: "mínimo 25%",
+    r_vac_days: "Días de vacaciones que te corresponden",
+    r_vac_days_sub: "LFT art. 76",
+    r_vac_pay: "Pago de días de vacaciones",
+    r_vac_pay_sub: "si no las disfrutas",
+    r_prima: "Prima vacacional ({p}%)",
+    r_prima_sub: "siempre se paga",
+    total_vac: "Pago de vacaciones + prima",
+    vac_note: "Desde el primer año te corresponden 12 días, y aumentan 2 días por año hasta 20 (al 5º año). A partir del 6º año suben 2 días por cada 5 de antigüedad. La prima vacacional mínima es 25% sobre los días de vacaciones.",
+    days_unit: "días",
+    // Finiquito
+    date_in: "Fecha de ingreso",
+    date_out: "Fecha de baja",
+    date_out_hint: "último día laborado",
+    days_pending: "Días de salario pendientes",
+    days_pending_hint: "del último periodo no pagado",
+    vac_pending: "Vacaciones no disfrutadas",
+    vac_pending_hint: "días — autocalculado, editable",
+    r_seniority: "Antigüedad",
+    r_years: "{y} años",
+    r_salaries_pending: "Salarios pendientes",
+    r_ag_prop: "Aguinaldo proporcional",
+    r_ag_prop_sub: "{d} días del año",
+    r_vac_unused: "Vacaciones no disfrutadas",
+    r_days_sub: "{d} día(s)",
+    total_finiquito: "Total del finiquito",
+    fin_invalid: "Captura una fecha de ingreso y de baja válidas para ver el cálculo.",
+    fin_disclaimer_html: "<strong>Finiquito ≠ Liquidación.</strong> Este cálculo es para <strong>renuncia o término de contrato</strong> e incluye lo que el patrón te debe (salarios, aguinaldo y vacaciones proporcionales + prima). La <strong>liquidación</strong> aplica solo en despido injustificado e incluye además 3 meses de salario, 20 días por año y prima de antigüedad.",
+    disclaimer_html: "<strong>Aviso:</strong> esta calculadora ofrece una estimación informativa basada en la LFT y los valores 2026 (salario mínimo general $315.04, frontera norte $440.87). No constituye asesoría legal ni contable. Para casos específicos —ISR, prima de antigüedad o despido— consulta a un profesional.",
+    cta_h3: "¿Manejas nómina o RH en tu empresa?",
+    cta_p: "En ACACIA automatizamos cálculos de nómina, finiquitos y prestaciones para PyMEs. Hablemos.",
+    cta_btn: "Contactar a ACACIA",
+    faq_title: "Preguntas frecuentes",
+    faq: [
+      ["¿Cómo se calcula el aguinaldo?", "Aguinaldo = salario diario × 15 × (días trabajados ÷ 365). El mínimo legal son 15 días de salario y, si no trabajaste el año completo, se paga la parte proporcional."],
+      ["¿Cuántos días de vacaciones me tocan?", "El primer año son 12 días y aumentan 2 por año hasta llegar a 20 en el quinto año. Después suben 2 días por cada 5 años de antigüedad. Siempre se paga una prima vacacional mínima del 25%."],
+      ["¿Qué incluye un finiquito por renuncia?", "Salarios pendientes, aguinaldo proporcional, vacaciones no disfrutadas y su prima vacacional. No incluye indemnización: eso corresponde a una liquidación por despido injustificado."],
+      ["¿Mis datos se guardan o se envían?", "No. Todo el cálculo ocurre en tu navegador; ningún dato sale de tu dispositivo ni se almacena en ningún servidor."],
+    ],
+    foot_free: "© 2026 ACACIA · Herramienta gratis",
+    foot_tools: "Herramientas",
+    foot_privacy: "Privacidad",
+    foot_contact: "Contacto",
+    foot_crafted: "hecho con",
+    foot_by: "por",
+  },
+  en: {
+    nav_more: "← More tools",
+    theme_label: "Toggle theme",
+    lang_label: "Language",
+    eyebrow: "Free tool",
+    h1_a: "Severance, year-end bonus & vacation calculator ",
+    hero_p: "Estimate what you're owed under Mexico's Federal Labor Law (LFT). No install, no account, and your data stays private.",
+    privacy_chip: "Everything is calculated in your browser. Nothing is uploaded.",
+    tab_finiquito: "Severance",
+    tab_aguinaldo: "Bonus",
+    tab_vacaciones: "Vacation",
+    salary: "Salary",
+    salary_hint: "gross, before deductions",
+    monthly: "Monthly",
+    daily: "Daily",
+    copy: "Copy breakdown",
+    print: "Print / PDF",
+    copied: "Copied!",
+    ag_days_worked: "Days worked this year",
+    ag_days_worked_hint: "365 = full year",
+    ag_days: "Bonus days",
+    ag_days_hint: "per contract",
+    r_salary_daily: "Daily salary",
+    r_ag_days: "Bonus days",
+    r_ag_days_sub: "legal minimum: 15",
+    r_proportion: "Proportion of year",
+    r_proportion_sub: "{d} of 365 days",
+    total_aguinaldo: "Year-end bonus",
+    ag_note: "The year-end bonus (aguinaldo) is at least 15 days of salary and must be paid by December 20. The first 30 days of UMA are income-tax exempt; the rest is taxable.",
+    vac_years: "Seniority",
+    vac_years_hint: "full years",
+    prima: "Vacation premium",
+    prima_hint: "minimum 25%",
+    r_vac_days: "Vacation days you're entitled to",
+    r_vac_days_sub: "LFT art. 76",
+    r_vac_pay: "Vacation days pay",
+    r_vac_pay_sub: "if not taken",
+    r_prima: "Vacation premium ({p}%)",
+    r_prima_sub: "always paid",
+    total_vac: "Vacation pay + premium",
+    vac_note: "From the first year you get 12 days, increasing by 2 per year up to 20 (5th year). From the 6th year they rise 2 days every 5 years of seniority. The minimum vacation premium is 25% of the vacation days.",
+    days_unit: "days",
+    date_in: "Start date",
+    date_out: "End date",
+    date_out_hint: "last day worked",
+    days_pending: "Unpaid salary days",
+    days_pending_hint: "from the last unpaid period",
+    vac_pending: "Unused vacation",
+    vac_pending_hint: "days — auto-calculated, editable",
+    r_seniority: "Seniority",
+    r_years: "{y} years",
+    r_salaries_pending: "Pending wages",
+    r_ag_prop: "Prorated bonus",
+    r_ag_prop_sub: "{d} days of the year",
+    r_vac_unused: "Unused vacation",
+    r_days_sub: "{d} day(s)",
+    total_finiquito: "Total severance",
+    fin_invalid: "Enter valid start and end dates to see the result.",
+    fin_disclaimer_html: "<strong>Severance (finiquito) ≠ Layoff pay (liquidación).</strong> This calculation is for <strong>resignation or end of contract</strong> and covers what the employer owes you (wages, prorated bonus and vacation + premium). <strong>Layoff pay</strong> applies only to unjustified dismissal and additionally includes 3 months of salary, 20 days per year and a seniority premium.",
+    disclaimer_html: "<strong>Disclaimer:</strong> this calculator provides an informational estimate based on Mexico's LFT and 2026 figures (minimum wage $315.04 general, $440.87 northern border). It is not legal or accounting advice. For specific cases —income tax, seniority premium or dismissal— consult a professional.",
+    cta_h3: "Do you run payroll or HR at your company?",
+    cta_p: "At ACACIA we automate payroll, severance and benefits calculations for SMBs. Let's talk.",
+    cta_btn: "Contact ACACIA",
+    faq_title: "FAQ",
+    faq: [
+      ["How is the year-end bonus calculated?", "Bonus = daily salary × 15 × (days worked ÷ 365). The legal minimum is 15 days of salary; if you didn't work the full year, the proportional part is paid."],
+      ["How many vacation days do I get?", "The first year is 12 days, increasing by 2 per year up to 20 in the fifth year. After that they rise 2 days for every 5 years of seniority. A minimum 25% vacation premium is always paid."],
+      ["What does a severance for resignation include?", "Pending wages, prorated bonus, unused vacation and its vacation premium. It does not include indemnity: that belongs to layoff pay for unjustified dismissal."],
+      ["Is my data stored or sent anywhere?", "No. All calculations happen in your browser; no data leaves your device or is stored on any server."],
+    ],
+    foot_free: "© 2026 ACACIA · Free tool",
+    foot_tools: "Tools",
+    foot_privacy: "Privacy",
+    foot_contact: "Contact",
+    foot_crafted: "crafted with",
+    foot_by: "by",
+  },
+};
+
+function makeT(lang) {
+  return (key, vars) => {
+    let s = (STRINGS[lang] && STRINGS[lang][key]) != null ? STRINGS[lang][key] : (STRINGS.es[key] != null ? STRINGS.es[key] : key);
+    if (vars && typeof s === "string") for (const k in vars) s = s.split("{" + k + "}").join(vars[k]);
+    return s;
+  };
+}
+const LangContext = React.createContext("es");
+const useT = () => makeT(React.useContext(LangContext));
 
 /* ---------- Helpers ---------- */
 const mxn = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", minimumFractionDigits: 2 });
@@ -38,14 +210,15 @@ function Field({ label, hint, children, full }) {
 }
 
 function SalaryInput({ monto, setMonto, modo, setModo }) {
+  const t = useT();
   return (
-    <Field label="Salario" hint="bruto, sin descuentos" full>
+    <Field label={t("salary")} hint={t("salary_hint")} full>
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
         <input type="number" inputMode="decimal" min="0" placeholder="0.00"
           value={monto} onChange={(e) => setMonto(e.target.value)} style={{ flex: "1 1 180px" }} />
-        <div className="seg" role="group" aria-label="Periodicidad del salario">
-          <button type="button" aria-pressed={modo === "mensual"} onClick={() => setModo("mensual")}>Mensual</button>
-          <button type="button" aria-pressed={modo === "diario"} onClick={() => setModo("diario")}>Diario</button>
+        <div className="seg" role="group" aria-label={t("salary")}>
+          <button type="button" aria-pressed={modo === "mensual"} onClick={() => setModo("mensual")}>{t("monthly")}</button>
+          <button type="button" aria-pressed={modo === "diario"} onClick={() => setModo("diario")}>{t("daily")}</button>
         </div>
       </div>
     </Field>
@@ -66,6 +239,7 @@ function Breakdown({ rows }) {
 }
 
 function ResultActions({ buildText }) {
+  const t = useT();
   const [copied, setCopied] = useState(false);
   const copy = useCallback(async () => {
     try { await navigator.clipboard.writeText(buildText()); setCopied(true); setTimeout(() => setCopied(false), 2000); }
@@ -75,19 +249,20 @@ function ResultActions({ buildText }) {
     <div className="actions">
       <button className="btn" type="button" onClick={copy}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        Copiar desglose
+        {t("copy")}
       </button>
       <button className="btn" type="button" onClick={() => window.print()}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-        Imprimir / PDF
+        {t("print")}
       </button>
-      {copied ? <span className="copied">¡Copiado!</span> : null}
+      {copied ? <span className="copied">{t("copied")}</span> : null}
     </div>
   );
 }
 
 /* ---------- Tab: Aguinaldo ---------- */
 function Aguinaldo() {
+  const t = useT();
   const [monto, setMonto] = useState("");
   const [modo, setModo] = useState("mensual");
   const [dias, setDias] = useState("365");
@@ -99,30 +274,30 @@ function Aguinaldo() {
   const total = sd * num(diasAg) * factor;
 
   const rows = [
-    { k: "Salario diario", v: money(sd) },
-    { k: "Días de aguinaldo", sub: "mínimo legal: 15", v: num(diasAg).toString() },
-    { k: "Proporción del año", sub: diasTrab + " de 365 días", v: (factor * 100).toFixed(1) + "%" },
+    { k: t("r_salary_daily"), v: money(sd) },
+    { k: t("r_ag_days"), sub: t("r_ag_days_sub"), v: num(diasAg).toString() },
+    { k: t("r_proportion"), sub: t("r_proportion_sub", { d: diasTrab }), v: (factor * 100).toFixed(1) + "%" },
   ];
   const buildText = () =>
-    `Aguinaldo 2026\nSalario diario: ${money(sd)}\nDías de aguinaldo: ${num(diasAg)}\nDías trabajados: ${diasTrab}/365\nAguinaldo: ${money(total)}\n\nCalculado en acaciaco.com.mx/freeware/calculadora-finiquito`;
+    `${t("total_aguinaldo")} 2026\n${t("r_salary_daily")}: ${money(sd)}\n${t("r_ag_days")}: ${num(diasAg)}\n${t("ag_days_worked")}: ${diasTrab}/365\n${t("total_aguinaldo")}: ${money(total)}\n\nacaciaco.com.mx/freeware/calculadora-finiquito`;
 
   return (
     <div className="card">
       <div className="grid">
         <SalaryInput monto={monto} setMonto={setMonto} modo={modo} setModo={setModo} />
-        <Field label="Días trabajados en el año" hint="365 = año completo">
+        <Field label={t("ag_days_worked")} hint={t("ag_days_worked_hint")}>
           <input type="number" inputMode="numeric" min="0" max="366" value={dias} onChange={(e) => setDias(e.target.value)} />
         </Field>
-        <Field label="Días de aguinaldo" hint="por contrato">
+        <Field label={t("ag_days")} hint={t("ag_days_hint")}>
           <input type="number" inputMode="numeric" min="15" value={diasAg} onChange={(e) => setDiasAg(e.target.value)} />
         </Field>
       </div>
 
       <div className="result">
         <Breakdown rows={rows} />
-        <div className="total"><span className="k">Aguinaldo</span><span className="v mono">{money(total)}</span></div>
+        <div className="total"><span className="k">{t("total_aguinaldo")}</span><span className="v mono">{money(total)}</span></div>
         <ResultActions buildText={buildText} />
-        <p className="note">El aguinaldo es de al menos 15 días de salario y se paga a más tardar el 20 de diciembre. Los primeros 30 días de UMA están exentos de ISR; el resto es gravable.</p>
+        <p className="note">{t("ag_note")}</p>
       </div>
     </div>
   );
@@ -130,6 +305,7 @@ function Aguinaldo() {
 
 /* ---------- Tab: Vacaciones ---------- */
 function Vacaciones() {
+  const t = useT();
   const [monto, setMonto] = useState("");
   const [modo, setModo] = useState("mensual");
   const [anios, setAnios] = useState("1");
@@ -141,31 +317,31 @@ function Vacaciones() {
   const prima = pagoDias * (num(primaPct) / 100);
 
   const rows = [
-    { k: "Días de vacaciones que te corresponden", sub: "LFT art. 76", v: dias + " días" },
-    { k: "Salario diario", v: money(sd) },
-    { k: "Pago de días de vacaciones", sub: "si no las disfrutas", v: money(pagoDias) },
-    { k: `Prima vacacional (${num(primaPct)}%)`, sub: "siempre se paga", v: money(prima) },
+    { k: t("r_vac_days"), sub: t("r_vac_days_sub"), v: dias + " " + t("days_unit") },
+    { k: t("r_salary_daily"), v: money(sd) },
+    { k: t("r_vac_pay"), sub: t("r_vac_pay_sub"), v: money(pagoDias) },
+    { k: t("r_prima", { p: num(primaPct) }), sub: t("r_prima_sub"), v: money(prima) },
   ];
   const buildText = () =>
-    `Vacaciones 2026 (LFT)\nAntigüedad: ${num(anios)} año(s)\nDías de vacaciones: ${dias}\nSalario diario: ${money(sd)}\nPago de vacaciones: ${money(pagoDias)}\nPrima vacacional (${num(primaPct)}%): ${money(prima)}\nTotal: ${money(pagoDias + prima)}\n\nCalculado en acaciaco.com.mx/freeware/calculadora-finiquito`;
+    `${t("tab_vacaciones")} 2026 (LFT)\n${t("vac_years")}: ${num(anios)}\n${t("r_vac_days")}: ${dias}\n${t("r_salary_daily")}: ${money(sd)}\n${t("r_vac_pay")}: ${money(pagoDias)}\n${t("r_prima", { p: num(primaPct) })}: ${money(prima)}\nTotal: ${money(pagoDias + prima)}\n\nacaciaco.com.mx/freeware/calculadora-finiquito`;
 
   return (
     <div className="card">
       <div className="grid">
         <SalaryInput monto={monto} setMonto={setMonto} modo={modo} setModo={setModo} />
-        <Field label="Antigüedad" hint="años cumplidos">
+        <Field label={t("vac_years")} hint={t("vac_years_hint")}>
           <input type="number" inputMode="numeric" min="0" value={anios} onChange={(e) => setAnios(e.target.value)} />
         </Field>
-        <Field label="Prima vacacional" hint="mínimo 25%">
+        <Field label={t("prima")} hint={t("prima_hint")}>
           <input type="number" inputMode="decimal" min="25" value={primaPct} onChange={(e) => setPrimaPct(e.target.value)} />
         </Field>
       </div>
 
       <div className="result">
         <Breakdown rows={rows} />
-        <div className="total"><span className="k">Pago de vacaciones + prima</span><span className="v mono">{money(pagoDias + prima)}</span></div>
+        <div className="total"><span className="k">{t("total_vac")}</span><span className="v mono">{money(pagoDias + prima)}</span></div>
         <ResultActions buildText={buildText} />
-        <p className="note">Desde el primer año te corresponden 12 días, y aumentan 2 días por año hasta 20 (al 5º año). A partir del 6º año suben 2 días por cada 5 de antigüedad. La prima vacacional mínima es 25% sobre los días de vacaciones.</p>
+        <p className="note">{t("vac_note")}</p>
       </div>
     </div>
   );
@@ -173,6 +349,7 @@ function Vacaciones() {
 
 /* ---------- Tab: Finiquito ---------- */
 function Finiquito() {
+  const t = useT();
   const [monto, setMonto] = useState("");
   const [modo, setModo] = useState("mensual");
   const [ingreso, setIngreso] = useState("");
@@ -186,19 +363,16 @@ function Finiquito() {
   const dBaja = parseDate(baja);
   const valid = dIng && dBaja && dBaja >= dIng;
 
-  // Derivados
   const calc = useMemo(() => {
     if (!valid) return null;
     const antigDias = daysBetween(dIng, dBaja);
     const antigYears = antigDias / 365.25;
     const antigEnt = Math.floor(antigYears);
 
-    // Días trabajados en el año natural de la baja (para aguinaldo proporcional)
     const yearStart = new Date(dBaja.getFullYear(), 0, 1);
     const start = dIng > yearStart ? dIng : yearStart;
     const diasAnio = Math.min(366, Math.max(0, daysBetween(start, dBaja) + 1));
 
-    // Vacaciones proporcionales del año de servicio en curso
     const entitlement = diasVacaciones(antigEnt >= 1 ? antigEnt : 1);
     const lastAnniv = new Date(dIng); lastAnniv.setFullYear(dIng.getFullYear() + antigEnt);
     const fracDays = Math.max(0, daysBetween(lastAnniv, dBaja));
@@ -217,33 +391,33 @@ function Finiquito() {
   const total = aguinaldoProp + pagoVac + prima + salariosPend;
 
   const rows = [
-    { k: "Salario diario", v: money(sd) },
-    { k: "Antigüedad", v: calc ? `${calc.antigYears.toFixed(2)} años` : "—" },
-    { k: "Salarios pendientes", sub: `${num(diasSalario)} día(s)`, v: money(salariosPend) },
-    { k: "Aguinaldo proporcional", sub: calc ? `${calc.diasAnio} días del año` : "", v: money(aguinaldoProp) },
-    { k: "Vacaciones no disfrutadas", sub: `${vacPendNum} día(s)`, v: money(pagoVac) },
-    { k: `Prima vacacional (${num(primaPct)}%)`, v: money(prima) },
+    { k: t("r_salary_daily"), v: money(sd) },
+    { k: t("r_seniority"), v: calc ? t("r_years", { y: calc.antigYears.toFixed(2) }) : "—" },
+    { k: t("r_salaries_pending"), sub: t("r_days_sub", { d: num(diasSalario) }), v: money(salariosPend) },
+    { k: t("r_ag_prop"), sub: calc ? t("r_ag_prop_sub", { d: calc.diasAnio }) : "", v: money(aguinaldoProp) },
+    { k: t("r_vac_unused"), sub: t("r_days_sub", { d: vacPendNum }), v: money(pagoVac) },
+    { k: t("r_prima", { p: num(primaPct) }), v: money(prima) },
   ];
   const buildText = () =>
-    `Finiquito 2026 (LFT)\nSalario diario: ${money(sd)}\nAntigüedad: ${calc ? calc.antigYears.toFixed(2) : 0} años\nSalarios pendientes: ${money(salariosPend)}\nAguinaldo proporcional: ${money(aguinaldoProp)}\nVacaciones no disfrutadas: ${money(pagoVac)}\nPrima vacacional (${num(primaPct)}%): ${money(prima)}\nTOTAL FINIQUITO: ${money(total)}\n\nCalculado en acaciaco.com.mx/freeware/calculadora-finiquito`;
+    `${t("total_finiquito")} 2026 (LFT)\n${t("r_salary_daily")}: ${money(sd)}\n${t("r_seniority")}: ${calc ? calc.antigYears.toFixed(2) : 0}\n${t("r_salaries_pending")}: ${money(salariosPend)}\n${t("r_ag_prop")}: ${money(aguinaldoProp)}\n${t("r_vac_unused")}: ${money(pagoVac)}\n${t("r_prima", { p: num(primaPct) })}: ${money(prima)}\n${t("total_finiquito")}: ${money(total)}\n\nacaciaco.com.mx/freeware/calculadora-finiquito`;
 
   return (
     <div className="card">
       <div className="grid">
         <SalaryInput monto={monto} setMonto={setMonto} modo={modo} setModo={setModo} />
-        <Field label="Fecha de ingreso">
+        <Field label={t("date_in")}>
           <input type="date" value={ingreso} max={baja} onChange={(e) => { setIngreso(e.target.value); setVacOverride(null); }} />
         </Field>
-        <Field label="Fecha de baja" hint="último día laborado">
+        <Field label={t("date_out")} hint={t("date_out_hint")}>
           <input type="date" value={baja} onChange={(e) => { setBaja(e.target.value); setVacOverride(null); }} />
         </Field>
-        <Field label="Días de salario pendientes" hint="del último periodo no pagado">
+        <Field label={t("days_pending")} hint={t("days_pending_hint")}>
           <input type="number" inputMode="numeric" min="0" value={diasSalario} onChange={(e) => setDiasSalario(e.target.value)} />
         </Field>
-        <Field label="Vacaciones no disfrutadas" hint="días — autocalculado, editable">
+        <Field label={t("vac_pending")} hint={t("vac_pending_hint")}>
           <input type="number" inputMode="decimal" min="0" value={vacPendDisplay} onChange={(e) => setVacOverride(e.target.value)} />
         </Field>
-        <Field label="Prima vacacional" hint="mínimo 25%">
+        <Field label={t("prima")} hint={t("prima_hint")}>
           <input type="number" inputMode="decimal" min="25" value={primaPct} onChange={(e) => setPrimaPct(e.target.value)} />
         </Field>
       </div>
@@ -251,31 +425,25 @@ function Finiquito() {
       {valid ? (
         <div className="result">
           <Breakdown rows={rows} />
-          <div className="total"><span className="k">Total del finiquito</span><span className="v mono">{money(total)}</span></div>
+          <div className="total"><span className="k">{t("total_finiquito")}</span><span className="v mono">{money(total)}</span></div>
           <ResultActions buildText={buildText} />
         </div>
       ) : (
-        <p className="note" style={{ marginTop: 16 }}>Captura una fecha de ingreso y de baja válidas para ver el cálculo.</p>
+        <p className="note" style={{ marginTop: 16 }}>{t("fin_invalid")}</p>
       )}
 
-      <div className="disclaimer">
-        <strong>Finiquito ≠ Liquidación.</strong> Este cálculo es para <strong>renuncia o término de contrato</strong> e incluye lo que el patrón te debe (salarios, aguinaldo y vacaciones proporcionales + prima). La <strong>liquidación</strong> aplica solo en despido injustificado e incluye además 3 meses de salario, 20 días por año y prima de antigüedad.
-      </div>
+      <div className="disclaimer" dangerouslySetInnerHTML={{ __html: t("fin_disclaimer_html") }} />
     </div>
   );
 }
 
 /* ---------- FAQ ---------- */
 function FAQ() {
-  const items = [
-    ["¿Cómo se calcula el aguinaldo?", "Aguinaldo = salario diario × 15 × (días trabajados ÷ 365). El mínimo legal son 15 días de salario y, si no trabajaste el año completo, se paga la parte proporcional."],
-    ["¿Cuántos días de vacaciones me tocan?", "El primer año son 12 días y aumentan 2 por año hasta llegar a 20 en el quinto año. Después suben 2 días por cada 5 años de antigüedad. Siempre se paga una prima vacacional mínima del 25%."],
-    ["¿Qué incluye un finiquito por renuncia?", "Salarios pendientes, aguinaldo proporcional, vacaciones no disfrutadas y su prima vacacional. No incluye indemnización: eso corresponde a una liquidación por despido injustificado."],
-    ["¿Mis datos se guardan o se envían?", "No. Todo el cálculo ocurre en tu navegador; ningún dato sale de tu dispositivo ni se almacena en ningún servidor."],
-  ];
+  const t = useT();
+  const items = t("faq");
   return (
     <div style={{ marginTop: 8 }}>
-      <h2 className="section-title">Preguntas frecuentes</h2>
+      <h2 className="section-title">{t("faq_title")}</h2>
       {items.map(([q, a], i) => (
         <details key={i}><summary>{q}</summary><p>{a}</p></details>
       ))}
@@ -285,77 +453,102 @@ function FAQ() {
 
 /* ---------- App ---------- */
 const TABS = [
-  { id: "finiquito", label: "Finiquito" },
-  { id: "aguinaldo", label: "Aguinaldo" },
-  { id: "vacaciones", label: "Vacaciones" },
+  { id: "finiquito", key: "tab_finiquito" },
+  { id: "aguinaldo", key: "tab_aguinaldo" },
+  { id: "vacaciones", key: "tab_vacaciones" },
 ];
+
+function detectLang() {
+  try {
+    const saved = localStorage.getItem("acacia-lang");
+    if (saved === "es" || saved === "en") return saved;
+  } catch (e) {}
+  return (navigator.language || "es").toLowerCase().startsWith("en") ? "en" : "es";
+}
 
 function App() {
   const [tab, setTab] = useState("finiquito");
+  const [lang, setLang] = useState(detectLang);
   const [theme, setTheme] = useState(() => {
     try { return localStorage.getItem("acacia-theme") || "light"; } catch (e) { return "light"; }
   });
+  const t = makeT(lang);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     try { localStorage.setItem("acacia-theme", theme); } catch (e) {}
   }, [theme]);
 
+  useEffect(() => {
+    document.documentElement.setAttribute("lang", lang);
+    try { localStorage.setItem("acacia-lang", lang); } catch (e) {}
+  }, [lang]);
+
   return (
-    <div className="app">
-      <div className="wrap">
-        <div className="topbar">
-          <a className="brand" href="/" aria-label="ACACIA inicio">
-            <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="28" height="28" />
-            ACACIA
-          </a>
-          <div className="topbar-actions">
-            <a className="ghost-link" href="/freeware">← Más herramientas</a>
-            <button className="icon-btn" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} aria-label="Cambiar tema">
-              <svg className="moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-              <svg className="sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-            </button>
+    <LangContext.Provider value={lang}>
+      <div className="app">
+        <div className="wrap">
+          <div className="topbar">
+            <a className="brand" href="/" aria-label="ACACIA inicio">
+              <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="28" height="28" />
+              ACACIA
+            </a>
+            <div className="topbar-actions">
+              <a className="ghost-link" href="/freeware">{t("nav_more")}</a>
+              <div className="seg lang-seg" role="group" aria-label={t("lang_label")}>
+                <button type="button" aria-pressed={lang === "es"} onClick={() => setLang("es")}>ES</button>
+                <button type="button" aria-pressed={lang === "en"} onClick={() => setLang("en")}>EN</button>
+              </div>
+              <button className="icon-btn" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} aria-label={t("theme_label")}>
+                <svg className="moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg className="sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              </button>
+            </div>
           </div>
+
+          <header className="hero">
+            <span className="eyebrow"><span className="dot" aria-hidden="true"></span> {t("eyebrow")}</span>
+            <h1>{t("h1_a")}<span style={{ color: "var(--accent-2)" }}>2026</span></h1>
+            <p>{t("hero_p")}</p>
+            <span className="privacy-chip">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              {t("privacy_chip")}
+            </span>
+          </header>
+
+          <div className="tabs" role="tablist" aria-label="modos">
+            {TABS.map((tb) => (
+              <button key={tb.id} className="tab" role="tab" aria-selected={tab === tb.id} onClick={() => setTab(tb.id)}>{t(tb.key)}</button>
+            ))}
+          </div>
+
+          {tab === "finiquito" && <Finiquito />}
+          {tab === "aguinaldo" && <Aguinaldo />}
+          {tab === "vacaciones" && <Vacaciones />}
+
+          <div className="disclaimer" style={{ marginTop: 18 }} dangerouslySetInnerHTML={{ __html: t("disclaimer_html") }} />
+
+          <div className="cta">
+            <h3>{t("cta_h3")}</h3>
+            <p>{t("cta_p")}</p>
+            <a className="btn btn-primary" href="/contacto">{t("cta_btn")}</a>
+          </div>
+
+          <FAQ />
+
+          <footer className="foot">
+            <span>{t("foot_free")}</span>
+            <span className="foot-credit">
+              {t("foot_crafted")} <span className="foot-heart" aria-label="love">♥</span> {t("foot_by")}{" "}
+              <a className="foot-link" href="https://acaciaco.com.mx" target="_blank" rel="noopener noreferrer">ACACIA Consultoría</a>
+            </span>
+            <span>
+              <a href="/freeware">{t("foot_tools")}</a> · <a href="/legal/privacidad">{t("foot_privacy")}</a> · <a href="/contacto">{t("foot_contact")}</a>
+            </span>
+          </footer>
         </div>
-
-        <header className="hero">
-          <span className="eyebrow"><span className="dot" aria-hidden="true"></span> Herramienta gratis</span>
-          <h1>Calculadora de finiquito, aguinaldo y vacaciones <span style={{ color: "var(--accent-2)" }}>2026</span></h1>
-          <p>Estima lo que te corresponde conforme a la Ley Federal del Trabajo. Sin instalar, sin cuenta y sin compartir tus datos.</p>
-          <span className="privacy-chip">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Todo se calcula en tu navegador. Nada se sube a internet.
-          </span>
-        </header>
-
-        <div className="tabs" role="tablist" aria-label="Tipo de cálculo">
-          {TABS.map((t) => (
-            <button key={t.id} className="tab" role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}>{t.label}</button>
-          ))}
-        </div>
-
-        {tab === "finiquito" && <Finiquito />}
-        {tab === "aguinaldo" && <Aguinaldo />}
-        {tab === "vacaciones" && <Vacaciones />}
-
-        <div className="disclaimer" style={{ marginTop: 18 }}>
-          <strong>Aviso:</strong> esta calculadora ofrece una estimación informativa basada en la LFT y los valores 2026 (salario mínimo general $315.04, frontera norte $440.87). No constituye asesoría legal ni contable. Para casos específicos —ISR, prima de antigüedad o despido— consulta a un profesional.
-        </div>
-
-        <div className="cta">
-          <h3>¿Manejas nómina o RH en tu empresa?</h3>
-          <p>En ACACIA automatizamos cálculos de nómina, finiquitos y prestaciones para PyMEs. Hablemos.</p>
-          <a className="btn btn-primary" href="/contacto">Contactar a ACACIA</a>
-        </div>
-
-        <FAQ />
-
-        <footer className="foot">
-          <span>© 2026 ACACIA · Herramienta gratis</span>
-          <span><a href="/freeware">Herramientas</a> · <a href="/legal/privacidad">Privacidad</a> · <a href="/contacto">Contacto</a></span>
-        </footer>
       </div>
-    </div>
+    </LangContext.Provider>
   );
 }
 

@@ -216,10 +216,16 @@
   details[open] summary::after { content: "−"; }
   details p { color: var(--ink-2); font-size: 13.5px; margin: 10px 0 2px; }
 
-  footer.foot { margin: 36px 0 28px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 12.5px; color: var(--ink-3); }
+  footer.foot { margin: 36px 0 28px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 12.5px; color: var(--ink-3); }
   footer.foot a { color: var(--ink-2); text-decoration: none; }
   footer.foot a:hover { color: var(--accent-2); }
+  .foot-credit { display: inline-flex; align-items: center; gap: 5px; }
+  .foot-heart { color: oklch(0.62 0.18 25); }
+  .foot-link { font-weight: 600; color: var(--ink-2); }
+  .foot-link:hover { color: var(--accent-2); }
+  .lang-seg button { padding: 7px 10px; font-size: 12.5px; min-width: 36px; }
   .section-title { margin: 30px 0 8px; font-size: 18px; }
+  @media (max-width: 480px) { .topbar-actions .ghost-link { display: none; } }
 </style>
 </head>
 <body>
