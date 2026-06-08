@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Comprimir imágenes">
+  <rect x="6" y="6" width="52" height="52" rx="12" fill="oklch(0.57 0.12 195)"/>
+  <rect x="14" y="16" width="36" height="26" rx="4" fill="oklch(0.97 0.012 195)"/>
+  <circle cx="23" cy="25" r="3.4" fill="oklch(0.57 0.12 195)"/>
+  <path d="M16 40l8-9 6 6 6-7 8 10z" fill="oklch(0.57 0.12 195)"/>
+  <g stroke="oklch(0.97 0.012 195)" stroke-width="3" stroke-linecap="round">
+    <path d="M22 50h20"/>
+    <path d="M27 47l-5 3 5 3"/>
+    <path d="M37 47l5 3-5 3"/>
+  </g>
+</svg>
