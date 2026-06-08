@@ -171,13 +171,17 @@
       elN.style.display = '';
     }
 
+    function escHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
     if (plan || monto) {
       document.getElementById('confirmCard').style.display = '';
       var rows = [];
-      if (plan)  rows.push(['Plan',  decodeURIComponent(plan)]);
+      if (plan)  rows.push(['Plan',  escHtml(decodeURIComponent(plan))]);
       if (monto) {
         var n = parseInt(monto, 10);
-        if (!isNaN(n)) rows.push(['Monto', '$' + n.toLocaleString('es-MX') + ' ' + moneda + ' / mes']);
+        if (!isNaN(n)) rows.push(['Monto', '$' + n.toLocaleString('es-MX') + ' ' + escHtml(moneda) + ' / mes']);
       }
       rows.push(['Fecha de activación', new Date().toLocaleDateString('es-MX', {day:'numeric', month:'long', year:'numeric'})]);
       rows.push(['Soporte', 'contacto@acaciaco.com.mx']);
