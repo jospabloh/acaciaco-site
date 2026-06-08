@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de Contraseñas Seguras gratis — ACACIA</title>
+<meta name="description" content="Crea contraseñas seguras y aleatorias gratis, o frases de contraseña fáciles de recordar. Personaliza longitud y caracteres. Todo se genera en tu navegador, nada se guarda ni se envía.">
+<meta name="keywords" content="generador de contraseñas, contraseña segura, crear contraseña aleatoria, generador de claves, password generator, frase de contraseña, contraseña fuerte, herramienta gratis, ACACIA">
+<link rel="canonical" href="https://acaciaco.com.mx/freeware/generador-contrasenas">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_MX">
+<meta property="og:url" content="https://acaciaco.com.mx/freeware/generador-contrasenas">
+<meta property="og:title" content="Generador de Contraseñas Seguras gratis — ACACIA">
+<meta property="og:description" content="Crea contraseñas seguras y aleatorias o frases fáciles de recordar. Todo en tu navegador, nada se guarda.">
+<meta property="og:image" content="https://acaciaco.com.mx/assets/acacia-logo.jpg">
+<meta property="og:site_name" content="ACACIA Consultoría">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Generador de Contraseñas Seguras gratis — ACACIA">
+<meta name="twitter:description" content="Crea contraseñas seguras y aleatorias o frases fáciles de recordar. Todo en tu navegador.">
+<meta name="twitter:image" content="https://acaciaco.com.mx/assets/acacia-logo.jpg">
+
+<link rel="icon" type="image/svg+xml" href="/freeware/generador-contrasenas/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+  (function () { try { var t = localStorage.getItem('acacia-theme') || 'light'; document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Generador de Contraseñas Seguras",
+    "applicationCategory": "SecurityApplication",
+    "operatingSystem": "Web",
+    "url": "https://acaciaco.com.mx/freeware/generador-contrasenas",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "MXN" },
+    "provider": { "@type": "Organization", "name": "ACACIA Consultoría", "url": "https://acaciaco.com.mx" },
+    "description": "Generador gratuito de contraseñas seguras y frases de contraseña. Usa generación criptográfica en el navegador; ninguna contraseña se guarda ni se envía."
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://acaciaco.com.mx/" },
+      { "@type": "ListItem", "position": 2, "name": "Herramientas gratis", "item": "https://acaciaco.com.mx/freeware" },
+      { "@type": "ListItem", "position": 3, "name": "Generador de contraseñas", "item": "https://acaciaco.com.mx/freeware/generador-contrasenas" }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "¿Qué hace segura a una contraseña?", "acceptedAnswer": { "@type": "Answer", "text": "La longitud y la aleatoriedad. Una contraseña larga (16+ caracteres) que combine mayúsculas, minúsculas, números y símbolos, o una frase de varias palabras al azar, es muy difícil de adivinar." } },
+      { "@type": "Question", "name": "¿Se guarda o envía mi contraseña?", "acceptedAnswer": { "@type": "Answer", "text": "No. Las contraseñas se generan en tu navegador con generación criptográfica segura y nunca se guardan ni se envían a ningún servidor." } },
+      { "@type": "Question", "name": "¿Qué es una frase de contraseña?", "acceptedAnswer": { "@type": "Answer", "text": "Es una contraseña formada por varias palabras al azar (por ejemplo, casa-tigre-nube-42). Es muy segura y, a la vez, más fácil de recordar que una cadena de símbolos." } }
+    ]
+  }
+]
+</script>
+
+<style>
+  :root {
+    color-scheme: light dark;
+    --paper:   oklch(0.97 0.013 85);
+    --paper-2: oklch(0.94 0.015 85);
+    --card:    #ffffff;
+    --ink:     oklch(0.22 0.015 80);
+    --ink-2:   oklch(0.44 0.013 80);
+    --ink-3:   oklch(0.60 0.012 80);
+    --line:    oklch(0.89 0.013 85);
+    --line-2:  oklch(0.83 0.015 85);
+    --accent:  oklch(0.62 0.13 80);
+    --accent-2:oklch(0.52 0.12 75);
+    --accent-soft: oklch(0.62 0.13 80 / 0.12);
+    --shadow:  0 1px 0 oklch(0.88 0.013 85 / 0.7), 0 14px 40px -22px oklch(0.30 0.06 80 / 0.30);
+    --radius:  16px;
+  }
+  html[data-theme="dark"] {
+    --paper:   oklch(0.17 0.012 80);
+    --paper-2: oklch(0.21 0.013 80);
+    --card:    oklch(0.23 0.013 80);
+    --ink:     oklch(0.95 0.012 85);
+    --ink-2:   oklch(0.78 0.012 85);
+    --ink-3:   oklch(0.60 0.012 85);
+    --line:    oklch(0.31 0.012 80);
+    --line-2:  oklch(0.38 0.012 80);
+    --accent:  oklch(0.78 0.13 85);
+    --accent-2:oklch(0.85 0.13 88);
+    --accent-soft: oklch(0.78 0.13 85 / 0.16);
+    --shadow:  0 1px 0 oklch(0.30 0.012 80 / 0.6), 0 16px 44px -22px #000;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif; background: var(--paper); color: var(--ink); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: "Space Grotesk", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+  .app { position: relative; isolation: isolate; min-height: 100vh; }
+  .app::before { content: ""; position: fixed; inset: -25%; z-index: -1; pointer-events: none; background: radial-gradient(40% 48% at 16% 14%, oklch(0.62 0.13 80 / 0.16), transparent 70%), radial-gradient(40% 48% at 86% 88%, oklch(0.62 0.12 120 / 0.10), transparent 70%); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 18px 0 8px; }
+  .brand { display: inline-flex; align-items: center; gap: 9px; font-weight: 700; color: var(--ink); text-decoration: none; font-size: 15px; }
+  .brand img { width: 28px; height: 28px; border-radius: 7px; }
+  .topbar-actions { display: inline-flex; gap: 8px; align-items: center; }
+  .ghost-link { color: var(--ink-2); text-decoration: none; font-size: 13.5px; padding: 7px 11px; border-radius: 9px; }
+  .ghost-link:hover { background: var(--paper-2); color: var(--ink); }
+  .icon-btn { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--ink-2); cursor: pointer; }
+  .icon-btn:hover { color: var(--ink); border-color: var(--line-2); }
+  .icon-btn .sun { display: none; }
+  html[data-theme="dark"] .icon-btn .moon { display: none; }
+  html[data-theme="dark"] .icon-btn .sun { display: block; }
+  .lang-seg { display: inline-flex; background: var(--paper-2); border: 1px solid var(--line); border-radius: 9px; padding: 3px; gap: 2px; }
+  .lang-seg button { border: none; background: transparent; color: var(--ink-2); font-family: inherit; font-size: 12.5px; font-weight: 600; padding: 7px 10px; border-radius: 7px; cursor: pointer; min-width: 36px; }
+  .lang-seg button[aria-pressed="true"] { background: var(--card); color: var(--ink); box-shadow: var(--shadow); }
+
+  .hero { padding: 22px 0 10px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.04em; }
+  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  h1 { font-size: clamp(25px, 5vw, 36px); line-height: 1.1; margin: 12px 0 8px; letter-spacing: -0.02em; }
+  .hero p { color: var(--ink-2); max-width: 58ch; margin: 0; }
+  .privacy-chip { margin-top: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-2); background: var(--accent-soft); border: 1px solid var(--line); padding: 7px 12px; border-radius: 999px; }
+  .privacy-chip svg { width: 14px; height: 14px; color: var(--accent-2); }
+
+  .tabs { display: flex; gap: 6px; margin: 24px 0 16px; background: var(--paper-2); border: 1px solid var(--line); padding: 5px; border-radius: 13px; }
+  .tab { flex: 1; text-align: center; padding: 10px 8px; border-radius: 9px; border: none; background: transparent; color: var(--ink-2); font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .tab[aria-selected="true"] { background: var(--card); color: var(--ink); box-shadow: var(--shadow); }
+
+  .out { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; margin-bottom: 16px; }
+  .pw { display: flex; align-items: center; gap: 12px; }
+  .pw-text { flex: 1; min-width: 0; font-size: clamp(18px, 4.5vw, 26px); font-weight: 600; letter-spacing: .01em; word-break: break-all; color: var(--ink); }
+  .pw-actions { display: flex; gap: 8px; flex: none; }
+  .iconbtn { width: 42px; height: 42px; padding: 0; border-radius: 11px; display: inline-grid; place-items: center; border: 1px solid var(--line-2); background: var(--card); color: var(--ink-2); cursor: pointer; }
+  .iconbtn:hover { border-color: var(--accent); color: var(--accent-2); }
+  .iconbtn svg { width: 19px; height: 19px; }
+  .strength { margin-top: 14px; }
+  .meter { display: flex; gap: 5px; }
+  .seg { height: 6px; flex: 1; border-radius: 3px; background: var(--line); transition: background .2s; }
+  .strength-row { display: flex; justify-content: space-between; margin-top: 7px; font-size: 12.5px; color: var(--ink-2); }
+  .copied { color: var(--accent-2); font-weight: 600; }
+
+  .controls { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 14px; }
+  .ctl-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+  label { font-size: 14px; font-weight: 600; color: var(--ink-2); }
+  .range-val { font-weight: 700; color: var(--accent-2); }
+  input[type="range"] { width: 100%; accent-color: var(--accent); }
+  .checks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .chk { display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--ink); }
+  .chk input { width: auto; accent-color: var(--accent); width: 17px; height: 17px; }
+  select, input[type="number"], input[type="text"] { font-family: inherit; font-size: 14px; color: var(--ink); background: var(--paper); border: 1px solid var(--line-2); border-radius: 10px; padding: 9px 11px; }
+  select:focus, input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .btn { font-family: inherit; font-size: 14px; font-weight: 600; padding: 11px 18px; border-radius: 10px; cursor: pointer; border: 1px solid var(--line-2); background: var(--card); color: var(--ink); display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
+  .btn:hover { border-color: var(--accent); color: var(--accent-2); }
+  .btn svg { width: 16px; height: 16px; }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #1a1408; }
+  .btn-primary:hover { background: var(--accent-2); border-color: var(--accent-2); color: #1a1408; }
+
+  .cta { margin: 28px 0 12px; text-align: center; padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); }
+  .cta h3 { margin: 0 0 6px; font-size: 18px; } .cta p { margin: 0 0 14px; color: var(--ink-2); font-size: 14px; }
+  details { border-bottom: 1px solid var(--line); padding: 14px 2px; }
+  summary { cursor: pointer; font-weight: 600; font-size: 14.5px; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  summary::-webkit-details-marker { display: none; } summary::after { content: "+"; color: var(--accent-2); font-size: 18px; } details[open] summary::after { content: "−"; }
+  details p { color: var(--ink-2); font-size: 13.5px; margin: 10px 0 2px; }
+  .section-title { margin: 30px 0 8px; font-size: 18px; }
+  footer.foot { margin: 36px 0 28px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 12.5px; color: var(--ink-3); }
+  footer.foot a { color: var(--ink-2); text-decoration: none; } footer.foot a:hover { color: var(--accent-2); }
+  .foot-credit { display: inline-flex; align-items: center; gap: 5px; } .foot-heart { color: oklch(0.62 0.18 25); } .foot-link { font-weight: 600; color: var(--ink-2); } .foot-link:hover { color: var(--accent-2); }
+  @media (max-width: 480px) { .topbar-actions .ghost-link { display: none; } .checks { grid-template-columns: 1fr; } }
+  .seo-article { max-width: 720px; margin: 0 auto; padding: 8px 20px 56px; }
+  .seo-article h2 { font-size: 22px; letter-spacing: -0.02em; margin: 34px 0 10px; }
+  .seo-article h3 { font-size: 16px; margin: 22px 0 6px; }
+  .seo-article p, .seo-article li { color: var(--ink-2); font-size: 14.5px; line-height: 1.65; }
+  .seo-article ul { padding-left: 18px; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <div id="acacia-promo"></div>
+
+  <article class="seo-article">
+    <h2>Generador de contraseñas seguras, gratis y privado</h2>
+    <p>Crea <strong>contraseñas aleatorias</strong> imposibles de adivinar o <strong>frases de contraseña</strong> fáciles de recordar. Ajusta la longitud y los tipos de carácter, mide la fortaleza y cópialas con un clic. Se generan con criptografía segura en tu navegador y <strong>nunca se guardan ni se envían</strong>.</p>
+    <h3>¿Qué hace fuerte a una contraseña?</h3>
+    <ul>
+      <li><strong>Longitud:</strong> 16 caracteres o más marcan la diferencia.</li>
+      <li><strong>Variedad:</strong> mayúsculas, minúsculas, números y símbolos.</li>
+      <li><strong>Aleatoriedad:</strong> evita nombres, fechas y palabras obvias.</li>
+      <li><strong>Única por sitio:</strong> nunca reutilices la misma contraseña.</li>
+    </ul>
+    <h3>¿Frase de contraseña?</h3>
+    <p>Una frase como <em>roble-faro-nube-42</em> combina varias palabras al azar: es muy segura por su longitud y, a la vez, más fácil de recordar y escribir que una cadena de símbolos.</p>
+    <h3>¿Es seguro generarlas aquí?</h3>
+    <p>Sí. Usamos <code>crypto.getRandomValues</code>, el generador aleatorio criptográfico del navegador, y nada sale de tu dispositivo. Aun así, lo ideal es guardarlas en un gestor de contraseñas.</p>
+  </article>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+  <script type="text/babel" src="/freeware/generador-contrasenas/app.jsx"></script>
+  <script src="/scripts/freeware-promo.js" defer></script>
+</body>
+</html>
