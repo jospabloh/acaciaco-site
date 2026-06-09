@@ -20,6 +20,7 @@ const STRINGS = {
     h1_a: "Calculadora de finiquito y liquidación ",
     hero_p: "Estima lo que te corresponde conforme a la Ley Federal del Trabajo. Sin instalar, sin cuenta y sin compartir tus datos.",
     privacy_chip: "Todo se calcula en tu navegador. Nada se sube a internet.",
+    mx_chip: "🇲🇽 México · basada en la Ley Federal del Trabajo (LFT) 2026",
     tab_finiquito: "Finiquito",
     tab_aguinaldo: "Aguinaldo",
     tab_vacaciones: "Vacaciones",
@@ -84,7 +85,7 @@ const STRINGS = {
     r_prima_antig: "Prima de antigüedad", r_prima_antig_sub: "12 días/año, tope 2× SM",
     total_liquidacion: "Total de la liquidación",
     liq_note: "La liquidación aplica en despido injustificado: suma las partes proporcionales (finiquito) más la indemnización de 3 meses (90 días), 20 días por año de servicio y la prima de antigüedad. La indemnización se calcula sobre el salario diario integrado (SDI); la prima de antigüedad topa el salario a 2 veces el salario mínimo.",
-    disclaimer_html: "<strong>Aviso:</strong> esta calculadora ofrece una estimación informativa basada en la LFT y los valores 2026 (salario mínimo general $315.04, frontera norte $440.87). No constituye asesoría legal ni contable. Para casos específicos —ISR, prima de antigüedad o despido— consulta a un profesional.",
+    disclaimer_html: "<strong>Aviso:</strong> esta calculadora aplica <strong>únicamente a México</strong> y se basa en la Ley Federal del Trabajo (LFT) y los valores 2026 (salario mínimo general $315.04, frontera norte $440.87). Si nos visitas desde otro país, los resultados no corresponden a tu legislación local. Es una estimación informativa, no asesoría legal ni contable; para casos específicos —ISR, prima de antigüedad o despido— consulta a un profesional.",
     cta_h3: "¿Manejas nómina o RH en tu empresa?",
     cta_p: "En ACACIA automatizamos cálculos de nómina, finiquitos y prestaciones para PyMEs. Hablemos.",
     cta_btn: "Contactar a ACACIA",
@@ -110,6 +111,7 @@ const STRINGS = {
     h1_a: "Severance & layoff pay calculator ",
     hero_p: "Estimate what you're owed under Mexico's Federal Labor Law (LFT). No install, no account, and your data stays private.",
     privacy_chip: "Everything is calculated in your browser. Nothing is uploaded.",
+    mx_chip: "🇲🇽 Mexico only · based on the Federal Labor Law (LFT) 2026",
     tab_finiquito: "Severance",
     tab_aguinaldo: "Bonus",
     tab_vacaciones: "Vacation",
@@ -171,7 +173,7 @@ const STRINGS = {
     r_prima_antig: "Seniority premium", r_prima_antig_sub: "12 days/year, capped at 2× MW",
     total_liquidacion: "Total layoff pay",
     liq_note: "Layoff pay applies to unjustified dismissal: it adds the prorated amounts (severance) plus the 3-month indemnity (90 days), 20 days per year of service and the seniority premium. The indemnity is computed on the integrated daily wage (SDI); the seniority premium caps the wage at twice the minimum wage.",
-    disclaimer_html: "<strong>Disclaimer:</strong> this calculator provides an informational estimate based on Mexico's LFT and 2026 figures (minimum wage $315.04 general, $440.87 northern border). It is not legal or accounting advice. For specific cases —income tax, seniority premium or dismissal— consult a professional.",
+    disclaimer_html: "<strong>Disclaimer:</strong> this calculator applies <strong>to Mexico only</strong> and is based on Mexico's Federal Labor Law (LFT) and 2026 figures (minimum wage $315.04 general, $440.87 northern border). If you're visiting from another country, the results won't match your local regulations. It is an informational estimate, not legal or accounting advice; for specific cases —income tax, seniority premium or dismissal— consult a professional.",
     cta_h3: "Do you run payroll or HR at your company?",
     cta_p: "At ACACIA we automate payroll, severance and benefits calculations for SMBs. Let's talk.",
     cta_btn: "Contact ACACIA",
@@ -639,10 +641,13 @@ function App() {
             <span className="eyebrow"><span className="dot" aria-hidden="true"></span> {t("eyebrow")}</span>
             <h1>{t("h1_a")}<span style={{ color: "var(--accent-2)" }}>2026</span></h1>
             <p>{t("hero_p")}</p>
-            <span className="privacy-chip">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              {t("privacy_chip")}
-            </span>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              <span className="privacy-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                {t("privacy_chip")}
+              </span>
+              <span className="privacy-chip">{t("mx_chip")}</span>
+            </div>
           </header>
 
           <div className="tabs" role="tablist" aria-label="modos">
