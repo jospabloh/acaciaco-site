@@ -123,6 +123,9 @@
     root.appendChild(sec);
 
     var card = sec.querySelector(".ap-card");
+    card.addEventListener("click", function () {
+      if (window.acaciaTrack) window.acaciaTrack("promo_click", { app: APPS[i].id, from: location.pathname, lang: getLang() });
+    });
     var inner = sec.querySelector(".ap-inner");
     var elIcon = sec.querySelector(".ap-icon");
     var elTag = sec.querySelector(".ap-tag");
