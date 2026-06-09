@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PDF a JPG">
+  <rect x="6" y="6" width="52" height="52" rx="12" fill="oklch(0.52 0.13 285)"/>
+  <rect x="12" y="18" width="26" height="28" rx="4" fill="oklch(0.97 0.012 285)"/>
+  <text x="25" y="35" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="9" font-weight="700" fill="oklch(0.52 0.13 285)">PDF</text>
+  <g fill="oklch(0.80 0.14 90)"><rect x="34" y="30" width="20" height="18" rx="3"/></g>
+  <circle cx="40" cy="36" r="2.2" fill="oklch(0.97 0.012 285)"/>
+  <path d="M36 46l5-5 4 3 4-4 5 6z" fill="oklch(0.97 0.012 285)"/>
+  <path d="M30 28h8m0 0-3-3m3 3-3 3" stroke="oklch(0.97 0.012 285)" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
