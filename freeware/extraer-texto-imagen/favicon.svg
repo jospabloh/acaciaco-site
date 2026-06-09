@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Extraer texto de imagen (OCR)">
+  <rect x="6" y="6" width="52" height="52" rx="12" fill="oklch(0.55 0.13 240)"/>
+  <g fill="none" stroke="oklch(0.98 0.01 240)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 22v-4a2 2 0 0 1 2-2h4"/><path d="M48 22v-4a2 2 0 0 0-2-2h-4"/>
+    <path d="M16 42v4a2 2 0 0 0 2 2h4"/><path d="M48 42v4a2 2 0 0 1-2 2h-4"/>
+  </g>
+  <g stroke="oklch(0.98 0.01 240)" stroke-width="3" stroke-linecap="round"><path d="M23 28h18"/><path d="M23 34h18"/><path d="M23 40h11"/></g>
+</svg>
