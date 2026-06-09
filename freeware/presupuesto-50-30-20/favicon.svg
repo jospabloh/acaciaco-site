@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Presupuesto 50/30/20">
+  <rect x="6" y="6" width="52" height="52" rx="12" fill="oklch(0.57 0.14 130)"/>
+  <circle cx="32" cy="32" r="17" fill="none" stroke="oklch(0.98 0.01 130)" stroke-width="8"/>
+  <circle cx="32" cy="32" r="17" fill="none" stroke="oklch(0.86 0.18 95)" stroke-width="8" stroke-dasharray="53.4 53.4" transform="rotate(-90 32 32)"/>
+  <circle cx="32" cy="32" r="17" fill="none" stroke="oklch(0.70 0.16 25)" stroke-width="8" stroke-dasharray="32 75" stroke-dashoffset="-53.4" transform="rotate(-90 32 32)"/>
+</svg>
