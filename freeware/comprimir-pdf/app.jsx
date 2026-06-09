@@ -11,7 +11,7 @@ if (window.pdfjsLib) {
 const STRINGS = {
   es: {
     nav_more: "← Más herramientas", theme_label: "Cambiar tema", lang_label: "Idioma", eyebrow: "Herramienta gratis",
-    nav_merge: "Unir", nav_compress: "Comprimir",
+    nav_merge: "Unir", nav_compress: "Comprimir", nav_split: "Dividir", nav_p2j: "PDF a JPG", nav_j2p: "JPG a PDF",
     h1: "Comprimir ", h1b: "PDF",
     hero_p: "Reduce el tamaño de tus PDF para enviarlos por correo, manteniendo buena calidad. Sin registro, sin marcas de agua y sin subir tus documentos.",
     privacy_chip: "Se comprime en tu navegador: tus PDF nunca se suben.",
@@ -36,7 +36,7 @@ const STRINGS = {
   },
   en: {
     nav_more: "← More tools", theme_label: "Toggle theme", lang_label: "Language", eyebrow: "Free tool",
-    nav_merge: "Merge", nav_compress: "Compress",
+    nav_merge: "Merge", nav_compress: "Compress", nav_split: "Split", nav_p2j: "PDF to JPG", nav_j2p: "JPG to PDF",
     h1: "Compress ", h1b: "PDF",
     hero_p: "Shrink your PDFs to email them, keeping good quality. No sign-up, no watermark, and your documents are never uploaded.",
     privacy_chip: "Compressed in your browser: your PDFs are never uploaded.",
@@ -174,6 +174,9 @@ function App() {
             <nav className="pdfnav" aria-label="PDF">
               <a href="/freeware/unir-pdf">{t("nav_merge")}</a>
               <a href="/freeware/comprimir-pdf" aria-current="true">{t("nav_compress")}</a>
+              <a href="/freeware/dividir-pdf">{t("nav_split")}</a>
+              <a href="/freeware/pdf-a-jpg">{t("nav_p2j")}</a>
+              <a href="/freeware/jpg-a-pdf">{t("nav_j2p")}</a>
             </nav>
             <div><span className="privacy-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{t("privacy_chip")}</span></div>
           </header>
