@@ -6,6 +6,7 @@ const { useState, useEffect, useCallback, useMemo, useRef } = React;
 const STRINGS = {
   es: {
     nav_more: "← Más herramientas", theme_label: "Cambiar tema", lang_label: "Idioma",
+    nav_merge: "Unir", nav_compress: "Comprimir",
     eyebrow: "Herramienta gratis",
     h1: "Unir ", h1b: "PDF",
     hero_p: "Combina, ordena y junta varios archivos PDF en uno solo. Sin instalar, sin marcas de agua y sin subir tus documentos.",
@@ -27,6 +28,7 @@ const STRINGS = {
   },
   en: {
     nav_more: "← More tools", theme_label: "Toggle theme", lang_label: "Language",
+    nav_merge: "Merge", nav_compress: "Compress",
     eyebrow: "Free tool",
     h1: "Merge ", h1b: "PDF",
     hero_p: "Combine, reorder and join several PDF files into one. No install, no watermark, and your documents are never uploaded.",
@@ -132,7 +134,11 @@ function App() {
             <span className="eyebrow"><span className="dot" aria-hidden="true"></span> {t("eyebrow")}</span>
             <h1>{t("h1")}<span style={{ color: "var(--accent-2)" }}>{t("h1b")}</span></h1>
             <p>{t("hero_p")}</p>
-            <span className="privacy-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{t("privacy_chip")}</span>
+            <nav className="pdfnav" aria-label="PDF">
+              <a href="/freeware/unir-pdf" aria-current="true">{t("nav_merge")}</a>
+              <a href="/freeware/comprimir-pdf">{t("nav_compress")}</a>
+            </nav>
+            <div><span className="privacy-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{t("privacy_chip")}</span></div>
           </header>
 
           <div className={"drop" + (over ? " over" : "")} onClick={() => inputRef.current && inputRef.current.click()}
