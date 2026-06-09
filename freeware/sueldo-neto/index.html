@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Sueldo Neto e ISR 2026 (México) — ACACIA</title>
+<meta name="description" content="Calcula tu sueldo neto, el ISR y el subsidio al empleo 2026 conforme a las tarifas oficiales del SAT (Anexo 8). Estima cuánto te queda después de impuestos e IMSS. Gratis, sin instalar, en tu navegador.">
+<meta name="keywords" content="calculadora de sueldo neto, calcular ISR 2026, sueldo neto mensual, cuanto me queda de sueldo, calculadora de salario neto, ISR sueldos y salarios, subsidio al empleo 2026, calculadora nomina, herramienta gratis México, ACACIA">
+<link rel="canonical" href="https://acaciaco.com.mx/freeware/sueldo-neto">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_MX">
+<meta property="og:url" content="https://acaciaco.com.mx/freeware/sueldo-neto">
+<meta property="og:title" content="Calculadora de Sueldo Neto e ISR 2026 (México) — ACACIA">
+<meta property="og:description" content="Calcula tu sueldo neto, ISR y subsidio 2026 con las tarifas oficiales del SAT. Gratis y en tu navegador.">
+<meta property="og:image" content="https://acaciaco.com.mx/assets/acacia-logo.jpg">
+<meta property="og:site_name" content="ACACIA Consultoría">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Calculadora de Sueldo Neto e ISR 2026 (México) — ACACIA">
+<meta name="twitter:description" content="Calcula tu sueldo neto, ISR y subsidio 2026 con las tarifas oficiales del SAT. Gratis y en tu navegador.">
+<meta name="twitter:image" content="https://acaciaco.com.mx/assets/acacia-logo.jpg">
+
+<link rel="icon" type="image/svg+xml" href="/freeware/sueldo-neto/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+  (function () { try { var t = localStorage.getItem('acacia-theme') || 'light'; document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Calculadora de Sueldo Neto e ISR 2026",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web",
+    "url": "https://acaciaco.com.mx/freeware/sueldo-neto",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "MXN" },
+    "provider": { "@type": "Organization", "name": "ACACIA Consultoría", "url": "https://acaciaco.com.mx" },
+    "description": "Calculadora de sueldo neto, ISR y subsidio al empleo 2026 conforme a las tarifas oficiales del SAT (Anexo 8 RMF 2026). Aplica a México. Funciona en el navegador, sin instalar y sin cuenta."
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://acaciaco.com.mx/" },
+      { "@type": "ListItem", "position": 2, "name": "Herramientas gratis", "item": "https://acaciaco.com.mx/freeware" },
+      { "@type": "ListItem", "position": 3, "name": "Calculadora de sueldo neto", "item": "https://acaciaco.com.mx/freeware/sueldo-neto" }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "¿Cómo se calcula el sueldo neto?", "acceptedAnswer": { "@type": "Answer", "text": "Al sueldo bruto se le resta el ISR (según la tarifa mensual del SAT, ya aplicado el subsidio al empleo) y las cuotas obrero del IMSS. El resultado es el sueldo neto que recibes." } },
+      { "@type": "Question", "name": "¿Qué es el subsidio al empleo 2026?", "acceptedAnswer": { "@type": "Answer", "text": "Es un apoyo fiscal que reduce el ISR de los trabajadores de menores ingresos. En 2026 es de $536.22 al mes y aplica cuando el ingreso gravado mensual no supera $11,492.66." } },
+      { "@type": "Question", "name": "¿Los cálculos son exactos?", "acceptedAnswer": { "@type": "Answer", "text": "El ISR usa la tarifa oficial del SAT (Anexo 8 RMF 2026). El IMSS es una estimación, pues depende del salario base de cotización de cada trabajador. Es una herramienta informativa, no sustituye a tu recibo de nómina." } }
+    ]
+  }
+]
+</script>
+
+<style>
+  :root {
+    color-scheme: light dark;
+    --paper:   oklch(0.97 0.012 165);
+    --paper-2: oklch(0.94 0.014 165);
+    --card:    #ffffff;
+    --ink:     oklch(0.22 0.015 165);
+    --ink-2:   oklch(0.44 0.013 165);
+    --ink-3:   oklch(0.60 0.012 165);
+    --line:    oklch(0.89 0.012 165);
+    --line-2:  oklch(0.83 0.014 165);
+    --accent:  oklch(0.56 0.13 165);
+    --accent-2:oklch(0.48 0.13 165);
+    --accent-soft: oklch(0.56 0.13 165 / 0.10);
+    --shadow:  0 1px 0 oklch(0.88 0.012 165 / 0.7), 0 14px 40px -22px oklch(0.20 0.04 165 / 0.30);
+    --radius:  16px;
+  }
+  html[data-theme="dark"] {
+    --paper:   oklch(0.17 0.013 165);
+    --paper-2: oklch(0.21 0.014 165);
+    --card:    oklch(0.23 0.014 165);
+    --ink:     oklch(0.95 0.012 165);
+    --ink-2:   oklch(0.78 0.012 165);
+    --ink-3:   oklch(0.60 0.012 165);
+    --line:    oklch(0.31 0.013 165);
+    --line-2:  oklch(0.38 0.013 165);
+    --accent:  oklch(0.72 0.13 165);
+    --accent-2:oklch(0.80 0.12 165);
+    --accent-soft: oklch(0.72 0.13 165 / 0.14);
+    --shadow:  0 1px 0 oklch(0.30 0.013 165 / 0.6), 0 16px 44px -22px #000;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif; background: var(--paper); color: var(--ink); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .mono { font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+  .app { position: relative; isolation: isolate; min-height: 100vh; }
+  .app::before { content: ""; position: fixed; inset: -25%; z-index: -1; pointer-events: none; background: radial-gradient(40% 48% at 16% 14%, oklch(0.56 0.13 165 / 0.16), transparent 70%), radial-gradient(40% 48% at 86% 88%, oklch(0.58 0.12 200 / 0.10), transparent 70%); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 18px 0 8px; }
+  .brand { display: inline-flex; align-items: center; gap: 9px; font-weight: 700; color: var(--ink); text-decoration: none; font-size: 15px; }
+  .brand img { width: 28px; height: 28px; border-radius: 7px; }
+  .topbar-actions { display: inline-flex; gap: 8px; align-items: center; }
+  .ghost-link { color: var(--ink-2); text-decoration: none; font-size: 13.5px; padding: 7px 11px; border-radius: 9px; }
+  .ghost-link:hover { background: var(--paper-2); color: var(--ink); }
+  .icon-btn { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--ink-2); cursor: pointer; }
+  .icon-btn:hover { color: var(--ink); border-color: var(--line-2); }
+  .icon-btn .sun { display: none; }
+  html[data-theme="dark"] .icon-btn .moon { display: none; }
+  html[data-theme="dark"] .icon-btn .sun { display: block; }
+  .lang-seg { display: inline-flex; background: var(--paper-2); border: 1px solid var(--line); border-radius: 9px; padding: 3px; gap: 2px; }
+  .lang-seg button { border: none; background: transparent; color: var(--ink-2); font-family: inherit; font-size: 12.5px; font-weight: 600; padding: 7px 10px; border-radius: 7px; cursor: pointer; min-width: 36px; }
+  .lang-seg button[aria-pressed="true"] { background: var(--card); color: var(--ink); box-shadow: var(--shadow); }
+
+  .hero { padding: 22px 0 10px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.04em; }
+  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  h1 { font-size: clamp(25px, 5vw, 36px); line-height: 1.1; margin: 12px 0 8px; letter-spacing: -0.02em; }
+  .hero p { color: var(--ink-2); max-width: 58ch; margin: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .chip { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-2); background: var(--accent-soft); border: 1px solid var(--line); padding: 7px 12px; border-radius: 999px; }
+  .chip svg { width: 14px; height: 14px; color: var(--accent-2); }
+
+  .tabs { display: flex; gap: 6px; margin: 24px 0 16px; background: var(--paper-2); border: 1px solid var(--line); padding: 5px; border-radius: 13px; }
+  .tab { flex: 1; text-align: center; padding: 10px 8px; border-radius: 9px; border: none; background: transparent; color: var(--ink-2); font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .tab[aria-selected="true"] { background: var(--card); color: var(--ink); box-shadow: var(--shadow); }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 460px) { .row2 { grid-template-columns: 1fr; } }
+  label { font-size: 13px; font-weight: 600; color: var(--ink-2); }
+  .hint { font-size: 11.5px; color: var(--ink-3); font-weight: 400; }
+  input[type="number"], select { font-family: inherit; font-size: 15px; color: var(--ink); background: var(--paper); border: 1px solid var(--line-2); border-radius: 10px; padding: 11px 12px; width: 100%; }
+  input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+  .result { margin-top: 18px; }
+  .breakdown { display: flex; flex-direction: column; }
+  .brow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 11px 4px; border-bottom: 1px dashed var(--line); }
+  .brow .k { color: var(--ink-2); font-size: 14px; }
+  .brow .k small { display: block; color: var(--ink-3); font-size: 11.5px; }
+  .brow .v { font-weight: 600; font-size: 15px; }
+  .brow .neg { color: oklch(0.55 0.16 25); }
+  .brow .pos { color: var(--accent-2); }
+  .total { margin-top: 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--accent-soft); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+  .total .k { font-weight: 600; } .total .v { font-size: clamp(22px, 5vw, 30px); font-weight: 700; color: var(--accent-2); }
+  .subline { margin-top: 8px; font-size: 12.5px; color: var(--ink-3); text-align: right; }
+  .actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  .btn { font-family: inherit; font-size: 14px; font-weight: 600; padding: 11px 16px; border-radius: 10px; cursor: pointer; border: 1px solid var(--line-2); background: var(--card); color: var(--ink); display: inline-flex; align-items: center; gap: 8px; }
+  .btn:hover { border-color: var(--accent); color: var(--accent-2); }
+  .btn svg { width: 15px; height: 15px; }
+  .copied { color: var(--accent-2); font-size: 13px; align-self: center; }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #06231a; text-decoration: none; }
+  .btn-primary:hover { background: var(--accent-2); border-color: var(--accent-2); color: #06231a; }
+
+  .disclaimer { margin-top: 16px; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; background: var(--paper-2); font-size: 12.5px; color: var(--ink-2); }
+  .disclaimer strong { color: var(--ink); }
+  .cta { margin: 28px 0 12px; text-align: center; padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); }
+  .cta h3 { margin: 0 0 6px; font-size: 18px; } .cta p { margin: 0 0 14px; color: var(--ink-2); font-size: 14px; }
+  details { border-bottom: 1px solid var(--line); padding: 14px 2px; }
+  summary { cursor: pointer; font-weight: 600; font-size: 14.5px; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  summary::-webkit-details-marker { display: none; } summary::after { content: "+"; color: var(--accent-2); font-size: 18px; } details[open] summary::after { content: "−"; }
+  details p { color: var(--ink-2); font-size: 13.5px; margin: 10px 0 2px; }
+  .section-title { margin: 30px 0 8px; font-size: 18px; }
+  footer.foot { margin: 36px 0 28px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 12.5px; color: var(--ink-3); }
+  footer.foot a { color: var(--ink-2); text-decoration: none; } footer.foot a:hover { color: var(--accent-2); }
+  .foot-credit { display: inline-flex; align-items: center; gap: 5px; } .foot-heart { color: oklch(0.62 0.18 25); } .foot-link { font-weight: 600; color: var(--ink-2); } .foot-link:hover { color: var(--accent-2); }
+  @media (max-width: 480px) { .topbar-actions .ghost-link { display: none; } }
+  .seo-article { max-width: 720px; margin: 0 auto; padding: 8px 20px 56px; }
+  .seo-article h2 { font-size: 22px; letter-spacing: -0.02em; margin: 34px 0 10px; }
+  .seo-article h3 { font-size: 16px; margin: 22px 0 6px; }
+  .seo-article p, .seo-article li { color: var(--ink-2); font-size: 14.5px; line-height: 1.65; }
+  .seo-article ul { padding-left: 18px; }
+  .seo-article table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13.5px; }
+  .seo-article th, .seo-article td { text-align: right; padding: 7px 10px; border-bottom: 1px solid var(--line); color: var(--ink-2); }
+  .seo-article th { color: var(--ink); font-weight: 600; }
+  .seo-article td:first-child, .seo-article th:first-child { text-align: left; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <div id="acacia-promo"></div>
+
+  <article class="seo-article">
+    <h2>Calculadora de sueldo neto e ISR 2026 (México)</h2>
+    <p>Calcula cuánto te queda realmente de sueldo después del <strong>ISR</strong> y las cuotas del <strong>IMSS</strong>, usando la tarifa mensual oficial del <strong>SAT</strong> (Anexo 8 de la RMF 2026) y el subsidio al empleo vigente. Aplica a México. Todo se calcula en tu navegador.</p>
+    <h3>¿Cómo se calcula el sueldo neto?</h3>
+    <ul>
+      <li>Se ubica el sueldo gravable en la <strong>tarifa mensual del ISR</strong> y se obtiene el impuesto.</li>
+      <li>Se resta el <strong>subsidio al empleo</strong> ($536.22 en 2026 si el ingreso no supera $11,492.66).</li>
+      <li>Se restan las <strong>cuotas obrero del IMSS</strong> (enfermedad, invalidez, cesantía y vejez).</li>
+      <li>El resultado es tu <strong>sueldo neto</strong>.</li>
+    </ul>
+    <h3>Tarifa ISR mensual 2026 (SAT)</h3>
+    <table>
+      <thead><tr><th>Límite inferior</th><th>Cuota fija</th><th>% excedente</th></tr></thead>
+      <tbody>
+        <tr><td>$0.01</td><td>$0.00</td><td>1.92%</td></tr>
+        <tr><td>$844.60</td><td>$16.22</td><td>6.40%</td></tr>
+        <tr><td>$7,168.52</td><td>$420.95</td><td>10.88%</td></tr>
+        <tr><td>$12,598.03</td><td>$1,011.68</td><td>16.00%</td></tr>
+        <tr><td>$14,644.65</td><td>$1,339.14</td><td>17.92%</td></tr>
+        <tr><td>$17,533.65</td><td>$1,856.84</td><td>21.36%</td></tr>
+        <tr><td>$35,362.84</td><td>$5,665.16</td><td>23.52%</td></tr>
+        <tr><td>$55,736.69</td><td>$10,457.09</td><td>30.00%</td></tr>
+        <tr><td>$106,410.51</td><td>$25,659.23</td><td>32.00%</td></tr>
+        <tr><td>$141,880.67</td><td>$37,009.69</td><td>34.00%</td></tr>
+        <tr><td>$425,642.00</td><td>$133,488.54</td><td>35.00%</td></tr>
+      </tbody>
+    </table>
+    <p>Fuente: Anexo 8 de la Resolución Miscelánea Fiscal 2026 (DOF 28/12/2025), tarifa para pagos provisionales mensuales del artículo 96 de la LISR.</p>
+  </article>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+  <script type="text/babel" src="/freeware/sueldo-neto/app.jsx"></script>
+  <script src="/scripts/freeware-promo.js" defer></script>
+</body>
+</html>
