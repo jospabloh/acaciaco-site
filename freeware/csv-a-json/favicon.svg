@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="CSV a JSON y SQL">
+  <rect x="6" y="6" width="52" height="52" rx="12" fill="oklch(0.55 0.15 325)"/>
+  <g fill="none" stroke="oklch(0.98 0.01 325)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M24 18c-5 0-7 2-7 7s2 7-2 7c4 0 2 5 2 7s2 7 7 7"/>
+    <path d="M40 18c5 0 7 2 7 7s-2 7 2 7c-4 0-2 5-2 7s-2 7-7 7"/>
+  </g>
+</svg>
