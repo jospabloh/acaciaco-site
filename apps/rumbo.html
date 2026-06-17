@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rumbo · Gestión de flotillas y conductores — ACACIA</title>
+  <meta name="description" content="Administra vehículos, conductores, mantenimiento, combustible, multas y costos por km en un solo lugar. Prueba Rumbo gratis 30 días. Software de flotillas para México." />
+  <link rel="canonical" href="https://acaciaco.com.mx/apps/rumbo" />
+  <meta name="theme-color" content="#2563eb" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_MX" />
+  <meta property="og:url" content="https://acaciaco.com.mx/apps/rumbo" />
+  <meta property="og:title" content="Rumbo · Gestión de flotillas y conductores — ACACIA" />
+  <meta property="og:description" content="Administra vehículos, conductores, mantenimiento, combustible y costos por km. Prueba Rumbo gratis 30 días." />
+  <meta property="og:image" content="https://acaciaco.com.mx/assets/Logo_ACACIA_HighRes.jpg" />
+  <meta property="og:site_name" content="ACACIA Consultoría" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Rumbo · Gestión de flotillas y conductores — ACACIA" />
+  <meta name="twitter:description" content="Administra vehículos, conductores, mantenimiento, combustible y costos por km. Prueba Rumbo gratis 30 días." />
+  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/Logo_ACACIA_HighRes.jpg" />
+
+  <link rel="icon" type="image/jpeg" sizes="32x32" href="/assets/acacia-logo.jpg" />
+  <link rel="icon" type="image/jpeg" sizes="192x192" href="/assets/Logo_ACACIA_HighRes.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('acacia-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/styles/base.css" />
+
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Rumbo",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "MXN",
+        "description": "30 días de prueba gratuita"
+      },
+      "provider": {
+        "@type": "Organization",
+        "name": "ACACIA Consultoría",
+        "url": "https://acaciaco.com.mx"
+      },
+      "description": "Sistema de gestión de flotillas para administrar vehículos, conductores, mantenimiento, combustible, multas, rentas y costos por kilómetro."
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://acaciaco.com.mx/" },
+        { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://acaciaco.com.mx/#apps" },
+        { "@type": "ListItem", "position": 3, "name": "Rumbo", "item": "https://acaciaco.com.mx/apps/rumbo" }
+      ]
+    }
+  ]
+  </script>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <header class="site-nav" role="banner">
+    <div class="nav-inner">
+      <a href="/" class="brand" aria-label="ACACIA inicio">
+        <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+        ACACIA
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links" role="list">
+          <li><a href="/#como-trabajamos">Soluciones</a></li>
+          <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="/#apps" aria-current="page">Apps</a></li>
+          <li><a href="/servicios">Servicios</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+
+        <div class="currency-toggle" role="group" aria-label="Moneda">
+          <button data-currency="MXN" aria-pressed="true" class="active">MXN</button>
+          <button data-currency="USD" aria-pressed="false">USD</button>
+        </div>
+
+        <a href="/contacto" class="btn btn-primary btn-sm nav-cta">Iniciar</a>
+
+        <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero section product-hero" aria-labelledby="rb-h1">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-copy reveal">
+            <div class="product-mark">
+              <span aria-hidden="true" style="display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:14px;background:var(--primary);color:#fff;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5v8h1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+              </span>
+              <span class="name">Rumbo</span>
+            </div>
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Disponible · 30 días gratis</span>
+            <h1 id="rb-h1">Toda tu flotilla bajo <span class="accent">control</span>, sin hojas de cálculo.</h1>
+            <p class="lead">Rumbo reúne vehículos, conductores, mantenimiento, combustible, multas y costos por kilómetro en una sola plataforma clara y lista para operar.</p>
+            <div class="hero-ctas">
+              <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20probar%20Rumbo%20gratis%2030%20d%C3%ADas" class="btn btn-primary" rel="noopener noreferrer" target="_blank">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.522 5.851L0 24l6.335-1.501A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.002-1.366l-.36-.214-3.757.89.936-3.657-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
+                Iniciar prueba gratis
+              </a>
+              <a href="#planes" class="btn btn-ghost">Ver planes →</a>
+            </div>
+          </div>
+
+          <div class="hero-visual reveal" aria-hidden="true">
+            <div class="mock">
+              <div class="mock-head">
+                <div class="dots"><span></span><span></span><span></span></div>
+                <span class="title">Rumbo · Flotilla</span>
+                <span class="search">🔍 Buscar</span>
+                <span class="pill">+ Vehículo</span>
+              </div>
+              <table class="mock-table">
+                <thead>
+                  <tr>
+                    <th>Placa</th>
+                    <th>Vehículo</th>
+                    <th>Conductor</th>
+                    <th>Estado</th>
+                    <th class="num">Km</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>ABC-12-34</td><td>Nissan NP300</td><td>J. Ramírez</td><td><span class="tag ok">Activo</span></td><td class="num">84,210</td></tr>
+                  <tr><td>XYZ-98-21</td><td>Hino 300</td><td>M. Torres</td><td><span class="tag warn">Servicio</span></td><td class="num">132,540</td></tr>
+                  <tr><td>JKL-55-09</td><td>VW Saveiro</td><td>—</td><td><span class="tag danger">Multa</span></td><td class="num">61,870</td></tr>
+                  <tr><td>MNO-77-40</td><td>Toyota Hiace</td><td>L. Gómez</td><td><span class="tag ok">Activo</span></td><td class="num">45,300</td></tr>
+                  <tr><td>PQR-31-58</td><td>Ford Transit</td><td>A. Núñez</td><td><span class="tag ok">Activo</span></td><td class="num">98,120</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section" id="features" aria-labelledby="rb-feat-h2">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Funcionalidades</span>
+          <h2 id="rb-feat-h2">Todo lo que tu operación necesita en un solo lugar.</h2>
+          <p>Sin libretas, sin recordatorios perdidos y sin sorpresas en el cierre de mes.</p>
+        </div>
+        <div class="features-grid">
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5v8h1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></span>
+            <h3>Vehículos y conductores</h3>
+            <p>Expediente completo de cada unidad y conductor, con documentos, licencias y vencimientos a la vista.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+            <h3>Mantenimiento e inventario</h3>
+            <p>Programa servicios preventivos y correctivos, controla refacciones y evita paros inesperados.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22h12V2H3z"/><path d="M15 9h3.5a2.5 2.5 0 0 1 2.5 2.5V17a2 2 0 0 1-4 0v-5"/><line x1="6" y1="6" x2="12" y2="6"/></svg></span>
+            <h3>Combustible y costo por km</h3>
+            <p>Registra cargas, calcula rendimiento y conoce el costo real por kilómetro de cada vehículo.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+            <h3>Multas, seguros y siniestros</h3>
+            <p>Lleva el control de infracciones, pólizas y siniestros para que nada se te escape.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+            <h3>Ubicación y rentas</h3>
+            <p>Ubica tus unidades, administra rentas y mantén la asignación de conductores siempre clara.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
+            <h3>Alertas automáticas</h3>
+            <p>Recordatorios de verificación, pólizas, servicios y documentos antes de que venzan.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="section" id="planes" aria-labelledby="rb-price-h2">
+      <div class="container">
+        <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Planes Rumbo</span>
+          <h2 id="rb-price-h2">Empieza gratis. Crece con tu flotilla.</h2>
+          <p class="section-sub">Todos los planes incluyen 30 días de prueba gratuita y branding con tu logo y colores.</p>
+        </div>
+        <div class="pricing-grid">
+
+          <!-- Prueba -->
+          <div class="reveal pricing-card">
+            <h3>Prueba</h3>
+            <div class="pricing-price">Gratis <span class="pricing-unit">/ 30 días</span></div>
+            <p class="pricing-desc">Para probar Rumbo sin riesgo y conocer todos los módulos.</p>
+            <ul class="pricing-features">
+              <li>Hasta 5 vehículos</li>
+              <li>Hasta 5 conductores</li>
+              <li>Todos los módulos</li>
+              <li>Todos los roles y permisos</li>
+              <li>Branding (logo y colores)</li>
+            </ul>
+            <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20Rumbo%20gratis%2030%20d%C3%ADas" target="_blank" rel="noopener" class="btn-mp">Probar 30 días →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20Rumbo" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
+          </div>
+
+          <!-- Starter -->
+          <div class="reveal pricing-card">
+            <h3>Rumbo Starter</h3>
+            <div class="pricing-price"><span data-price="599">$599 MXN</span> <span class="pricing-unit">/ mes</span></div>
+            <p class="pricing-desc">Para dueños de flotillas pequeñas que quieren ordenar su operación.</p>
+            <ul class="pricing-features">
+              <li>Hasta 15 vehículos</li>
+              <li>Hasta 20 conductores</li>
+              <li>Vehículos, conductores y rentas</li>
+              <li>Combustible, multas y alertas</li>
+              <li>Mensajería interna</li>
+              <li>Roles básicos</li>
+              <li>Soporte por correo</li>
+            </ul>
+            <a href="https://www.mercadopago.com.mx/subscriptions/checkout?preapproval_plan_id=3b0cb274f6e74eb4bae02d4cd6279921" target="_blank" rel="noopener" class="btn-mp">Suscribirse →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20Rumbo%20Starter" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
+          </div>
+
+          <!-- Pro (FEATURED) -->
+          <div class="reveal pricing-card featured">
+            <div class="pricing-badge">Más popular</div>
+            <h3>Rumbo Pro</h3>
+            <div class="pricing-price"><span data-price="1699">$1,699 MXN</span> <span class="pricing-unit">/ mes</span></div>
+            <p class="pricing-desc">Para flotillas en crecimiento que necesitan más control y análisis.</p>
+            <ul class="pricing-features">
+              <li>Hasta 50 vehículos</li>
+              <li>Hasta 75 conductores</li>
+              <li>Todo lo de Starter, y además:</li>
+              <li>Mantenimiento e inventario</li>
+              <li>Seguros y siniestros</li>
+              <li>Financiero (costo por km)</li>
+              <li>Importación CSV y ubicación</li>
+              <li>Permisos granulares por rol</li>
+              <li>Soporte prioritario</li>
+            </ul>
+            <a href="https://www.mercadopago.com.mx/subscriptions/checkout?preapproval_plan_id=a1e4fc2b0bc645d1ba4b47f250169582" target="_blank" rel="noopener" class="btn-mp">Suscribirse →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20Rumbo%20Pro" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
+          </div>
+
+          <!-- Flotilla / Enterprise -->
+          <div class="reveal pricing-card">
+            <h3>Rumbo Flotilla</h3>
+            <div class="pricing-price">A cotizar <span class="pricing-unit">/ anual</span></div>
+            <p class="pricing-desc">Para operaciones grandes que requieren todo sin límites.</p>
+            <ul class="pricing-features">
+              <li>Vehículos ilimitados</li>
+              <li>Conductores ilimitados</li>
+              <li>Todos los módulos</li>
+              <li>Permisos granulares + usuarios ilimitados</li>
+              <li>Branding white-label</li>
+              <li>Soporte dedicado + onboarding asistido</li>
+            </ul>
+            <a href="https://wa.me/524498958291?text=Hola,%20quiero%20una%20cotizaci%C3%B3n%20de%20Rumbo%20Flotilla" target="_blank" rel="noopener" class="btn-mp">Solicitar cotización →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20Rumbo%20Flotilla" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
+          </div>
+
+        </div>
+        <p class="pricing-note">* Precios sugeridos en MXN, sin permanencia. ¿Necesitas algo a la medida? <a href="https://wa.me/524498958291?text=Hola,%20necesito%20un%20plan%20personalizado%20para%20Rumbo" target="_blank" rel="noopener">Cuéntanos por WhatsApp</a></p>
+      </div>
+    </section>
+
+    <!-- TESTIMONIAL -->
+    <section class="section" aria-labelledby="rb-test-h2">
+      <div class="container">
+        <h2 id="rb-test-h2" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Testimonio</h2>
+        <div class="testimonial-single reveal">
+          <blockquote>“Con Rumbo dejamos las libretas: hoy sabemos qué unidad rinde, qué servicio toca y cuánto cuesta cada kilómetro.”</blockquote>
+          <cite><strong>Carlos Méndez</strong> Coordinador de flotilla</cite>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEEDBACK -->
+    <section class="section-feedback section">
+      <div class="container">
+        <div class="feedback-card reveal">
+          <div class="feedback-text">
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Tu opinión importa</span>
+            <h2>¿Ya usas Rumbo?</h2>
+            <p>Cuéntanos cómo ha sido tu experiencia. Las mejores reseñas aparecen en el sitio.</p>
+          </div>
+          <a href="https://wa.me/524498958291?text=Hola,%20quiero%20compartir%20mi%20experiencia%20con%20Rumbo" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Compartir mi experiencia →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA STRIP -->
+    <section class="cta-section section" id="contacto" aria-labelledby="rb-cta-h2">
+      <div class="container">
+        <div class="reveal">
+          <h2 id="rb-cta-h2">¿Listo para tomar el control de tu flotilla?</h2>
+          <p>Te acompañamos en la activación, importamos tu información y arrancas con tu equipo desde el primer día.</p>
+          <div class="btns">
+            <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20Rumbo%2030%20d%C3%ADas%20gratis" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Hablar por WhatsApp</a>
+            <a href="mailto:contacto@acaciaco.com.mx" class="btn btn-ghost">Escribir por correo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-grid">
+      <div class="col-brand">
+        <a href="/" class="brand" aria-label="ACACIA inicio">
+          <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+          ACACIA
+        </a>
+        <p>Tecnología, consultoría y soluciones digitales para operaciones que buscan claridad y crecimiento.</p>
+      </div>
+      <div>
+        <h4>Apps</h4>
+        <ul>
+          <li><a href="/apps/rumbo">Rumbo</a></li>
+          <li><a href="/apps/stockflow">StockFlow</a></li>
+          <li><a href="/apps/flowfin">FlowFin</a></li>
+          <li><a href="/apps/puntos-plus">Puntos+</a></li>
+          <li><a href="/apps/liuma">LIUMA</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="/servicios">Consultoría</a></li>
+          <li><a href="/servicios">Implementación</a></li>
+          <li><a href="/servicios">Desarrollo</a></li>
+          <li><a href="/servicios">Precios</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>ACACIA</h4>
+        <ul>
+          <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+          <li><a href="/trabaja-con-nosotros">Trabaja con nosotros</a></li>
+          <li><a href="/legal/privacidad">Privacidad</a></li>
+          <li><a href="/legal/terminos">Términos</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 ACACIA · Todos los derechos reservados</span>
+      <a href="mailto:contacto@acaciaco.com.mx">contacto@acaciaco.com.mx</a>
+    </div>
+  </footer>
+
+  <!-- COOKIE BANNER -->
+  <div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Aviso de cookies" aria-live="polite">
+    <h4>Cookies y privacidad</h4>
+    <p>Usamos cookies para mejorar tu experiencia. Consulta nuestra <a href="/legal/privacidad">política de privacidad</a>.</p>
+    <div class="actions">
+      <button class="btn btn-primary btn-sm" data-cookies="all">Aceptar</button>
+      <button class="btn btn-ghost btn-sm" data-cookies="essential">Solo esenciales</button>
+    </div>
+  </div>
+
+  <script src="/scripts/shared.js"></script>
+</body>
+</html>

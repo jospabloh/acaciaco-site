@@ -13,6 +13,11 @@
       "permanent": false
     },
     {
+      "source": "/rumbo",
+      "destination": "/apps/rumbo",
+      "permanent": true
+    },
+    {
       "source": "/stockflow",
       "destination": "/apps/stockflow",
       "permanent": true
