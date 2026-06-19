@@ -6,6 +6,7 @@
   <title>Apps | ACACIA | Tecnología, consultoría y soluciones digitales</title>
   <meta name="description" content="Catálogo de apps de ACACIA: StockFlow, FlowFin, LIUMA y Puntos+." />
   <link rel="canonical" href="https://acaciaco.com.mx/apps" />
+
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="es_MX" />
   <meta property="og:url" content="https://acaciaco.com.mx/apps" />
@@ -17,65 +18,204 @@
   <meta name="twitter:title" content="Apps de ACACIA" />
   <meta name="twitter:description" content="Explora el catálogo de apps de ACACIA y elige la solución adecuada para tu operación." />
   <meta name="twitter:image" content="https://acaciaco.com.mx/assets/acacia-logo.jpg" />
-  <link rel="icon" type="image/jpeg" href="/assets/Logo_ACACIA_HighRes.jpg" />
-  <link rel="stylesheet" href="/assets/css/site.css?v=20260619-merged-fixes" />
+
+  <link rel="icon" type="image/jpeg" sizes="32x32" href="/assets/acacia-logo.jpg" />
+  <link rel="icon" type="image/jpeg" sizes="192x192" href="/assets/Logo_ACACIA_HighRes.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('acacia-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/styles/base.css" />
 </head>
 
-<body data-page="apps" data-wa-number="524498958291" data-wa-message="Hola, me interesa conocer más sobre las apps de ACACIA.">
+<body>
   <a class="skip-link" href="#main">Saltar al contenido principal</a>
-  <div class="grid"></div><div class="orb"></div><div class="orb2"></div>
-  <header id="site-header"></header>
+
+  <!-- NAV -->
+  <header class="site-nav" role="banner">
+    <div class="nav-inner">
+      <a href="/" class="brand" aria-label="ACACIA inicio">
+        <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+        ACACIA
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links" role="list">
+          <li><a href="/#como-trabajamos">Soluciones</a></li>
+          <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="/#apps" aria-current="page">Apps</a></li>
+          <li><a href="/servicios">Servicios</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <div class="currency-toggle" role="group" aria-label="Moneda">
+          <button data-currency="MXN" aria-pressed="true" class="active">MXN</button>
+          <button data-currency="USD" aria-pressed="false">USD</button>
+        </div>
+        <a href="/contacto" class="btn btn-primary btn-sm nav-cta">Iniciar</a>
+        <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
 
   <main id="main">
-    <section class="wrap" id="inicio">
-      <section class="panel panel-single reveal-up apps-hero sharp-surface">
-        <div class="section-head compact-head">
-          <span class="eyebrow"><span class="dot"></span> ACACIA | Tecnología, consultoría y soluciones digitales</span>
-          <h1 class="h2">Catálogo de apps del ecosistema ACACIA.</h1>
-          <p class="copy">Aquí encuentras cada producto, su enfoque y su ruta de activación. Para ver precios y planes, usa la página de pricing.</p>
-          <div class="cta"><a class="btn btn-ghost" href="/">Ir al sitio corporativo</a><a class="btn btn-primary" href="/pricing">Ver pricing</a></div>
+
+    <!-- HERO -->
+    <section class="section" aria-labelledby="ap-h1" style="padding-block: clamp(6rem, 12vw, 10rem) clamp(2rem, 4vw, 3rem);">
+      <div class="container">
+        <div class="reveal" style="max-width:680px;">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Ecosistema ACACIA</span>
+          <h1 id="ap-h1">Catálogo de apps del ecosistema ACACIA.</h1>
+          <p class="lead">Aquí encuentras cada producto, su enfoque y su ruta de activación. Para ver precios y planes, usa la página de pricing.</p>
+          <div class="hero-ctas">
+            <a class="btn btn-ghost" href="/">Ir al sitio corporativo</a>
+            <a class="btn btn-primary" href="/pricing">Ver pricing</a>
+          </div>
         </div>
-      </section>
+      </div>
     </section>
 
-    <section class="wrap section-wrap" id="apps-destacadas">
-      <section class="panel panel-single reveal-up sharp-surface">
-        <div class="section-head compact-head"><span class="eyebrow"><span class="dot"></span> En producción</span><h2 class="h2">Productos listos para operar.</h2></div>
-        <div class="pricing-cards-grid app-pricing-grid">
-          <article class="premium-price-card" id="stockflow">
-            <span class="badge-upcoming badge-trial">Producción</span>
-            <div class="app-card-head"><img src="https://stockflow.acaciaco.com.mx/favicon.ico" alt="Logo StockFlow" width="28" height="28" /><b>StockFlow</b></div>
-            <h5>StockFlow</h5>
-            <p class="price-support">Inventario, cotizaciones y trazabilidad operativa para equipos comerciales.</p>
-            <ul class="list-clean"><li>Inventario y movimientos</li><li>Cotizaciones y clientes</li><li>Activación guiada opcional</li></ul>
-            <div class="cta app-cta"><a class="btn btn-primary" href="/stockflow">Ver producto</a><a class="btn btn-ghost" href="/pricing#stockflow">Ver planes</a><a class="btn btn-secondary" href="/trial#stockflow">Probar 30 días</a></div>
-          </article>
-
-          <article class="premium-price-card" id="flowfin">
-            <span class="badge-upcoming badge-trial">Producción</span>
-            <div class="app-card-head"><img src="https://flowfin.acaciaco.com.mx/favicon.ico" alt="Logo FlowFin" width="28" height="28" /><b>FlowFin</b></div>
-            <h5>FlowFin</h5>
-            <p class="price-support">App en autoservicio para finanzas personales, de pareja y familiares.</p>
-            <ul class="list-clean"><li>Ingresos y egresos</li><li>Seguimiento compartido</li><li>Autoservicio desde el día 1</li></ul>
-            <div class="cta app-cta"><a class="btn btn-primary" href="/flowfin">Ver producto</a><a class="btn btn-ghost" href="/pricing#flowfin">Ver planes</a><a class="btn btn-secondary" href="/trial#flowfin">Probar 30 días</a></div>
-          </article>
+    <!-- IN PRODUCTION -->
+    <section class="section" style="padding-top:0;" id="apps-destacadas" aria-labelledby="ap-prod-h2">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> En producción</span>
+          <h2 id="ap-prod-h2">Productos listos para operar.</h2>
         </div>
-      </section>
+        <div class="pricing-grid pricing-grid-2">
+
+          <div class="reveal pricing-card" id="stockflow">
+            <div class="pricing-badge">Producción</div>
+            <h3>StockFlow</h3>
+            <p class="pricing-desc">Inventario, cotizaciones y trazabilidad operativa para equipos comerciales.</p>
+            <ul class="pricing-features">
+              <li>Inventario y movimientos</li>
+              <li>Cotizaciones y clientes</li>
+              <li>Activación guiada opcional</li>
+            </ul>
+            <a class="btn btn-primary" href="/stockflow">Ver producto</a>
+            <a class="btn btn-ghost" href="/pricing#stockflow">Ver planes</a>
+            <a class="btn btn-ghost" href="/trial#stockflow">Probar 30 días</a>
+          </div>
+
+          <div class="reveal pricing-card" id="flowfin">
+            <div class="pricing-badge">Producción</div>
+            <h3>FlowFin</h3>
+            <p class="pricing-desc">App en autoservicio para finanzas personales, de pareja y familiares.</p>
+            <ul class="pricing-features">
+              <li>Ingresos y egresos</li>
+              <li>Seguimiento compartido</li>
+              <li>Autoservicio desde el día 1</li>
+            </ul>
+            <a class="btn btn-primary" href="/flowfin">Ver producto</a>
+            <a class="btn btn-ghost" href="/pricing#flowfin">Ver planes</a>
+            <a class="btn btn-ghost" href="/trial#flowfin">Probar 30 días</a>
+          </div>
+
+        </div>
+      </div>
     </section>
 
-    <section class="wrap section-wrap" id="apps-preview">
-      <section class="panel panel-single section-tone reveal-up sharp-surface">
-        <div class="section-head compact-head"><span class="eyebrow"><span class="dot"></span> Preview</span><h2 class="h2">Productos en preview privado.</h2></div>
-        <div class="mini app-grid available-grid stagger-grid">
-          <article class="box app-card app-card-preview interactive-card"><span class="badge-upcoming">Preview</span><div class="app-card-head"><img src="https://liuma.acaciaco.com.mx/favicon.ico" alt="Logo LIUMA" width="28" height="28" /><b>LIUMA</b></div><span>Preview privado con acceso por invitación y aprobación para instituciones seleccionadas.</span><div class="cta app-cta"><a class="btn btn-primary" href="/liuma">Solicitar preview</a></div></article>
-          <article class="box app-card app-card-preview interactive-card"><span class="badge-upcoming">Preview</span><div class="app-card-head"><img src="https://puntosplus.acaciaco.com.mx/favicon.ico" alt="Logo Puntos+" width="28" height="28" /><b>Puntos+</b></div><span>Preview privado con acceso por invitación y aprobación para evaluar Puntos+ en marcas seleccionadas.</span><div class="cta app-cta"><a class="btn btn-primary" href="/puntosplus">Solicitar preview</a></div></article>
+    <!-- PREVIEW -->
+    <section class="section" id="apps-preview" aria-labelledby="ap-prev-h2" style="background: var(--bg-subtle);">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Preview</span>
+          <h2 id="ap-prev-h2">Productos en preview privado.</h2>
         </div>
-      </section>
+        <div class="pricing-grid pricing-grid-2">
+
+          <div class="reveal pricing-card">
+            <div class="pricing-badge">Preview</div>
+            <h3>LIUMA</h3>
+            <p class="pricing-desc">Preview privado con acceso por invitación y aprobación para instituciones seleccionadas.</p>
+            <a class="btn btn-primary" href="/liuma">Solicitar preview</a>
+          </div>
+
+          <div class="reveal pricing-card">
+            <div class="pricing-badge">Preview</div>
+            <h3>Puntos+</h3>
+            <p class="pricing-desc">Preview privado con acceso por invitación y aprobación para evaluar Puntos+ en marcas seleccionadas.</p>
+            <a class="btn btn-primary" href="/puntosplus">Solicitar preview</a>
+          </div>
+
+        </div>
+      </div>
     </section>
+
   </main>
 
-  <a class="wa-float" id="wa-link" target="_blank" rel="noopener noreferrer" href="https://wa.me/524498958291?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20las%20apps%20de%20ACACIA."><span class="wa-icon" aria-hidden="true"></span><span>WhatsApp</span></a>
-  <footer class="site-footer"><div class="wrap footer-inner"><span>© <span id="year"></span> ACACIA</span><span>•</span><a href="/">Inicio</a><span>•</span><a href="/stockflow">StockFlow</a><span>•</span><a href="/flowfin">FlowFin</a><span>•</span><a href="/liuma">LIUMA</a><span>•</span><a href="/puntosplus">Puntos+</a><span>•</span><a href="/pricing">Pricing</a><span>•</span><a href="/contacto">Contacto</a></div></footer>
-  <script src="/assets/js/site.js" defer></script>
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-grid">
+      <div class="col-brand">
+        <a href="/" class="brand" aria-label="ACACIA inicio">
+          <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+          ACACIA
+        </a>
+        <p>Tecnología, consultoría y soluciones digitales para operaciones que buscan claridad y crecimiento.</p>
+      </div>
+      <div>
+        <h4>Apps</h4>
+        <ul>
+          <li><a href="/apps/stockflow">StockFlow</a></li>
+          <li><a href="/apps/flowfin">FlowFin</a></li>
+          <li><a href="/apps/puntos-plus">Puntos+</a></li>
+          <li><a href="/apps/liuma">LIUMA</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="/servicios">Consultoría</a></li>
+          <li><a href="/servicios">Implementación</a></li>
+          <li><a href="/servicios">Desarrollo</a></li>
+          <li><a href="/pricing">Precios</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>ACACIA</h4>
+        <ul>
+          <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+          <li><a href="/trabaja-con-nosotros">Trabaja con nosotros</a></li>
+          <li><a href="/legal/privacidad">Privacidad</a></li>
+          <li><a href="/legal/terminos">Términos</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 ACACIA · Todos los derechos reservados</span>
+      <a href="mailto:contacto@acaciaco.com.mx">contacto@acaciaco.com.mx</a>
+    </div>
+  </footer>
+
+  <!-- COOKIE BANNER -->
+  <div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Aviso de cookies" aria-live="polite">
+    <h4>Cookies y privacidad</h4>
+    <p>Usamos cookies para mejorar tu experiencia. Consulta nuestra <a href="/legal/privacidad">política de privacidad</a>.</p>
+    <div class="actions">
+      <button class="btn btn-primary btn-sm" data-cookies="all">Aceptar</button>
+      <button class="btn btn-ghost btn-sm" data-cookies="essential">Solo esenciales</button>
+    </div>
+  </div>
+
+  <script src="/scripts/shared.js"></script>
 </body>
 </html>
