@@ -3,267 +3,224 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <title>ACACIA | Tecnología, consultoría y soluciones digitales</title>
-  <meta
-    name="description"
-    content="ACACIA | Tecnología, consultoría y soluciones digitales. Estamos renovando la experiencia web para ofrecer una presencia más clara, profesional y moderna."
-  />
-  <meta name="title" content="ACACIA | Tecnología, consultoría y soluciones digitales" />
+  <title>Sitio en renovación — ACACIA</title>
+  <meta name="description" content="ACACIA | Tecnología, consultoría y soluciones digitales. Estamos renovando la experiencia web para ofrecer una presencia más clara, profesional y moderna." />
   <meta name="author" content="ACACIA" />
-  <meta name="theme-color" content="#0a78b8" />
 
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="ACACIA | Tecnología, consultoría y soluciones digitales" />
-  <meta
-    property="og:description"
-    content="Sitio en actualización de ACACIA: tecnología, consultoría y soluciones digitales."
-  />
-  <meta property="og:site_name" content="ACACIA | Tecnología, consultoría y soluciones digitales" />
-  <meta property="og:image" content="/assets/Logo_ACACIA_HighRes.jpg" />
+  <meta property="og:locale" content="es_MX" />
+  <meta property="og:title" content="Sitio en renovación — ACACIA" />
+  <meta property="og:description" content="Sitio en actualización de ACACIA: tecnología, consultoría y soluciones digitales." />
+  <meta property="og:site_name" content="ACACIA Consultoría" />
+  <meta property="og:image" content="https://acaciaco.com.mx/assets/Logo_ACACIA_HighRes.jpg" />
 
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="ACACIA | Tecnología, consultoría y soluciones digitales" />
-  <meta
-    name="twitter:description"
-    content="Sitio en actualización de ACACIA: tecnología, consultoría y soluciones digitales."
-  />
-  <meta name="twitter:image" content="/assets/Logo_ACACIA_HighRes.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sitio en renovación — ACACIA" />
+  <meta name="twitter:description" content="Sitio en actualización de ACACIA: tecnología, consultoría y soluciones digitales." />
+  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/Logo_ACACIA_HighRes.jpg" />
 
-  <link rel="icon" type="image/jpeg" href="/assets/Logo_ACACIA_HighRes.jpg" />
-  <link rel="stylesheet" href="/assets/css/site.css?v=20260410-premium" />
+  <link rel="icon" type="image/jpeg" sizes="32x32" href="/assets/acacia-logo.jpg" />
+  <link rel="icon" type="image/jpeg" sizes="192x192" href="/assets/Logo_ACACIA_HighRes.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('acacia-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/styles/base.css" />
 </head>
 
-<body
-  data-wa-number="524498958291"
-  data-wa-message="Hola, me interesa conocer más sobre ACACIA y sus soluciones digitales."
-  data-usd-rate="17"
->
+<body>
   <a class="skip-link" href="#main">Saltar al contenido principal</a>
-  <div class="grid-bg"></div>
-  <div class="orb"></div>
-  <div class="orb-2"></div>
 
-    <header id="site-header"></header>
-
+  <!-- NAV -->
+  <header class="site-nav" role="banner">
+    <div class="nav-inner">
+      <a href="/" class="brand" aria-label="ACACIA inicio">
+        <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+        ACACIA
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links" role="list">
+          <li><a href="/#como-trabajamos">Soluciones</a></li>
+          <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="/#apps">Apps</a></li>
+          <li><a href="/servicios">Servicios</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <div class="currency-toggle" role="group" aria-label="Moneda">
+          <button data-currency="MXN" aria-pressed="true" class="active">MXN</button>
+          <button data-currency="USD" aria-pressed="false">USD</button>
+        </div>
+        <a href="/contacto" class="btn btn-primary btn-sm nav-cta">Iniciar</a>
+        <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
 
   <main id="main">
-    <section class="hero">
+
+    <!-- HERO -->
+    <section class="section" aria-labelledby="uc-h1" style="padding-block: clamp(6rem, 12vw, 10rem) clamp(2rem, 4vw, 3rem);">
       <div class="container">
-        <div class="hero-shell">
-          <section class="hero-panel">
-            <div class="hero-brand">
-              <img src="/assets/Logo_ACACIA_HighRes.jpg" alt="Logo ACACIA" />
-              <div class="hero-brand-copy">
-                <b>ACACIA</b>
-                <span>Rediseño en progreso</span>
-              </div>
-            </div>
-
-            <h1>Estamos renovando toda la experiencia web</h1>
-
-            <p class="lead">
-              Estamos preparando una versión más clara, más fluida y más profesional de ACACIA, con mejor navegación,
-              mejor presentación de servicios y una estructura más sólida para nuestras soluciones digitales.
-            </p>
-
-            <div class="pillrow">
-              <div class="pill"><strong>Diseño UI renovado</strong></div>
-              <div class="pill"><strong>Contenido actualizado</strong></div>
-              <div class="pill"><strong>Más claridad comercial</strong></div>
-              <div class="pill"><strong>Experiencia más premium</strong></div>
-            </div>
-
-            <div class="cta">
-              <a class="btn btn-primary" href="/apps">Ir a Apps</a>
-              <a class="btn btn-secondary" id="wa-link-hero" href="#contacto-acacia">Solicitar información</a>
-              <a class="btn btn-ghost" href="/">Volver al inicio</a>
-            </div>
-
-            <p class="note">
-              Mientras termina el rediseño, puedes entrar directamente a las apps activas o escribirnos por WhatsApp y correo.
-            </p>
-          </section>
-
-          <aside class="hero-sidebar">
-            <div class="card">
-              <div class="meter">
-                <h2>Accesos rápidos</h2>
-
-                <div class="mini">
-                  <div class="box">
-                    <b>StockFlow</b>
-                    <span>Control de inventario, movimientos y cotizaciones.</span>
-                  </div>
-                  <div class="box">
-                    <b>FlowFin</b>
-                    <span>Gestión financiera colaborativa para familias y grupos.</span>
-                  </div>
-                  <div class="box">
-                    <b>LIUMA</b>
-                    <span>Comunicación y gestión escolar con mejor visibilidad.</span>
-                  </div>
-                  <div class="box">
-                    <b>Puntos+</b>
-                    <span>Lealtad y recompensas para negocios.</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="content">
-                <h2>Disponibles ahora</h2>
-                <ul class="list-clean">
-                  <li><a href="https://stockflow.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">Abrir StockFlow</a></li>
-                  <li><a href="https://flowfin.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">Abrir FlowFin</a></li>
-                  <li><a href="/liuma">Ver preview de LIUMA</a></li>
-                  <li><a href="/puntosplus">Ver preview de Puntos+</a></li>
-                </ul>
-              </div>
-            </div>
-          </aside>
+        <div class="reveal" style="max-width:720px;">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Rediseño en progreso</span>
+          <h1 id="uc-h1">Estamos renovando toda la experiencia web.</h1>
+          <p class="lead">Estamos preparando una versión más clara, más fluida y más profesional de ACACIA, con mejor navegación, mejor presentación de servicios y una estructura más sólida para nuestras soluciones digitales.</p>
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href="/apps">Ir a Apps</a>
+            <a class="btn btn-ghost" href="#contacto-acacia">Solicitar información</a>
+            <a class="btn btn-ghost" href="/">Volver al inicio</a>
+          </div>
+          <p class="section-sub" style="margin-top:1.25rem;">Mientras termina el rediseño, puedes entrar directamente a las apps activas o escribirnos por WhatsApp y correo.</p>
         </div>
       </div>
     </section>
 
-    <section class="section section-tight">
+    <!-- QUICK ACCESS -->
+    <section class="section" style="padding-top:0;" aria-labelledby="uc-access-h2">
       <div class="container">
-        <div class="section-head">
-          <span class="eyebrow"><span class="dot"></span> Qué está cambiando</span>
-          <h2 class="h2">Una presencia más ordenada, clara y profesional</h2>
-          <p class="copy">
-            El rediseño busca eliminar duplicidad, mejorar jerarquía visual, ordenar la navegación y presentar de mejor manera
-            las apps, servicios, consultoría, contacto y propuesta de valor de ACACIA.
-          </p>
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Accesos rápidos</span>
+          <h2 id="uc-access-h2">Disponibles ahora</h2>
         </div>
+        <div class="features-grid reveal">
+          <article class="feature">
+            <h3>StockFlow</h3>
+            <p>Control de inventario, movimientos y cotizaciones.</p>
+            <a class="btn btn-ghost btn-sm" href="https://stockflow.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">Abrir StockFlow</a>
+          </article>
+          <article class="feature">
+            <h3>FlowFin</h3>
+            <p>Gestión financiera colaborativa para familias y grupos.</p>
+            <a class="btn btn-ghost btn-sm" href="https://flowfin.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">Abrir FlowFin</a>
+          </article>
+          <article class="feature">
+            <h3>LIUMA</h3>
+            <p>Comunicación y gestión escolar con mejor visibilidad.</p>
+            <a class="btn btn-ghost btn-sm" href="/liuma">Ver preview de LIUMA</a>
+          </article>
+          <article class="feature">
+            <h3>Puntos+</h3>
+            <p>Lealtad y recompensas para negocios.</p>
+            <a class="btn btn-ghost btn-sm" href="/puntosplus">Ver preview de Puntos+</a>
+          </article>
+        </div>
+      </div>
+    </section>
 
-        <div class="feature-grid">
-          <article class="feature-card">
+    <!-- WHAT'S CHANGING -->
+    <section class="section" aria-labelledby="uc-change-h2" style="background: var(--bg-subtle);">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Qué está cambiando</span>
+          <h2 id="uc-change-h2">Una presencia más ordenada, clara y profesional</h2>
+          <p class="section-sub">El rediseño busca eliminar duplicidad, mejorar jerarquía visual, ordenar la navegación y presentar de mejor manera las apps, servicios, consultoría, contacto y propuesta de valor de ACACIA.</p>
+        </div>
+        <div class="features-grid reveal">
+          <article class="feature">
             <h3>Navegación mejor integrada</h3>
-            <p>
-              Menos ruido visual, mejor estructura y una experiencia más clara para llegar a lo importante.
-            </p>
+            <p>Menos ruido visual, mejor estructura y una experiencia más clara para llegar a lo importante.</p>
           </article>
-
-          <article class="feature-card">
+          <article class="feature">
             <h3>Branding más consistente</h3>
-            <p>
-              Una sola línea visual y verbal para que ACACIA se perciba sólida, profesional y confiable.
-            </p>
+            <p>Una sola línea visual y verbal para que ACACIA se perciba sólida, profesional y confiable.</p>
           </article>
-
-          <article class="feature-card">
+          <article class="feature">
             <h3>Mejor claridad comercial</h3>
-            <p>
-              Servicios, soluciones y contacto presentados con mayor orden y mejor lectura.
-            </p>
+            <p>Servicios, soluciones y contacto presentados con mayor orden y mejor lectura.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="section section-tight" id="contacto-acacia">
+    <!-- CONTACT -->
+    <section class="section" id="contacto-acacia" aria-labelledby="uc-contact-h2">
       <div class="container">
-        <div class="contact-strip">
-          <div>
-            <h3>¿Necesitas información mientras termina el rediseño?</h3>
-            <p>
-              Puedes escribirnos para conocer nuestras apps, servicios, consultoría, implementación o soporte.
-            </p>
-          </div>
-
-          <div class="contact-strip-actions">
-            <a
-              class="btn btn-secondary"
-              id="wa-link"
-              href="https://wa.me/524498958291?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20soluciones%20ACACIA."
-              target="_blank"
-              rel="noopener noreferrer"
-              data-i18n="contact.cta.whatsapp"
-            >
-              Hablar por WhatsApp
-            </a>
-
-            <a
-              class="btn btn-ghost"
-              href="mailto:contacto@acaciaco.com.mx"
-              data-i18n="contact.cta.email"
-            >
-              Escribir por correo
-            </a>
-
-            <a class="btn btn-primary" href="/apps">
-              Ver Apps
-            </a>
-          </div>
+        <div class="section-head reveal" style="max-width:640px;">
+          <h2 id="uc-contact-h2">¿Necesitas información mientras termina el rediseño?</h2>
+          <p class="section-sub">Puedes escribirnos para conocer nuestras apps, servicios, consultoría, implementación o soporte.</p>
+        </div>
+        <div class="hero-ctas reveal">
+          <a class="btn btn-primary" href="https://wa.me/524498958291?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20soluciones%20ACACIA." target="_blank" rel="noopener noreferrer">Hablar por WhatsApp</a>
+          <a class="btn btn-ghost" href="mailto:contacto@acaciaco.com.mx">Escribir por correo</a>
+          <a class="btn btn-ghost" href="/apps">Ver Apps</a>
         </div>
       </div>
     </section>
+
   </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <div class="footer-brand-head">
-            <img src="/assets/Logo_ACACIA_HighRes.jpg" alt="Logo ACACIA" />
-            <div class="footer-brand-copy">
-              <b>ACACIA</b>
-              <span>Tecnología, consultoría y soluciones digitales</span>
-            </div>
-          </div>
-
-          <p class="footer-copy">
-            Soluciones digitales con enfoque profesional, estructura clara y experiencia cuidada para empresas, negocios y proyectos en crecimiento.
-          </p>
-        </div>
-
-        <div class="footer-col">
-          <h4>Apps</h4>
-          <div class="footer-links">
-            <a href="https://flowfin.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">FlowFin</a>
-            <a href="https://stockflow.acaciaco.com.mx" target="_blank" rel="noopener noreferrer">StockFlow</a>
-            <a href="/liuma">LIUMA</a>
-            <a href="/puntosplus">Puntos+</a>
-          </div>
-        </div>
-
-        <div class="footer-col">
-          <h4>Contacto</h4>
-          <div class="footer-links">
-            <a href="mailto:contacto@acaciaco.com.mx">contacto@acaciaco.com.mx</a>
-            <a href="https://wa.me/524498958291" target="_blank" rel="noopener noreferrer">WhatsApp: +52 449 895 8291</a>
-            <a href="/apps">Ver sitio principal</a>
-          </div>
-        </div>
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-grid">
+      <div class="col-brand">
+        <a href="/" class="brand" aria-label="ACACIA inicio">
+          <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+          ACACIA
+        </a>
+        <p>Tecnología, consultoría y soluciones digitales para operaciones que buscan claridad y crecimiento.</p>
       </div>
-
-      <div class="footer-legal">
-        <span>© <span id="year"></span> ACACIA</span>
-        <span>•</span>
-        <a href="/privacy">Privacy</a>
-        <span>•</span>
-        <a href="/terms">Terms</a>
+      <div>
+        <h4>Apps</h4>
+        <ul>
+          <li><a href="/apps/stockflow">StockFlow</a></li>
+          <li><a href="/apps/flowfin">FlowFin</a></li>
+          <li><a href="/apps/puntos-plus">Puntos+</a></li>
+          <li><a href="/apps/liuma">LIUMA</a></li>
+        </ul>
       </div>
+      <div>
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="/servicios">Consultoría</a></li>
+          <li><a href="/servicios">Implementación</a></li>
+          <li><a href="/servicios">Desarrollo</a></li>
+          <li><a href="/pricing">Precios</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li><a href="mailto:contacto@acaciaco.com.mx">contacto@acaciaco.com.mx</a></li>
+          <li><a href="https://wa.me/524498958291" target="_blank" rel="noopener noreferrer">WhatsApp: +52 449 895 8291</a></li>
+          <li><a href="/legal/privacidad">Privacidad</a></li>
+          <li><a href="/legal/terminos">Términos</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 ACACIA · Todos los derechos reservados</span>
+      <a href="mailto:contacto@acaciaco.com.mx">contacto@acaciaco.com.mx</a>
     </div>
   </footer>
 
-  <a class="wa-float" id="wa-link-float" target="_blank" rel="noopener noreferrer" href="https://wa.me/524498958291">
-    <span class="wa-icon" aria-hidden="true"></span>
-    <span>WhatsApp</span>
-  </a>
+  <!-- COOKIE BANNER -->
+  <div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Aviso de cookies" aria-live="polite">
+    <h4>Cookies y privacidad</h4>
+    <p>Usamos cookies para mejorar tu experiencia. Consulta nuestra <a href="/legal/privacidad">política de privacidad</a>.</p>
+    <div class="actions">
+      <button class="btn btn-primary btn-sm" data-cookies="all">Aceptar</button>
+      <button class="btn btn-ghost btn-sm" data-cookies="essential">Solo esenciales</button>
+    </div>
+  </div>
 
-  <script src="/assets/js/site.js" defer></script>
-  <script>
-    (function () {
-      var heroWa = document.getElementById('wa-link-hero');
-      var mainWa = document.getElementById('wa-link');
-      var floatWa = document.getElementById('wa-link-float');
-      var href = 'https://wa.me/524498958291?text=' + encodeURIComponent('Hola, me interesa conocer más sobre ACACIA y sus soluciones digitales.');
-
-      if (heroWa) heroWa.setAttribute('href', href);
-      if (mainWa) mainWa.setAttribute('href', href);
-      if (floatWa) floatWa.setAttribute('href', href);
-    })();
-  </script>
+  <script src="/scripts/shared.js"></script>
 </body>
 </html>

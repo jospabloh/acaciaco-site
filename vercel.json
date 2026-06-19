@@ -13,6 +13,11 @@
       "permanent": false
     },
     {
+      "source": "/bolsa-empleo",
+      "destination": "/trabaja-con-nosotros",
+      "permanent": true
+    },
+    {
       "source": "/rumbo",
       "destination": "/apps/rumbo",
       "permanent": true
@@ -89,7 +94,7 @@
       ]
     },
     {
-      "source": "/(pricing|trial|faq|apps|bolsa-empleo|underconstruction)",
+      "source": "/(pricing|trial|faq|apps|underconstruction)",
       "headers": [
         {
           "key": "X-Robots-Tag",
