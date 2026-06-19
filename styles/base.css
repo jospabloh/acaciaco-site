@@ -2031,3 +2031,29 @@ details.faq-item[open] { border-color: var(--primary); }
   margin-left: 4px;
 }
 .compliance-note a:hover { text-decoration: underline; }
+
+/* ── Accessibility: visible keyboard focus + skip link ───────────────── */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -48px;
+  z-index: 1000;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 8px;
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
