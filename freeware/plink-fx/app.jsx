@@ -447,11 +447,18 @@ function quickAmountsFor(code) {
   return baseUSD.map(b => roundNice(b * r));
 }
 
+function prefersReducedMotion() {
+  return typeof window !== "undefined" && window.matchMedia
+    && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 function useAnimatedNumber(value, ms = 280) {
   const [display, setDisplay] = useState(value);
   const fromRef = useRef(value);
   const startRef = useRef(performance.now());
   useEffect(() => {
+    // Respect reduced-motion: snap straight to the value, no tween.
+    if (prefersReducedMotion()) { setDisplay(value); return; }
     fromRef.current = display;
     startRef.current = performance.now();
     let raf;
