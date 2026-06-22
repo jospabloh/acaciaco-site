@@ -2121,3 +2121,208 @@ details.faq-item[open] { border-color: var(--primary); }
   outline: 3px solid var(--primary);
   outline-offset: 2px;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PREMIUM LAYER — atmosphere, motion & tactile micro-interactions
+   Additive only. Every motion effect degrades gracefully and is disabled
+   under prefers-reduced-motion (guarded at the end of this block).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Scroll progress: a hairline of brand light at the top of the page ── */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  z-index: 300;
+  transform-origin: 0 50%;
+  transform: scaleX(var(--scroll, 0));
+  background: linear-gradient(90deg, var(--primary), var(--secondary) 55%, var(--success));
+  box-shadow: 0 0 12px var(--glow);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.scroll-progress.on { opacity: 1; }
+
+/* ── Hero atmosphere: slow-drifting light + fine grain ────────────────── */
+.hero { isolation: isolate; }
+.hero::before { animation: drift-a 26s var(--ease-out) infinite alternate; }
+.hero::after  { animation: drift-b 32s var(--ease-out) infinite alternate; }
+
+@keyframes drift-a {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(6%, 4%, 0) scale(1.12); }
+}
+@keyframes drift-b {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(-5%, -6%, 0) scale(1.1); }
+}
+
+/* near-invisible grain to kill banding on the gradients */
+.hero > .container { position: relative; z-index: 1; }
+.hero-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+/* The dashboard preview breathes, then reacts to the pointer (set in JS) */
+.preview {
+  transform: rotate(-1.5deg);
+  transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
+  animation: float-preview 7s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes float-preview {
+  0%, 100% { transform: rotate(-1.5deg) translateY(0); }
+  50%      { transform: rotate(-1.5deg) translateY(-10px); }
+}
+.preview.tilt {
+  animation: none;
+  transform: perspective(1100px)
+             rotateX(calc(var(--ty, 0) * -4deg))
+             rotateY(calc(var(--tx, 0) * 6deg))
+             rotate(-1.5deg);
+}
+.preview .preview-chart .bar {
+  transform-origin: bottom;
+  animation: bar-rise 0.9s var(--ease-out) both;
+}
+.preview .preview-chart .bar:nth-child(odd)  { animation-delay: 0.05s; }
+.preview .preview-chart .bar:nth-child(3n)   { animation-delay: 0.12s; }
+.preview .preview-chart .bar:nth-child(4n)   { animation-delay: 0.18s; }
+@keyframes bar-rise { from { transform: scaleY(0); opacity: 0; } to { transform: scaleY(1); opacity: 1; } }
+
+/* ── Pointer-reactive spotlight on the primary card grids ─────────────── */
+.app-card, .card { position: relative; isolation: isolate; }
+.app-card::before, .card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--primary) 14%, transparent),
+    transparent 62%);
+}
+.app-card:hover::before, .card:hover::before { opacity: 1; }
+/* keep card content above the glow */
+.app-card > *, .card > * { position: relative; z-index: 1; }
+
+/* a touch more depth on lift */
+.app-card:hover, .card:hover { box-shadow: var(--shadow-lg); }
+
+/* ── Refined nav: animated active/hover underline ─────────────────────── */
+.nav-links a { position: relative; }
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -6px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--ease-out);
+}
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-links a[aria-current="page"]::after { transform: scaleX(1); }
+/* supersede the legacy block underline (avoid double rule) */
+.nav-links a[aria-current="page"]::after { margin-top: 0; width: auto; }
+@media (max-width: 768px) {
+  .nav-links a::after { display: none; }
+}
+
+/* brand mark gets a subtle hover lift + glow */
+.site-nav .brand img { transition: transform 0.3s var(--ease-spring), box-shadow 0.3s ease; }
+.site-nav .brand:hover img { transform: rotate(-3deg) scale(1.06); box-shadow: 0 6px 16px var(--glow); }
+
+/* ── Number count-up target ───────────────────────────────────────────── */
+[data-count-to] { font-variant-numeric: tabular-nums; }
+
+/* ── Directional reveal variants (opt-in via data-reveal) ─────────────── */
+.reveal[data-reveal="left"]  { transform: translateX(-28px); }
+.reveal[data-reveal="right"] { transform: translateX(28px); }
+.reveal[data-reveal="scale"] { transform: scale(0.94); }
+.reveal[data-reveal].in { transform: none; }
+
+/* Broaden graceful stagger to every reveal grid */
+.pricing-grid .reveal.in:nth-child(2),
+.testimonials-grid .reveal.in:nth-child(2),
+.features-grid .reveal.in:nth-child(2),
+.compliance-grid .reveal.in:nth-child(2) { transition-delay: 0.06s; }
+.pricing-grid .reveal.in:nth-child(3),
+.testimonials-grid .reveal.in:nth-child(3),
+.features-grid .reveal.in:nth-child(3),
+.compliance-grid .reveal.in:nth-child(3) { transition-delay: 0.12s; }
+.cards-grid .reveal.in:nth-child(5),
+.apps-grid .reveal.in:nth-child(5)  { transition-delay: 0.24s; }
+.apps-grid .reveal.in:nth-child(6)  { transition-delay: 0.30s; }
+
+/* ── Buttons: crisper press + focus-visible glow ──────────────────────── */
+.btn:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+.btn-primary:active { transform: translateY(1px) scale(0.99); }
+.btn-ghost::after {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(120% 120% at 50% 120%, var(--glow), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.btn-ghost:hover::after { opacity: 0.6; }
+
+/* ── Eyebrow: subtle sheen so labels feel crafted, not stuck-on ───────── */
+.eyebrow { position: relative; }
+.eyebrow::after {
+  content: "";
+  position: absolute; inset: 0;
+  clip-path: inset(0 round var(--radius-pill));
+  background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.35) 50%, transparent 65%);
+  transform: translateX(-130%);
+  animation: eyebrow-sheen 7s ease-in-out infinite;
+  pointer-events: none;
+}
+[data-theme="dark"] .eyebrow::after { background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.10) 50%, transparent 65%); }
+@keyframes eyebrow-sheen {
+  0%, 88%, 100% { transform: translateX(-130%); }
+  94%           { transform: translateX(130%); }
+}
+
+/* ── Section ambient: a faint brand wash between major sections ────────── */
+.cta-section { position: relative; isolation: isolate; overflow: hidden; }
+.cta-section::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 50%; top: 50%;
+  width: 70vw; height: 70vw;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at center, var(--glow) 0%, transparent 60%);
+  pointer-events: none;
+  animation: drift-a 30s var(--ease-out) infinite alternate;
+}
+
+/* Preserve the mobile un-rotation (the float animation would otherwise re-tilt it) */
+@media (max-width: 960px) {
+  .preview { animation: none; transform: rotate(0); }
+  .preview.tilt { transform: rotate(0); }
+}
+
+/* ── Quiet everything for reduced-motion users ────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .hero::before, .hero::after,
+  .preview, .preview .preview-chart .bar,
+  .eyebrow::after, .cta-section::before { animation: none !important; }
+  .preview { transform: rotate(-1.5deg) !important; }
+  .scroll-progress { display: none; }
+}

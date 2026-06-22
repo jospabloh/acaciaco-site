@@ -102,6 +102,18 @@
     overscroll-behavior: none;
   }
   .mono { font-family: "Space Grotesk", ui-monospace, monospace; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+
+  /* Accessibility floor — visible, branded keyboard focus everywhere */
+  :focus-visible {
+    outline: 2px solid var(--accent, var(--mx));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  /* mouse users don't get the ring on these tap targets */
+  button:focus:not(:focus-visible),
+  a:focus:not(:focus-visible),
+  input:focus:not(:focus-visible) { outline: none; }
+  ::selection { background: oklch(from var(--mx) l c h / 0.22); }
   .app {
     position: relative;
     isolation: isolate;
@@ -161,6 +173,8 @@
   }
   /* Slow sheen sweeping across the wordmark — the premium touch */
   .trip-mark > span {
+    font-weight: 500;
+    letter-spacing: -0.02em;
     background: linear-gradient(110deg,
       var(--ink) 28%, var(--mx) 44%, var(--cr) 56%, var(--ink) 72%);
     background-size: 220% 100%;
@@ -177,8 +191,13 @@
     .app::before,
     .trip-header,
     .trip-mark > span,
-    .conv-card { animation: none; }
-    .conv-card:hover { transform: none; }
+    .picker-bar,
+    .region-bar,
+    .conv-card { animation: none !important; }
+    .conv-card:hover,
+    .chip:hover,
+    .picker-chip:hover { transform: none; }
+    * { scroll-behavior: auto; }
   }
   .trip-credit {
     font-size: 11px;
@@ -437,6 +456,12 @@
   .picker-bar {
     background: var(--paper);
     border-bottom: 1px solid var(--line);
+    animation: bar-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+  }
+  .region-bar { animation: bar-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both; }
+  @keyframes bar-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: none; }
   }
   .picker-bar-inner {
     max-width: 1080px;
@@ -487,7 +512,10 @@
     border-radius: 999px 0 0 999px;
     opacity: 0.7;
   }
-  .picker-chip:hover { border-color: var(--ink-3); }
+  .picker-chip:hover {
+    border-color: oklch(from var(--accent) l c h / 0.5);
+    box-shadow: 0 6px 16px -12px oklch(from var(--accent) l c h / 0.6);
+  }
   .picker-chip-code {
     font-weight: 600;
     font-size: 12px;
@@ -821,16 +849,20 @@
 
   .amount-input-wrap {
     display: flex; align-items: baseline; gap: 16px;
-    padding: 22px 24px;
-    background: var(--card);
+    padding: 24px 26px;
+    background:
+      linear-gradient(180deg, oklch(from var(--accent, var(--mx)) l c h / 0.05), transparent 90px),
+      var(--card);
     border: 1px solid var(--line);
-    border-radius: 18px;
+    border-radius: 20px;
     box-shadow: var(--shadow);
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
   }
   .amount-input-wrap.focused {
-    border-color: var(--ink-2);
-    box-shadow: 0 0 0 4px oklch(from var(--ink) l c h / 0.06), var(--shadow);
+    border-color: oklch(from var(--accent, var(--ink)) l c h / 0.5);
+    box-shadow:
+      0 0 0 4px oklch(from var(--accent, var(--ink)) l c h / 0.10),
+      var(--shadow);
   }
   .amount-symbol {
     font-family: "Space Grotesk", serif;
@@ -879,15 +911,25 @@
     cursor: pointer;
     transition: all 0.12s;
   }
-  .chip:hover { border-color: var(--ink-3); color: var(--ink); }
-  .chip.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .chip:hover { border-color: var(--ink-3); color: var(--ink); transform: translateY(-1px); }
+  .chip:active { transform: translateY(0); }
+  .chip.active {
+    background: var(--accent, var(--ink));
+    border-color: var(--accent, var(--ink));
+    color: #fff;
+  }
 
-  /* === Conversion card === */
+  /* === Conversion card — SIGNATURE: travel "fare ticket" ===
+     Each conversion reads like a boarding-pass / departure-board fare:
+     a perforated accent stub down the left, a tinted ticket-paper wash,
+     and crafted tabular fare numerals. This is the one bold motif. */
   .conv-card {
-    background: var(--card);
+    background:
+      linear-gradient(180deg, oklch(from var(--accent) l c h / 0.045), transparent 120px),
+      var(--card);
     border: 1px solid var(--line);
-    border-radius: 20px;
-    padding: 24px;
+    border-radius: 18px;
+    padding: 24px 24px 24px 28px;
     box-shadow: var(--shadow);
     display: flex; flex-direction: column; gap: 18px;
     position: relative;
@@ -907,13 +949,19 @@
     from { opacity: 0; transform: translateY(20px) scale(0.985); }
     to   { opacity: 1; transform: none; }
   }
+  /* Perforated ticket stub — accent rail + punched perforation line */
   .conv-card::before {
     content: "";
     position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--accent);
-    opacity: 0.6;
+    top: 0; bottom: 0; left: 0;
+    width: 6px;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        var(--accent) 0 7px,
+        transparent 7px 13px
+      );
+    opacity: 0.85;
   }
   .conv-card.is-home {
     border-color: oklch(from var(--accent) l c h / 0.4);
@@ -935,7 +983,12 @@
   .conv-head {
     display: flex; align-items: center; gap: 14px;
   }
-  .conv-meta { flex: 1; }
+  .conv-head > svg {
+    flex-shrink: 0;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px oklch(from var(--accent) l c h / 0.18);
+  }
+  .conv-meta { flex: 1; min-width: 0; }
   .conv-name {
     font-family: "Space Grotesk", serif;
     font-size: 22px;
@@ -970,7 +1023,17 @@
 
   .conv-amount {
     display: flex; align-items: baseline; gap: 10px;
-    padding: 8px 0 6px;
+    padding: 10px 0 6px;
+    position: relative;
+  }
+  /* thin fare-rail above the headline number, like a ticket field divider */
+  .conv-amount::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 26px; height: 2px;
+    background: var(--accent);
+    opacity: 0.55;
+    border-radius: 2px;
   }
   .conv-symbol {
     font-family: "Space Grotesk", serif;
@@ -985,17 +1048,20 @@
     line-height: 1;
     letter-spacing: -0.03em;
     font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "ss01" 1;
   }
   .conv-cur {
     font-size: 13px;
     color: var(--accent);
     font-weight: 700;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
   .conv-foot {
-    padding-top: 14px;
-    border-top: 1px dashed var(--line);
+    position: relative;
+    padding-top: 15px;
+    margin-top: 2px;
+    border-top: 1px dashed var(--line-2);
     font-size: 12px;
     color: var(--ink-3);
     display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
@@ -1748,14 +1814,10 @@
     }
     .conv-card:last-child { border-bottom: none; }
 
-    /* Accent: convert top stripe → left stripe */
+    /* Accent: keep the perforated ticket rail, slimmer on mobile */
     .conv-card::before {
-      right: auto;
-      bottom: 0;
-      width: 3px;
-      height: auto;
-      border-radius: 0;
-      opacity: 0.85;
+      width: 4px;
+      opacity: 0.9;
     }
 
     /* Home currency: subtle tint */
@@ -1940,17 +2002,163 @@
     .region-bar-inner  { padding-inline: 14px; }
     .trip-header       { padding-inline: 14px; }
   }
-  /* Contenido estático rastreable por buscadores (auto claro/oscuro) */
-  .seo-article { max-width: 720px; margin: 0 auto; padding: 10px 24px 48px;
+  /* ══════════════════════════════════════════
+     SEO editorial — "boarding-pass" travel dossier
+     Static, crawlable, self-contained (lives outside .app),
+     auto light/dark. Premium editorial hierarchy.
+  ══════════════════════════════════════════ */
+  .seo-article {
+    --se-ink:   #21232b;
+    --se-ink-2: #4a4d57;
+    --se-ink-3: #8a8d97;
+    --se-line:  #e6e3da;
+    --se-line-2:#d6d2c6;
+    --se-card:  #fffefb;
+    --se-paper: #f6f4ee;
+    --se-accent:#b8623a;
+    --se-accent-2:#3f7d63;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 24px 64px;
     font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
-    color: #41434a; }
-  .seo-article h2 { font-size: 22px; letter-spacing: -0.01em; margin: 30px 0 10px; color: #1f2127; }
-  .seo-article h3 { font-size: 16px; margin: 22px 0 6px; color: #1f2127; }
-  .seo-article p, .seo-article li { font-size: 14.5px; line-height: 1.65; }
-  .seo-article ul { padding-left: 18px; }
+    color: var(--se-ink-2);
+  }
+  .seo-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--se-accent);
+    margin-bottom: 16px;
+  }
+  .seo-eyebrow::before {
+    content: ""; width: 22px; height: 1px;
+    background: currentColor; opacity: 0.6;
+  }
+  .seo-article > h2:first-of-type {
+    margin-top: 0;
+    font-size: clamp(26px, 5vw, 34px);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    color: var(--se-ink);
+    text-wrap: balance;
+    max-width: 18ch;
+  }
+  .seo-lead {
+    font-size: 16.5px;
+    line-height: 1.7;
+    color: var(--se-ink-2);
+    margin: 16px 0 8px;
+    max-width: 62ch;
+  }
+  .seo-lead strong { color: var(--se-ink); font-weight: 600; }
+  .seo-rule {
+    height: 1px; border: 0; margin: 36px 0 4px;
+    background: linear-gradient(90deg, var(--se-line-2), transparent);
+  }
+  .seo-article h2 {
+    font-size: 13px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin: 38px 0 18px; color: var(--se-ink-3);
+  }
+  .seo-article h3 {
+    font-size: 18px; font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px; color: var(--se-ink);
+    text-wrap: balance;
+  }
+  .seo-article p, .seo-article li { font-size: 15px; line-height: 1.7; }
+  /* "What it's for" — three boarding-pass feature stubs */
+  .seo-uses { list-style: none; padding: 0; margin: 6px 0 0;
+    display: grid; gap: 12px; }
+  .seo-uses li {
+    position: relative;
+    display: flex; align-items: baseline; gap: 14px;
+    background: var(--se-card);
+    border: 1px solid var(--se-line);
+    border-radius: 14px;
+    padding: 16px 18px 16px 20px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.02), 0 10px 30px -22px rgba(40,30,20,0.4);
+    overflow: hidden;
+  }
+  /* perforated ticket stub edge */
+  .seo-uses li::before {
+    content: ""; position: absolute;
+    left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--se-accent); opacity: 0.55;
+  }
+  .seo-uses li strong { color: var(--se-ink); font-weight: 600; }
+  .seo-use-no {
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--se-accent);
+    background: rgba(184,98,58,0.10);
+    padding: 3px 8px; border-radius: 6px;
+    align-self: flex-start;
+  }
+  /* FAQ — clean stacked cards */
+  .seo-faq { display: grid; gap: 14px; margin-top: 18px; }
+  .seo-faq-item {
+    background: var(--se-card);
+    border: 1px solid var(--se-line);
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 10px 30px -24px rgba(40,30,20,0.4);
+  }
+  .seo-faq-item p { margin: 6px 0 0; color: var(--se-ink-2); }
+  .seo-signoff {
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 40px; padding-top: 22px;
+    border-top: 1px solid var(--se-line);
+    font-size: 13px; color: var(--se-ink-3);
+    letter-spacing: 0.01em;
+  }
+  .seo-signoff a {
+    color: var(--se-ink-2); text-decoration: none;
+    border-bottom: 1px solid var(--se-line-2);
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .seo-signoff a:hover { color: var(--se-ink); border-bottom-color: var(--se-ink-3); }
+  .seo-stamp {
+    flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 46px; height: 46px;
+    border: 1.5px solid var(--se-accent);
+    border-radius: 50%;
+    color: var(--se-accent);
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    text-align: center; line-height: 1.05;
+    transform: rotate(-9deg);
+    opacity: 0.85;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .seo-uses li, .seo-faq-item {
+      opacity: 0; transform: translateY(14px);
+      animation: seo-reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation-timeline: view();
+      animation-range: entry 5% cover 22%;
+    }
+  }
+  @keyframes seo-reveal {
+    to { opacity: 1; transform: none; }
+  }
   @media (prefers-color-scheme: dark) {
-    .seo-article { color: #b9bcc4; }
-    .seo-article h2, .seo-article h3 { color: #eef0f4; }
+    .seo-article {
+      --se-ink:   #f0eef4;
+      --se-ink-2: #b9bcc4;
+      --se-ink-3: #7e818b;
+      --se-line:  #2b2c33;
+      --se-line-2:#3a3b43;
+      --se-card:  #202128;
+      --se-paper: #17181d;
+      --se-accent:#d98a64;
+      --se-accent-2:#6fb38f;
+    }
+    .seo-uses li::before { opacity: 0.7; }
+    .seo-use-no { background: rgba(217,138,100,0.14); }
   }
 </style>
 </head>
@@ -1960,18 +2168,35 @@
   <div id="acacia-promo" style="padding-bottom:28px"></div>
 
   <article class="seo-article">
+    <span class="seo-eyebrow">Herramienta gratis de ACACIA</span>
     <h2>Conversor de divisas para viajes, gratis y sin cuenta</h2>
-    <p>Plink FX convierte entre varias monedas al instante con el tipo de cambio más reciente, pensado para viajeros: lleva el control de tus gastos en tu propia moneda y planea tu presupuesto sin sorpresas. Funciona en el navegador, sin instalar nada y sin crear una cuenta.</p>
-    <h3>¿Para qué sirve?</h3>
-    <ul>
-      <li><strong>Convertir precios al vuelo</strong> mientras compras o comes en el extranjero.</li>
-      <li><strong>Registrar gastos del viaje</strong> y ver cuánto llevas en tu moneda local.</li>
-      <li><strong>Comparar hasta cinco monedas</strong> a la vez en un solo lugar.</li>
+    <p class="seo-lead">Plink FX convierte entre varias monedas al instante con el tipo de cambio más reciente, pensado para viajeros: lleva el control de tus gastos en tu propia moneda y planea tu presupuesto sin sorpresas. Funciona en el navegador, <strong>sin instalar nada y sin crear una cuenta</strong>.</p>
+
+    <hr class="seo-rule" aria-hidden="true">
+
+    <h2>¿Para qué sirve?</h2>
+    <ul class="seo-uses">
+      <li><span class="seo-use-no">01</span><span><strong>Convertir precios al vuelo</strong> mientras compras o comes en el extranjero.</span></li>
+      <li><span class="seo-use-no">02</span><span><strong>Registrar gastos del viaje</strong> y ver cuánto llevas en tu moneda local.</span></li>
+      <li><span class="seo-use-no">03</span><span><strong>Comparar hasta cinco monedas</strong> a la vez en un solo lugar.</span></li>
     </ul>
-    <h3>¿Funciona sin conexión?</h3>
-    <p>Sí. Una vez cargadas las tasas, puedes seguir convirtiendo aunque te quedes sin internet; los tipos de cambio se actualizan cuando vuelves a conectarte.</p>
-    <h3>¿Es gratis?</h3>
-    <p>Totalmente. Plink FX es una de las herramientas gratuitas de ACACIA: sin costo, sin marcas de agua y sin necesidad de registro.</p>
+
+    <h2>Preguntas frecuentes</h2>
+    <div class="seo-faq">
+      <div class="seo-faq-item">
+        <h3>¿Funciona sin conexión?</h3>
+        <p>Sí. Una vez cargadas las tasas, puedes seguir convirtiendo aunque te quedes sin internet; los tipos de cambio se actualizan cuando vuelves a conectarte.</p>
+      </div>
+      <div class="seo-faq-item">
+        <h3>¿Es gratis?</h3>
+        <p>Totalmente. Plink FX es una de las herramientas gratuitas de ACACIA: sin costo, sin marcas de agua y sin necesidad de registro.</p>
+      </div>
+    </div>
+
+    <div class="seo-signoff">
+      <span class="seo-stamp" aria-hidden="true">PLINK<br>FX</span>
+      <span>Hecho con cariño por <a href="https://acaciaco.com.mx/" rel="noopener">ACACIA Consultoría</a> — gratis para viajeros, en todas partes.</span>
+    </div>
   </article>
 
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>

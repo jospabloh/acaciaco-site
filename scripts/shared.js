@@ -187,6 +187,106 @@
     if (essential) essential.addEventListener('click', function () { persistCookieChoice('essential'); dismissBanner(banner); });
   }
 
+  /* ---------- Motion preference ---------- */
+  function prefersReducedMotion() {
+    try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+  }
+
+  /* ---------- Scroll progress bar ---------- */
+  function initScrollProgress() {
+    if (prefersReducedMotion()) return;
+    var bar = document.createElement('div');
+    bar.className = 'scroll-progress';
+    document.body.appendChild(bar);
+    var ticking = false;
+    function update() {
+      var doc = document.documentElement;
+      var max = (doc.scrollHeight - doc.clientHeight) || 1;
+      var ratio = Math.min(1, Math.max(0, window.scrollY / max));
+      bar.style.setProperty('--scroll', ratio.toFixed(4));
+      bar.classList.toggle('on', window.scrollY > 60);
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+  }
+
+  /* ---------- Count-up numbers ---------- */
+  function animateCount(el) {
+    var target = parseFloat(el.getAttribute('data-count-to'));
+    if (isNaN(target)) return;
+    var prefix = el.getAttribute('data-prefix') || '';
+    var suffix = el.getAttribute('data-suffix') || '';
+    var decimals = (el.getAttribute('data-decimals') | 0);
+    if (prefersReducedMotion()) {
+      el.textContent = prefix + target.toFixed(decimals) + suffix;
+      return;
+    }
+    var dur = 1100, start = null;
+    function frame(ts) {
+      if (start === null) start = ts;
+      var p = Math.min(1, (ts - start) / dur);
+      var eased = 1 - Math.pow(1 - p, 3); /* easeOutCubic */
+      var val = target * eased;
+      el.textContent = prefix + val.toFixed(decimals) + suffix;
+      if (p < 1) requestAnimationFrame(frame);
+      else el.textContent = prefix + target.toFixed(decimals) + suffix;
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function initCountUp() {
+    var nodes = document.querySelectorAll('[data-count-to]');
+    if (!nodes.length) return;
+    if (!('IntersectionObserver' in window)) {
+      for (var i = 0; i < nodes.length; i++) animateCount(nodes[i]);
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { animateCount(entry.target); io.unobserve(entry.target); }
+      });
+    }, { threshold: 0.6 });
+    for (var j = 0; j < nodes.length; j++) io.observe(nodes[j]);
+  }
+
+  /* ---------- Pointer-reactive card spotlight ---------- */
+  function initSpotlight() {
+    if (prefersReducedMotion() || !window.matchMedia('(hover: hover)').matches) return;
+    var cards = document.querySelectorAll('.app-card, .card');
+    cards.forEach(function (card) {
+      card.addEventListener('pointermove', function (e) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+        card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+      });
+    });
+  }
+
+  /* ---------- Subtle pointer tilt on hero preview / mockups ---------- */
+  function initTilt() {
+    if (prefersReducedMotion() || !window.matchMedia('(hover: hover)').matches) return;
+    var targets = document.querySelectorAll('.preview, .mock');
+    targets.forEach(function (el) {
+      var parent = el.parentElement || el;
+      parent.addEventListener('pointermove', function (e) {
+        var r = el.getBoundingClientRect();
+        var tx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+        var ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
+        el.style.setProperty('--tx', Math.max(-1, Math.min(1, tx)).toFixed(3));
+        el.style.setProperty('--ty', Math.max(-1, Math.min(1, ty)).toFixed(3));
+        el.classList.add('tilt');
+      });
+      parent.addEventListener('pointerleave', function () {
+        el.classList.remove('tilt');
+        el.style.removeProperty('--tx');
+        el.style.removeProperty('--ty');
+      });
+    });
+  }
+
   /* ---------- Init ---------- */
   function ready(fn) {
     if (document.readyState !== 'loading') fn();
@@ -200,5 +300,9 @@
     initStickyNav();
     initReveal();
     initCookies();
+    initScrollProgress();
+    initCountUp();
+    initSpotlight();
+    initTilt();
   });
 })();
