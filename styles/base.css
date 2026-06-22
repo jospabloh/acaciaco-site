@@ -715,13 +715,28 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .price-card h3 { font-size: 1.25rem; }
 .price-card .amount {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 2.2rem;
   font-weight: 700;
   color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  line-height: 1.05;
+}
+
+.price-card .amount .amount-from {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.price-card .amount .amount-num {
+  font-size: 2.1rem;
+  white-space: nowrap;
 }
 
 .price-card .amount .unit {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
   font-weight: 400;
 }
