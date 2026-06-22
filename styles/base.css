@@ -762,6 +762,38 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 .testimonial cite strong { color: var(--text); font-weight: 600; display: block; }
 
+/* ---------- Casos reales (real client case cards) ---------- */
+.case-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  transition: border-color 0.3s ease, transform 0.3s var(--ease-out);
+}
+.case-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+.case-card .case-tag {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: var(--primary);
+}
+.case-card h3 { font-size: 1.1rem; margin-top: 0.1rem; }
+.case-card .case-sector { font-size: 0.82rem; color: var(--text-muted); }
+.case-card p { font-size: 0.92rem; line-height: 1.55; color: var(--text-muted); margin-top: 0.4rem; }
+.case-card .case-link {
+  margin-top: auto;
+  padding-top: 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: none;
+}
+.case-card .case-link:hover { text-decoration: underline; }
+
 /* ---------- CTA section ---------- */
 .cta-section {
   text-align: center;
