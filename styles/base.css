@@ -1416,7 +1416,36 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   line-height: 1;
 }
 .service-card .svc-price .unit { font-size: 0.85rem; font-weight: 400; color: var(--text-muted); }
-.service-card .svc-price-note { font-size: 0.78rem; color: var(--text-dim); margin-top: -0.5rem; }
+.service-card .svc-price-note { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.45rem; line-height: 1.4; }
+.service-card .svc-price-note .unit { color: var(--text-dim); }
+
+/* Tiered price rows inside a service card (label left, price right) */
+.service-card .svc-tiers {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+.service-card .svc-tiers li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.service-card .svc-tiers li:first-child { padding-top: 0; }
+.service-card .svc-tiers li:last-child { border-bottom: none; padding-bottom: 0; }
+.service-card .svc-tiers .label { font-size: 0.86rem; color: var(--text-muted); line-height: 1.3; }
+.service-card .svc-tiers .val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--text);
+  white-space: nowrap;
+}
+.service-card .svc-tiers .val .pre { color: var(--text-muted); font-weight: 400; }
 .service-card .svc-desc { color: var(--text-muted); font-size: 0.93rem; line-height: 1.55; }
 .service-card .svc-features {
   list-style: none;
