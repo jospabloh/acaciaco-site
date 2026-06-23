@@ -381,15 +381,15 @@
     var url = 'https://acaciaco.com.mx/mundial-2026';
     if (mm.status === 'ft') {
       var res = mm.winner === 0
-        ? 'Empataron ' + mm.ft[0] + '–' + mm.ft[1] + '.'
-        : '¡Ganó ' + (mm.winner === 1 ? a : b) + '! ' + Math.max(mm.ft[0], mm.ft[1]) + '–' + Math.min(mm.ft[0], mm.ft[1]) + '.';
+        ? '🤝 Empataron ' + mm.ft[0] + '–' + mm.ft[1] + '.'
+        : '🎉 ¡Ganó ' + (mm.winner === 1 ? a : b) + '! ' + Math.max(mm.ft[0], mm.ft[1]) + '–' + Math.min(mm.ft[0], mm.ft[1]);
       msg = '⚽ Mundial 2026 — ' + a + ' ' + mm.ft[0] + '–' + mm.ft[1] + ' ' + b + '\n' + res +
-        '\n\nCalendario: ' + url;
+        '\n👉 ' + url;
     } else {
       msg = '⚽ Mundial 2026 — ' + a + ' vs ' + b +
-        '\n\nCuándo: ' + fmtDayLabel(mm.key) + ', ' + fmtTime(mm.start) + ' (hora del centro de México)' +
-        '\nDónde: ' + venueLine(mm) +
-        '\n\n¿Lo vemos?\nCalendario: ' + url;
+        '\n\n📅 ' + fmtDayLabel(mm.key) + ' · ' + fmtTime(mm.start) + ' (hora del centro de México)' +
+        '\n📍 ' + venueLine(mm) +
+        '\n\n¿Lo vemos? 🍿\n👉 ' + url;
     }
     return 'https://wa.me/?text=' + encodeURIComponent(msg);
   }
