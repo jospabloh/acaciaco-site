@@ -104,6 +104,7 @@
   var favColor = {}; // teamName(EN) -> color asignado (recalculado en cada render)
   var byIndex = {};  // i original -> partido normalizado (para el modal)
   var lastData = null, lastHost = null, lastOpts = null; // para re-render al cambiar favoritos
+  var LIVE_NOW = false; // ¿hay algún partido en vivo? → sondeo más rápido
 
   // asigna color de playera a cada favorito; evita choque de colores iguales
   function computeFavColors(favs) {
@@ -197,7 +198,11 @@
       if (!start) return;
       var ft = m.score && m.score.ft ? m.score.ft : null;
       var pen = m.score && m.score.p ? m.score.p : null;
-      var status = ft ? 'ft' : (now >= start.getTime() && now < start.getTime() + CFG.liveWindowMin * 60000 ? 'live' : 'soon');
+      // Marcador EN JUEGO inyectado por el proxy (capa en vivo).
+      var liveInfo = (m.live && m.live.state === 'in' && m.live.score) ? m.live : null;
+      var status = ft ? 'ft'
+        : liveInfo ? 'live'
+        : (now >= start.getTime() && now < start.getTime() + CFG.liveWindowMin * 60000 ? 'live' : 'soon');
       var winner = 0; // 0 empate/sin definir, 1 ó 2
       if (ft) {
         if (ft[0] > ft[1]) winner = 1; else if (ft[1] > ft[0]) winner = 2;
@@ -208,7 +213,7 @@
         isKO: KO_ORDER.indexOf(m.round) >= 0,
         t1: m.team1, t2: m.team2, start: start, key: cdmxKey(start),
         ft: ft, pen: pen, status: status, winner: winner, ground: m.ground || '',
-        g1: m.goals1 || [], g2: m.goals2 || []
+        live: liveInfo, g1: m.goals1 || [], g2: m.goals2 || []
       });
     });
     out.sort(function (a, b) { return a.start - b.start; });
@@ -238,7 +243,8 @@
     var favCls = fav ? ' has-fav' : '';
     var favStyle = fav ? ' style="--fav:' + fav + '"' : '';
     var g = GROUND[mm.ground] || [mm.ground, ''];
-    var badge = mm.status === 'live' ? '<span class="wc-badge live">EN VIVO</span>'
+    var liveDetail = mm.live && mm.live.detail ? ' ' + esc(mm.live.detail) : '';
+    var badge = mm.status === 'live' ? '<span class="wc-badge live">EN VIVO' + liveDetail + '</span>'
       : mm.status === 'ft' ? '<span class="wc-badge ft">Final</span>'
       : '<span class="wc-badge soon">' + fmtTime(mm.start) + '</span>';
     var s1, s2, cls1 = '', cls2 = '', note = '';
@@ -252,6 +258,11 @@
         var pen = mm.pen ? ' (' + mm.pen[0] + '–' + mm.pen[1] + ' en penales)' : '';
         note = '<p class="wc-result-note">🏆 ¡Felicidades, ' + esc(w.name) + '! Victoria ' + Math.max(mm.ft[0], mm.ft[1]) + '–' + Math.min(mm.ft[0], mm.ft[1]) + pen + '.</p>';
       }
+    } else if (mm.live) {
+      // marcador en juego (no decide ganador hasta el final)
+      s1 = '<span class="wc-score live">' + mm.live.score[0] + '</span>';
+      s2 = '<span class="wc-score live">' + mm.live.score[1] + '</span>';
+      if (mm.live.score[0] > mm.live.score[1]) cls1 = ' lead'; else if (mm.live.score[1] > mm.live.score[0]) cls2 = ' lead';
     } else {
       s1 = '<span class="wc-score tbd">' + (mm.status === 'live' ? '·' : '') + '</span>';
       s2 = '<span class="wc-score tbd">' + (mm.status === 'live' ? '·' : '') + '</span>';
@@ -412,11 +423,13 @@
     var el = ensureModal();
     var a = teamMeta(mm.t1), b = teamMeta(mm.t2);
     var st = STADIUM[mm.ground];
-    var badge = mm.status === 'live' ? '<span class="wc-badge live">EN VIVO</span>'
+    var badge = mm.status === 'live' ? '<span class="wc-badge live">EN VIVO' + (mm.live && mm.live.detail ? ' ' + esc(mm.live.detail) : '') + '</span>'
       : mm.status === 'ft' ? '<span class="wc-badge ft">Finalizado</span>'
       : '<span class="wc-badge soon">Próximo</span>';
     var mid = mm.status === 'ft'
       ? '<span class="wc-modal-vs">' + mm.ft[0] + ' – ' + mm.ft[1] + (mm.pen ? '<small> (' + mm.pen[0] + '–' + mm.pen[1] + ' pen)</small>' : '') + '</span>'
+      : mm.live
+      ? '<span class="wc-modal-vs">' + mm.live.score[0] + ' – ' + mm.live.score[1] + '<small>en vivo' + (mm.live.detail ? ' · ' + esc(mm.live.detail) : '') + '</small></span>'
       : '<span class="wc-modal-vs">vs</span>';
     var stadium = st
       ? '<div class="wc-stadium"><span class="wc-st-emoji">🏟️</span><div><b>' + esc(st[0]) + '</b>' +
@@ -492,6 +505,7 @@
     all.forEach(function (m) { byIndex[m.i] = m; });
 
     var live = all.filter(function (m) { return m.status === 'live'; });
+    LIVE_NOW = live.length > 0;
     var finalMatch = all.filter(function (m) { return m.round === 'Final'; })[0];
     var celebrating = finalMatch && finalMatch.status === 'ft' && now >= finalMatch.start.getTime() &&
       now < finalMatch.start.getTime() + CFG.celebrateDays * 86400000;
@@ -659,10 +673,13 @@
     fetchData().then(function (data) {
       if (host.hidden) return;
       render(host, data, opts);
-      // Auto-refresco cada 90 s mientras haya partidos en vivo o por jugar hoy.
+      // Auto-refresco: cada 30 s si hay partido en vivo, cada 90 s si no.
       if (refreshTimer) clearInterval(refreshTimer);
+      var tick = 0;
       refreshTimer = setInterval(function () {
         if (host.hidden) return;
+        tick++;
+        if (!LIVE_NOW && tick % 3 !== 0) return; // sin vivo: solo cada 3.º tick (~90 s)
         var sel = host.querySelector('[data-wc-tab][aria-selected="true"]');
         var keep = sel ? sel.getAttribute('data-wc-tab') : null;
         fetchData().then(function (d) {
@@ -670,7 +687,7 @@
           render(host, d, opts);
           if (keep) { var b = host.querySelector('[data-wc-tab="' + keep + '"]'); if (b) b.click(); }
         });
-      }, 90000);
+      }, 30000);
     }).catch(function () {
       host.innerHTML = '<div class="wc-shell"><div class="wc-empty"><span class="wc-ball">⚽</span>No pudimos cargar el calendario. Revisa tu conexión e intenta más tarde.</div></div>';
     });

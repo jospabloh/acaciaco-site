@@ -584,3 +584,9 @@
 @keyframes wc-shine { 0%, 60% { left: -60%; } 100% { left: 130%; } }
 @media (max-width: 520px) { .wc-promo-cta { width: 100%; text-align: center; } }
 @media (prefers-reduced-motion: reduce) { .wc-promo::after { display: none; } }
+
+/* --- marcador en juego (capa en vivo) --------------------------------- */
+.wc-score.live { color: #fff; animation: wc-blink 1.6s ease-in-out infinite; }
+.wc-row.lead .wc-team { color: var(--wc-ink); font-weight: 700; }
+.wc-row.lead .wc-score { color: #fff; }
+.wc-modal-vs small { font-weight: 600; }
