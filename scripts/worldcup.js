@@ -251,13 +251,25 @@
     var week = all.filter(function (m) { return weekKeys[m.key]; });
     var played = all.filter(function (m) { return m.status === 'ft'; }).length;
 
-    var liveBanner = live.length ? '<div class="wc-grid" style="margin-bottom:1.2rem">' + live.map(matchCard).join('') + '</div>' : '';
+    // Los partidos en vivo se destacan arriba; se excluyen de la lista del día
+    // para que no aparezcan dos veces en la pestaña "Hoy".
+    var liveIds = {};
+    live.forEach(function (m) { liveIds[m.i] = 1; });
+    var todayRest = today.filter(function (m) { return !liveIds[m.i]; });
+    var liveBanner = live.length
+      ? '<div class="wc-daygroup"><div class="wc-dayhead">⚡ En vivo ahora <small>' +
+        live.length + (live.length === 1 ? ' partido' : ' partidos') + '</small></div>' +
+        '<div class="wc-grid">' + live.map(matchCard).join('') + '</div></div>'
+      : '';
+    var hoyEmpty = (!live.length && !today.length)
+      ? '<div class="wc-empty"><span class="wc-ball">⚽</span>Hoy no hay partidos. Vuelve mañana. 📅</div>' : '';
+    var hoyHtml = liveBanner + (todayRest.length ? listByDay(todayRest, '') : '') + hoyEmpty;
 
     var statusTxt = live.length ? '<span class="wc-pip"></span>' + live.length + (live.length === 1 ? ' partido en vivo' : ' partidos en vivo')
       : '<span class="wc-pip"></span>Jornada en curso · ' + played + ' de 104 partidos jugados';
 
     var tabs = [
-      { id: 'hoy', label: 'Hoy', count: today.length, html: (live.length ? liveBanner : '') + listByDay(today, 'Hoy no hay partidos. Vuelve mañana. 📅') },
+      { id: 'hoy', label: 'Hoy', count: today.length, html: hoyHtml },
       { id: 'semana', label: 'Esta semana', count: week.length, html: listByDay(week, 'No hay partidos en los próximos 7 días.') },
       { id: 'cal', label: 'Calendario', count: all.length, html: listByDay(all, '') },
       { id: 'bracket', label: 'Eliminatorias', count: '', html: bracket(all) }
