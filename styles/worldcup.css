@@ -469,3 +469,124 @@
   }
   .wc-confetti { display: none; }
 }
+
+/* =========================================================================
+   Favoritos · modal de detalle · acciones (recordatorio / WhatsApp / ficha)
+   ========================================================================= */
+
+/* --- barra de favoritos ------------------------------------------------ */
+.wc-favbar { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .8rem;
+  padding: clamp(.9rem, 2.5vw, 1.3rem) clamp(1.4rem, 4vw, 2.6rem) 0; }
+.wc-favlabel { font-size: .85rem; font-weight: 600; color: var(--wc-ink); }
+.wc-favplus { color: var(--wc-ink-dim); font-weight: 500; }
+.wc-favbar select { font-family: var(--wc-body); font-size: .85rem; color: var(--wc-ink);
+  background: var(--wc-card); border: 1px solid var(--wc-border); border-radius: var(--radius-pill, 99px);
+  padding: .4rem .85rem; cursor: pointer; max-width: 190px; }
+.wc-favbar select:hover { border-color: var(--wc-border-hi); }
+.wc-favbar select option { color: #111; }
+.wc-favlegend { display: inline-flex; gap: .4rem; flex-wrap: wrap; }
+.wc-favchip { display: inline-flex; align-items: center; gap: .4rem; font-size: .8rem; font-weight: 600;
+  color: var(--wc-ink); padding: .28rem .7rem; border-radius: var(--radius-pill, 99px);
+  background: var(--wc-card); border: 1px solid var(--wc-border); }
+.wc-favchip i { width: 10px; height: 10px; border-radius: 50%; background: var(--fav); box-shadow: 0 0 8px var(--fav); }
+
+/* --- acento del favorito en tarjetas y bracket ------------------------- */
+.wc-match.has-fav { border-left: 3px solid var(--fav); box-shadow: -8px 0 22px -12px var(--fav); }
+.wc-match.has-fav:hover { box-shadow: -8px 0 26px -10px var(--fav); border-color: var(--wc-border-hi); }
+.wc-btie.has-fav { border-left: 3px solid var(--fav); }
+.wc-star { color: var(--star); margin-left: .22rem; font-size: .78rem; filter: drop-shadow(0 0 4px var(--star)); }
+
+/* tarjeta abrible */
+.wc-match:focus-visible, .wc-btie:focus-visible { outline: 2px solid var(--wc-gold-bright); outline-offset: 2px; }
+
+/* --- modal de detalle -------------------------------------------------- */
+.wc-modal { position: fixed; inset: 0; z-index: 90; display: none; align-items: center; justify-content: center;
+  padding: 1rem; background: rgba(3, 9, 7, .74); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.wc-modal.open { display: flex; animation: wc-fade .2s ease; }
+@keyframes wc-fade { from { opacity: 0; } to { opacity: 1; } }
+.wc-modal-card { position: relative; width: min(540px, 100%); max-height: 90vh; overflow-y: auto;
+  border-radius: 20px; border: 1px solid var(--wc-border-hi); color: var(--wc-ink); font-family: var(--wc-body);
+  background: linear-gradient(180deg, var(--wc-pitch-1), var(--wc-pitch-2));
+  box-shadow: 0 40px 90px -20px rgba(0, 0, 0, .85); padding: clamp(1.3rem, 4vw, 2rem); }
+.wc-modal-close { position: absolute; top: .7rem; right: .7rem; width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--wc-border); background: var(--wc-card); color: var(--wc-ink); cursor: pointer; font-size: .9rem; line-height: 1; }
+.wc-modal-close:hover { background: var(--wc-card-hi); }
+.wc-modal-badge { display: flex; align-items: center; gap: .5rem; font-size: .7rem; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--wc-ink-faint); }
+.wc-modal-badge .wc-tag { color: var(--wc-gold-bright); font-weight: 700; }
+.wc-modal-teams { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: .7rem; margin: 1.1rem 0 .3rem; }
+.wc-mt { display: flex; flex-direction: column; align-items: center; gap: .5rem; text-align: center; }
+.wc-mt .wc-flag { width: 56px; height: 38px; }
+.wc-mt b { font-size: 1rem; font-weight: 600; }
+.wc-modal-vs { font-family: var(--wc-mono); font-size: 1.9rem; font-weight: 700; color: var(--wc-gold-bright); text-align: center; }
+.wc-modal-vs small { display: block; font-size: .68rem; color: var(--wc-ink-faint); font-weight: 500; }
+.wc-modal-when { text-align: center; color: var(--wc-ink-dim); font-size: .85rem; margin-bottom: 1.1rem; }
+.wc-goals { margin: 0 0 1rem; padding: .8rem .9rem; border-radius: 12px; background: var(--wc-card); border: 1px solid var(--wc-border); }
+.wc-goals h5 { margin: 0 0 .5rem; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--wc-ink-faint); }
+.wc-goal { display: flex; gap: .5rem; font-size: .86rem; color: var(--wc-ink-dim); padding: .12rem 0; }
+.wc-goal .m { font-family: var(--wc-mono); color: var(--wc-gold-bright); min-width: 3.4ch; font-weight: 600; }
+.wc-stadium { display: flex; gap: .7rem; align-items: flex-start; padding: .85rem .9rem; border-radius: 12px;
+  background: var(--wc-card); border: 1px solid var(--wc-border); margin-bottom: 1.1rem; }
+.wc-st-emoji { font-size: 1.3rem; line-height: 1.2; }
+.wc-stadium b { font-size: .95rem; }
+.wc-stadium small { color: var(--wc-ink-dim); }
+.wc-stadium p { margin: .35rem 0 0; font-size: .84rem; color: var(--wc-ink-dim); }
+.wc-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+.wc-act { flex: 1 1 46%; min-width: 150px; display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
+  text-decoration: none; text-align: center; font-family: var(--wc-body); font-weight: 600; font-size: .84rem;
+  padding: .65rem .8rem; border-radius: 12px; cursor: pointer; border: 1px solid var(--wc-border);
+  background: var(--wc-card); color: var(--wc-ink); transition: background .2s, border-color .2s; }
+.wc-act:hover { background: var(--wc-card-hi); border-color: var(--wc-border-hi); }
+.wc-act.cal { background: linear-gradient(180deg, var(--wc-gold-bright), var(--wc-gold)); color: #06140d; border-color: transparent; }
+.wc-act.wa { background: #25d366; color: #04210f; border-color: transparent; }
+.wc-modal-note { margin: .9rem 0 0; font-size: .78rem; color: var(--wc-ink-faint); text-align: center; }
+.wc-modal-note a { color: var(--wc-gold-bright); }
+
+@media (max-width: 420px) { .wc-act { flex: 1 1 100%; } }
+
+/* =========================================================================
+   Promos de apps ACACIA dentro del módulo (guiño futbolero, rotan)
+   ========================================================================= */
+.wc-sponsor { padding: clamp(.9rem, 2.5vw, 1.3rem) clamp(1.4rem, 4vw, 2.6rem) 0; }
+.wc-sponsor .wc-promo { transition: opacity .22s ease, transform .22s ease, border-color .2s, box-shadow .2s; }
+.wc-sponsor.swap .wc-promo { opacity: 0; transform: translateY(4px); }
+
+.wc-promo {
+  position: relative; overflow: hidden;
+  display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .9rem;
+  text-decoration: none; color: var(--wc-ink);
+  background: var(--wc-card); border: 1px solid var(--wc-border); border-left: 3px solid var(--app);
+  border-radius: 14px; padding: .85rem 1rem; box-shadow: -10px 0 28px -18px var(--app);
+  transition: transform .2s, border-color .2s, box-shadow .2s;
+}
+.wc-promo:hover { transform: translateY(-2px); border-color: var(--wc-border-hi); box-shadow: -10px 0 32px -14px var(--app); }
+.wc-promo::after {
+  content: ""; position: absolute; top: 0; left: -60%; width: 45%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .12), transparent);
+  transform: skewX(-18deg); animation: wc-shine 6s ease-in-out infinite; pointer-events: none;
+}
+.wc-promo-spon {
+  flex-basis: 100%; display: inline-flex; align-items: center; gap: .35rem;
+  font-size: .62rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--wc-ink-faint);
+}
+.wc-promo-spon .wc-ball { font-size: .8rem; }
+.wc-promo-main { flex: 1; min-width: 170px; display: flex; flex-direction: column; gap: .1rem; }
+.wc-promo-tag { font-family: var(--wc-mono); font-weight: 700; font-size: .82rem; color: var(--app); }
+.wc-promo-h { font-weight: 600; font-size: .98rem; color: var(--wc-ink); line-height: 1.22; }
+.wc-promo-cta {
+  flex: none; white-space: nowrap; font-weight: 700; font-size: .82rem; color: #06140d;
+  background: var(--app); padding: .5rem .9rem; border-radius: 10px; transition: gap .2s;
+}
+.wc-promo.is-feed { margin: .2rem 0; }
+.wc-promo.is-modal { margin-top: 1rem; padding: .7rem .85rem; }
+.wc-promo.is-modal .wc-promo-h { font-size: .9rem; }
+
+@keyframes wc-shine { 0%, 60% { left: -60%; } 100% { left: 130%; } }
+@media (max-width: 520px) { .wc-promo-cta { width: 100%; text-align: center; } }
+@media (prefers-reduced-motion: reduce) { .wc-promo::after { display: none; } }
+
+/* --- marcador en juego (capa en vivo) --------------------------------- */
+.wc-score.live { color: #fff; animation: wc-blink 1.6s ease-in-out infinite; }
+.wc-row.lead .wc-team { color: var(--wc-ink); font-weight: 700; }
+.wc-row.lead .wc-score { color: #fff; }
+.wc-modal-vs small { font-weight: 600; }
