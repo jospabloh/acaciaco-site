@@ -117,6 +117,45 @@
     });
   }
 
+  // ---- Promos de apps ACACIA (guiño futbolero, rotan) -------------------
+  var APP_PROMOS = [
+    { id: 'stockflow', href: '/apps/stockflow', tag: 'StockFlow', color: 'oklch(0.70 0.13 205)',
+      h: 'Controla tu inventario como una defensa sólida: nada se te escapa.', cta: 'Ordena tu operación' },
+    { id: 'flowfin', href: '/apps/flowfin', tag: 'FlowFin', color: 'oklch(0.72 0.14 152)',
+      h: 'Que tus finanzas lleguen a la final sin penales en contra.', cta: 'Toma el control' },
+    { id: 'puntos', href: '/apps/puntos-plus', tag: 'Puntos+', color: 'oklch(0.76 0.14 75)',
+      h: 'Premia a tu afición: haz que tus clientes regresen cada jornada.', cta: 'Fideliza más' },
+    { id: 'liuma', href: '/apps/liuma', tag: 'LIUMA', color: 'oklch(0.70 0.16 292)',
+      h: 'El colegio que juega en equipo: familias, maestros y dirección en sintonía.', cta: 'Conoce LIUMA' },
+    { id: 'rumbo', href: '/apps/rumbo', tag: 'Rumbo', color: 'oklch(0.70 0.14 255)',
+      h: 'Dirige tu flotilla como un capitán: cada vehículo, con rumbo fijo.', cta: 'Mueve tu flota' }
+  ];
+  var promoOrder = APP_PROMOS.slice().sort(function () { return Math.random() - 0.5; });
+  var bannerIdx = 0, bannerTimer = null;
+
+  function promoCard(p, variant) {
+    return '<a class="wc-promo' + (variant ? ' ' + variant : '') + '" style="--app:' + p.color + '"' +
+      ' href="' + p.href + '" data-wc-promo="' + p.id + '">' +
+      '<span class="wc-promo-spon"><span class="wc-ball">⚽</span> Patrocinado por ACACIA</span>' +
+      '<span class="wc-promo-main"><span class="wc-promo-tag">' + esc(p.tag) + '</span>' +
+        '<span class="wc-promo-h">' + esc(p.h) + '</span></span>' +
+      '<span class="wc-promo-cta">' + esc(p.cta) + ' →</span></a>';
+  }
+
+  function startBannerRotation(host) {
+    if (bannerTimer) { clearInterval(bannerTimer); bannerTimer = null; }
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) return;
+    bannerTimer = setInterval(function () {
+      if (host.hidden) return;
+      var slot = host.querySelector('[data-wc-sponsor]');
+      if (!slot) { clearInterval(bannerTimer); bannerTimer = null; return; }
+      bannerIdx = (bannerIdx + 1) % promoOrder.length;
+      slot.classList.add('swap');
+      setTimeout(function () { slot.innerHTML = promoCard(promoOrder[bannerIdx], 'is-banner'); slot.classList.remove('swap'); }, 220);
+    }, 9000);
+  }
+
   // ---- Utilidades -------------------------------------------------------
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
@@ -230,15 +269,26 @@
       '</article>';
   }
 
-  function listByDay(matches, emptyMsg) {
+  function listByDay(matches, emptyMsg, withPromos) {
     if (!matches.length) return '<div class="wc-empty"><span class="wc-ball">⚽</span>' + emptyMsg + '</div>';
     var days = {}, order = [];
     matches.forEach(function (m) { if (!days[m.key]) { days[m.key] = []; order.push(m.key); } days[m.key].push(m); });
-    return order.map(function (k) {
+    var blocks = order.map(function (k) {
       return '<div class="wc-daygroup"><div class="wc-dayhead">' + fmtDayLabel(k) +
         ' <small>' + days[k].length + (days[k].length === 1 ? ' partido' : ' partidos') + '</small></div>' +
         '<div class="wc-grid">' + days[k].map(matchCard).join('') + '</div></div>';
-    }).join('');
+    });
+    if (!withPromos) return blocks.join('');
+    // intercala una promo de app cada dos días (nunca después del último bloque)
+    var out = [], pc = 0;
+    blocks.forEach(function (b, idx) {
+      out.push(b);
+      if ((idx + 1) % 2 === 0 && idx < blocks.length - 1) {
+        out.push(promoCard(promoOrder[pc % promoOrder.length], 'is-feed'));
+        pc++;
+      }
+    });
+    return out.join('');
   }
 
   function bracket(all) {
@@ -393,6 +443,7 @@
       goalsBlock(mm) + stadium +
       '<div class="wc-actions">' + actions + '</div>' +
       '<p class="wc-modal-note">Las alineaciones y el historial entre selecciones se abren en una búsqueda con la información más reciente.</p>' +
+      promoCard(promoOrder[mm.i % promoOrder.length], 'is-modal') +
       '</div>';
     el.querySelector('[data-wc-mclose]').addEventListener('click', closeModal);
     el.classList.add('open');
@@ -484,8 +535,8 @@
 
     var tabs = [
       { id: 'hoy', label: 'Hoy', count: today.length, html: hoyHtml },
-      { id: 'semana', label: 'Esta semana', count: week.length, html: listByDay(week, 'No hay partidos en los próximos 7 días.') },
-      { id: 'cal', label: 'Calendario', count: all.length, html: listByDay(all, '') },
+      { id: 'semana', label: 'Esta semana', count: week.length, html: listByDay(week, 'No hay partidos en los próximos 7 días.', true) },
+      { id: 'cal', label: 'Calendario', count: all.length, html: listByDay(all, '', true) },
       { id: 'bracket', label: 'Eliminatorias', count: '', html: bracket(all) }
     ];
     var startTab = today.length || live.length ? 'hoy' : 'semana';
@@ -505,6 +556,7 @@
         '<p class="wc-sub">Marcador en vivo, partidos de hoy, de la semana y el camino a la final. Horarios en hora del centro de México.</p>' +
       '</div><div class="wc-status">' + statusTxt + '</div></div>' +
       favBar(favs) +
+      '<div class="wc-sponsor" data-wc-sponsor>' + promoCard(promoOrder[bannerIdx], 'is-banner') + '</div>' +
       '<div class="wc-tabs" role="tablist" aria-label="Vistas del Mundial 2026">' + tabBtns + '</div>' +
       '<div class="wc-body">' + panels + '</div>' +
       '<div class="wc-foot"><p>Datos abiertos del calendario oficial, actualizados durante el torneo. ¿No eres de fútbol? Cierra la sección con un clic.' +
@@ -549,6 +601,7 @@
       });
     });
 
+    startBannerRotation(host);
     wireClose(host, opts);
   }
 
@@ -556,6 +609,7 @@
     var btn = host.querySelector('[data-wc-close]');
     if (btn) btn.addEventListener('click', function () {
       try { localStorage.setItem(CFG.dismissKey, '1'); } catch (e) {}
+      if (bannerTimer) { clearInterval(bannerTimer); bannerTimer = null; }
       host.hidden = true;
       showReopen(host, opts);
     });
@@ -625,6 +679,11 @@
   function init() {
     var host = document.getElementById('mundial-2026');
     if (!host) return;
+    // medición de clics en promos de apps (Vercel Web Analytics)
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest ? e.target.closest('[data-wc-promo]') : null;
+      if (t && window.acaciaTrack) window.acaciaTrack('mundial_promo_click', { app: t.getAttribute('data-wc-promo') });
+    });
     var opts = { dismissible: host.getAttribute('data-wc-mode') !== 'page' };
     boot(host, opts, false);
   }
