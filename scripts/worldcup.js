@@ -389,7 +389,7 @@
       msg = '⚽ Mundial 2026 — ' + a + ' vs ' + b +
         '\n\n📅 ' + fmtDayLabel(mm.key) + ' · ' + fmtTime(mm.start) + ' (hora del centro de México)' +
         '\n📍 ' + venueLine(mm) +
-        '\n\n¿Lo vemos? 🍿\n👉 ' + url;
+        '\n\n¿Lo vemos? 🇲🇽🍿\n👉 ' + url;
     }
     return 'https://wa.me/?text=' + encodeURIComponent(msg);
   }
