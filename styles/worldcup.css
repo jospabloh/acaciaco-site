@@ -4,8 +4,11 @@
    Todo va prefijado .wc- y scopeado a #mundial-2026 para no tocar base.css.
    ========================================================================= */
 
-#mundial-2026 {
-  /* tokens locales del panel */
+#mundial-2026,
+.wc-modal,
+.wc-reopen {
+  /* tokens locales del panel — también para el modal y el chip, que se montan
+     en <body> (fuera de #mundial-2026) y necesitan resolver estas variables */
   --wc-pitch-1: #0c2a1b;
   --wc-pitch-2: #061410;
   --wc-pitch-3: #020a08;
@@ -25,7 +28,9 @@
   --wc-radius: 18px;
   --wc-mono: 'Space Grotesk', ui-monospace, system-ui, sans-serif;
   --wc-body: 'DM Sans', system-ui, sans-serif;
+}
 
+#mundial-2026 {
   margin: clamp(1rem, 4vw, 3rem) auto;
   max-width: var(--max-content, 1300px);
   width: calc(100% - 2 * clamp(1rem, 4vw, 2rem));
@@ -505,8 +510,9 @@
 .wc-modal.open { display: flex; animation: wc-fade .2s ease; }
 @keyframes wc-fade { from { opacity: 0; } to { opacity: 1; } }
 .wc-modal-card { position: relative; width: min(540px, 100%); max-height: 90vh; overflow-y: auto;
-  border-radius: 20px; border: 1px solid var(--wc-border-hi); color: var(--wc-ink); font-family: var(--wc-body);
-  background: linear-gradient(180deg, var(--wc-pitch-1), var(--wc-pitch-2));
+  border-radius: 20px; border: 1px solid var(--wc-border-hi); color: var(--wc-ink, #f2faf3); font-family: var(--wc-body);
+  background-color: #0a1f14;
+  background: linear-gradient(180deg, var(--wc-pitch-1, #0c2a1b), var(--wc-pitch-2, #061410));
   box-shadow: 0 40px 90px -20px rgba(0, 0, 0, .85); padding: clamp(1.3rem, 4vw, 2rem); }
 .wc-modal-close { position: absolute; top: .7rem; right: .7rem; width: 34px; height: 34px; border-radius: 50%;
   border: 1px solid var(--wc-border); background: var(--wc-card); color: var(--wc-ink); cursor: pointer; font-size: .9rem; line-height: 1; }
@@ -574,9 +580,11 @@
 .wc-promo-tag { font-family: var(--wc-mono); font-weight: 700; font-size: .82rem; color: var(--app); }
 .wc-promo-h { font-weight: 600; font-size: .98rem; color: var(--wc-ink); line-height: 1.22; }
 .wc-promo-cta {
-  flex: none; white-space: nowrap; font-weight: 700; font-size: .82rem; color: #06140d;
-  background: var(--app); padding: .5rem .9rem; border-radius: 10px; transition: gap .2s;
+  flex: none; white-space: nowrap; font-weight: 600; font-size: .82rem; color: var(--app);
+  background: transparent; border: 1px solid var(--app); padding: .5rem .9rem; border-radius: 10px;
+  transition: background .2s, color .2s, border-color .2s;
 }
+.wc-promo:hover .wc-promo-cta { background: rgba(255, 255, 255, .06); }
 .wc-promo.is-feed { margin: .2rem 0; }
 .wc-promo.is-modal { margin-top: 1rem; padding: .7rem .85rem; }
 .wc-promo.is-modal .wc-promo-h { font-size: .9rem; }
