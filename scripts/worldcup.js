@@ -378,13 +378,18 @@
   }
   function waURL(mm) {
     var a = teamMeta(mm.t1).name, b = teamMeta(mm.t2).name, msg;
+    var url = 'https://acaciaco.com.mx/mundial-2026';
     if (mm.status === 'ft') {
-      var res = mm.winner === 0 ? 'Empataron ' + mm.ft[0] + '–' + mm.ft[1] + ' 🤝'
-        : '¡Ganó ' + (mm.winner === 1 ? a : b) + '! ' + Math.max(mm.ft[0], mm.ft[1]) + '–' + Math.min(mm.ft[0], mm.ft[1]) + ' 🎉';
-      msg = '⚽ ' + a + ' ' + mm.ft[0] + '–' + mm.ft[1] + ' ' + b + ' · Mundial 2026\n' + res;
+      var res = mm.winner === 0
+        ? '🤝 Empataron ' + mm.ft[0] + '–' + mm.ft[1] + '.'
+        : '🎉 ¡Ganó ' + (mm.winner === 1 ? a : b) + '! ' + Math.max(mm.ft[0], mm.ft[1]) + '–' + Math.min(mm.ft[0], mm.ft[1]);
+      msg = '⚽ Mundial 2026 — ' + a + ' ' + mm.ft[0] + '–' + mm.ft[1] + ' ' + b + '\n' + res +
+        '\n👉 ' + url;
     } else {
-      msg = '⚽ ' + a + ' vs ' + b + '\n📅 ' + fmtDayLabel(mm.key) + ' a las ' + fmtTime(mm.start) +
-        ' h (hora de México)\n📍 ' + venueLine(mm) + '\n\n¿Lo vemos? 🇲🇽🍿';
+      msg = '⚽ Mundial 2026 — ' + a + ' vs ' + b +
+        '\n\n📅 ' + fmtDayLabel(mm.key) + ' · ' + fmtTime(mm.start) + ' (hora del centro de México)' +
+        '\n📍 ' + venueLine(mm) +
+        '\n\n¿Lo vemos? 🇲🇽🍿\n👉 ' + url;
     }
     return 'https://wa.me/?text=' + encodeURIComponent(msg);
   }

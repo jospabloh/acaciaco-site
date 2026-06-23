@@ -4,11 +4,11 @@
    Todo va prefijado .wc- y scopeado a #mundial-2026 para no tocar base.css.
    ========================================================================= */
 
-#mundial-2026,
-.wc-modal,
-.wc-reopen {
-  /* tokens locales del panel — también para el modal y el chip, que se montan
-     en <body> (fuera de #mundial-2026) y necesitan resolver estas variables */
+/* Tokens del módulo en :root → disponibles globalmente. Así cualquier elemento
+   .wc-* (incluidos el modal y el chip, que se montan en <body> fuera de
+   #mundial-2026, y cualquiera que se agregue a futuro) los resuelve siempre.
+   Todos van prefijados --wc- para no colisionar con los tokens de base.css. */
+:root {
   --wc-pitch-1: #0c2a1b;
   --wc-pitch-2: #061410;
   --wc-pitch-3: #020a08;
