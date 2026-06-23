@@ -30,11 +30,16 @@ function canon(name) {
   return alias[n] || n;
 }
 
-async function fetchLive() {
+async function fetchLive(diag) {
   try {
-    const r = await fetch(LIVE_SOURCE, { headers: { 'User-Agent': 'acaciaco-mundial/1.0' } });
+    // fecha UTC de hoy para asegurar el slate correcto sin depender del default
+    const now = new Date();
+    const ymd = now.getUTCFullYear() + String(now.getUTCMonth() + 1).padStart(2, '0') + String(now.getUTCDate()).padStart(2, '0');
+    const r = await fetch(LIVE_SOURCE + '?dates=' + ymd, { headers: { 'User-Agent': 'acaciaco-mundial/1.0' } });
+    if (diag) { diag.status = r.status; }
     if (!r.ok) return [];
     const d = await r.json();
+    if (diag) { diag.raw = (d.events || []).length; }
     return (d.events || []).map(function (e) {
       var comp = (e.competitions && e.competitions[0]) || {};
       var cs = comp.competitors || [];
@@ -93,11 +98,13 @@ export default async function handler(req, res) {
     const data = await r.json();
 
     // Capa en vivo (best-effort): nunca rompe la respuesta base.
-    const live = await fetchLive();
+    const diag = {};
+    const live = await fetchLive(diag);
     const mergedCount = mergeLive(data, live);
 
     data._fetchedAt = new Date(now).toISOString();
     data._live = mergedCount;
+    data._liveDiag = { httpStatus: diag.status || null, espnEvents: diag.raw || 0, parsed: live.length };
     cache = { data, ts: now };
     res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=120');
     return res.status(200).json(data);
