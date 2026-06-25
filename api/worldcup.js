@@ -32,10 +32,17 @@ function canon(name) {
 
 async function fetchLive(diag) {
   try {
-    // fecha UTC de hoy para asegurar el slate correcto sin depender del default
+    // Ventana de fechas UTC: ayer · hoy · mañana. Los partidos que arrancan por
+    // la tarde/noche en América caen en el DÍA UTC SIGUIENTE (p. ej. 19:00 CDMX =
+    // 01:00 UTC del día siguiente). Pedir un solo día UTC perdía esos juegos en
+    // curso, así que el marcador en vivo nunca llegaba. Pedimos un rango y
+    // filtramos por estado, no por un día exacto.
     const now = new Date();
-    const ymd = now.getUTCFullYear() + String(now.getUTCMonth() + 1).padStart(2, '0') + String(now.getUTCDate()).padStart(2, '0');
-    const r = await fetch(LIVE_SOURCE + '?dates=' + ymd, { headers: { 'User-Agent': 'acaciaco-mundial/1.0' } });
+    function ymd(d) {
+      return d.getUTCFullYear() + String(d.getUTCMonth() + 1).padStart(2, '0') + String(d.getUTCDate()).padStart(2, '0');
+    }
+    const range = ymd(new Date(now.getTime() - 86400000)) + '-' + ymd(new Date(now.getTime() + 86400000));
+    const r = await fetch(LIVE_SOURCE + '?dates=' + range, { headers: { 'User-Agent': 'acaciaco-mundial/1.0' } });
     if (diag) { diag.status = r.status; }
     if (!r.ok) return [];
     const d = await r.json();
@@ -58,13 +65,23 @@ async function fetchLive(diag) {
   } catch (e) { return []; }
 }
 
+// Tolerancia de fecha de ±1 día: la fecha del evento ESPN viene en UTC y la del
+// calendario openfootball es local, así que para juegos de la noche americana
+// difieren en un día. Emparejamos por el PAR DE EQUIPOS y usamos la fecha solo
+// como desempate flexible (un mismo cruce no se repite en <2 días).
+function sameDayish(d1, d2) {
+  var a = Date.parse(d1 + 'T00:00:00Z'), b = Date.parse(d2 + 'T00:00:00Z');
+  if (isNaN(a) || isNaN(b)) return true; // si no parsea, no bloquees por fecha
+  return Math.abs(a - b) <= 86400000;
+}
+
 function mergeLive(data, live) {
   if (!live.length) return 0;
   var merged = 0;
   (data.matches || []).forEach(function (m) {
     var ka = canon(m.team1), kb = canon(m.team2), day = (m.date || '').slice(0, 10);
     var ev = live.find(function (x) {
-      return x.date === day && ((x.a === ka && x.b === kb) || (x.a === kb && x.b === ka));
+      return ((x.a === ka && x.b === kb) || (x.a === kb && x.b === ka)) && sameDayish(x.date, day);
     });
     if (!ev || isNaN(ev.sa) || isNaN(ev.sb)) return;
     // orienta el marcador a team1/team2 de openfootball

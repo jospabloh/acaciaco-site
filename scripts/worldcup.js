@@ -13,7 +13,7 @@
     start: Date.UTC(2026, 5, 11, 0, 0),        // 11 jun 2026 (apertura)
     finalDate: Date.UTC(2026, 6, 19, 0, 0),    // 19 jul 2026 (final)
     celebrateDays: 3,                          // días de festejo al campeón
-    liveWindowMin: 135,                        // ventana "en vivo" por partido
+    liveWindowMin: 150,                        // ventana "en vivo" por partido (cubre tiempos extra/penales)
     cdmxOffset: -6,                            // CDMX = UTC-6 todo el año
     apiUrl: '/api/worldcup',
     fallbackUrl: 'https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json',
