@@ -16,4 +16,16 @@
   window.acaciaTrack = function (name, data) {
     try { window.va("event", { name: name, data: data || {} }); } catch (e) {}
   };
+
+  // Analítica propia (first-party) → ACACIA Mission Control. Un pixel por vista,
+  // sin cookies ni datos personales; el servidor sólo guarda la ruta + un hash
+  // diario anónimo. Llena los KPIs de Freeware/Sitios en el panel de control.
+  try {
+    var img = new Image(1, 1);
+    img.src = "https://control.acaciaco.com.mx/api/track?p=" +
+      encodeURIComponent(location.pathname) +
+      "&h=" + encodeURIComponent(location.host) +
+      "&r=" + encodeURIComponent(document.referrer || "") +
+      "&t=" + Date.now();
+  } catch (e) {}
 })();
