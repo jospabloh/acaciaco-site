@@ -157,6 +157,47 @@
 
         </div>
 
+        <!-- Native lead form → ACACIA Mission Control CRM -->
+        <div class="reveal" style="max-width:640px;margin:clamp(2.5rem,5vw,4rem) auto 0;">
+          <h2 style="margin:0 0 .35rem;">O escríbenos directo</h2>
+          <p class="lead" style="margin:0 0 1.4rem;">Llena el formulario y te contactamos en menos de 24 horas hábiles.</p>
+          <form id="lead-form" style="display:grid;gap:.9rem;">
+            <input name="name" required maxlength="120" placeholder="Nombre" style="width:100%;padding:.8rem 1rem;border:1px solid #ddd;border-radius:.7rem;font:inherit;background:#fff;" />
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem;">
+              <input name="email" type="email" required maxlength="180" placeholder="Correo" style="width:100%;padding:.8rem 1rem;border:1px solid #ddd;border-radius:.7rem;font:inherit;background:#fff;" />
+              <input name="phone" maxlength="30" placeholder="Teléfono (opcional)" style="width:100%;padding:.8rem 1rem;border:1px solid #ddd;border-radius:.7rem;font:inherit;background:#fff;" />
+            </div>
+            <select name="app_interest" style="width:100%;padding:.8rem 1rem;border:1px solid #ddd;border-radius:.7rem;font:inherit;background:#fff;">
+              <option value="">¿Qué te interesa? (opcional)</option>
+              <option>Consultoría</option><option>Puntos+</option><option>FlowFin</option>
+              <option>StockFlow</option><option>Rumbo</option><option>LIUMA</option><option>Otro</option>
+            </select>
+            <textarea name="message" rows="4" maxlength="2000" placeholder="Cuéntanos qué necesitas…" style="width:100%;padding:.8rem 1rem;border:1px solid #ddd;border-radius:.7rem;font:inherit;background:#fff;resize:vertical;"></textarea>
+            <button class="btn btn-primary" type="submit">Enviar</button>
+            <p id="lead-msg" role="status" aria-live="polite" style="margin:0;font-size:.92rem;"></p>
+          </form>
+        </div>
+        <script>
+        (function () {
+          var f = document.getElementById('lead-form'); if (!f) return;
+          f.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var msg = document.getElementById('lead-msg');
+            var data = Object.fromEntries(new FormData(f).entries());
+            data.source = 'acaciaco.com.mx/contacto';
+            msg.style.color = '#888'; msg.textContent = 'Enviando…';
+            fetch('https://control.acaciaco.com.mx/api/ingest/lead', {
+              method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data)
+            }).then(function (r) {
+              if (!r.ok) throw new Error();
+              msg.style.color = '#0a7'; msg.textContent = '¡Gracias! Te contactamos pronto.'; f.reset();
+            }).catch(function () {
+              msg.style.color = '#c33'; msg.textContent = 'No se pudo enviar — escríbenos a contacto@acaciaco.com.mx.';
+            });
+          });
+        })();
+        </script>
+
         <!-- Info strip -->
         <div class="info-strip">
           <span>
