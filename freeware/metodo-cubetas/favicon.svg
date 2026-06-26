@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Método de cubetas">
+  <rect x="6" y="6" width="52" height="52" rx="13" fill="oklch(0.55 0.11 215)"/>
+  <!-- ingreso que cae y se reparte -->
+  <circle cx="32" cy="15" r="3.2" fill="oklch(0.95 0.03 200)"/>
+  <path d="M32 18 L20 27 M32 18 L32 27 M32 18 L44 27" stroke="oklch(0.95 0.03 200 / .55)" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- tres cubetas (trapecios) con llenado distinto -->
+  <g stroke="oklch(0.98 0.01 200)" stroke-width="2.2" stroke-linejoin="round">
+    <path d="M14 29 L26 29 L24 47 L16 47 Z" fill="oklch(0.62 0.13 240)"/>
+    <path d="M26 29 L38 29 L36.5 47 L27.5 47 Z" fill="oklch(0.80 0.15 90)"/>
+    <path d="M38 29 L50 29 L48 47 L40 47 Z" fill="oklch(0.64 0.15 152)"/>
+  </g>
+  <!-- asas -->
+  <g fill="none" stroke="oklch(0.98 0.01 200)" stroke-width="2" stroke-linecap="round">
+    <path d="M17 29 q3 -4 6 0"/>
+    <path d="M29 29 q3 -4 6 0"/>
+    <path d="M41 29 q3 -4 6 0"/>
+  </g>
+</svg>
