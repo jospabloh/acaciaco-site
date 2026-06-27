@@ -7,3 +7,6 @@ node_modules/
 # Env
 .env
 .env.*
+
+# macOS
+.DS_Store
