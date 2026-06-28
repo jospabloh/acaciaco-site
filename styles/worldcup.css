@@ -393,7 +393,10 @@
 .wc-btie.has-fav { border-left: 3px solid var(--fav); }
 
 .wc-bnum {
-  position: absolute; top: -9px; left: 50%; transform: translateX(-50%);
+  /* El desfase vertical va por transform (no por top negativo): html2canvas
+     mueve la caja y su texto juntos, así el código (W##/Final) no se recorta
+     en el PNG exportado. En pantalla se ve idéntico a top:-9px. */
+  position: absolute; top: 0; left: 50%; transform: translate(-50%, -9px);
   font-family: var(--wc-mono); font-size: 0.6rem; font-weight: 600;
   letter-spacing: 0.08em; line-height: 1;
   padding: 0.18rem 0.42rem; border-radius: 999px;
