@@ -301,38 +301,111 @@
 .wc-empty .wc-ball { font-size: 1.8rem; display: block; margin-bottom: 0.5rem; opacity: 0.6; }
 .wc-skeleton { height: 96px; border-radius: 14px; background: linear-gradient(90deg, var(--wc-card), var(--wc-card-hi), var(--wc-card)); background-size: 200% 100%; animation: wc-shimmer 1.4s infinite; }
 
-/* --- bracket ----------------------------------------------------------- */
-.wc-bracket {
+/* --- cuadro de eliminatorias (camino a la final) ---------------------- */
+.wc-cuadro-wrap { overflow-x: auto; overflow-y: hidden; padding: 0.4rem 0 0.4rem; scrollbar-width: thin; }
+.wc-cuadro {
+  --wc-rh: 54px;          /* alto de fila base (16 filas por lado) */
+  --wc-cgap: 22px;        /* separación entre columnas */
+  --wc-tw: 146px;         /* ancho de cada ficha de cruce */
+  position: relative;
   display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  padding-bottom: 0.6rem;
-  scrollbar-width: thin;
+  align-items: center;
+  justify-content: center;
+  gap: var(--wc-cgap);
+  width: max-content;
+  margin: 0 auto;
+  padding: 16px 8px;      /* aire para los rótulos W## y los medallones */
 }
-.wc-bcol { flex: 0 0 auto; min-width: 188px; display: flex; flex-direction: column; gap: 0.6rem; justify-content: space-around; }
-.wc-bcol h4 {
-  margin: 0 0 0.2rem;
-  font-family: var(--wc-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--wc-gold-bright);
-  position: sticky; top: 0;
+/* SVG de llaves: cubre todo el cuadro, sin capturar el ratón */
+.wc-cn-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: visible; }
+.wc-cn-svg polyline { fill: none; stroke: var(--wc-border-hi); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+
+.wc-side {
+  display: grid;
+  grid-template-rows: repeat(16, var(--wc-rh));
+  grid-template-columns: repeat(4, var(--wc-tw));
+  column-gap: var(--wc-cgap);
+  position: relative;
+  z-index: 1;
 }
+.wc-side .wc-btie { align-self: center; }
+
+.wc-center {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  padding: 0 0.2rem; position: relative; z-index: 1;
+}
+.wc-trophy { font-size: clamp(2.2rem, 4vw, 3.2rem); line-height: 1; filter: drop-shadow(0 6px 14px rgba(232,196,104,0.45)); animation: wc-trophy-bob 4s ease-in-out infinite; }
+.wc-center-label {
+  font-family: var(--wc-mono); font-size: 0.7rem; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--wc-gold-bright);
+}
+@keyframes wc-trophy-bob { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-5px) } }
+@media (prefers-reduced-motion: reduce) { .wc-trophy { animation: none; } }
+
+/* --- ficha de cruce ---------------------------------------------------- */
 .wc-btie {
+  position: relative;
   background: var(--wc-card);
   border: 1px solid var(--wc-border);
-  border-radius: 11px;
-  padding: 0.5rem 0.65rem;
-  font-size: 0.82rem;
+  border-radius: 13px;
+  padding: 0.55rem 0.55rem 0.4rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s, background 0.2s;
 }
-.wc-btie.is-final { border-color: var(--wc-gold); background: rgba(232,196,104,0.08); }
-.wc-bteam { display: flex; align-items: center; gap: 0.45rem; padding: 0.18rem 0; }
-.wc-bteam .wc-flag { width: 20px; height: 14px; }
-.wc-bteam span:first-of-type { flex: 1; color: var(--wc-ink-dim); font-weight: 600; }
-.wc-bteam.win span { color: var(--wc-gold-bright); }
-.wc-bteam b { font-family: var(--wc-mono); font-variant-numeric: tabular-nums; }
-.wc-btie small { display: block; margin-top: 0.3rem; color: var(--wc-ink-faint); font-size: 0.68rem; }
+.wc-btie:hover { border-color: var(--wc-border-hi); background: var(--wc-card-hi); transform: translateY(-1px); }
+.wc-btie.is-live { border-color: var(--wc-live); box-shadow: 0 0 0 1px rgba(255,59,48,0.35); }
+.wc-btie.is-final {
+  border-color: var(--wc-gold);
+  background: linear-gradient(180deg, rgba(232,196,104,0.16), rgba(232,196,104,0.05));
+  box-shadow: 0 10px 30px -12px rgba(232,196,104,0.5);
+  min-width: 200px;
+}
+.wc-btie.has-fav { border-left: 3px solid var(--fav); }
+
+.wc-bnum {
+  position: absolute; top: -9px; left: 50%; transform: translateX(-50%);
+  font-family: var(--wc-mono); font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 0.08em; line-height: 1;
+  padding: 0.18rem 0.42rem; border-radius: 999px;
+  color: var(--wc-pitch-3); background: var(--wc-gold); white-space: nowrap;
+}
+.wc-bnum.is-final { background: var(--wc-gold-bright); }
+
+.wc-bteam { display: flex; align-items: center; gap: 0.45rem; padding: 0.13rem 0; min-width: 0; }
+.wc-bname { flex: 1; min-width: 0; color: var(--wc-ink-dim); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wc-bteam.is-ph .wc-bname { color: var(--wc-ink-faint); font-style: italic; font-weight: 500; }
+.wc-bteam.win .wc-bname { color: var(--wc-gold-bright); }
+.wc-bscore { font-family: var(--wc-mono); font-variant-numeric: tabular-nums; color: var(--wc-ink); }
+.wc-bteam.win .wc-bscore { color: var(--wc-gold-bright); }
+.wc-bsub { display: block; margin-top: 0.3rem; color: var(--wc-ink-faint); font-size: 0.64rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* medallón circular con la bandera (estilo infografía) */
+.wc-med {
+  flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; overflow: hidden;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.12), 0 2px 6px rgba(0,0,0,0.4);
+  background: rgba(255,255,255,0.06);
+}
+.wc-med img { width: 100%; height: 100%; object-fit: cover; }
+.wc-med.is-ph {
+  font-family: var(--wc-mono); font-size: 0.56rem; font-weight: 600;
+  color: var(--wc-ink-faint); box-shadow: inset 0 0 0 1.5px var(--wc-border-hi);
+}
+.wc-med.is-ph.win { color: var(--wc-gold-bright); box-shadow: inset 0 0 0 1.5px rgba(232,196,104,0.5); }
+.wc-med.is-ph.lose { color: var(--wc-ink-faint); }
+
+.wc-third { margin: 0.6rem auto 0; max-width: 280px; }
+.wc-third-label { display: block; text-align: center; font-family: var(--wc-mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--wc-ink-faint); margin-bottom: 0.5rem; }
+.wc-cuadro-hint { text-align: center; color: var(--wc-ink-faint); font-size: 0.74rem; margin: 0.9rem 0 0; }
+.wc-cuadro-hint b { color: var(--wc-gold-bright); font-family: var(--wc-mono); }
+
+@media (max-width: 600px) {
+  .wc-cuadro { --wc-rh: 51px; --wc-cgap: 16px; --wc-tw: 134px; }
+  .wc-med { width: 26px; height: 26px; }
+  .wc-bname { font-size: 0.74rem; }
+  .wc-bnum { font-size: 0.56rem; }
+}
 
 /* --- champion / celebración ------------------------------------------- */
 .wc-champ {

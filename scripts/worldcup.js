@@ -187,6 +187,8 @@
     var p = key.split('-'); var dt = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]));
     return DOW[dt.getUTCDay()] + ' ' + (+p[2]) + ' ' + MON[+p[1] - 1];
   }
+  // versión compacta de una sola línea para el cuadro: "19 jul"
+  function fmtShort(key) { var p = key.split('-'); return (+p[2]) + ' ' + MON[+p[1] - 1]; }
   function flagURL(code, w) { return 'https://flagcdn.com/' + (w || 'w40') + '/' + code + '.png'; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
@@ -209,7 +211,7 @@
         else if (pen) winner = pen[0] > pen[1] ? 1 : (pen[1] > pen[0] ? 2 : 0);
       }
       out.push({
-        i: i, round: m.round, group: m.group || '', stage: ROUND_ES[m.round] || m.group || m.round,
+        i: i, num: m.num, round: m.round, group: m.group || '', stage: ROUND_ES[m.round] || m.group || m.round,
         isKO: KO_ORDER.indexOf(m.round) >= 0,
         t1: m.team1, t2: m.team2, start: start, key: cdmxKey(start),
         ft: ft, pen: pen, status: status, winner: winner, ground: m.ground || '',
@@ -302,25 +304,155 @@
     return out.join('');
   }
 
+  // ---- Eliminatorias: cuadro simétrico "camino a la final" --------------
+  // Los partidos de eliminación traen team1/team2 como "W99"/"L101" hasta
+  // que se definen (ganador/perdedor del partido 99/101). Los mostramos
+  // legibles y rotulamos cada cruce con su código FIFA: W73, W74, … W104.
+  var bracketEdges = []; // [ [numOrigen, numDestino], … ] para las líneas SVG
+
+  function koFeeder(token) { var m = /^([WL])(\d+)$/.exec(token || ''); return m ? +m[2] : null; }
+  function koSlot(token) {
+    var m = /^([WL])(\d+)$/.exec(token || '');
+    if (m) return {
+      ph: true, placeholder: true, kind: m[1] === 'W' ? 'win' : 'lose', ref: +m[2], code: null,
+      name: (m[1] === 'W' ? 'Ganador' : 'Perdedor') + ' ' + m[2]
+    };
+    var meta = teamMeta(token);
+    return { ph: meta.ph, placeholder: false, kind: 'team', code: meta.code, name: meta.name };
+  }
+  function bMed(slot) {
+    if (slot.code) return '<span class="wc-med"><img loading="lazy" width="34" height="34" src="' +
+      flagURL(slot.code, 'w160') + '" alt="Bandera de ' + esc(slot.name) + '"></span>';
+    if (slot.placeholder) return '<span class="wc-med is-ph ' + slot.kind + '" aria-hidden="true">' +
+      (slot.kind === 'win' ? 'W' : 'L') + slot.ref + '</span>';
+    return '<span class="wc-med is-ph" aria-hidden="true">·</span>';
+  }
+  function bTie(m) {
+    var a = koSlot(m.t1), b = koSlot(m.t2);
+    var w1 = m.winner === 1 ? ' win' : '', w2 = m.winner === 2 ? ' win' : '';
+    var fav = favColor[m.t1] || favColor[m.t2] || '';
+    var live = m.status === 'live';
+    var isFinal = m.round === 'Final';
+    var s1 = m.ft ? m.ft[0] : (m.live ? m.live.score[0] : '');
+    var s2 = m.ft ? m.ft[1] : (m.live ? m.live.score[1] : '');
+    var sub = m.ft ? (m.pen ? 'Penales ' + m.pen[0] + '–' + m.pen[1] : 'Final')
+      : live ? 'En vivo ahora'
+        : (fmtShort(m.key) + ' · ' + fmtTime(m.start));
+    var tag = isFinal ? '<span class="wc-bnum is-final">🏆 Final</span>'
+      : m.round === 'Match for third place' ? '<span class="wc-bnum">🥉 3.º lugar</span>'
+        : '<span class="wc-bnum" title="Su ganador avanza como W' + m.num + '">W' + m.num + '</span>';
+    return '<article class="wc-btie' + (isFinal ? ' is-final' : '') + (live ? ' is-live' : '') +
+      (fav ? ' has-fav' : '') + '"' + (fav ? ' style="--fav:' + fav + '"' : '') +
+      ' data-wc-tie="' + m.num + '" data-wc-open="' + m.i + '" role="button" tabindex="0"' +
+      ' aria-label="Detalle del partido ' + esc(a.name) + ' contra ' + esc(b.name) + '">' +
+      tag +
+      '<div class="wc-bteam' + w1 + (a.placeholder ? ' is-ph' : '') + '">' + bMed(a) +
+        '<span class="wc-bname">' + esc(a.name) + starFor(m.t1) + '</span><b class="wc-bscore">' + (s1 === '' ? '' : s1) + '</b></div>' +
+      '<div class="wc-bteam' + w2 + (b.placeholder ? ' is-ph' : '') + '">' + bMed(b) +
+        '<span class="wc-bname">' + esc(b.name) + starFor(m.t2) + '</span><b class="wc-bscore">' + (s2 === '' ? '' : s2) + '</b></div>' +
+      '<small class="wc-bsub">' + esc(sub) + '</small>' +
+      '</article>';
+  }
+
+  // columnas (exterior→interior) y su grid-row para alinear cada cruce con
+  // el punto medio de su pareja. 16 filas por lado (8 cruces de dieciseisavos).
+  var SPAN = { 'Round of 32': 2, 'Round of 16': 4, 'Quarter-final': 8, 'Semi-final': 16 };
+  var SIDE_ROUNDS = ['Round of 32', 'Round of 16', 'Quarter-final', 'Semi-final'];
+
+  function bracketSide(all, side, sides) {
+    var html = '';
+    SIDE_ROUNDS.forEach(function (rn, idx) {
+      var ms = all.filter(function (m) { return m.round === rn && sides[m.num] === side; })
+        .sort(function (a, b) { return a._ord - b._ord; });
+      var span = SPAN[rn];
+      var col = side === 'left' ? idx + 1 : 4 - idx;
+      ms.forEach(function (m, k) {
+        var rowStart = k * span + 1;
+        html += bTie(m).replace('<article ',
+          '<article style="grid-column:' + col + ';grid-row:' + rowStart + ' / span ' + span + '" ');
+      });
+    });
+    return '<div class="wc-side wc-' + (side === 'left' ? 'l' : 'r') + '">' + html + '</div>';
+  }
+
   function bracket(all) {
-    var cols = KO_ORDER.map(function (r) {
-      var ms = all.filter(function (m) { return m.round === r; });
-      if (!ms.length) return '';
-      var ties = ms.map(function (m) {
-        var a = teamMeta(m.t1), b = teamMeta(m.t2);
-        var sc = m.ft ? [m.ft[0], m.ft[1]] : ['', ''];
-        var w1 = m.winner === 1 ? ' win' : '', w2 = m.winner === 2 ? ' win' : '';
-        var sub = m.ft ? (m.pen ? 'Penales ' + m.pen[0] + '–' + m.pen[1] : 'Final') : fmtDayLabel(m.key) + ' · ' + fmtTime(m.start);
-        var fav = favColor[m.t1] || favColor[m.t2] || '';
-        return '<div class="wc-btie ' + (r === 'Final' ? 'is-final' : '') + (fav ? ' has-fav' : '') + '"' + (fav ? ' style="--fav:' + fav + '"' : '') +
-          ' data-wc-open="' + m.i + '" role="button" tabindex="0">' +
-          '<div class="wc-bteam' + w1 + '">' + flagCell(a) + '<span>' + esc(a.name) + starFor(m.t1) + '</span><b>' + sc[0] + '</b></div>' +
-          '<div class="wc-bteam' + w2 + '">' + flagCell(b) + '<span>' + esc(b.name) + starFor(m.t2) + '</span><b>' + sc[1] + '</b></div>' +
-          '<small>' + esc(sub) + '</small></div>';
-      }).join('');
-      return '<div class="wc-bcol"><h4>' + (ROUND_ES[r] || r) + '</h4>' + ties + '</div>';
-    }).join('');
-    return '<div class="wc-bracket">' + cols + '</div>';
+    var ko = all.filter(function (m) { return m.isKO; });
+    if (!ko.length) return '<div class="wc-empty"><span class="wc-ball">⚽</span>El cuadro de eliminatorias se arma cuando termine la fase de grupos.</div>';
+
+    // mapa nº→partido y reparto izquierda/derecha siguiendo el árbol desde la final
+    var map = {}; ko.forEach(function (m) { if (m.num != null) map[m.num] = m; });
+    var sides = {};
+    var ord = { v: 0 };
+    function inorder(num, side) {
+      var m = map[num]; if (!m) return;
+      sides[num] = side;
+      var f1 = koFeeder(m.t1), f2 = koFeeder(m.t2);
+      if (f1 != null) inorder(f1, side);
+      m._ord = ord.v++;
+      if (f2 != null) inorder(f2, side);
+    }
+    var final = ko.filter(function (m) { return m.round === 'Final'; })[0];
+    var third = ko.filter(function (m) { return m.round === 'Match for third place'; })[0];
+    if (final && final.num != null) {
+      sides[final.num] = 'center';
+      var lf = koFeeder(final.t1), rf = koFeeder(final.t2);
+      if (lf != null) inorder(lf, 'left');
+      if (rf != null) inorder(rf, 'right');
+      final._ord = ord.v++;
+    }
+
+    // aristas para las líneas (cada partido recibe a sus dos alimentadores)
+    bracketEdges = [];
+    ko.forEach(function (t) {
+      if (t.round === 'Match for third place') return;
+      [koFeeder(t.t1), koFeeder(t.t2)].forEach(function (f) {
+        if (f != null && map[f]) bracketEdges.push([f, t.num]);
+      });
+    });
+
+    var center = '<div class="wc-center">' +
+      '<div class="wc-trophy" aria-hidden="true">🏆</div>' +
+      '<div class="wc-center-label">La Gran Final</div>' +
+      (final ? bTie(final) : '') +
+      '</div>';
+
+    var thirdHtml = third ? '<div class="wc-third"><span class="wc-third-label">Tercer lugar</span>' + bTie(third) + '</div>' : '';
+
+    return '<div class="wc-cuadro-wrap"><div class="wc-cuadro" data-wc-bracket>' +
+      '<svg class="wc-cn-svg" aria-hidden="true" preserveAspectRatio="none"></svg>' +
+      bracketSide(ko, 'left', sides) + center + bracketSide(ko, 'right', sides) +
+      '</div>' + thirdHtml +
+      '<p class="wc-cuadro-hint">Cada cruce lleva su código FIFA (su ganador avanza como <b>W##</b>). Toca un partido para ver el detalle.</p>' +
+      '</div>';
+  }
+
+  // dibuja las llaves del cuadro como codos exactos sobre un SVG superpuesto
+  function drawBracketLines(host) {
+    var wrap = host.querySelector('[data-wc-bracket]');
+    if (!wrap) return;
+    var svg = wrap.querySelector('.wc-cn-svg');
+    if (!svg) return;
+    var box = wrap.getBoundingClientRect();
+    if (!box.width || !box.height) return; // panel oculto: se redibuja al abrir
+    svg.setAttribute('viewBox', '0 0 ' + box.width + ' ' + box.height);
+    var byNum = {};
+    wrap.querySelectorAll('[data-wc-tie]').forEach(function (t) { byNum[t.getAttribute('data-wc-tie')] = t; });
+    function pt(el) {
+      var r = el.getBoundingClientRect();
+      return { l: r.left - box.left, r: r.right - box.left, cy: r.top - box.top + r.height / 2, cx: r.left - box.left + r.width / 2 };
+    }
+    var lines = '';
+    bracketEdges.forEach(function (e) {
+      var sEl = byNum[e[0]], tEl = byNum[e[1]];
+      if (!sEl || !tEl) return;
+      var S = pt(sEl), T = pt(tEl);
+      var dir = T.cx > S.cx ? 1 : -1;
+      var sx = dir > 0 ? S.r : S.l, tx = dir > 0 ? T.l : T.r;
+      var mx = (sx + tx) / 2;
+      lines += '<polyline points="' + sx + ',' + S.cy + ' ' + mx + ',' + S.cy + ' ' +
+        mx + ',' + T.cy + ' ' + tx + ',' + T.cy + '" />';
+    });
+    svg.innerHTML = lines;
   }
 
   // ---- Barra de favoritos ------------------------------------------------
@@ -590,8 +722,20 @@
         btn.setAttribute('aria-selected', 'true');
         var id = btn.getAttribute('data-wc-tab');
         host.querySelectorAll('[data-wc-panel]').forEach(function (p) { p.hidden = p.getAttribute('data-wc-panel') !== id; });
+        if (id === 'bracket') requestAnimationFrame(function () { drawBracketLines(host); });
       });
     });
+
+    // líneas del cuadro: dibuja al abrir la pestaña activa y al cambiar el tamaño
+    if (startTab === 'bracket') requestAnimationFrame(function () { drawBracketLines(host); });
+    if (!host._wcResize) {
+      host._wcResize = true;
+      var rt = null;
+      window.addEventListener('resize', function () {
+        clearTimeout(rt);
+        rt = setTimeout(function () { drawBracketLines(host); }, 120);
+      });
+    }
 
     // abrir detalle del partido (delegación enganchada una sola vez por host)
     if (!host._wcWired) {
