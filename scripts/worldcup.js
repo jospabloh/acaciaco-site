@@ -464,8 +464,8 @@
 
     var pathLegend = favPaths.length ? '<div class="wc-fav-paths">' +
       favPaths.map(function (p) {
-        return '<span class="wc-fav-path-chip" style="--fav:' + p.color + '">' +
-          '<i></i>Camino de <b>' + esc(p.name) + '</b> a la final</span>';
+        return '<span class="wc-fav-path-chip' + (p.eliminated ? ' is-out' : '') + '" style="--fav:' + p.color + '">' +
+          '<i></i>Camino de <b>' + esc(p.name) + '</b>' + (p.eliminated ? ' · eliminado' : ' a la final') + '</span>';
       }).join('') + '</div>' : '';
 
     return '<div class="wc-cuadro-wrap">' + bar + pathLegend +
@@ -481,8 +481,10 @@
   }
 
   // De cada favorito: localiza su cruce de entrada (dieciseisavos) y sigue las
-  // aristas del árbol hacia adelante hasta la final. Devuelve el camino aunque
-  // los rivales aún no se conozcan: la estructura del cuadro es fija.
+  // aristas del árbol hacia adelante. La estructura del cuadro es fija, así que
+  // el camino existe aunque los rivales aún no se conozcan; pero solo se ilumina
+  // hasta el último partido que el equipo jugó: si ya perdió, se apaga de ahí en
+  // adelante (más honesto que mostrar una final que ya no alcanzará).
   function computeFavPaths(ko) {
     favPathNum = {}; favPathEdge = {}; favPaths = [];
     getFavs().filter(Boolean).forEach(function (en) {
@@ -491,6 +493,7 @@
         return m.round === 'Round of 32' && m.num != null && (m.t1 === en || m.t2 === en);
       })[0];
       if (!entry) return; // su selección aún no aparece en el cuadro
+      // ruta estructural completa (entrada -> final)
       var path = [entry.num], cur = entry.num, guard = 0;
       while (guard++ < 12) {
         var nx = null;
@@ -498,11 +501,29 @@
           if (bracketEdges[i][0] === cur) { nx = bracketEdges[i][1]; break; }
         }
         if (nx == null) break;
-        favPathEdge[cur + '>' + nx] = color;
         path.push(nx); cur = nx;
       }
-      path.forEach(function (n) { if (!favPathNum[n]) favPathNum[n] = color; });
-      favPaths.push({ en: en, name: (TEAM[en] ? TEAM[en][1] : en), color: color, path: path });
+      // ¿hasta dónde sigue vivo el favorito? recorta en el partido que perdió.
+      var cut = path.length - 1, eliminated = false;
+      for (var j = 0; j < path.length; j++) {
+        var mm = koMap[path[j]];
+        if (!mm || !mm.ft || !mm.winner) break;        // partido sin jugar: sigue vivo -> ruta completa
+        var side = (koResolveToken(mm.t1, 0) === en) ? 1
+          : (koResolveToken(mm.t2, 0) === en ? 2 : 0);
+        if (side === 0) { cut = j - 1; eliminated = true; break; } // ya no está en este cruce
+        if (mm.winner !== side) { cut = j; eliminated = true; break; } // perdió aquí: ilumina hasta este
+        // ganó: continúa al siguiente cruce
+      }
+      if (cut < 0) return; // perdió antes de aparecer (no debería): sin camino
+      // ilumina solo el tramo jugado/vigente
+      for (var k = 0; k <= cut; k++) {
+        if (!favPathNum[path[k]]) favPathNum[path[k]] = color;
+        if (k < cut) favPathEdge[path[k] + '>' + path[k + 1]] = color;
+      }
+      favPaths.push({
+        en: en, name: (TEAM[en] ? TEAM[en][1] : en), color: color,
+        path: path.slice(0, cut + 1), eliminated: eliminated
+      });
     });
   }
 

@@ -473,6 +473,8 @@
 }
 .wc-fav-path-chip i { width: 9px; height: 9px; border-radius: 50%; background: var(--fav); box-shadow: 0 0 8px var(--fav); }
 .wc-fav-path-chip b { color: var(--fav); font-weight: 700; }
+.wc-fav-path-chip.is-out { border-style: dashed; opacity: 0.8; }
+.wc-fav-path-chip.is-out i { box-shadow: none; opacity: 0.6; }
 
 /* --- imagen exportable (marca + publicidad ACACIA) -------------------- */
 .wc-export {
