@@ -445,6 +445,35 @@
   .wc-cuadro.reveal-anim .wc-cn-svg polyline { animation: none; }
 }
 
+/* --- camino del favorito: foco sobre su ruta a la final --------------- */
+/* atenúa todo lo que no está en el camino para que la ruta resalte */
+.wc-cuadro.has-fav-path .wc-btie:not(.is-fav-path) { opacity: 0.34; filter: saturate(0.55); transition: opacity 0.3s ease; }
+.wc-cuadro.has-fav-path .wc-cn-svg polyline:not(.is-fav-line) { stroke-opacity: 0.22; }
+/* la ruta: fichas con borde/halo del color del equipo + pulso suave */
+.wc-btie.is-fav-path { border-color: var(--fav); box-shadow: 0 0 0 1px var(--fav), 0 0 20px -5px var(--fav); animation: wc-path-pulse 2.4s ease-in-out infinite; }
+.wc-cn-svg polyline.is-fav-line { stroke-width: 3.5; filter: drop-shadow(0 0 3px currentColor); animation: wc-line-pulse 2.4s ease-in-out infinite; }
+@keyframes wc-path-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px var(--fav), 0 0 14px -7px var(--fav); }
+  50% { box-shadow: 0 0 0 1px var(--fav), 0 0 26px -1px var(--fav); }
+}
+@keyframes wc-line-pulse { 0%, 100% { stroke-opacity: 0.8; } 50% { stroke-opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .wc-btie.is-fav-path, .wc-cn-svg polyline.is-fav-line { animation: none; }
+}
+/* en el PNG no hay animación: foco estable, sin parpadeo */
+.wc-export .wc-btie.is-fav-path, .wc-export .wc-cn-svg polyline.is-fav-line { animation: none; }
+
+/* leyenda: chip por favorito con su color */
+.wc-fav-paths { display: flex; flex-wrap: wrap; gap: 0.4rem 0.7rem; margin: 0 0 0.7rem; }
+.wc-fav-path-chip {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  font-size: 0.82rem; font-weight: 600; color: var(--wc-ink-dim);
+  padding: 0.3rem 0.7rem; border: 1px solid var(--fav); border-radius: 999px;
+  background: rgba(0, 0, 0, 0.22);
+}
+.wc-fav-path-chip i { width: 9px; height: 9px; border-radius: 50%; background: var(--fav); box-shadow: 0 0 8px var(--fav); }
+.wc-fav-path-chip b { color: var(--fav); font-weight: 700; }
+
 /* --- imagen exportable (marca + publicidad ACACIA) -------------------- */
 .wc-export {
   width: max-content; padding: 26px 30px 22px; font-family: var(--wc-body); color: var(--wc-ink);

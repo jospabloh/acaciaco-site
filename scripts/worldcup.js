@@ -309,6 +309,10 @@
   // que se definen (ganador/perdedor del partido 99/101). Los mostramos
   // legibles y rotulamos cada cruce con su código FIFA: W73, W74, … W104.
   var bracketEdges = []; // [ [numOrigen, numDestino], … ] para las líneas SVG
+  // Camino del favorito: del cruce donde entra (dieciseisavos) hasta la final.
+  var favPathNum = {};   // nº de cruce  -> color del camino del favorito
+  var favPathEdge = {};  // "origen>destino" -> color (para pintar esa llave)
+  var favPaths = [];     // [{ en, name, color, path:[nums] }] para la leyenda
 
   function koFeeder(token) { var m = /^([WL])(\d+)$/.exec(token || ''); return m ? +m[2] : null; }
   function koSlot(token) {
@@ -330,7 +334,10 @@
   function bTie(m) {
     var a = koSlot(m.t1), b = koSlot(m.t2);
     var w1 = m.winner === 1 ? ' win' : '', w2 = m.winner === 2 ? ' win' : '';
-    var fav = favColor[m.t1] || favColor[m.t2] || '';
+    // un cruce se ilumina si juega un favorito (dieciseisavos) o si está en
+    // el camino que ese favorito recorrería hacia la final (rondas siguientes).
+    var pathColor = favPathNum[m.num] || '';
+    var fav = favColor[m.t1] || favColor[m.t2] || pathColor || '';
     var live = m.status === 'live';
     var isFinal = m.round === 'Final';
     var s1 = m.ft ? m.ft[0] : (m.live ? m.live.score[0] : '');
@@ -342,7 +349,7 @@
       : m.round === 'Match for third place' ? '<span class="wc-bnum">🥉 3.º lugar</span>'
         : '<span class="wc-bnum" title="Su ganador avanza como W' + m.num + '">W' + m.num + '</span>';
     return '<article class="wc-btie' + (isFinal ? ' is-final' : '') + (live ? ' is-live' : '') +
-      (fav ? ' has-fav' : '') + '"' + (fav ? ' style="--fav:' + fav + '"' : '') +
+      (fav ? ' has-fav' : '') + (pathColor ? ' is-fav-path' : '') + '"' + (fav ? ' style="--fav:' + fav + '"' : '') +
       ' data-wc-tie="' + m.num + '" data-wc-open="' + m.i + '" role="button" tabindex="0"' +
       ' aria-label="Detalle del partido ' + esc(a.name) + ' contra ' + esc(b.name) + '">' +
       tag +
@@ -411,6 +418,8 @@
       });
     });
 
+    computeFavPaths(ko); // traza el camino de cada favorito hacia la final
+
     var center = '<div class="wc-center" style="--d:0.42s">' +
       '<div class="wc-trophy" aria-hidden="true">🏆</div>' +
       '<div class="wc-center-label">La Gran Final</div>' +
@@ -431,15 +440,48 @@
       '</div>' +
       '</div>';
 
-    return '<div class="wc-cuadro-wrap">' + bar +
+    var pathLegend = favPaths.length ? '<div class="wc-fav-paths">' +
+      favPaths.map(function (p) {
+        return '<span class="wc-fav-path-chip" style="--fav:' + p.color + '">' +
+          '<i></i>Camino de <b>' + esc(p.name) + '</b> a la final</span>';
+      }).join('') + '</div>' : '';
+
+    return '<div class="wc-cuadro-wrap">' + bar + pathLegend +
       '<div class="wc-cuadro-scroll">' +
-        '<div class="wc-cuadro" data-wc-bracket>' +
+        '<div class="wc-cuadro' + (favPaths.length ? ' has-fav-path' : '') + '" data-wc-bracket>' +
         '<svg class="wc-cn-svg" aria-hidden="true" preserveAspectRatio="none"></svg>' +
         bracketSide(ko, 'left', sides) + center + bracketSide(ko, 'right', sides) +
         '</div>' +
       '</div>' + thirdHtml +
-      '<p class="wc-cuadro-hint">Verás el cuadro completo de un vistazo. Usa <b>+</b> para acercarte, <b>Ver todo</b> para encuadrarlo y toca un partido para el detalle. Cada cruce lleva su código FIFA (su ganador avanza como <b>W##</b>).</p>' +
+      '<p class="wc-cuadro-hint">Verás el cuadro completo de un vistazo. Usa <b>+</b> para acercarte, <b>Ver todo</b> para encuadrarlo y toca un partido para el detalle. Cada cruce lleva su código FIFA (su ganador avanza como <b>W##</b>).' +
+      (favPaths.length ? ' Marca tu favorito arriba y verás iluminado su <b>camino a la final</b>.' : '') + '</p>' +
       '</div>';
+  }
+
+  // De cada favorito: localiza su cruce de entrada (dieciseisavos) y sigue las
+  // aristas del árbol hacia adelante hasta la final. Devuelve el camino aunque
+  // los rivales aún no se conozcan: la estructura del cuadro es fija.
+  function computeFavPaths(ko) {
+    favPathNum = {}; favPathEdge = {}; favPaths = [];
+    getFavs().filter(Boolean).forEach(function (en) {
+      var color = favColor[en]; if (!color) return;
+      var entry = ko.filter(function (m) {
+        return m.round === 'Round of 32' && m.num != null && (m.t1 === en || m.t2 === en);
+      })[0];
+      if (!entry) return; // su selección aún no aparece en el cuadro
+      var path = [entry.num], cur = entry.num, guard = 0;
+      while (guard++ < 12) {
+        var nx = null;
+        for (var i = 0; i < bracketEdges.length; i++) {
+          if (bracketEdges[i][0] === cur) { nx = bracketEdges[i][1]; break; }
+        }
+        if (nx == null) break;
+        favPathEdge[cur + '>' + nx] = color;
+        path.push(nx); cur = nx;
+      }
+      path.forEach(function (n) { if (!favPathNum[n]) favPathNum[n] = color; });
+      favPaths.push({ en: en, name: (TEAM[en] ? TEAM[en][1] : en), color: color, path: path });
+    });
   }
 
   // dibuja las llaves del cuadro como codos exactos sobre un SVG superpuesto.
@@ -465,7 +507,9 @@
       var dir = T.cx > S.cx ? 1 : -1;
       var sx = dir > 0 ? S.r : S.l, tx = dir > 0 ? T.l : T.r;
       var mx = (sx + tx) / 2;
-      lines += '<polyline points="' + sx + ',' + S.cy + ' ' + mx + ',' + S.cy + ' ' +
+      var pc = favPathEdge[e[0] + '>' + e[1]]; // llave dentro del camino del favorito
+      lines += '<polyline ' + (pc ? 'class="is-fav-line" style="stroke:' + pc + ';color:' + pc + '" ' : '') +
+        'points="' + sx + ',' + S.cy + ' ' + mx + ',' + S.cy + ' ' +
         mx + ',' + T.cy + ' ' + tx + ',' + T.cy + '" />';
     });
     svg.innerHTML = lines;
