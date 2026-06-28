@@ -302,7 +302,36 @@
 .wc-skeleton { height: 96px; border-radius: 14px; background: linear-gradient(90deg, var(--wc-card), var(--wc-card-hi), var(--wc-card)); background-size: 200% 100%; animation: wc-shimmer 1.4s infinite; }
 
 /* --- cuadro de eliminatorias (camino a la final) ---------------------- */
-.wc-cuadro-wrap { overflow-x: auto; overflow-y: hidden; padding: 0.4rem 0 0.4rem; scrollbar-width: thin; }
+.wc-cuadro-wrap { padding: 0.2rem 0 0.4rem; }
+.wc-cuadro-scroll { overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+
+/* barra de herramientas: zoom + exportar / compartir */
+.wc-cuadro-bar {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+  gap: 0.6rem; margin: 0 0 0.7rem;
+}
+.wc-zoom { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.2rem; border: 1px solid var(--wc-border); border-radius: 999px; background: rgba(0,0,0,0.25); }
+.wc-zbtn {
+  appearance: none; border: 0; cursor: pointer; color: var(--wc-ink);
+  background: transparent; font-family: var(--wc-mono); font-size: 0.82rem; font-weight: 600;
+  min-width: 34px; height: 30px; padding: 0 0.55rem; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center; transition: background 0.15s, color 0.15s;
+}
+.wc-zbtn:hover { background: var(--wc-card-hi); }
+.wc-zfit { color: var(--wc-gold-bright); letter-spacing: 0.04em; }
+.wc-cuadro-actions { display: inline-flex; gap: 0.5rem; }
+.wc-abtn {
+  appearance: none; cursor: pointer; font-family: var(--wc-body); font-size: 0.8rem; font-weight: 600;
+  color: var(--wc-ink); background: rgba(0,0,0,0.25); border: 1px solid var(--wc-border);
+  padding: 0.42rem 0.8rem; border-radius: 999px; display: inline-flex; align-items: center; gap: 0.35rem;
+  transition: border-color 0.18s, background 0.18s, transform 0.18s, box-shadow 0.18s;
+}
+.wc-abtn:hover { border-color: var(--wc-border-hi); background: var(--wc-card-hi); transform: translateY(-1px); }
+.wc-abtn .wc-ai { font-size: 0.95em; }
+.wc-abtn-primary { color: var(--wc-pitch-3); background: linear-gradient(180deg, var(--wc-gold-bright), var(--wc-gold)); border-color: var(--wc-gold); }
+.wc-abtn-primary:hover { box-shadow: 0 8px 22px -10px rgba(232,196,104,0.7); }
+.wc-abtn:disabled, .wc-abtn.is-busy { opacity: 0.7; cursor: progress; transform: none; }
+
 .wc-cuadro {
   --wc-rh: 54px;          /* alto de fila base (16 filas por lado) */
   --wc-cgap: 22px;        /* separación entre columnas */
@@ -400,11 +429,55 @@
 .wc-cuadro-hint { text-align: center; color: var(--wc-ink-faint); font-size: 0.74rem; margin: 0.9rem 0 0; }
 .wc-cuadro-hint b { color: var(--wc-gold-bright); font-family: var(--wc-mono); }
 
+/* --- animaciones de entrada del cuadro -------------------------------- */
+@keyframes wc-tie-in { from { opacity: 0; transform: translateY(10px) scale(0.96); } to { opacity: 1; transform: none; } }
+@keyframes wc-draw { from { stroke-dashoffset: 1400; } to { stroke-dashoffset: 0; } }
+@keyframes wc-pop { 0% { opacity: 0; transform: scale(0.5); } 70% { transform: scale(1.12); } 100% { opacity: 1; transform: scale(1); } }
+.wc-cuadro.reveal-anim .wc-btie { animation: wc-tie-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; animation-delay: var(--d, 0s); }
+.wc-cuadro.reveal-anim .wc-trophy { animation: wc-pop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.2) backwards 0.3s, wc-trophy-bob 4s ease-in-out infinite 0.9s; }
+.wc-cuadro.reveal-anim .wc-cn-svg polyline { stroke-dasharray: 1400; animation: wc-draw 0.9s ease forwards; animation-delay: 0.25s; }
+@media (prefers-reduced-motion: reduce) {
+  .wc-cuadro.reveal-anim .wc-btie,
+  .wc-cuadro.reveal-anim .wc-trophy,
+  .wc-cuadro.reveal-anim .wc-cn-svg polyline { animation: none; }
+}
+
+/* --- imagen exportable (marca + publicidad ACACIA) -------------------- */
+.wc-export {
+  width: max-content; padding: 26px 30px 22px; font-family: var(--wc-body); color: var(--wc-ink);
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(54, 208, 126, 0.20), transparent 55%),
+    radial-gradient(90% 70% at 85% 0%, rgba(232, 196, 104, 0.14), transparent 60%),
+    linear-gradient(180deg, var(--wc-pitch-1), var(--wc-pitch-2) 55%, var(--wc-pitch-3));
+}
+.wc-export-head { display: flex; align-items: center; gap: 14px; padding-bottom: 16px; margin-bottom: 8px; border-bottom: 1px solid var(--wc-border); }
+.wc-export-logo { border-radius: 10px; display: block; }
+.wc-export-ht { display: flex; flex-direction: column; line-height: 1.15; }
+.wc-export-ht b { font-family: var(--wc-mono); font-size: 1.5rem; letter-spacing: 0.02em; color: var(--wc-ink); }
+.wc-export-ht span { font-size: 0.92rem; color: var(--wc-ink-dim); }
+.wc-export-tag { margin-left: auto; font-family: var(--wc-mono); font-weight: 600; font-size: 0.86rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--wc-pitch-3); background: linear-gradient(180deg, var(--wc-gold-bright), var(--wc-gold)); padding: 0.4rem 0.8rem; border-radius: 999px; }
+.wc-export-body { display: flex; justify-content: center; }
+.wc-export-body .wc-cuadro { margin: 0; }
+.wc-export-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 14px; margin-top: 8px; border-top: 1px solid var(--wc-border); }
+.wc-export-url { font-family: var(--wc-mono); font-weight: 600; color: var(--wc-gold-bright); font-size: 0.95rem; }
+.wc-export-pub { color: var(--wc-ink-dim); font-size: 0.82rem; }
+
+/* --- menú de compartir (fallback de escritorio) ----------------------- */
+.wc-sharemenu { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; background: rgba(2, 8, 6, 0.66); backdrop-filter: blur(3px); }
+.wc-sharemenu-card { position: relative; width: min(92vw, 340px); background: linear-gradient(180deg, var(--wc-pitch-1), var(--wc-pitch-3)); border: 1px solid var(--wc-border-hi); border-radius: 16px; padding: 1.4rem 1.3rem; color: var(--wc-ink); box-shadow: 0 30px 80px -30px rgba(0,0,0,0.9); }
+.wc-sharemenu-card h5 { margin: 0 0 0.3rem; font-family: var(--wc-mono); font-size: 1rem; }
+.wc-sharemenu-card p { margin: 0 0 1rem; color: var(--wc-ink-dim); font-size: 0.86rem; }
+.wc-sharemenu-card .wc-act { display: block; margin-top: 0.5rem; }
+.wc-sharemenu-x { position: absolute; top: 0.6rem; right: 0.6rem; width: 28px; height: 28px; border: 0; border-radius: 50%; background: var(--wc-card-hi); color: var(--wc-ink); cursor: pointer; }
+
 @media (max-width: 600px) {
   .wc-cuadro { --wc-rh: 51px; --wc-cgap: 16px; --wc-tw: 134px; }
   .wc-med { width: 26px; height: 26px; }
   .wc-bname { font-size: 0.74rem; }
   .wc-bnum { font-size: 0.56rem; }
+  .wc-cuadro-bar { gap: 0.45rem; }
+  .wc-cuadro-actions { flex: 1; }
+  .wc-abtn { flex: 1; justify-content: center; }
 }
 
 /* --- champion / celebración ------------------------------------------- */
