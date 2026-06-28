@@ -438,7 +438,7 @@
         bracketSide(ko, 'left', sides) + center + bracketSide(ko, 'right', sides) +
         '</div>' +
       '</div>' + thirdHtml +
-      '<p class="wc-cuadro-hint">Cada cruce lleva su código FIFA (su ganador avanza como <b>W##</b>). Usa <b>Ver todo</b> para el cuadro completo o toca un partido para el detalle.</p>' +
+      '<p class="wc-cuadro-hint">Verás el cuadro completo de un vistazo. Usa <b>+</b> para acercarte, <b>Ver todo</b> para encuadrarlo y toca un partido para el detalle. Cada cruce lleva su código FIFA (su ganador avanza como <b>W##</b>).</p>' +
       '</div>';
   }
 
@@ -499,8 +499,10 @@
       cu.classList.add('reveal-anim');
       setTimeout(function () { cu.classList.remove('reveal-anim'); }, 1800);
     }
-    if (host._wcZoom && host._wcZoom !== 1) applyZoom(host, host._wcZoom);
-    else drawBracketLines(host);
+    // por defecto encuadra TODO el cuadro (se ve completo de entrada);
+    // si el usuario ya ajustó el zoom a mano, se respeta.
+    if (host._wcUserZoom && host._wcZoom) applyZoom(host, host._wcZoom);
+    else requestAnimationFrame(function () { fitZoom(host); });
   }
 
   // ---- Export / compartir como PNG (con marca y publicidad ACACIA) ------
@@ -895,8 +897,8 @@
     host.querySelectorAll('[data-wc-zoom]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var a = btn.getAttribute('data-wc-zoom');
-        if (a === 'fit') fitZoom(host);
-        else applyZoom(host, (host._wcZoom || 1) * (a === 'in' ? 1.18 : 0.84));
+        if (a === 'fit') { host._wcUserZoom = false; fitZoom(host); }
+        else { host._wcUserZoom = true; applyZoom(host, (host._wcZoom || 1) * (a === 'in' ? 1.18 : 0.84)); }
       });
     });
     // exportar / compartir como PNG con marca ACACIA
@@ -912,7 +914,9 @@
       var rt = null;
       window.addEventListener('resize', function () {
         clearTimeout(rt);
-        rt = setTimeout(function () { drawBracketLines(host); }, 120);
+        rt = setTimeout(function () {
+          if (host._wcUserZoom) drawBracketLines(host); else fitZoom(host);
+        }, 120);
       });
     }
 
