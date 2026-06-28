@@ -314,13 +314,32 @@
   var favPathEdge = {};  // "origen>destino" -> color (para pintar esa llave)
   var favPaths = [];     // [{ en, name, color, path:[nums] }] para la leyenda
 
+  var koMap = {}; // nº de cruce -> partido, para resolver ganadores ya definidos
   function koFeeder(token) { var m = /^([WL])(\d+)$/.exec(token || ''); return m ? +m[2] : null; }
+  // Si el cruce alimentador ya terminó, devuelve el token del equipo concreto
+  // (ganador o perdedor); resuelve en cadena por si ese alimentador era otro W##.
+  function koResolveToken(token, depth) {
+    var m = /^([WL])(\d+)$/.exec(token || '');
+    if (!m) return token;                       // ya es un equipo (o placeholder de grupo)
+    if (depth > 8) return null;                 // tope de seguridad
+    var match = koMap[+m[2]];
+    if (!match || !match.ft || !match.winner) return null; // aún sin definir
+    var side = (m[1] === 'W') ? match.winner : (match.winner === 1 ? 2 : 1);
+    return koResolveToken(side === 1 ? match.t1 : match.t2, (depth || 0) + 1);
+  }
   function koSlot(token) {
     var m = /^([WL])(\d+)$/.exec(token || '');
-    if (m) return {
-      ph: true, placeholder: true, kind: m[1] === 'W' ? 'win' : 'lose', ref: +m[2], code: null,
-      name: (m[1] === 'W' ? 'Ganador' : 'Perdedor') + ' ' + m[2]
-    };
+    if (m) {
+      var resolved = koResolveToken(token, 0);
+      if (resolved && !/^[WL]\d+$/.test(resolved)) {
+        var rm = teamMeta(resolved);
+        return { ph: rm.ph, placeholder: false, kind: 'team', code: rm.code, name: rm.name };
+      }
+      return {
+        ph: true, placeholder: true, kind: m[1] === 'W' ? 'win' : 'lose', ref: +m[2], code: null,
+        name: (m[1] === 'W' ? 'Ganador' : 'Perdedor') + ' ' + m[2]
+      };
+    }
     var meta = teamMeta(token);
     return { ph: meta.ph, placeholder: false, kind: 'team', code: meta.code, name: meta.name };
   }
@@ -334,10 +353,12 @@
   function bTie(m) {
     var a = koSlot(m.t1), b = koSlot(m.t2);
     var w1 = m.winner === 1 ? ' win' : '', w2 = m.winner === 2 ? ' win' : '';
+    // token del equipo ya resuelto (si el alimentador terminó), para la ★ y el color
+    var t1r = koResolveToken(m.t1, 0) || m.t1, t2r = koResolveToken(m.t2, 0) || m.t2;
     // un cruce se ilumina si juega un favorito (dieciseisavos) o si está en
     // el camino que ese favorito recorrería hacia la final (rondas siguientes).
     var pathColor = favPathNum[m.num] || '';
-    var fav = favColor[m.t1] || favColor[m.t2] || pathColor || '';
+    var fav = favColor[t1r] || favColor[t2r] || pathColor || '';
     var live = m.status === 'live';
     var isFinal = m.round === 'Final';
     var s1 = m.ft ? m.ft[0] : (m.live ? m.live.score[0] : '');
@@ -354,9 +375,9 @@
       ' aria-label="Detalle del partido ' + esc(a.name) + ' contra ' + esc(b.name) + '">' +
       tag +
       '<div class="wc-bteam' + w1 + (a.placeholder ? ' is-ph' : '') + '">' + bMed(a) +
-        '<span class="wc-bname">' + esc(a.name) + starFor(m.t1) + '</span><b class="wc-bscore">' + (s1 === '' ? '' : s1) + '</b></div>' +
+        '<span class="wc-bname">' + esc(a.name) + starFor(t1r) + '</span><b class="wc-bscore">' + (s1 === '' ? '' : s1) + '</b></div>' +
       '<div class="wc-bteam' + w2 + (b.placeholder ? ' is-ph' : '') + '">' + bMed(b) +
-        '<span class="wc-bname">' + esc(b.name) + starFor(m.t2) + '</span><b class="wc-bscore">' + (s2 === '' ? '' : s2) + '</b></div>' +
+        '<span class="wc-bname">' + esc(b.name) + starFor(t2r) + '</span><b class="wc-bscore">' + (s2 === '' ? '' : s2) + '</b></div>' +
       '<small class="wc-bsub">' + esc(sub) + '</small>' +
       '</article>';
   }
@@ -389,6 +410,7 @@
 
     // mapa nº→partido y reparto izquierda/derecha siguiendo el árbol desde la final
     var map = {}; ko.forEach(function (m) { if (m.num != null) map[m.num] = m; });
+    koMap = map; // para resolver ganadores ya definidos en koSlot()
     var sides = {};
     var ord = { v: 0 };
     function inorder(num, side) {
