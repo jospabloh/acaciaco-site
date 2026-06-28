@@ -321,7 +321,7 @@
     return { ph: meta.ph, placeholder: false, kind: 'team', code: meta.code, name: meta.name };
   }
   function bMed(slot) {
-    if (slot.code) return '<span class="wc-med"><img loading="lazy" width="34" height="34" src="' +
+    if (slot.code) return '<span class="wc-med"><img loading="lazy" crossorigin="anonymous" width="34" height="34" src="' +
       flagURL(slot.code, 'w160') + '" alt="Bandera de ' + esc(slot.name) + '"></span>';
     if (slot.placeholder) return '<span class="wc-med is-ph ' + slot.kind + '" aria-hidden="true">' +
       (slot.kind === 'win' ? 'W' : 'L') + slot.ref + '</span>';
@@ -368,8 +368,9 @@
       var col = side === 'left' ? idx + 1 : 4 - idx;
       ms.forEach(function (m, k) {
         var rowStart = k * span + 1;
+        var delay = (0.05 + idx * 0.08).toFixed(2);
         html += bTie(m).replace('<article ',
-          '<article style="grid-column:' + col + ';grid-row:' + rowStart + ' / span ' + span + '" ');
+          '<article style="grid-column:' + col + ';grid-row:' + rowStart + ' / span ' + span + ';--d:' + delay + 's" ');
       });
     });
     return '<div class="wc-side wc-' + (side === 'left' ? 'l' : 'r') + '">' + html + '</div>';
@@ -410,7 +411,7 @@
       });
     });
 
-    var center = '<div class="wc-center">' +
+    var center = '<div class="wc-center" style="--d:0.42s">' +
       '<div class="wc-trophy" aria-hidden="true">🏆</div>' +
       '<div class="wc-center-label">La Gran Final</div>' +
       (final ? bTie(final) : '') +
@@ -418,25 +419,40 @@
 
     var thirdHtml = third ? '<div class="wc-third"><span class="wc-third-label">Tercer lugar</span>' + bTie(third) + '</div>' : '';
 
-    return '<div class="wc-cuadro-wrap"><div class="wc-cuadro" data-wc-bracket>' +
-      '<svg class="wc-cn-svg" aria-hidden="true" preserveAspectRatio="none"></svg>' +
-      bracketSide(ko, 'left', sides) + center + bracketSide(ko, 'right', sides) +
+    var bar = '<div class="wc-cuadro-bar">' +
+      '<div class="wc-zoom" role="group" aria-label="Zoom del cuadro">' +
+        '<button type="button" class="wc-zbtn" data-wc-zoom="out" aria-label="Alejar">−</button>' +
+        '<button type="button" class="wc-zbtn wc-zfit" data-wc-zoom="fit">Ver todo</button>' +
+        '<button type="button" class="wc-zbtn" data-wc-zoom="in" aria-label="Acercar">+</button>' +
+      '</div>' +
+      '<div class="wc-cuadro-actions">' +
+        '<button type="button" class="wc-abtn" data-wc-export><span class="wc-ai" aria-hidden="true">⬇</span> <span class="wc-al">Descargar PNG</span></button>' +
+        '<button type="button" class="wc-abtn wc-abtn-primary" data-wc-share><span class="wc-ai" aria-hidden="true">↗</span> <span class="wc-al">Compartir</span></button>' +
+      '</div>' +
+      '</div>';
+
+    return '<div class="wc-cuadro-wrap">' + bar +
+      '<div class="wc-cuadro-scroll">' +
+        '<div class="wc-cuadro" data-wc-bracket>' +
+        '<svg class="wc-cn-svg" aria-hidden="true" preserveAspectRatio="none"></svg>' +
+        bracketSide(ko, 'left', sides) + center + bracketSide(ko, 'right', sides) +
+        '</div>' +
       '</div>' + thirdHtml +
-      '<p class="wc-cuadro-hint">Cada cruce lleva su código FIFA (su ganador avanza como <b>W##</b>). Toca un partido para ver el detalle.</p>' +
+      '<p class="wc-cuadro-hint">Cada cruce lleva su código FIFA (su ganador avanza como <b>W##</b>). Usa <b>Ver todo</b> para el cuadro completo o toca un partido para el detalle.</p>' +
       '</div>';
   }
 
-  // dibuja las llaves del cuadro como codos exactos sobre un SVG superpuesto
-  function drawBracketLines(host) {
-    var wrap = host.querySelector('[data-wc-bracket]');
-    if (!wrap) return;
-    var svg = wrap.querySelector('.wc-cn-svg');
+  // dibuja las llaves del cuadro como codos exactos sobre un SVG superpuesto.
+  // Recibe el elemento .wc-cuadro (sirve igual en pantalla y en la copia de export).
+  function drawLinesIn(cuadro) {
+    if (!cuadro) return;
+    var svg = cuadro.querySelector('.wc-cn-svg');
     if (!svg) return;
-    var box = wrap.getBoundingClientRect();
+    var box = cuadro.getBoundingClientRect();
     if (!box.width || !box.height) return; // panel oculto: se redibuja al abrir
     svg.setAttribute('viewBox', '0 0 ' + box.width + ' ' + box.height);
     var byNum = {};
-    wrap.querySelectorAll('[data-wc-tie]').forEach(function (t) { byNum[t.getAttribute('data-wc-tie')] = t; });
+    cuadro.querySelectorAll('[data-wc-tie]').forEach(function (t) { byNum[t.getAttribute('data-wc-tie')] = t; });
     function pt(el) {
       var r = el.getBoundingClientRect();
       return { l: r.left - box.left, r: r.right - box.left, cy: r.top - box.top + r.height / 2, cx: r.left - box.left + r.width / 2 };
@@ -453,6 +469,155 @@
         mx + ',' + T.cy + ' ' + tx + ',' + T.cy + '" />';
     });
     svg.innerHTML = lines;
+  }
+  function drawBracketLines(host) { drawLinesIn(host.querySelector('[data-wc-bracket]')); }
+
+  // ---- Zoom del cuadro (ver el mapa completo) ---------------------------
+  function clampZoom(z) { return Math.max(0.25, Math.min(1, z)); }
+  function applyZoom(host, z) {
+    var cu = host.querySelector('[data-wc-bracket]'); if (!cu) return;
+    z = clampZoom(z); host._wcZoom = z;
+    cu.style.zoom = z === 1 ? '' : z;
+    var fit = host.querySelector('[data-wc-zoom="fit"]');
+    if (fit) fit.textContent = z < 0.999 ? Math.round(z * 100) + '%' : 'Ver todo';
+    requestAnimationFrame(function () { drawBracketLines(host); });
+  }
+  function fitZoom(host) {
+    var scroll = host.querySelector('.wc-cuadro-scroll'), cu = host.querySelector('[data-wc-bracket]');
+    if (!scroll || !cu) return;
+    cu.style.zoom = '';                       // medir a tamaño natural (zoom 1)
+    var natW = cu.getBoundingClientRect().width;
+    if (!natW) return;
+    applyZoom(host, (scroll.clientWidth - 10) / natW);
+  }
+  // revela el cuadro con una animación de entrada (una sola vez por montaje)
+  function revealBracket(host) {
+    var cu = host.querySelector('[data-wc-bracket]'); if (!cu) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!host._wcRevealed && !reduce) {
+      host._wcRevealed = true;
+      cu.classList.add('reveal-anim');
+      setTimeout(function () { cu.classList.remove('reveal-anim'); }, 1800);
+    }
+    if (host._wcZoom && host._wcZoom !== 1) applyZoom(host, host._wcZoom);
+    else drawBracketLines(host);
+  }
+
+  // ---- Export / compartir como PNG (con marca y publicidad ACACIA) ------
+  var _h2cPromise = null;
+  function ensureH2C() {
+    if (window.html2canvas) return Promise.resolve(window.html2canvas);
+    if (_h2cPromise) return _h2cPromise;
+    _h2cPromise = new Promise(function (res, rej) {
+      var s = document.createElement('script');
+      s.src = '/scripts/html2canvas.min.js';
+      s.onload = function () { window.html2canvas ? res(window.html2canvas) : rej(new Error('h2c')); };
+      s.onerror = function () { rej(new Error('no se pudo cargar html2canvas')); };
+      document.head.appendChild(s);
+    });
+    return _h2cPromise;
+  }
+  function buildExportNode(host) {
+    var live = host.querySelector('[data-wc-bracket]'); if (!live) return null;
+    var clone = live.cloneNode(true);
+    clone.style.zoom = '';
+    clone.classList.remove('reveal-anim');
+    var node = document.createElement('div');
+    node.className = 'wc-export';
+    node.innerHTML =
+      '<div class="wc-export-head">' +
+        '<img class="wc-export-logo" src="/assets/acacia-logo.jpg" crossorigin="anonymous" width="46" height="46" alt="ACACIA">' +
+        '<div class="wc-export-ht"><b>ACACIA</b><span>Mundial 2026 · El camino a la final</span></div>' +
+        '<div class="wc-export-tag">🏆 Eliminatorias</div>' +
+      '</div>' +
+      '<div class="wc-export-body"></div>' +
+      '<div class="wc-export-foot">' +
+        '<span class="wc-export-url">⚽ acaciaco.com.mx/mundial-2026</span>' +
+        '<span class="wc-export-pub">Apps que ponen orden en tu negocio — StockFlow · FlowFin · Puntos+ · LIUMA · Rumbo</span>' +
+      '</div>';
+    node.querySelector('.wc-export-body').appendChild(clone);
+    node.style.cssText = 'position:fixed;left:-10000px;top:0;z-index:-1';
+    document.body.appendChild(node);
+    drawLinesIn(clone);
+    return { node: node, cleanup: function () { if (node.parentNode) node.parentNode.removeChild(node); } };
+  }
+  function renderBracketCanvas(host) {
+    var built = buildExportNode(host);
+    if (!built) return Promise.reject(new Error('no bracket'));
+    var fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+    return ensureH2C().then(function (h2c) {
+      return fontsReady.then(function () { return new Promise(function (r) { setTimeout(r, 80); }); }).then(function () {
+        return h2c(built.node, { useCORS: true, backgroundColor: '#061410', scale: Math.min(2, window.devicePixelRatio || 1.6), logging: false });
+      });
+    }).then(function (canvas) { built.cleanup(); return canvas; },
+      function (e) { built.cleanup(); throw e; });
+  }
+  function canvasToBlob(canvas) {
+    return new Promise(function (res) {
+      if (canvas.toBlob) canvas.toBlob(function (b) { res(b); }, 'image/png');
+      else res(dataURLtoBlob(canvas.toDataURL('image/png')));
+    });
+  }
+  function dataURLtoBlob(d) {
+    var p = d.split(','), bin = atob(p[1]), n = bin.length, u = new Uint8Array(n);
+    while (n--) u[n] = bin.charCodeAt(n);
+    return new Blob([u], { type: 'image/png' });
+  }
+  function downloadBlob(blob, name) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 5000);
+  }
+  function setBusy(btn, busy, busyLabel) {
+    if (!btn) return;
+    var lab = btn.querySelector('.wc-al');
+    if (busy) { btn.disabled = true; btn.dataset.lab = lab ? lab.textContent : ''; if (lab) lab.textContent = busyLabel || 'Generando…'; btn.classList.add('is-busy'); }
+    else { btn.disabled = false; if (lab && btn.dataset.lab != null) lab.textContent = btn.dataset.lab; btn.classList.remove('is-busy'); }
+  }
+  function track(ev, data) { if (window.acaciaTrack) try { window.acaciaTrack(ev, data || {}); } catch (e) {} }
+  var EXPORT_NAME = 'mundial-2026-eliminatorias-acacia.png';
+  var SHARE_TEXT = 'El camino a la final del Mundial 2026 🏆⚽ — calendario y marcador en vivo en ACACIA: https://acaciaco.com.mx/mundial-2026';
+
+  function downloadBracketPNG(host, btn) {
+    setBusy(btn, true);
+    renderBracketCanvas(host).then(canvasToBlob).then(function (blob) {
+      downloadBlob(blob, EXPORT_NAME); track('mundial_bracket_export'); setBusy(btn, false);
+    }).catch(function () { setBusy(btn, false); alert('No pudimos generar la imagen. Intenta de nuevo.'); });
+  }
+  function shareBracketPNG(host, btn) {
+    setBusy(btn, true, 'Preparando…');
+    renderBracketCanvas(host).then(canvasToBlob).then(function (blob) {
+      var file = new File([blob], EXPORT_NAME, { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        return navigator.share({ files: [file], title: 'Mundial 2026 — Eliminatorias', text: SHARE_TEXT })
+          .then(function () { track('mundial_bracket_share', { m: 'native' }); },
+            function (e) { if (!e || e.name !== 'AbortError') throw e; });
+      }
+      // Escritorio / sin compartir nativo: descarga la imagen y abre opciones
+      downloadBlob(blob, EXPORT_NAME);
+      openShareFallback();
+      track('mundial_bracket_share', { m: 'fallback' });
+    }).then(function () { setBusy(btn, false); })
+      .catch(function () { setBusy(btn, false); alert('No pudimos preparar la imagen para compartir.'); });
+  }
+  function openShareFallback() {
+    var prev = document.querySelector('.wc-sharemenu'); if (prev) prev.remove();
+    var wa = 'https://wa.me/?text=' + encodeURIComponent(SHARE_TEXT);
+    var mail = 'mailto:?subject=' + encodeURIComponent('Mundial 2026 — Eliminatorias (ACACIA)') +
+      '&body=' + encodeURIComponent('Te comparto el cuadro de eliminatorias del Mundial 2026 (imagen adjunta).\n\n' + SHARE_TEXT);
+    var box = document.createElement('div');
+    box.className = 'wc-sharemenu';
+    box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Compartir imagen');
+    box.innerHTML = '<div class="wc-sharemenu-card">' +
+      '<button class="wc-sharemenu-x" type="button" aria-label="Cerrar">✕</button>' +
+      '<h5>Imagen descargada ✔</h5>' +
+      '<p>Adjunta el PNG en tu mensaje y compártelo:</p>' +
+      '<a class="wc-act wa" href="' + wa + '" target="_blank" rel="noopener">Compartir por WhatsApp</a>' +
+      '<a class="wc-act" href="' + mail + '">Enviar por correo</a>' +
+      '</div>';
+    box.addEventListener('click', function (e) { if (e.target === box || e.target.closest('.wc-sharemenu-x')) box.remove(); });
+    document.body.appendChild(box);
   }
 
   // ---- Barra de favoritos ------------------------------------------------
@@ -722,12 +887,26 @@
         btn.setAttribute('aria-selected', 'true');
         var id = btn.getAttribute('data-wc-tab');
         host.querySelectorAll('[data-wc-panel]').forEach(function (p) { p.hidden = p.getAttribute('data-wc-panel') !== id; });
-        if (id === 'bracket') requestAnimationFrame(function () { drawBracketLines(host); });
+        if (id === 'bracket') requestAnimationFrame(function () { revealBracket(host); });
       });
     });
 
+    // zoom del cuadro (ver el mapa completo / acercar / alejar)
+    host.querySelectorAll('[data-wc-zoom]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var a = btn.getAttribute('data-wc-zoom');
+        if (a === 'fit') fitZoom(host);
+        else applyZoom(host, (host._wcZoom || 1) * (a === 'in' ? 1.18 : 0.84));
+      });
+    });
+    // exportar / compartir como PNG con marca ACACIA
+    var expBtn = host.querySelector('[data-wc-export]');
+    if (expBtn) expBtn.addEventListener('click', function () { downloadBracketPNG(host, expBtn); });
+    var shBtn = host.querySelector('[data-wc-share]');
+    if (shBtn) shBtn.addEventListener('click', function () { shareBracketPNG(host, shBtn); });
+
     // líneas del cuadro: dibuja al abrir la pestaña activa y al cambiar el tamaño
-    if (startTab === 'bracket') requestAnimationFrame(function () { drawBracketLines(host); });
+    if (startTab === 'bracket') requestAnimationFrame(function () { revealBracket(host); });
     if (!host._wcResize) {
       host._wcResize = true;
       var rt = null;
