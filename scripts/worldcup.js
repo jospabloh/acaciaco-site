@@ -192,6 +192,23 @@
   function flagURL(code, w) { return 'https://flagcdn.com/' + (w || 'w40') + '/' + code + '.png'; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
+  // Emojis del texto que se comparte (WhatsApp, calendario, .ics), escritos con
+  // escapes Unicode: así son ASCII en el archivo y llegan intactos aunque el
+  // servidor entregue el .js con otra codificación. Se evitan banderas de país
+  // (🇲🇽), que Windows/WhatsApp Web y varios Android no dibujan y muestran como
+  // cajitas o «�»; usamos emojis con soporte universal.
+  var EMO = {
+    ball: '\u26BD',        // ⚽
+    cal: '\u{1F4C5}',      // 📅
+    pin: '\u{1F4CD}',      // 📍
+    point: '\u{1F449}',    // 👉
+    pop: '\u{1F37F}',      // 🍿
+    tv: '\u{1F4FA}',       // 📺
+    party: '\u{1F389}',    // 🎉
+    hands: '\u{1F91D}',    // 🤝
+    trophy: '\u{1F3C6}'    // 🏆
+  };
+
   // ---- Normalización ----------------------------------------------------
   function norm(raw, now) {
     var out = [];
@@ -721,7 +738,7 @@
   }
   function track(ev, data) { if (window.acaciaTrack) try { window.acaciaTrack(ev, data || {}); } catch (e) {} }
   var EXPORT_NAME = 'mundial-2026-eliminatorias-acacia.png';
-  var SHARE_TEXT = 'El camino a la final del Mundial 2026 🏆⚽ — calendario y marcador en vivo en ACACIA: https://acaciaco.com.mx/mundial-2026';
+  var SHARE_TEXT = 'El camino a la final del Mundial 2026 ' + EMO.trophy + EMO.ball + ' — calendario y marcador en vivo en ACACIA: https://acaciaco.com.mx/mundial-2026';
 
   function downloadBracketPNG(host, btn) {
     setBusy(btn, true);
@@ -791,7 +808,7 @@
       pad(date.getUTCHours()) + pad(date.getUTCMinutes()) + '00Z';
   }
   function matchTitle(mm) {
-    return '⚽ ' + teamMeta(mm.t1).name + ' vs ' + teamMeta(mm.t2).name + ' · Mundial 2026';
+    return EMO.ball + ' ' + teamMeta(mm.t1).name + ' vs ' + teamMeta(mm.t2).name + ' · Mundial 2026';
   }
   function venueLine(mm) {
     var st = STADIUM[mm.ground];
@@ -822,15 +839,15 @@
     var url = 'https://acaciaco.com.mx/mundial-2026';
     if (mm.status === 'ft') {
       var res = mm.winner === 0
-        ? '🤝 Empataron ' + mm.ft[0] + '–' + mm.ft[1] + '.'
-        : '🎉 ¡Ganó ' + (mm.winner === 1 ? a : b) + '! ' + Math.max(mm.ft[0], mm.ft[1]) + '–' + Math.min(mm.ft[0], mm.ft[1]);
-      msg = '⚽ Mundial 2026 — ' + a + ' ' + mm.ft[0] + '–' + mm.ft[1] + ' ' + b + '\n' + res +
-        '\n👉 ' + url;
+        ? EMO.hands + ' Empataron ' + mm.ft[0] + '–' + mm.ft[1] + '.'
+        : EMO.party + ' ¡Ganó ' + (mm.winner === 1 ? a : b) + '! ' + Math.max(mm.ft[0], mm.ft[1]) + '–' + Math.min(mm.ft[0], mm.ft[1]);
+      msg = EMO.ball + ' Mundial 2026 — ' + a + ' ' + mm.ft[0] + '–' + mm.ft[1] + ' ' + b + '\n' + res +
+        '\n' + EMO.point + ' ' + url;
     } else {
-      msg = '⚽ Mundial 2026 — ' + a + ' vs ' + b +
-        '\n\n📅 ' + fmtDayLabel(mm.key) + ' · ' + fmtTime(mm.start) + ' (hora del centro de México)' +
-        '\n📍 ' + venueLine(mm) +
-        '\n\n¿Lo vemos? 🇲🇽🍿\n👉 ' + url;
+      msg = EMO.ball + ' Mundial 2026 — ' + a + ' vs ' + b +
+        '\n\n' + EMO.cal + ' ' + fmtDayLabel(mm.key) + ' · ' + fmtTime(mm.start) + ' (hora del centro de México)' +
+        '\n' + EMO.pin + ' ' + venueLine(mm) +
+        '\n\n¿Lo vemos? ' + EMO.pop + EMO.tv + '\n' + EMO.point + ' ' + url;
     }
     return 'https://wa.me/?text=' + encodeURIComponent(msg);
   }
