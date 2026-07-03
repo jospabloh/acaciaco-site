@@ -745,7 +745,9 @@
   }
   function track(ev, data) { if (window.acaciaTrack) try { window.acaciaTrack(ev, data || {}); } catch (e) {} }
   var EXPORT_NAME = 'mundial-2026-eliminatorias-acacia.png';
-  var SHARE_TEXT = 'El camino a la final del Mundial 2026 ' + EMO.trophy + EMO.ball + ' — calendario y marcador en vivo en ACACIA: https://acaciaco.com.mx/mundial-2026';
+  // Sin emojis: WhatsApp de escritorio los corrompe al importar el texto de un
+  // enlace de compartir. En texto limpio se ve bien en todos lados.
+  var SHARE_TEXT = 'El camino a la final del Mundial 2026 — calendario y marcador en vivo en ACACIA: https://acaciaco.com.mx/mundial-2026';
 
   function downloadBracketPNG(host, btn) {
     setBusy(btn, true);
@@ -844,17 +846,21 @@
   function waURL(mm) {
     var a = teamMeta(mm.t1).name, b = teamMeta(mm.t2).name, msg;
     var url = 'https://acaciaco.com.mx/mundial-2026';
+    // Sin emojis a propósito: WhatsApp de escritorio corrompe los emojis que
+    // llegan por un enlace wa.me (los muestra como «□»), aunque el texto está
+    // bien codificado. El mensaje va en texto limpio para que se vea igual de
+    // bien en móvil y en escritorio.
     if (mm.status === 'ft') {
       var res = mm.winner === 0
-        ? EMO.hands + ' Empataron ' + mm.ft[0] + '–' + mm.ft[1] + '.'
-        : EMO.party + ' ¡Ganó ' + (mm.winner === 1 ? a : b) + '! ' + Math.max(mm.ft[0], mm.ft[1]) + '–' + Math.min(mm.ft[0], mm.ft[1]);
-      msg = EMO.ball + ' Mundial 2026 — ' + a + ' ' + mm.ft[0] + '–' + mm.ft[1] + ' ' + b + '\n' + res +
-        '\n' + EMO.point + ' ' + url;
+        ? 'Empataron ' + mm.ft[0] + '–' + mm.ft[1] + '.'
+        : '¡Ganó ' + (mm.winner === 1 ? a : b) + '! ' + Math.max(mm.ft[0], mm.ft[1]) + '–' + Math.min(mm.ft[0], mm.ft[1]);
+      msg = 'Mundial 2026 — ' + a + ' ' + mm.ft[0] + '–' + mm.ft[1] + ' ' + b + '\n' + res +
+        '\n' + url;
     } else {
-      msg = EMO.ball + ' Mundial 2026 — ' + a + ' vs ' + b +
-        '\n\n' + EMO.cal + ' ' + fmtDayLabel(mm.key) + ' · ' + fmtTime(mm.start) + ' (hora del centro de México)' +
-        '\n' + EMO.pin + ' ' + venueLine(mm) +
-        '\n\n¿Lo vemos? ' + EMO.pop + EMO.tv + '\n' + EMO.point + ' ' + url;
+      msg = 'Mundial 2026 — ' + a + ' vs ' + b +
+        '\n\nCuándo: ' + fmtDayLabel(mm.key) + ' · ' + fmtTime(mm.start) + ' (hora del centro de México)' +
+        '\nDónde: ' + venueLine(mm) +
+        '\n\n¿Lo vemos?\n' + url;
     }
     return 'https://wa.me/?text=' + encodeURIComponent(msg);
   }
