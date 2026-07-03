@@ -94,7 +94,7 @@
       ]
     },
     {
-      "source": "/(pricing|trial|faq|apps|underconstruction)",
+      "source": "/(underconstruction)",
       "headers": [
         {
           "key": "X-Robots-Tag",
