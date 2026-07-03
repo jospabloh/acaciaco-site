@@ -12,6 +12,18 @@ const SOURCE =
 const LIVE_SOURCE =
   'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard';
 
+// fetch con límite de tiempo: una fuente lenta o colgada NUNCA debe estancar la
+// función (Vercel la mataría con 504 y el cliente se quedaría sin calendario).
+async function fetchWithTimeout(url, opts, ms) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(function () { ctrl.abort(); }, ms);
+  try {
+    return await fetch(url, Object.assign({}, opts, { signal: ctrl.signal }));
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 // ESPN usa nombres ligeramente distintos → los llevamos a los de openfootball.
 function canon(name) {
   if (!name) return '';
@@ -42,7 +54,9 @@ async function fetchLive(diag) {
       return d.getUTCFullYear() + String(d.getUTCMonth() + 1).padStart(2, '0') + String(d.getUTCDate()).padStart(2, '0');
     }
     const range = ymd(new Date(now.getTime() - 86400000)) + '-' + ymd(new Date(now.getTime() + 86400000));
-    const r = await fetch(LIVE_SOURCE + '?dates=' + range, { headers: { 'User-Agent': 'acaciaco-mundial/1.0' } });
+    // Capa en vivo: best-effort con timeout corto. Si ESPN tarda, la abortamos
+    // y devolvemos el calendario base sin marcador en vivo (mejor que nada).
+    const r = await fetchWithTimeout(LIVE_SOURCE + '?dates=' + range, { headers: { 'User-Agent': 'acaciaco-mundial/1.0' } }, 3500);
     if (diag) { diag.status = r.status; }
     if (!r.ok) return [];
     const d = await r.json();
@@ -108,9 +122,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    const r = await fetch(SOURCE, {
+    const r = await fetchWithTimeout(SOURCE, {
       headers: { 'User-Agent': 'acaciaco-mundial/1.0 (+https://acaciaco.com.mx)' }
-    });
+    }, 6000);
     if (!r.ok) throw new Error('upstream-' + r.status);
     const data = await r.json();
 
