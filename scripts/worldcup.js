@@ -209,6 +209,14 @@
     trophy: '\u{1F3C6}'    // 🏆
   };
 
+  // ¿El dispositivo abrirá WhatsApp MÓVIL? Solo ahí ponemos emojis en el texto
+  // que se comparte: WhatsApp de ESCRITORIO corrompe los emojis que llegan por
+  // un enlace wa.me (los muestra como «□»), mientras que la app móvil los
+  // muestra bien. En escritorio compartimos texto limpio para no romper nada.
+  var IS_MOBILE = /Android|iPhone|iPad|iPod|Mobile/i.test(
+    (typeof navigator !== 'undefined' && navigator.userAgent) || ''
+  );
+
   // ---- Normalización ----------------------------------------------------
   function norm(raw, now) {
     var out = [];
@@ -745,9 +753,11 @@
   }
   function track(ev, data) { if (window.acaciaTrack) try { window.acaciaTrack(ev, data || {}); } catch (e) {} }
   var EXPORT_NAME = 'mundial-2026-eliminatorias-acacia.png';
-  // Sin emojis: WhatsApp de escritorio los corrompe al importar el texto de un
-  // enlace de compartir. En texto limpio se ve bien en todos lados.
-  var SHARE_TEXT = 'El camino a la final del Mundial 2026 — calendario y marcador en vivo en ACACIA: https://acaciaco.com.mx/mundial-2026';
+  // Emojis solo en móvil (ver IS_MOBILE): WhatsApp de escritorio los corrompe al
+  // importar el texto de un enlace de compartir; en la app móvil se ven bien.
+  var SHARE_TEXT = 'El camino a la final del Mundial 2026' +
+    (IS_MOBILE ? ' ' + EMO.trophy + EMO.ball : '') +
+    ' — calendario y marcador en vivo en ACACIA: https://acaciaco.com.mx/mundial-2026';
 
   function downloadBracketPNG(host, btn) {
     setBusy(btn, true);
@@ -846,21 +856,23 @@
   function waURL(mm) {
     var a = teamMeta(mm.t1).name, b = teamMeta(mm.t2).name, msg;
     var url = 'https://acaciaco.com.mx/mundial-2026';
-    // Sin emojis a propósito: WhatsApp de escritorio corrompe los emojis que
-    // llegan por un enlace wa.me (los muestra como «□»), aunque el texto está
-    // bien codificado. El mensaje va en texto limpio para que se vea igual de
-    // bien en móvil y en escritorio.
+    // Emojis solo en móvil (ver IS_MOBILE): en escritorio WhatsApp los corrompe
+    // al importar el texto del enlace, así que ahí va con etiquetas de texto.
+    var em = IS_MOBILE;
+    var lead = em ? EMO.ball + ' ' : '';
+    var point = em ? EMO.point + ' ' : '';
     if (mm.status === 'ft') {
+      var mark = em ? (mm.winner === 0 ? EMO.hands + ' ' : EMO.party + ' ') : '';
       var res = mm.winner === 0
-        ? 'Empataron ' + mm.ft[0] + '–' + mm.ft[1] + '.'
-        : '¡Ganó ' + (mm.winner === 1 ? a : b) + '! ' + Math.max(mm.ft[0], mm.ft[1]) + '–' + Math.min(mm.ft[0], mm.ft[1]);
-      msg = 'Mundial 2026 — ' + a + ' ' + mm.ft[0] + '–' + mm.ft[1] + ' ' + b + '\n' + res +
-        '\n' + url;
+        ? mark + 'Empataron ' + mm.ft[0] + '–' + mm.ft[1] + '.'
+        : mark + '¡Ganó ' + (mm.winner === 1 ? a : b) + '! ' + Math.max(mm.ft[0], mm.ft[1]) + '–' + Math.min(mm.ft[0], mm.ft[1]);
+      msg = lead + 'Mundial 2026 — ' + a + ' ' + mm.ft[0] + '–' + mm.ft[1] + ' ' + b + '\n' + res +
+        '\n' + point + url;
     } else {
-      msg = 'Mundial 2026 — ' + a + ' vs ' + b +
-        '\n\nCuándo: ' + fmtDayLabel(mm.key) + ' · ' + fmtTime(mm.start) + ' (hora del centro de México)' +
-        '\nDónde: ' + venueLine(mm) +
-        '\n\n¿Lo vemos?\n' + url;
+      msg = lead + 'Mundial 2026 — ' + a + ' vs ' + b +
+        '\n\n' + (em ? EMO.cal + ' ' : 'Cuándo: ') + fmtDayLabel(mm.key) + ' · ' + fmtTime(mm.start) + ' (hora del centro de México)' +
+        '\n' + (em ? EMO.pin + ' ' : 'Dónde: ') + venueLine(mm) +
+        '\n\n¿Lo vemos?' + (em ? ' ' + EMO.pop + EMO.tv : '') + '\n' + point + url;
     }
     return 'https://wa.me/?text=' + encodeURIComponent(msg);
   }
