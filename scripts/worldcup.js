@@ -1065,11 +1065,21 @@
   }
 
   // ---- Carga de datos ---------------------------------------------------
+  function validData(d) {
+    if (!d || !d.matches || !d.matches.length) throw 0;
+    return d;
+  }
   function fetchData() {
     return fetch(CFG.apiUrl, { headers: { Accept: 'application/json' } })
       .then(function (r) { if (!r.ok) throw 0; return r.json(); })
-      .then(function (d) { if (!d.matches || !d.matches.length) throw 0; return d; })
-      .catch(function () { return fetch(CFG.fallbackUrl).then(function (r) { return r.json(); }); });
+      .then(validData)
+      // Respaldo: archivo público de openfootball. Validamos igual que la fuente
+      // primaria (ok + partidos) para no aceptar una página de error como datos.
+      .catch(function () {
+        return fetch(CFG.fallbackUrl, { headers: { Accept: 'application/json' } })
+          .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+          .then(validData);
+      });
   }
 
   var refreshTimer = null;
