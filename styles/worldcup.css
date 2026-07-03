@@ -282,6 +282,7 @@
 }
 .wc-when { font-weight: 600; color: var(--wc-ink-dim); }
 .wc-venue { display: inline-flex; align-items: center; gap: 0.3rem; text-align: right; }
+.wc-venue-flag { width: 16px; height: 11px; border-radius: 2px; object-fit: cover; flex: 0 0 auto; box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
 .wc-result-note {
   grid-column: 1 / -1;
   margin: 0.1rem 0 0;

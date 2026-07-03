@@ -42,13 +42,13 @@
 
   // ---- Sedes: ciudad en español + país ----------------------------------
   var GROUND = {
-    'Mexico City': ['Ciudad de México', '🇲🇽'], 'Monterrey (Guadalupe)': ['Monterrey', '🇲🇽'],
-    'Guadalajara (Zapopan)': ['Guadalajara', '🇲🇽'], 'Toronto': ['Toronto', '🇨🇦'], 'Vancouver': ['Vancouver', '🇨🇦'],
-    'Atlanta': ['Atlanta', '🇺🇸'], 'Boston (Foxborough)': ['Boston', '🇺🇸'], 'Dallas (Arlington)': ['Dallas', '🇺🇸'],
-    'Houston': ['Houston', '🇺🇸'], 'Kansas City': ['Kansas City', '🇺🇸'], 'Los Angeles (Inglewood)': ['Los Ángeles', '🇺🇸'],
-    'Miami (Miami Gardens)': ['Miami', '🇺🇸'], 'New York/New Jersey (East Rutherford)': ['Nueva York', '🇺🇸'],
-    'Philadelphia': ['Filadelfia', '🇺🇸'], 'San Francisco Bay Area (Santa Clara)': ['San Francisco', '🇺🇸'],
-    'Seattle': ['Seattle', '🇺🇸']
+    'Mexico City': ['Ciudad de México', 'mx'], 'Monterrey (Guadalupe)': ['Monterrey', 'mx'],
+    'Guadalajara (Zapopan)': ['Guadalajara', 'mx'], 'Toronto': ['Toronto', 'ca'], 'Vancouver': ['Vancouver', 'ca'],
+    'Atlanta': ['Atlanta', 'us'], 'Boston (Foxborough)': ['Boston', 'us'], 'Dallas (Arlington)': ['Dallas', 'us'],
+    'Houston': ['Houston', 'us'], 'Kansas City': ['Kansas City', 'us'], 'Los Angeles (Inglewood)': ['Los Ángeles', 'us'],
+    'Miami (Miami Gardens)': ['Miami', 'us'], 'New York/New Jersey (East Rutherford)': ['Nueva York', 'us'],
+    'Philadelphia': ['Filadelfia', 'us'], 'San Francisco Bay Area (Santa Clara)': ['San Francisco', 'us'],
+    'Seattle': ['Seattle', 'us']
   };
 
   var ROUND_ES = {
@@ -268,6 +268,13 @@
       '" src="' + flagURL(meta.code, big ? 'w80' : 'w40') + '" alt="Bandera de ' + esc(meta.name) + '">';
   }
 
+  // Bandera del país sede como imagen (flagcdn), no como emoji: las banderas de
+  // país en emoji no se dibujan en Windows/escritorio y salían como cajitas.
+  function venueFlag(code) {
+    return code ? '<img class="wc-venue-flag" loading="lazy" width="16" height="11" src="' +
+      flagURL(code, 'w40') + '" alt="">' : '';
+  }
+
   function starFor(enName) {
     var c = favColor[enName];
     return c ? ' <span class="wc-star" style="--star:' + c + '" title="Tu favorito">★</span>' : '';
@@ -311,7 +318,7 @@
         note +
       '</div>' +
       '<div class="wc-match-foot"><span class="wc-when">' + (mm.status === 'ft' ? 'Finalizado · toca para ver' : fmtTime(mm.start) + ' h · centro de México') + '</span>' +
-        '<span class="wc-venue">' + esc(g[0]) + ' ' + (g[1] || '') + '</span></div>' +
+        '<span class="wc-venue">' + esc(g[0]) + venueFlag(g[1]) + '</span></div>' +
       '</article>';
   }
 
