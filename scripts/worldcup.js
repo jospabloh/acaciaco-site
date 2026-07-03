@@ -199,6 +199,7 @@
       var start = parseStart(m.date, m.time);
       if (!start) return;
       var ft = m.score && m.score.ft ? m.score.ft : null;
+      var et = m.score && m.score.et ? m.score.et : null; // tiempo extra
       var pen = m.score && m.score.p ? m.score.p : null;
       // Marcador EN JUEGO inyectado por el proxy (capa en vivo).
       var liveInfo = (m.live && m.live.state === 'in' && m.live.score) ? m.live : null;
@@ -207,14 +208,18 @@
         : (now >= start.getTime() && now < start.getTime() + CFG.liveWindowMin * 60000 ? 'live' : 'soon');
       var winner = 0; // 0 empate/sin definir, 1 ó 2
       if (ft) {
+        // El ganador se decide, en orden: 90', tiempo extra y penales. En
+        // eliminatoria un empate en ft puede resolverse en et (sin penales),
+        // así que hay que mirar et antes de declarar empate.
         if (ft[0] > ft[1]) winner = 1; else if (ft[1] > ft[0]) winner = 2;
+        else if (et && et[0] !== et[1]) winner = et[0] > et[1] ? 1 : 2;
         else if (pen) winner = pen[0] > pen[1] ? 1 : (pen[1] > pen[0] ? 2 : 0);
       }
       out.push({
         i: i, num: m.num, round: m.round, group: m.group || '', stage: ROUND_ES[m.round] || m.group || m.round,
         isKO: KO_ORDER.indexOf(m.round) >= 0,
         t1: m.team1, t2: m.team2, start: start, key: cdmxKey(start),
-        ft: ft, pen: pen, status: status, winner: winner, ground: m.ground || '',
+        ft: ft, et: et, pen: pen, status: status, winner: winner, ground: m.ground || '',
         live: liveInfo, g1: m.goals1 || [], g2: m.goals2 || []
       });
     });
@@ -225,6 +230,18 @@
   function teamMeta(name) {
     var info = TEAM[name];
     return info ? { name: info[1], code: info[0], ph: false } : { name: name, code: null, ph: true };
+  }
+
+  // Describe cómo se ganó un partido ya finalizado: en los 90', en tiempo extra
+  // o en penales. Así un cruce definido en et/penales conserva su historia real
+  // en vez de mostrarse como empate.
+  function winLine(mm) {
+    if (!mm.ft) return '';
+    var hi = Math.max(mm.ft[0], mm.ft[1]), lo = Math.min(mm.ft[0], mm.ft[1]);
+    if (mm.pen) return 'Victoria en penales ' + Math.max(mm.pen[0], mm.pen[1]) + '–' + Math.min(mm.pen[0], mm.pen[1]) +
+      ' (' + mm.ft[0] + '–' + mm.ft[1] + ' en el tiempo reglamentario)';
+    if (mm.et && mm.et[0] !== mm.et[1]) return 'Victoria ' + Math.max(mm.et[0], mm.et[1]) + '–' + Math.min(mm.et[0], mm.et[1]) + ' en tiempo extra';
+    return 'Victoria ' + hi + '–' + lo;
   }
 
   // ---- Plantillas HTML --------------------------------------------------
@@ -257,8 +274,7 @@
       if (mm.winner === 0) note = '<p class="wc-result-note draw">Empate ' + mm.ft[0] + '–' + mm.ft[1] + '. ¡Bien jugado por ambos!</p>';
       else {
         var w = mm.winner === 1 ? a : b;
-        var pen = mm.pen ? ' (' + mm.pen[0] + '–' + mm.pen[1] + ' en penales)' : '';
-        note = '<p class="wc-result-note">🏆 ¡Felicidades, ' + esc(w.name) + '! Victoria ' + Math.max(mm.ft[0], mm.ft[1]) + '–' + Math.min(mm.ft[0], mm.ft[1]) + pen + '.</p>';
+        note = '<p class="wc-result-note">🏆 ¡Felicidades, ' + esc(w.name) + '! ' + winLine(mm) + '.</p>';
       }
     } else if (mm.live) {
       // marcador en juego (no decide ganador hasta el final)
@@ -315,7 +331,45 @@
   var favPaths = [];     // [{ en, name, color, path:[nums] }] para la leyenda
 
   var koMap = {}; // nº de cruce -> partido, para resolver ganadores ya definidos
+  var koFeed = {}; // nº de cruce -> [alimentador1, alimentador2] (nº de cruce previo)
   function koFeeder(token) { var m = /^([WL])(\d+)$/.exec(token || ''); return m ? +m[2] : null; }
+
+  // Ronda que alimenta a cada ronda (para reconstruir aristas del cuadro).
+  var FEED_ROUND = {
+    'Round of 16': 'Round of 32', 'Quarter-final': 'Round of 16',
+    'Semi-final': 'Quarter-final', 'Final': 'Semi-final', 'Match for third place': 'Semi-final'
+  };
+
+  // Alimentador de un lado del cruce. Dos casos:
+  //  · el slot trae un código (W83/L101) → el alimentador es ese número.
+  //  · el slot ya trae el equipo resuelto (openfootball "mueve" al ganador en
+  //    cuanto se juega) → buscamos en la ronda anterior el cruce que ese equipo
+  //    ganó y reconstruimos la arista. Sin esto, los cruces cuyos ganadores ya
+  //    avanzaron desaparecían del cuadro (se veía incompleto y descuadrado).
+  function feederFor(m, token, byRound) {
+    var wl = /^([WL])(\d+)$/.exec(token || '');
+    if (wl) return +wl[2];
+    var fr = FEED_ROUND[m.round];
+    if (!fr) return null; // dieciseisavos: entran equipos de grupo, no hay alimentador
+    var cands = byRound[fr] || [];
+    for (var i = 0; i < cands.length; i++) {
+      var c = cands[i];
+      if (c.num == null || c.num >= m.num || !c.ft || !c.winner) continue;
+      var wTok = koResolveToken(c.winner === 1 ? c.t1 : c.t2, 0);
+      if (wTok === token) return c.num;
+    }
+    return null;
+  }
+  function computeFeeders(ko) {
+    koFeed = {};
+    var byRound = {};
+    ko.forEach(function (m) { (byRound[m.round] = byRound[m.round] || []).push(m); });
+    ko.forEach(function (m) {
+      if (m.num == null) return;
+      koFeed[m.num] = [feederFor(m, m.t1, byRound), feederFor(m, m.t2, byRound)];
+    });
+  }
+  function feedOf(num, side) { return koFeed[num] ? koFeed[num][side] : null; }
   // Si el cruce alimentador ya terminó, devuelve el token del equipo concreto
   // (ganador o perdedor); resuelve en cadena por si ese alimentador era otro W##.
   function koResolveToken(token, depth) {
@@ -411,12 +465,13 @@
     // mapa nº→partido y reparto izquierda/derecha siguiendo el árbol desde la final
     var map = {}; ko.forEach(function (m) { if (m.num != null) map[m.num] = m; });
     koMap = map; // para resolver ganadores ya definidos en koSlot()
+    computeFeeders(ko); // aristas completas, aunque el ganador ya haya avanzado
     var sides = {};
     var ord = { v: 0 };
     function inorder(num, side) {
       var m = map[num]; if (!m) return;
       sides[num] = side;
-      var f1 = koFeeder(m.t1), f2 = koFeeder(m.t2);
+      var f1 = feedOf(num, 0), f2 = feedOf(num, 1);
       if (f1 != null) inorder(f1, side);
       m._ord = ord.v++;
       if (f2 != null) inorder(f2, side);
@@ -425,7 +480,7 @@
     var third = ko.filter(function (m) { return m.round === 'Match for third place'; })[0];
     if (final && final.num != null) {
       sides[final.num] = 'center';
-      var lf = koFeeder(final.t1), rf = koFeeder(final.t2);
+      var lf = feedOf(final.num, 0), rf = feedOf(final.num, 1);
       if (lf != null) inorder(lf, 'left');
       if (rf != null) inorder(rf, 'right');
       final._ord = ord.v++;
@@ -434,8 +489,8 @@
     // aristas para las líneas (cada partido recibe a sus dos alimentadores)
     bracketEdges = [];
     ko.forEach(function (t) {
-      if (t.round === 'Match for third place') return;
-      [koFeeder(t.t1), koFeeder(t.t2)].forEach(function (f) {
+      if (t.round === 'Match for third place' || t.num == null) return;
+      [feedOf(t.num, 0), feedOf(t.num, 1)].forEach(function (f) {
         if (f != null && map[f]) bracketEdges.push([f, t.num]);
       });
     });
@@ -844,6 +899,7 @@
         '<div class="wc-mt">' + flagCell(b, true) + '<b>' + esc(b.name) + starFor(mm.t2) + '</b></div>' +
       '</div>' +
       '<div class="wc-modal-when">' + fmtDayLabel(mm.key) + ' · ' + fmtTime(mm.start) + ' h · hora del centro de México</div>' +
+      (mm.status === 'ft' && mm.winner ? '<p class="wc-result-note">🏆 ¡' + esc((mm.winner === 1 ? a : b).name) + '! ' + winLine(mm) + '.</p>' : '') +
       goalsBlock(mm) + stadium +
       '<div class="wc-actions">' + actions + '</div>' +
       '<p class="wc-modal-note">Las alineaciones y el historial entre selecciones se abren en una búsqueda con la información más reciente.</p>' +
