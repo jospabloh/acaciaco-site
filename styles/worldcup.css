@@ -724,6 +724,8 @@
 .wc-act:hover { background: var(--wc-card-hi); border-color: var(--wc-border-hi); }
 .wc-act.cal { background: linear-gradient(180deg, var(--wc-gold-bright), var(--wc-gold)); color: #06140d; border-color: transparent; }
 .wc-act.wa { background: #25d366; color: #04210f; border-color: transparent; }
+.wc-act.mail { background: linear-gradient(180deg, #6cb0ff, #3f86d8); color: #041526; border-color: transparent; }
+.wc-act.mail:hover { filter: brightness(1.06); }
 .wc-modal-note { margin: .9rem 0 0; font-size: .78rem; color: var(--wc-ink-faint); text-align: center; }
 .wc-modal-note a { color: var(--wc-gold-bright); }
 

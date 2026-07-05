@@ -881,6 +881,79 @@
       encodeURIComponent(teamMeta(mm.t1).name + ' vs ' + teamMeta(mm.t2).name + ' Mundial 2026 alineaciones resultado historial');
   }
 
+  // ---- Compartir el RESULTADO (en vivo o finalizado) con goles ----------
+  // Goleadores ordenados por minuto, con su selección y (pen.)/(a. g.).
+  function goalEvents(mm) {
+    var a = teamMeta(mm.t1).name, b = teamMeta(mm.t2).name;
+    var toMin = function (g) { return parseInt(String(g.minute).replace(/[^\d].*$/, ''), 10) || 0; };
+    return (mm.g1 || []).map(function (g) { return { g: g, team: a }; })
+      .concat((mm.g2 || []).map(function (g) { return { g: g, team: b }; }))
+      .sort(function (x, y) { return toMin(x.g) - toMin(y.g); });
+  }
+  function goalShareLines(mm, em) {
+    return goalEvents(mm).map(function (e) {
+      var tag = e.g.penalty ? ' (pen.)' : (e.g.owngoal ? ' (a. g.)' : '');
+      return (em ? EMO.ball + ' ' : '- ') + e.g.minute + "' " + e.g.name + tag + ' — ' + e.team;
+    });
+  }
+  // Texto del marcador + estadística de goles. em=false en WhatsApp de
+  // escritorio (corrompe emojis); em=true en correo y WhatsApp móvil.
+  function shareResultText(mm, em) {
+    var a = teamMeta(mm.t1).name, b = teamMeta(mm.t2).name;
+    var url = 'https://acaciaco.com.mx/mundial-2026';
+    var stage = mm.group || mm.stage;
+    var lead = em ? EMO.ball + ' ' : '';
+    var point = em ? EMO.point + ' ' : '';
+    var L = [];
+    if (mm.status === 'ft') {
+      L.push(lead + 'Mundial 2026 — ' + a + ' ' + mm.ft[0] + '–' + mm.ft[1] + ' ' + b);
+      if (stage) L.push(stage + ' · Finalizado');
+      if (mm.winner === 0) L.push((em ? EMO.hands + ' ' : '') + 'Empataron ' + mm.ft[0] + '–' + mm.ft[1] + '.');
+      else L.push((em ? EMO.trophy + ' ' : '') + '¡Ganó ' + (mm.winner === 1 ? a : b) + '! ' + winLine(mm) + '.');
+    } else {
+      var sc = mm.live ? mm.live.score : [0, 0];
+      var det = mm.live && mm.live.detail ? ' · ' + mm.live.detail : '';
+      L.push(lead + 'Mundial 2026 — ' + a + ' ' + sc[0] + '–' + sc[1] + ' ' + b);
+      L.push((em ? EMO.tv + ' ' : '') + 'EN VIVO' + det + (stage ? ' · ' + stage : ''));
+    }
+    var goals = goalShareLines(mm, em);
+    if (goals.length) {
+      L.push('');
+      L.push((em ? EMO.ball + ' ' : '') + 'Goles:');
+      goals.forEach(function (g) { L.push('  ' + g); });
+    }
+    L.push('');
+    L.push(point + url);
+    return L.join('\n');
+  }
+  function waResultURL(mm) {
+    return 'https://wa.me/?text=' + encodeURIComponent(shareResultText(mm, IS_MOBILE));
+  }
+  function mailResultURL(mm) {
+    var a = teamMeta(mm.t1).name, b = teamMeta(mm.t2).name;
+    var sc = mm.status === 'ft' ? mm.ft : (mm.live ? mm.live.score : [0, 0]);
+    var subject = 'Mundial 2026 — ' + a + ' ' + sc[0] + '–' + sc[1] + ' ' + b +
+      (mm.status === 'ft' ? '' : ' (en vivo)');
+    return 'mailto:?subject=' + encodeURIComponent(subject) +
+      '&body=' + encodeURIComponent(shareResultText(mm, true));
+  }
+  // Invitación por correo para un partido que aún no empieza (cuándo y dónde).
+  function mailInviteURL(mm) {
+    var a = teamMeta(mm.t1).name, b = teamMeta(mm.t2).name;
+    var url = 'https://acaciaco.com.mx/mundial-2026';
+    var body = [
+      EMO.ball + ' Mundial 2026 — ' + a + ' vs ' + b,
+      '',
+      EMO.cal + ' ' + fmtDayLabel(mm.key) + ' · ' + fmtTime(mm.start) + ' (hora del centro de México)',
+      EMO.pin + ' ' + venueLine(mm),
+      '',
+      '¿Lo vemos? ' + EMO.pop + EMO.tv,
+      EMO.point + ' ' + url
+    ].join('\n');
+    return 'mailto:?subject=' + encodeURIComponent('Mundial 2026 — ' + a + ' vs ' + b) +
+      '&body=' + encodeURIComponent(body);
+  }
+
   // ---- Modal de detalle del partido -------------------------------------
   var modalEl = null;
   function ensureModal() {
@@ -897,14 +970,14 @@
   function closeModal() { if (modalEl) { modalEl.classList.remove('open'); modalEl.innerHTML = ''; } }
 
   function goalsBlock(mm) {
-    if (mm.status !== 'ft') return '';
+    if (mm.status !== 'ft' && !mm.live) return '';
     function line(g, side) {
       var tag = g.penalty ? ' (pen.)' : (g.owngoal ? ' (a. g.)' : '');
       return '<div class="wc-goal ' + side + '"><span class="m">' + esc(g.minute) + "'</span><span>" + esc(g.name) + tag + '</span></div>';
     }
     var rows = mm.g1.map(function (g) { return line(g, 'h'); }).concat(mm.g2.map(function (g) { return line(g, 'a'); }));
     if (!rows.length) return '';
-    return '<div class="wc-goals"><h5>⚽ Goles</h5>' + rows.join('') + '</div>';
+    return '<div class="wc-goals"><h5>⚽ Goles' + (mm.status === 'ft' ? '' : ' · en vivo') + '</h5>' + rows.join('') + '</div>';
   }
 
   function openModal(mm) {
@@ -924,13 +997,19 @@
         '<small> · ' + esc(st[1]) + ' · ' + esc(st[2]) + ' asientos</small><p>' + esc(st[3]) + '</p></div></div>'
       : '';
     var actions;
-    if (mm.status === 'ft') {
-      actions = '<a class="wc-act wa" href="' + waURL(mm) + '" target="_blank" rel="noopener">Compartir resultado por WhatsApp</a>' +
+    if (mm.status === 'ft' || mm.live) {
+      // Resultado (finalizado o en vivo): compartir el marcador con los goles,
+      // por WhatsApp o por correo.
+      var waLabel = mm.status === 'ft' ? 'Compartir resultado por WhatsApp' : 'Compartir marcador en vivo por WhatsApp';
+      var mailLabel = mm.status === 'ft' ? 'Enviar resultado por correo' : 'Enviar marcador en vivo por correo';
+      actions = '<a class="wc-act wa" href="' + waResultURL(mm) + '" target="_blank" rel="noopener">' + waLabel + '</a>' +
+        '<a class="wc-act mail" href="' + mailResultURL(mm) + '">' + mailLabel + '</a>' +
         '<a class="wc-act" href="' + fichaURL(mm) + '" target="_blank" rel="noopener">Alineaciones e historial ↗</a>';
     } else {
       actions = '<a class="wc-act cal" href="' + gcalURL(mm) + '" target="_blank" rel="noopener">Recordar en Google Calendar</a>' +
         '<a class="wc-act" href="' + icsURL(mm) + '" download="mundial-' + mm.i + '.ics">Descargar .ics (Apple/Outlook)</a>' +
         '<a class="wc-act wa" href="' + waURL(mm) + '" target="_blank" rel="noopener">Compartir por WhatsApp · ¿Lo vemos?</a>' +
+        '<a class="wc-act mail" href="' + mailInviteURL(mm) + '">Invitar por correo</a>' +
         '<a class="wc-act" href="' + fichaURL(mm) + '" target="_blank" rel="noopener">Alineaciones e historial ↗</a>';
     }
     el.innerHTML = '<div class="wc-modal-card">' +
