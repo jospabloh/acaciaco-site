@@ -684,7 +684,7 @@
 .wc-match:focus-visible, .wc-btie:focus-visible { outline: 2px solid var(--wc-gold-bright); outline-offset: 2px; }
 
 /* --- modal de detalle -------------------------------------------------- */
-.wc-modal { position: fixed; inset: 0; z-index: 90; display: none; align-items: center; justify-content: center;
+.wc-modal { position: fixed; inset: 0; z-index: 900; display: none; align-items: center; justify-content: center;
   padding: 1rem; background: rgba(3, 9, 7, .74); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
 .wc-modal.open { display: flex; animation: wc-fade .2s ease; }
 @keyframes wc-fade { from { opacity: 0; } to { opacity: 1; } }
