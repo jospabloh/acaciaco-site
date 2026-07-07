@@ -710,6 +710,19 @@
 .wc-goals h5 { margin: 0 0 .5rem; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--wc-ink-faint); }
 .wc-goal { display: flex; gap: .5rem; font-size: .86rem; color: var(--wc-ink-dim); padding: .12rem 0; }
 .wc-goal .m { font-family: var(--wc-mono); color: var(--wc-gold-bright); min-width: 3.4ch; font-weight: 600; }
+.wc-stats { margin: 0 0 1rem; padding: .8rem .9rem; border-radius: 12px; background: var(--wc-card); border: 1px solid var(--wc-border); }
+.wc-stats h5 { margin: 0 0 .6rem; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--wc-ink-faint); }
+.wc-stats-skel { height: 60px; border-radius: 8px; }
+.wc-stat-row { display: grid; grid-template-columns: 3.2ch 1fr 3.2ch; align-items: center; gap: .6rem; margin-top: .55rem; }
+.wc-stat-row:first-of-type { margin-top: 0; }
+.wc-stat-val { font-family: var(--wc-mono); font-size: .82rem; font-weight: 700; color: var(--wc-ink); }
+.wc-stat-val.h { text-align: right; }
+.wc-stat-val.a { text-align: left; }
+.wc-stat-bar { display: flex; height: 6px; border-radius: 999px; overflow: hidden; background: var(--wc-border); }
+.wc-stat-fill { height: 100%; }
+.wc-stat-fill.h { background: var(--wc-gold-bright); }
+.wc-stat-fill.a { background: var(--wc-grass-bright); }
+.wc-stat-label { text-align: center; font-size: .68rem; color: var(--wc-ink-faint); margin-top: .2rem; }
 .wc-stadium { display: flex; gap: .7rem; align-items: flex-start; padding: .85rem .9rem; border-radius: 12px;
   background: var(--wc-card); border: 1px solid var(--wc-border); margin-bottom: 1.1rem; }
 .wc-st-emoji { font-size: 1.3rem; line-height: 1.2; }

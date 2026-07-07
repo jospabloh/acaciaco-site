@@ -17,6 +17,7 @@
     cdmxOffset: -6,                            // CDMX = UTC-6 todo el año
     apiUrl: '/api/worldcup',
     fallbackUrl: 'https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json',
+    statsUrl: '/api/worldcup-stats',
     dismissKey: 'acacia-mundial-dismissed'
   };
 
@@ -243,7 +244,7 @@
       out.push({
         i: i, num: m.num, round: m.round, group: m.group || '', stage: ROUND_ES[m.round] || m.group || m.round,
         isKO: KO_ORDER.indexOf(m.round) >= 0,
-        t1: m.team1, t2: m.team2, start: start, key: cdmxKey(start),
+        t1: m.team1, t2: m.team2, start: start, key: cdmxKey(start), date: m.date || '',
         ft: ft, et: et, pen: pen, status: status, winner: winner, ground: m.ground || '',
         live: liveInfo, g1: m.goals1 || [], g2: m.goals2 || []
       });
@@ -980,6 +981,75 @@
     return '<div class="wc-goals"><h5>⚽ Goles' + (mm.status === 'ft' ? '' : ' · en vivo') + '</h5>' + rows.join('') + '</div>';
   }
 
+  // ---- Estadísticas del partido (posesión, tiros) — bajo demanda --------
+  // Solo tiene sentido pedirlas cuando el partido ya arrancó. Se cargan al
+  // abrir el detalle (no en el listado) y vía ESPN, así que pueden no venir
+  // para todos los cruces: en ese caso el bloque se oculta sin avisar.
+  function statBar(mm, val1, val2) {
+    var t1 = val1 == null ? 0 : val1, t2 = val2 == null ? 0 : val2;
+    var total = t1 + t2;
+    var w1 = total > 0 ? (t1 / total * 100) : 50;
+    var w2 = 100 - w1;
+    return '<div class="wc-stat-bar"><div class="wc-stat-fill h" style="width:' + w1.toFixed(1) + '%"></div>' +
+      '<div class="wc-stat-fill a" style="width:' + w2.toFixed(1) + '%"></div></div>';
+  }
+  function statRow(mm, label, val1, val2, suffix) {
+    if (val1 == null && val2 == null) return '';
+    var sx = suffix || '';
+    var d1 = val1 == null ? '—' : (Math.round(val1) + sx);
+    var d2 = val2 == null ? '—' : (Math.round(val2) + sx);
+    return '<div class="wc-stat-row">' +
+      '<span class="wc-stat-val h">' + esc(d1) + '</span>' +
+      statBar(mm, val1, val2) +
+      '<span class="wc-stat-val a">' + esc(d2) + '</span>' +
+      '</div><div class="wc-stat-label">' + esc(label) + '</div>';
+  }
+  function statsBlock(mm) {
+    if (mm.status !== 'ft' && !mm.live) return '';
+    return '<div class="wc-stats" data-wc-stats>' +
+      '<h5>📊 Estadísticas</h5>' +
+      '<div class="wc-skeleton wc-stats-skel"></div>' +
+      '</div>';
+  }
+  function statsHTML(mm, s) {
+    var rows = statRow(mm, 'Posesión de balón', s.possession, s.t2possession, '%') +
+      statRow(mm, 'Tiros totales', s.shots, s.t2shots) +
+      statRow(mm, 'Tiros a puerta', s.shotsOnTarget, s.t2shotsOnTarget);
+    if (!rows) return '';
+    return '<h5>📊 Estadísticas' + (mm.live && !s.final ? ' · en vivo' : '') + '</h5>' + rows;
+  }
+  var statsToken = 0;
+  function loadStats(mm, host) {
+    if (mm.status !== 'ft' && !mm.live) return;
+    if (!mm.date) return;
+    var myToken = ++statsToken;
+    var url = CFG.statsUrl + '?home=' + encodeURIComponent(mm.t1) +
+      '&away=' + encodeURIComponent(mm.t2) + '&date=' + encodeURIComponent(mm.date);
+    fetch(url, { headers: { Accept: 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : { found: false }; })
+      .then(function (payload) {
+        if (myToken !== statsToken) return; // el usuario ya cerró/cambió de partido
+        var box = host.querySelector('[data-wc-stats]');
+        if (!box) return;
+        if (!payload.found || !payload.stats) { box.remove(); return; }
+        var st = payload.stats;
+        var merged = {
+          possession: st.t1.possession, t2possession: st.t2.possession,
+          shots: st.t1.shots, t2shots: st.t2.shots,
+          shotsOnTarget: st.t1.shotsOnTarget, t2shotsOnTarget: st.t2.shotsOnTarget,
+          final: !payload.live
+        };
+        var html = statsHTML(mm, merged);
+        if (!html) { box.remove(); return; }
+        box.innerHTML = html;
+      })
+      .catch(function () {
+        if (myToken !== statsToken) return;
+        var box = host.querySelector('[data-wc-stats]');
+        if (box) box.remove();
+      });
+  }
+
   function openModal(mm) {
     var el = ensureModal();
     var a = teamMeta(mm.t1), b = teamMeta(mm.t2);
@@ -1021,13 +1091,14 @@
       '</div>' +
       '<div class="wc-modal-when">' + fmtDayLabel(mm.key) + ' · ' + fmtTime(mm.start) + ' h · hora del centro de México</div>' +
       (mm.status === 'ft' && mm.winner ? '<p class="wc-result-note">🏆 ¡' + esc((mm.winner === 1 ? a : b).name) + '! ' + winLine(mm) + '.</p>' : '') +
-      goalsBlock(mm) + stadium +
+      goalsBlock(mm) + statsBlock(mm) + stadium +
       '<div class="wc-actions">' + actions + '</div>' +
       '<p class="wc-modal-note">Las alineaciones y el historial entre selecciones se abren en una búsqueda con la información más reciente.</p>' +
       promoCard(promoOrder[mm.i % promoOrder.length], 'is-modal') +
       '</div>';
     el.querySelector('[data-wc-mclose]').addEventListener('click', closeModal);
     el.classList.add('open');
+    loadStats(mm, el);
   }
 
   // ---- Modo campeón -----------------------------------------------------
