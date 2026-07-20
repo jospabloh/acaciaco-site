@@ -3,9 +3,9 @@ import { google } from "googleapis";
 import { timingSafeEqual } from "crypto";
 
 // Simple in-memory sliding-window rate limit (same "module-scope cache" pattern
-// used by api/exchange-rate.js and api/worldcup.js — persists across warm
-// invocations, resets on cold start; good enough for a low-traffic internal
-// endpoint, not meant to survive a distributed/serverless fleet at scale).
+// used by api/exchange-rate.js — persists across warm invocations, resets on
+// cold start; good enough for a low-traffic internal endpoint, not meant to
+// survive a distributed/serverless fleet at scale).
 const RATE_LIMIT_WINDOW_MS = 60000;
 const RATE_LIMIT_MAX = 20;
 const hits = new Map<string, number[]>();
