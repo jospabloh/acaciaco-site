@@ -69,9 +69,6 @@
     @media(min-width:820px){.webad{flex-direction:row;align-items:center;justify-content:space-between}.webad-cta{align-self:center}}
   </style>
 
-  <!-- Módulo temporal Mundial 2026 (se oculta solo fuera del torneo) -->
-  <link rel="stylesheet" href="/styles/worldcup.css" />
-
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -114,29 +111,6 @@
   }
   </script>
 
-  <!-- SEO: Mundial 2026 (módulo temporal) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SportsEvent",
-    "name": "Copa Mundial de la FIFA 2026",
-    "alternateName": "Mundial 2026",
-    "sport": "Fútbol",
-    "description": "Calendario, partidos de hoy, marcador en vivo y camino a la final del Mundial 2026 (Canadá, México y Estados Unidos), en hora del centro de México. Cobertura de ACACIA.",
-    "startDate": "2026-06-11",
-    "endDate": "2026-07-19",
-    "eventStatus": "https://schema.org/EventScheduled",
-    "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
-    "location": [
-      { "@type": "Country", "name": "México" },
-      { "@type": "Country", "name": "Estados Unidos" },
-      { "@type": "Country", "name": "Canadá" }
-    ],
-    "organizer": { "@type": "Organization", "name": "FIFA", "url": "https://www.fifa.com" },
-    "url": "https://acaciaco.com.mx/mundial-2026",
-    "image": "https://acaciaco.com.mx/assets/mundial-2026-og.png"
-  }
-  </script>
 </head>
 
 <body>
@@ -240,7 +214,6 @@
           <li><a href="#como-trabajamos">Cómo trabajamos</a></li>
           <li><a href="#apps">Apps</a></li>
           <li><a href="#gratis">Gratis</a></li>
-          <li><a href="/mundial-2026">Mundial 2026</a></li>
           <li><a href="#servicios">Servicios</a></li>
           <li><a href="#colaboradores">Colaboradores</a></li>
           <li><a href="#contacto">Contacto</a></li>
@@ -336,16 +309,6 @@
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- MUNDIAL 2026 · sección temporal, controlada por /scripts/worldcup.js -->
-    <section id="mundial-2026" aria-label="Mundial 2026: calendario y marcador en vivo" hidden>
-      <noscript>
-        <div class="wc-shell"><div class="wc-body">
-          <p class="wc-sub" style="padding:1.5rem">Sigue el Mundial 2026 con ACACIA: calendario, partidos de hoy y resultados en vivo.
-          <a href="/mundial-2026" style="color:#f6dd8c">Ver el calendario completo →</a></p>
-        </div></div>
-      </noscript>
     </section>
 
     <!-- HOW WE WORK -->
@@ -875,7 +838,6 @@
         <ul>
           <li><a href="#como-trabajamos">Cómo trabajamos</a></li>
           <li><a href="#colaboradores">Colaboradores</a></li>
-          <li><a href="/mundial-2026">Mundial 2026</a></li>
           <li><a href="/contacto">Contacto</a></li>
           <li><a href="/trabaja-con-nosotros">Trabaja con nosotros</a></li>
           <li><a href="/legal/privacidad">Privacidad</a></li>
@@ -903,6 +865,5 @@
   <script src="/scripts/shared.js"></script>
   <script src="/scripts/analytics.js" defer></script>
   <script src="/scripts/home-tools-region.js" defer></script>
-  <script src="/scripts/worldcup.js" defer></script>
 </body>
 </html>
