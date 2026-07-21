@@ -43,6 +43,11 @@
       "permanent": true
     },
     {
+      "source": "/catequesis",
+      "destination": "/apps/catequesis-qr",
+      "permanent": true
+    },
+    {
       "source": "/plink-fx",
       "destination": "/freeware/plink-fx",
       "permanent": true
