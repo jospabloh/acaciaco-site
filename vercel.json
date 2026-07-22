@@ -44,7 +44,12 @@
     },
     {
       "source": "/catequesis",
-      "destination": "/apps/catequesis-qr",
+      "destination": "/apps/cateqhub",
+      "permanent": true
+    },
+    {
+      "source": "/apps/catequesis-qr",
+      "destination": "/apps/cateqhub",
       "permanent": true
     },
     {
