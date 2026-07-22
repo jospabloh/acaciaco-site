@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-label="CateqHub">
+  <defs>
+    <linearGradient id="ch-navy" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e3f74"/>
+      <stop offset="100%" stop-color="#12274d"/>
+    </linearGradient>
+    <linearGradient id="ch-trace" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#bfe3f2"/>
+      <stop offset="55%" stop-color="#7fb8dd"/>
+      <stop offset="100%" stop-color="#d8ab5a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Cruz redondeada (unión de dos barras redondeadas) -->
+  <rect x="332" y="64" width="360" height="896" rx="96" fill="url(#ch-navy)"/>
+  <rect x="64" y="332" width="896" height="360" rx="96" fill="url(#ch-navy)"/>
+
+  <!-- Trazos tipo circuito por cada brazo -->
+  <g fill="none" stroke="url(#ch-trace)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.9">
+    <!-- brazo superior -->
+    <path d="M472 150v90l-24 24v110"/>
+    <path d="M552 150v70l24 24v130"/>
+    <!-- brazo inferior -->
+    <path d="M472 874v-90l-24-24V650"/>
+    <path d="M552 874v-70l24-24V720"/>
+    <!-- brazo izquierdo -->
+    <path d="M150 472h90l24-24h110"/>
+    <path d="M150 552h70l24 24h130"/>
+    <!-- brazo derecho -->
+    <path d="M874 472h-90l-24-24H650"/>
+    <path d="M874 552h-70l-24 24H720"/>
+  </g>
+
+  <!-- Nodo conector en la punta superior -->
+  <circle cx="472" cy="132" r="14" fill="#bfe3f2"/>
+  <path d="M472 132v40" stroke="#bfe3f2" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- Chip central blanco -->
+  <rect x="392" y="392" width="240" height="240" rx="28" fill="#f7f9fb"/>
+
+  <!-- Código QR estilizado -->
+  <g>
+    <!-- Finder pattern: superior izquierda -->
+    <rect x="410" y="410" width="56" height="56" rx="6" fill="none" stroke="#16294f" stroke-width="10"/>
+    <rect x="428" y="428" width="20" height="20" rx="3" fill="#caa14f"/>
+    <!-- Finder pattern: superior derecha -->
+    <rect x="558" y="410" width="56" height="56" rx="6" fill="none" stroke="#16294f" stroke-width="10"/>
+    <rect x="576" y="428" width="20" height="20" rx="3" fill="#caa14f"/>
+    <!-- Finder pattern: inferior izquierda -->
+    <rect x="410" y="558" width="56" height="56" rx="6" fill="none" stroke="#16294f" stroke-width="10"/>
+    <rect x="428" y="576" width="20" height="20" rx="3" fill="#caa14f"/>
+
+    <!-- Módulos de datos -->
+    <g fill="#16294f">
+      <rect x="480" y="410" width="16" height="16"/>
+      <rect x="512" y="410" width="16" height="16"/>
+      <rect x="480" y="442" width="16" height="16"/>
+      <rect x="512" y="474" width="16" height="16"/>
+      <rect x="480" y="506" width="16" height="16"/>
+      <rect x="544" y="490" width="16" height="16"/>
+      <rect x="576" y="506" width="16" height="16"/>
+      <rect x="598" y="480" width="16" height="16"/>
+      <rect x="480" y="558" width="16" height="16"/>
+      <rect x="512" y="542" width="16" height="16"/>
+      <rect x="544" y="558" width="16" height="16"/>
+      <rect x="576" y="576" width="16" height="16"/>
+      <rect x="598" y="600" width="16" height="16"/>
+      <rect x="558" y="600" width="16" height="16"/>
+    </g>
+    <g fill="#caa14f">
+      <rect x="512" y="442" width="16" height="16"/>
+      <rect x="544" y="522" width="16" height="16"/>
+      <rect x="598" y="546" width="16" height="16"/>
+      <rect x="512" y="600" width="16" height="16"/>
+    </g>
+  </g>
+</svg>
