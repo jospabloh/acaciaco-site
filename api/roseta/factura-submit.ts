@@ -44,6 +44,47 @@ function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] as string));
 }
 
+// The customer only ever saw an on-screen confirmation, never an actual
+// email — this sends them one too, separate from (and much shorter than)
+// the internal notification Roseta's team gets, since it must never leak
+// internal-only fields like the estimated subtotal. Best-effort: a failure
+// here doesn't fail the request, the customer already has the on-screen
+// confirmation and their folio either way.
+async function sendClientConfirmationEmail(
+  resendClient: Resend | null,
+  from: string,
+  toEmail: string,
+  folio: string,
+  isDuplicate: boolean,
+): Promise<void> {
+  if (!resendClient) return;
+  const statusUrl = `https://acaciaco.com.mx/roseta/factura/estatus?folio=${encodeURIComponent(folio)}`;
+  const html =
+    `<h2>${isDuplicate ? "Ya teníamos tu solicitud" : "¡Recibimos tu solicitud de factura!"}</h2>` +
+    `<p>${
+      isDuplicate
+        ? "Ya teníamos registrada tu solicitud de factura para este mismo consumo — no hace falta enviarla de nuevo."
+        : "Confirmamos que recibimos tu solicitud de factura de Roseta Café."
+    }</p>` +
+    `<p>Deberías recibirla en este correo en un máximo de <strong>3 días hábiles</strong>.</p>` +
+    `<p>Folio: <strong>${escapeHtml(folio)}</strong></p>` +
+    `<p>Puedes consultar el estatus de tu solicitud aquí: <a href="${statusUrl}">${statusUrl}</a></p>` +
+    `<p>¿Dudas? Responde a este correo o escríbenos por WhatsApp al 449 895 8291.</p>` +
+    `<p style="margin-top:16px;color:#888;font-size:12px;">Roseta Café · Sitio operado por ACACIA</p>`;
+  try {
+    const result = await resendClient.emails.send({
+      from,
+      to: [toEmail],
+      replyTo: NOTIFY_EMAILS[0],
+      subject: isDuplicate ? "Ya teníamos tu solicitud de factura · Roseta Café" : "Recibimos tu solicitud de factura · Roseta Café",
+      html,
+    });
+    if (result.error) console.error("Resend error (client confirmation)", result.error);
+  } catch (err) {
+    console.error("Client confirmation email failed", err);
+  }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     if (req.method !== "POST") {
@@ -113,6 +154,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         (r[7] || "").toLowerCase() === email.toLowerCase(),
     );
     if (dupRow) {
+      const dupApiKey = process.env.RESEND_API_KEY;
+      const dupFrom = process.env.RESEND_FROM_EMAIL || "Roseta Café <facturacion@acaciaco.com.mx>";
+      await sendClientConfirmationEmail(dupApiKey ? new Resend(dupApiKey) : null, dupFrom, email, dupRow[0], true);
       return res.status(200).json({ ok: true, folio: dupRow[0], duplicate: true });
     }
 
@@ -216,6 +260,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       console.error("Resend error", sendResult.error);
       return res.status(502).json({ ok: false, error: "No se pudo enviar tu solicitud, intenta de nuevo en un momento." });
     }
+
+    await sendClientConfirmationEmail(resend, from, email, folio, false);
 
     // 2) Best-effort bookkeeping in Sheets — powers the public status lookup
     // and RFC autofill, but must never block the email that already went out.
