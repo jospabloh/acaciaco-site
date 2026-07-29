@@ -29,6 +29,8 @@
   var statusEl = document.getElementById('rf-status');
   var submitBtn = document.getElementById('rf-submit');
   var successEl = document.getElementById('rf-success');
+  var successTitleEl = document.getElementById('rf-success-title');
+  var successBodyEl = document.getElementById('rf-success-body');
   var folioEl = document.getElementById('rf-folio');
   var statusLinkEl = document.getElementById('rf-status-link');
 
@@ -196,6 +198,11 @@
     renderRegimenFromCsf(data.regimenes);
   }
 
+  // Subtotal (before IVA) isn't shown on the form — it's only useful to
+  // Roseta internally, so it rides along in the submit payload instead of
+  // becoming another field the customer has to look at.
+  var lastTicketSubtotal = null;
+
   function applyTicketData(data) {
     fillIfEmpty(document.getElementById('fecha'), data.fecha);
     if (data.monto != null) fillIfEmpty(document.getElementById('monto'), String(data.monto));
@@ -207,6 +214,7 @@
       }
     }
     fillIfEmpty(document.getElementById('folio_ticket'), data.folio_ticket);
+    lastTicketSubtotal = typeof data.subtotal === 'number' ? data.subtotal : null;
   }
 
   function setupDrop(dropId, inputId, filenameId, onFile) {
@@ -260,6 +268,7 @@
 
   var ticketStatusEl = document.getElementById('ticket-extract-status');
   setupDrop('ticket-drop', 'ticket_file', 'ticket-filename', function (file) {
+    lastTicketSubtotal = null; // any previously-extracted subtotal no longer applies to this file
     if (!file) { ticketStatusEl.textContent = ''; ticketStatusEl.className = 'rf-extract-status'; return; }
     ticketStatusEl.textContent = 'Leyendo tu ticket…';
     ticketStatusEl.className = 'rf-extract-status busy';
@@ -445,6 +454,7 @@
           monto: form.monto.value,
           forma_pago: form.forma_pago.value,
           folio_ticket: form.folio_ticket.value.trim(),
+          ticket_subtotal: lastTicketSubtotal,
           csf: prepared.csf,
           ticket: prepared.ticket,
           ticket_dropped: prepared.ticketDropped
@@ -466,6 +476,12 @@
         folioEl.textContent = res.json.folio || '';
         if (res.json.folio) {
           statusLinkEl.href = '/roseta/factura/estatus?folio=' + encodeURIComponent(res.json.folio);
+        }
+        if (res.json.duplicate) {
+          // Same RFC + fecha + monto + correo as a request we already have —
+          // reassure them it's covered rather than reading as an error.
+          successTitleEl.textContent = 'Ya la teníamos registrada';
+          successBodyEl.textContent = 'Ya nos habías pedido factura por este mismo consumo — no hace falta enviarla otra vez. Aquí está tu folio para dar seguimiento.';
         }
         if (res.ticketDropped) {
           var noteEl = document.getElementById('rf-success-note');
