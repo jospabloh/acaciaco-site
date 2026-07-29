@@ -167,6 +167,25 @@
 
           <form id="rf-form" class="rf-form" novalidate>
             <fieldset class="rf-fieldset">
+              <legend>Identifícate</legend>
+
+              <div class="rf-field">
+                <label for="rfc">RFC <span class="req">*</span></label>
+                <input id="rfc" name="rfc" required maxlength="13" autocomplete="off" placeholder="XAXX010101000" style="text-transform:uppercase" />
+                <span class="rf-hint">Al salir del campo buscamos si ya facturaste antes con este RFC — si ya tenemos tus datos, no hace falta que subas tu CSF de nuevo.</span>
+              </div>
+
+              <div class="rf-match" id="rfc-match">
+                <h4>Encontramos datos de una solicitud anterior con este RFC</h4>
+                <dl id="rfc-match-data"></dl>
+                <div class="rf-match-actions">
+                  <button type="button" class="btn btn-primary btn-sm" id="rfc-use">Sí, usar estos datos</button>
+                  <button type="button" class="btn btn-ghost btn-sm" id="rfc-dismiss">No, son distintos</button>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="rf-fieldset">
               <legend>Tus documentos</legend>
               <p class="rf-hint" style="margin:-0.6rem 0 1.1rem;">Sube tu ticket y tu CSF y adelantamos el llenado por ti — revisa siempre los datos antes de enviar.</p>
 
@@ -182,11 +201,11 @@
               </div>
 
               <div class="rf-field">
-                <label>Constancia de Situación Fiscal (CSF) vigente <span class="req">*</span></label>
+                <label>Constancia de Situación Fiscal (CSF) vigente <span class="req" id="csf-req-mark">*</span></label>
                 <label class="rf-drop" id="csf-drop">
                   <input type="file" id="csf" name="csf" accept=".pdf,.jpg,.jpeg,.png" required />
                   <span class="rf-drop-label">Arrastra tu CSF aquí o haz clic para subirla</span>
-                  <span class="rf-drop-hint">PDF, JPG o PNG · vigente (no mayor a 3 meses) · máx. 4 MB</span>
+                  <span class="rf-drop-hint" id="csf-hint">PDF, JPG o PNG · vigente (no mayor a 3 meses) · máx. 4 MB</span>
                   <span class="rf-drop-file" id="csf-filename"></span>
                 </label>
                 <p class="rf-extract-status" id="csf-extract-status"></p>
@@ -195,21 +214,6 @@
 
             <fieldset class="rf-fieldset">
               <legend>Datos fiscales</legend>
-
-              <div class="rf-field">
-                <label for="rfc">RFC <span class="req">*</span></label>
-                <input id="rfc" name="rfc" required maxlength="13" autocomplete="off" placeholder="XAXX010101000" style="text-transform:uppercase" />
-                <span class="rf-hint">Al salir del campo buscamos si ya facturaste antes con este RFC.</span>
-              </div>
-
-              <div class="rf-match" id="rfc-match">
-                <h4>Encontramos datos de una solicitud anterior con este RFC</h4>
-                <dl id="rfc-match-data"></dl>
-                <div class="rf-match-actions">
-                  <button type="button" class="btn btn-primary btn-sm" id="rfc-use">Sí, usar estos datos</button>
-                  <button type="button" class="btn btn-ghost btn-sm" id="rfc-dismiss">No, son distintos</button>
-                </div>
-              </div>
 
               <div class="rf-field">
                 <label for="razon">Razón social o nombre completo <span class="req">*</span></label>

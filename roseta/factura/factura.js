@@ -51,6 +51,23 @@
   var matchDismissBtn = document.getElementById('rfc-dismiss');
   var lastMatch = null;
 
+  var csfInput = document.getElementById('csf');
+  var csfReqMark = document.getElementById('csf-req-mark');
+  var csfHintEl = document.getElementById('csf-hint');
+  var CSF_HINT_DEFAULT = csfHintEl.textContent;
+  var CSF_HINT_KNOWN = 'Ya tenemos tu CSF en archivo — opcional, solo súbela si tu información fiscal cambió.';
+  var csfOptional = false;
+
+  // Roseta already has this customer's CSF on file from a prior request —
+  // no need to make them dig it up and re-upload it every single time.
+  // Re-validated server-side too; this only controls the client's UI/UX.
+  function setCsfOptional(flag) {
+    csfOptional = flag;
+    csfInput.required = !flag;
+    csfReqMark.style.display = flag ? 'none' : '';
+    csfHintEl.textContent = flag ? CSF_HINT_KNOWN : CSF_HINT_DEFAULT;
+  }
+
   function setStatus(msg, kind) {
     statusEl.textContent = msg || '';
     statusEl.className = kind || '';
@@ -98,13 +115,13 @@
     });
   }
 
-  // Prepares the CSF (required, must fit on its own) and the ticket photo
-  // (optional — dropped with a note if it doesn't fit the combined budget,
-  // rather than blocking the whole submission).
+  // Prepares the CSF (required for new RFCs, optional for known ones — may
+  // be null) and the ticket photo (always optional — dropped with a note if
+  // it doesn't fit the combined budget, rather than blocking the submission).
   function prepareAttachments(csfFile, ticketFile) {
     return Promise.resolve()
       .then(function () {
-        if (csfFile.size > CSF_MAX_BYTES) {
+        if (csfFile && csfFile.size > CSF_MAX_BYTES) {
           throw new Error('Tu CSF pesa más de 3 MB. Comprímela (o guárdala como PDF más ligero) e inténtalo de nuevo.');
         }
         if (!ticketFile) return [csfFile, null];
@@ -113,11 +130,11 @@
       .then(function (pair) {
         var csf = pair[0], ticket = pair[1];
         var ticketDropped = false;
-        if (ticket && csf.size + ticket.size > COMBINED_MAX_BYTES) {
+        if (csf && ticket && csf.size + ticket.size > COMBINED_MAX_BYTES) {
           ticket = null;
           ticketDropped = true;
         }
-        return Promise.all([readAsBase64(csf), ticket ? readAsBase64(ticket) : Promise.resolve(null)])
+        return Promise.all([csf ? readAsBase64(csf) : Promise.resolve(null), ticket ? readAsBase64(ticket) : Promise.resolve(null)])
           .then(function (files) { return { csf: files[0], ticket: files[1], ticketDropped: ticketDropped }; });
       });
   }
@@ -291,6 +308,7 @@
   rfcInput.addEventListener('input', function () {
     rfcInput.value = rfcInput.value.toUpperCase();
     matchBox.classList.remove('show');
+    setCsfOptional(false);
   });
   rfcInput.addEventListener('blur', function () {
     var rfc = rfcInput.value.trim();
@@ -322,10 +340,12 @@
         if (el) el.value = lastMatch[key];
       }
     });
-    setStatus('Datos aplicados. Revisa que todo esté correcto antes de enviar.', 'info');
+    setCsfOptional(true);
+    setStatus('Datos aplicados — no hace falta que subas tu CSF de nuevo, a menos que haya cambiado.', 'info');
     matchBox.classList.remove('show');
   });
   matchDismissBtn.addEventListener('click', function () {
+    setCsfOptional(false);
     matchBox.classList.remove('show');
   });
 
@@ -359,7 +379,7 @@
     addRow(reviewConsumoEl, 'Folio de ticket', form.folio_ticket.value.trim());
     var csfFile = document.getElementById('csf').files[0];
     var ticketFile = document.getElementById('ticket_file').files[0];
-    addRow(reviewConsumoEl, 'CSF adjunta', csfFile ? csfFile.name : '');
+    addRow(reviewConsumoEl, 'CSF adjunta', csfFile ? csfFile.name : (csfOptional ? 'No adjuntada — ya en archivo' : ''));
     addRow(reviewConsumoEl, 'Ticket adjunto', ticketFile ? ticketFile.name : 'No adjuntado');
   }
 
@@ -390,12 +410,10 @@
       return;
     }
     if (!form.checkValidity()) {
+      // Covers a missing CSF too: setCsfOptional() keeps #csf's `required`
+      // attribute in lockstep with csfOptional, so the native check alone
+      // is enough — no separate CSF presence check needed here.
       form.reportValidity();
-      return;
-    }
-    var csfFile = document.getElementById('csf').files[0];
-    if (!csfFile) {
-      setStatus('Adjunta tu Constancia de Situación Fiscal vigente.', 'error');
       return;
     }
 
