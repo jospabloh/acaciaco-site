@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Solicita tu factura · Roseta Café</title>
+  <meta name="description" content="Solicita la factura de tu consumo en Roseta Café. Llena tus datos fiscales, adjunta tu Constancia de Situación Fiscal vigente y recíbela por correo en un máximo de 3 días hábiles." />
+  <link rel="canonical" href="https://acaciaco.com.mx/roseta/factura" />
+  <meta name="robots" content="noindex, follow" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Solicita tu factura · Roseta Café" />
+  <meta property="og:description" content="Llena tus datos, adjunta tu CSF vigente y recibe tu factura por correo en un máximo de 3 días hábiles." />
+  <meta property="og:site_name" content="Roseta Café" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%239E1B2A'/%3E%3Ccircle cx='29' cy='33' r='19' stroke='white' stroke-width='3' fill='none'/%3E%3Cpath d='M46 22c6 .5 10 4 10 9s-4 8.5-10 9' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Cpath d='M29 44c-7-2-11-7.5-11-14 0-1.5.2-3 .6-4.4C21.5 27 25 30.5 26 35.5c1-5.5 5-9 7.8-7.1 2.4 1.6 3.2 4.6 3.2 7.6 0 6.3-3.3 11.3-8 8z' fill='white'/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#9E1B2A" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('acacia-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/styles/base.css" />
+
+  <style>
+    :root{
+      --primary: #9E1B2A;
+      --glow: rgba(158,27,42,.22);
+      --roseta-blush: #F1DCD6;
+      --roseta-ink: #3C0B12;
+    }
+    .btn-primary{ background: linear-gradient(180deg, #B23A47, var(--primary)); box-shadow: 0 8px 24px var(--glow), inset 0 1px 0 rgba(255,255,255,.18); }
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+    .rf-shell{max-width:720px;margin:0 auto;}
+    .rf-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-card);box-shadow:var(--shadow-md);padding:clamp(1.5rem,4vw,2.5rem);}
+    .rf-fieldset{border:0;padding:0;margin:0 0 2rem;}
+    .rf-fieldset:last-of-type{margin-bottom:0;}
+    .rf-fieldset legend{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.05rem;padding:0 0 1.1rem;width:100%;border-bottom:1px solid var(--border);margin-bottom:1.1rem;}
+    .rf-row{display:grid;gap:1rem;grid-template-columns:1fr 1fr;}
+    .rf-row.single{grid-template-columns:1fr;}
+    @media(max-width:640px){.rf-row{grid-template-columns:1fr;}}
+    .rf-field{display:flex;flex-direction:column;gap:.4rem;margin-top:1rem;}
+    .rf-field:first-child{margin-top:0;}
+    .rf-row .rf-field{margin-top:0;}
+    .rf-field label{font-size:.85rem;font-weight:600;color:var(--text-muted);}
+    .rf-field label .req{color:var(--primary);}
+    .rf-field input, .rf-field select, .rf-field textarea{
+      width:100%;padding:.75rem .9rem;border:1px solid var(--border);border-radius:.7rem;
+      font:inherit;font-size:.96rem;background:var(--bg);color:var(--text);transition:border-color .2s ease,box-shadow .2s ease;
+    }
+    .rf-field input:focus, .rf-field select:focus, .rf-field textarea:focus{
+      outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--glow);
+    }
+    .rf-hint{font-size:.78rem;color:var(--text-muted);}
+
+    .rf-match{background:var(--roseta-blush);border:1px solid rgba(158,27,42,.25);border-radius:.9rem;padding:1.1rem 1.2rem;margin:0 0 1.3rem;display:none;}
+    .rf-match.show{display:block;}
+    .rf-match h4{font-size:.95rem;margin:0 0 .5rem;color:var(--roseta-ink);}
+    .rf-match dl{display:grid;grid-template-columns:auto 1fr;gap:.25rem .8rem;font-size:.85rem;margin:0 0 1rem;color:var(--roseta-ink);}
+    .rf-match dt{font-weight:600;opacity:.75;}
+    .rf-match .rf-match-actions{display:flex;gap:.6rem;flex-wrap:wrap;}
+
+    .rf-drop{position:relative;border:1.5px dashed var(--border);border-radius:.9rem;padding:1.4rem 1.2rem;text-align:center;cursor:pointer;transition:border-color .2s ease,background .2s ease;}
+    .rf-drop:hover, .rf-drop.drag{border-color:var(--primary);background:var(--roseta-blush);}
+    .rf-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+    .rf-drop .rf-drop-label{font-size:.88rem;font-weight:600;}
+    .rf-drop .rf-drop-hint{font-size:.78rem;color:var(--text-muted);margin-top:.25rem;}
+    .rf-drop .rf-drop-file{font-size:.82rem;color:var(--primary);font-weight:600;margin-top:.4rem;display:none;}
+    .rf-drop.has-file .rf-drop-file{display:block;}
+
+    .rf-honeypot{position:absolute;left:-9999px;top:-9999px;}
+
+    #rf-status{margin-top:1rem;font-size:.92rem;min-height:1.3em;}
+    #rf-status.error{color:#c33;}
+    #rf-status.info{color:var(--text-muted);}
+
+    .rf-success{display:none;text-align:center;padding:1rem 0;}
+    .rf-success.show{display:block;}
+    .rf-success .rf-check{width:64px;height:64px;border-radius:50%;background:var(--roseta-blush);display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;color:var(--primary);}
+    .rf-success h2{margin:0 0 .6rem;}
+    .rf-success p{color:var(--text-muted);max-width:46ch;margin:0 auto;}
+    .rf-success .rf-folio{display:inline-block;margin-top:1.1rem;font-family:'Space Grotesk',monospace;font-weight:700;letter-spacing:.03em;background:var(--bg-subtle);border:1px solid var(--border);border-radius:.6rem;padding:.5rem 1rem;}
+    .rf-success .rf-success-cta{margin-top:1.6rem;display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;}
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+  <header class="site-nav" role="banner">
+    <div class="nav-inner">
+      <a href="/roseta" class="brand" aria-label="Roseta Café inicio">
+        <svg width="32" height="32" viewBox="0 0 120 120" fill="none" style="color:var(--primary)"><circle cx="54" cy="60" r="42" stroke="currentColor" stroke-width="8"/><path d="M93 42c12 1 20 8 20 18s-8 17-20 18" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><path d="M54 84c-14-4-22-15-22-28 0-3 .4-6 1.2-9C39 51 46 58 48 68c2-11 10-18 15.6-14.2C68.4 57 70 62 70 67.4c0 12.6-6.6 22.6-16 24.6z" fill="currentColor"/></svg>
+        Roseta Café
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links" role="list">
+          <li><a href="/roseta">Inicio</a></li>
+          <li><a href="/roseta#especialidades">Menú</a></li>
+          <li><a href="/roseta#sucursales">Sucursales</a></li>
+          <li><a href="/roseta/factura" aria-current="page">Solicitar factura</a></li>
+          <li><a href="/roseta/factura/estatus">Estatus</a></li>
+        </ul>
+      </nav>
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <a href="https://wa.me/524498958291?text=Hola,%20tengo%20una%20duda%20sobre%20mi%20factura%20de%20Roseta%20Caf%C3%A9" class="btn btn-primary btn-sm nav-cta" target="_blank" rel="noopener">¿Dudas? WhatsApp</a>
+        <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section" style="padding-block: clamp(6rem, 12vw, 8rem) 2rem;">
+      <div class="container rf-shell">
+        <div class="reveal" style="margin-bottom:2.2rem;">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Facturación · Roseta Café</span>
+          <h1 style="margin-top:1rem;">Solicita tu factura.</h1>
+          <p class="lead" style="margin-top:.6rem;">Llena tus datos y adjunta tu Constancia de Situación Fiscal (CSF) vigente. Te la enviamos por correo en un máximo de <strong>3 días hábiles</strong>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0;">
+      <div class="container rf-shell">
+        <div class="rf-card reveal">
+
+          <form id="rf-form" novalidate>
+            <fieldset class="rf-fieldset">
+              <legend>Datos fiscales</legend>
+
+              <div class="rf-field">
+                <label for="rfc">RFC <span class="req">*</span></label>
+                <input id="rfc" name="rfc" required maxlength="13" autocomplete="off" placeholder="XAXX010101000" style="text-transform:uppercase" />
+                <span class="rf-hint">Al salir del campo buscamos si ya facturaste antes con este RFC.</span>
+              </div>
+
+              <div class="rf-match" id="rfc-match">
+                <h4>Encontramos datos de una solicitud anterior con este RFC</h4>
+                <dl id="rfc-match-data"></dl>
+                <div class="rf-match-actions">
+                  <button type="button" class="btn btn-primary btn-sm" id="rfc-use">Sí, usar estos datos</button>
+                  <button type="button" class="btn btn-ghost btn-sm" id="rfc-dismiss">No, son distintos</button>
+                </div>
+              </div>
+
+              <div class="rf-field">
+                <label for="razon">Razón social o nombre completo <span class="req">*</span></label>
+                <input id="razon" name="razon_social" required maxlength="180" placeholder="Como aparece en tu CSF" />
+              </div>
+
+              <div class="rf-row">
+                <div class="rf-field">
+                  <label for="regimen">Régimen fiscal <span class="req">*</span></label>
+                  <select id="regimen" name="regimen_fiscal" required>
+                    <option value="">Selecciona…</option>
+                    <option value="601">601 · General de Ley Personas Morales</option>
+                    <option value="603">603 · Personas Morales con Fines no Lucrativos</option>
+                    <option value="605">605 · Sueldos y Salarios</option>
+                    <option value="606">606 · Arrendamiento</option>
+                    <option value="608">608 · Demás ingresos</option>
+                    <option value="611">611 · Ingresos por Dividendos (socios y accionistas)</option>
+                    <option value="612">612 · Personas Físicas con Actividades Empresariales y Profesionales</option>
+                    <option value="614">614 · Ingresos por intereses</option>
+                    <option value="616">616 · Sin obligaciones fiscales</option>
+                    <option value="621">621 · Incorporación Fiscal</option>
+                    <option value="622">622 · Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras</option>
+                    <option value="625">625 · Actividades Empresariales por Plataformas Tecnológicas</option>
+                    <option value="626">626 · Régimen Simplificado de Confianza (RESICO)</option>
+                  </select>
+                </div>
+                <div class="rf-field">
+                  <label for="usocfdi">Uso de CFDI <span class="req">*</span></label>
+                  <select id="usocfdi" name="uso_cfdi" required>
+                    <option value="">Selecciona…</option>
+                    <option value="G01">G01 · Adquisición de mercancías</option>
+                    <option value="G03">G03 · Gastos en general</option>
+                    <option value="I08">I08 · Otra maquinaria y equipo</option>
+                    <option value="P01">P01 · Por definir</option>
+                    <option value="S01">S01 · Sin efectos fiscales</option>
+                    <option value="CP01">CP01 · Pagos</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="rf-row">
+                <div class="rf-field">
+                  <label for="cp">Código postal fiscal <span class="req">*</span></label>
+                  <input id="cp" name="codigo_postal" required maxlength="5" inputmode="numeric" placeholder="20000" />
+                </div>
+                <div class="rf-field">
+                  <label for="email">Correo para tu factura <span class="req">*</span></label>
+                  <input id="email" name="email" type="email" required maxlength="180" placeholder="tucorreo@ejemplo.com" />
+                </div>
+              </div>
+
+              <div class="rf-field">
+                <label for="telefono">Teléfono (opcional)</label>
+                <input id="telefono" name="telefono" maxlength="20" placeholder="449 000 0000" />
+              </div>
+            </fieldset>
+
+            <fieldset class="rf-fieldset">
+              <legend>Tu consumo</legend>
+
+              <div class="rf-row">
+                <div class="rf-field">
+                  <label for="sucursal">Sucursal <span class="req">*</span></label>
+                  <select id="sucursal" name="sucursal" required>
+                    <option value="">Selecciona…</option>
+                    <option>Tres Centurias</option>
+                    <option>Plaza Universidad</option>
+                    <option>Lomas del Campestre</option>
+                    <option>Exseminario</option>
+                    <option>Otra</option>
+                  </select>
+                </div>
+                <div class="rf-field">
+                  <label for="fecha">Fecha de consumo <span class="req">*</span></label>
+                  <input id="fecha" name="fecha_consumo" type="date" required />
+                </div>
+              </div>
+
+              <div class="rf-row">
+                <div class="rf-field">
+                  <label for="monto">Monto total del ticket (MXN) <span class="req">*</span></label>
+                  <input id="monto" name="monto" type="number" min="0" step="0.01" required placeholder="0.00" />
+                </div>
+                <div class="rf-field">
+                  <label for="forma_pago">Forma de pago <span class="req">*</span></label>
+                  <select id="forma_pago" name="forma_pago" required>
+                    <option value="">Selecciona…</option>
+                    <option>Efectivo</option>
+                    <option>Tarjeta de débito</option>
+                    <option>Tarjeta de crédito</option>
+                    <option>Transferencia</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="rf-field">
+                <label for="folio_ticket">Folio o número de ticket (opcional)</label>
+                <input id="folio_ticket" name="folio_ticket" maxlength="60" placeholder="Si aparece impreso en tu ticket" />
+              </div>
+            </fieldset>
+
+            <fieldset class="rf-fieldset">
+              <legend>Documentos</legend>
+
+              <div class="rf-field">
+                <label>Constancia de Situación Fiscal (CSF) vigente <span class="req">*</span></label>
+                <label class="rf-drop" id="csf-drop">
+                  <input type="file" id="csf" name="csf" accept=".pdf,.jpg,.jpeg,.png" required />
+                  <span class="rf-drop-label">Arrastra tu CSF aquí o haz clic para subirla</span>
+                  <span class="rf-drop-hint">PDF, JPG o PNG · vigente (no mayor a 3 meses) · máx. 4 MB</span>
+                  <span class="rf-drop-file" id="csf-filename"></span>
+                </label>
+              </div>
+
+              <div class="rf-field">
+                <label>Foto o PDF de tu ticket (opcional, agiliza tu factura)</label>
+                <label class="rf-drop" id="ticket-drop">
+                  <input type="file" id="ticket_file" name="ticket_file" accept=".pdf,.jpg,.jpeg,.png" />
+                  <span class="rf-drop-label">Arrastra tu ticket aquí o haz clic para subirlo</span>
+                  <span class="rf-drop-hint">PDF, JPG o PNG · máx. 4 MB</span>
+                  <span class="rf-drop-file" id="ticket-filename"></span>
+                </label>
+              </div>
+            </fieldset>
+
+            <input type="text" name="website" id="website" class="rf-honeypot" tabindex="-1" autocomplete="off" />
+
+            <button class="btn btn-primary" type="submit" id="rf-submit" style="width:100%;justify-content:center;">Enviar solicitud</button>
+            <p id="rf-status" role="status" aria-live="polite"></p>
+            <p class="rf-hint" style="text-align:center;margin-top:.8rem;">Tus datos y tu CSF se usan únicamente para emitir tu factura. No se comparten con terceros.</p>
+          </form>
+
+          <div class="rf-success" id="rf-success">
+            <div class="rf-check">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <h2>¡Solicitud enviada!</h2>
+            <p>Recibimos tu solicitud de factura. Deberías recibirla en tu correo en un máximo de <strong>3 días hábiles</strong>. Guarda tu folio para dar seguimiento.</p>
+            <span class="rf-folio" id="rf-folio"></span>
+            <p class="rf-hint" id="rf-success-note" style="margin-top:1rem;color:#8A5A00;"></p>
+            <div class="rf-success-cta">
+              <a class="btn btn-ghost" href="/roseta/factura/estatus" id="rf-status-link">Consultar estatus</a>
+              <a class="btn btn-ghost" href="/roseta">Volver a Roseta</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo" style="padding-top:2.5rem;">
+    <div class="footer-bottom" style="border-top:0;">
+      <span>© 2026 Roseta Café · Sitio operado por ACACIA</span>
+      <a href="mailto:roseta.cafeteria@gmail.com">roseta.cafeteria@gmail.com</a>
+    </div>
+  </footer>
+
+  <div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Aviso de cookies" aria-live="polite">
+    <h4>Cookies y privacidad</h4>
+    <p>Usamos cookies para mejorar tu experiencia. Consulta nuestra <a href="/legal/privacidad">política de privacidad</a>.</p>
+    <div class="actions">
+      <button class="btn btn-primary btn-sm" data-cookies="all">Aceptar</button>
+      <button class="btn btn-ghost btn-sm" data-cookies="essential">Solo esenciales</button>
+    </div>
+  </div>
+
+  <script src="/scripts/shared.js"></script>
+  <script src="/scripts/analytics.js" defer></script>
+  <script src="/roseta/factura/factura.js" defer></script>
+</body>
+</html>
