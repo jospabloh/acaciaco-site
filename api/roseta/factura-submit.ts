@@ -90,6 +90,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ ok: false, error: "Revisa los datos del formulario, algo no es válido." });
     }
 
+    // Without a ticket photo there's no "Movimiento" number to uniquely
+    // identify the sale, so RFC + fecha de consumo + monto + correo is the
+    // best available stand-in — if this exact combination was already
+    // submitted, treat it as the same consumption rather than creating a
+    // second entry. Fails open (no dedup) on a lookup error, since blocking
+    // a genuinely new request is worse than an occasional duplicate row.
+    let existingSolicitudes: string[][] = [];
+    try {
+      existingSolicitudes = await getValues("Solicitudes!A:R");
+    } catch (err) {
+      console.error("Solicitudes lookup (dup-check) failed", err);
+    }
+    const dupRow = existingSolicitudes.find(
+      (r, i) =>
+        i > 0 &&
+        (r[2] || "").toUpperCase() === rfc &&
+        (r[10] || "") === fechaConsumo &&
+        Number(r[11]) === Number(monto) &&
+        (r[7] || "").toLowerCase() === email.toLowerCase(),
+    );
+    if (dupRow) {
+      return res.status(200).json({ ok: true, folio: dupRow[0], duplicate: true });
+    }
+
     // Roseta can reuse a CSF she already has on file, so returning customers
     // don't need to re-upload one — but that's only trustworthy if *we*
     // verify the RFC is actually known, not a flag the client could send.
@@ -109,6 +133,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ ok: false, error: "Adjunta tu Constancia de Situación Fiscal vigente (máx. 3 MB)." });
     }
     const ticket = parseDataUrl(body.ticket);
+
+    // Subtotal (before IVA) is internal-only — Roseta's team sees it in the
+    // email, the customer never does. Trust an amount Claude read straight
+    // off the ticket only if it's plausible for a 16% IVA total; otherwise
+    // derive it from the total, both rounded to the cent.
+    const montoNum = Number(monto);
+    const extractedSubtotal = Number(body.ticket_subtotal);
+    let subtotal: number;
+    let subtotalSource: string;
+    if (
+      Number.isFinite(extractedSubtotal) &&
+      extractedSubtotal > 0 &&
+      extractedSubtotal < montoNum &&
+      Math.abs(montoNum - extractedSubtotal * 1.16) < 2
+    ) {
+      subtotal = Math.round(extractedSubtotal * 100) / 100;
+      subtotalSource = "del ticket";
+    } else {
+      subtotal = Math.round((montoNum / 1.16) * 100) / 100;
+      subtotalSource = "estimado, IVA 16%";
+    }
+    const iva = Math.round((montoNum - subtotal) * 100) / 100;
 
     const folio = makeFolio();
     const fechaSolicitud = new Date().toISOString().slice(0, 10);
@@ -136,8 +182,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ["Sucursal", sucursal],
       ["Fecha de consumo", fechaConsumo],
       ["Monto del ticket", `$${monto} MXN`],
+      ["Subtotal (antes de IVA)", `$${subtotal.toFixed(2)} MXN (${subtotalSource})`],
+      ["IVA", `$${iva.toFixed(2)} MXN`],
       ["Forma de pago", formaPago],
-      ["Folio de ticket", folioTicket || "—"],
+      ["Movimiento / folio de ticket", folioTicket || "—"],
     ];
     const html =
       `<h2>Factura por consumo solicitada</h2>` +
@@ -170,7 +218,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // 2) Best-effort bookkeeping in Sheets — powers the public status lookup
     // and RFC autofill, but must never block the email that already went out.
     try {
-      await appendRow("Solicitudes!A:P", [
+      // Estatus (O) and Fecha de facturación (P) stay exactly where they've
+      // always been — Roseta edits Estatus by hand, so those columns must
+      // never shift. Subtotal/IVA are appended strictly after them (Q, R).
+      await appendRow("Solicitudes!A:R", [
         folio,
         fechaSolicitud,
         rfc,
@@ -187,6 +238,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         sanitizeCell(folioTicket),
         "Pendiente",
         "",
+        subtotal.toFixed(2),
+        iva.toFixed(2),
       ]);
     } catch (err) {
       console.error("Sheets append (Solicitudes) failed", err);

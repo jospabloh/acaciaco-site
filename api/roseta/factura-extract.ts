@@ -14,6 +14,13 @@ import { getClientKey, isRateLimited } from "./_ratelimit";
 const MAX_DATA_URL_LEN = 6 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
+// Haiku is plenty for reading a printed/handwritten receipt or CSF against a
+// fixed schema, and it's a fraction of Opus's cost for a high-volume
+// convenience feature — Sonnet is the fallback if Haiku errors out or the
+// account doesn't have access to it.
+const PRIMARY_MODEL = "claude-haiku-4-5";
+const FALLBACK_MODEL = "claude-sonnet-5";
+
 const FORMAS_PAGO = ["Efectivo", "Tarjeta de débito", "Tarjeta de crédito", "Transferencia"] as const;
 
 const CsfSchema = z.object({
@@ -39,9 +46,22 @@ const CsfSchema = z.object({
 const TicketSchema = z.object({
   es_ticket: z.boolean().describe("true only if this image is a purchase receipt/ticket"),
   fecha: z.string().nullable().describe("Purchase date in YYYY-MM-DD format"),
-  monto: z.number().nullable().describe("Final total charged, as a plain number without currency symbols"),
+  monto: z.number().nullable().describe("'Gran Total' / final total charged, as a plain number without currency symbols"),
+  subtotal: z
+    .number()
+    .nullable()
+    .describe(
+      "Subtotal before tax, ONLY if printed verbatim on the receipt (e.g. a 'Subtotal' line). Do not calculate " +
+        "or estimate this yourself from the total — leave it null if there's no explicit subtotal line.",
+    ),
   forma_pago: z.enum(FORMAS_PAGO).nullable(),
-  folio_ticket: z.string().nullable().describe("Ticket/folio/receipt number if printed"),
+  folio_ticket: z
+    .string()
+    .nullable()
+    .describe(
+      "The point-of-sale transaction ID — commonly labeled 'Movimiento' on Mexican POS receipts, but also seen " +
+        "as 'Folio', 'Ticket #' or 'Transacción'. Combined with the date this uniquely identifies the sale.",
+    ),
 });
 
 type Kind = "csf" | "ticket";
@@ -83,7 +103,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(429).json({ ok: false, error: "Demasiadas solicitudes, intenta de nuevo en un minuto." });
     }
 
-    const apiKey = process.env.ANTHROPIC_API_KEY;
+    const apiKey = process.env.ANTHROPIC_API_KEY_Roseta;
     if (!apiKey) {
       // Not configured — fail soft, the client falls back to manual entry.
       return res.status(200).json({ ok: false, error: "not_configured" });
@@ -107,8 +127,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const client = new Anthropic({ apiKey });
 
     if (kind === "csf") {
-      const response = await client.beta.messages.parse({
-        model: "claude-opus-5",
+      const csfParams = {
         max_tokens: 2000,
         system:
           "Extraes datos de una Constancia de Situación Fiscal (CSF) mexicana emitida por el SAT. " +
@@ -116,12 +135,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           "Si un dato no es legible o no aparece, devuélvelo como null en vez de inventarlo.",
         messages: [
           {
-            role: "user",
-            content: [block, { type: "text", text: "Extrae los datos de esta Constancia de Situación Fiscal." }],
+            role: "user" as const,
+            content: [block, { type: "text" as const, text: "Extrae los datos de esta Constancia de Situación Fiscal." }],
           },
         ],
         output_format: betaZodOutputFormat(CsfSchema),
-      });
+      };
+      let response;
+      try {
+        response = await client.beta.messages.parse({ ...csfParams, model: PRIMARY_MODEL });
+      } catch (err) {
+        console.error(`${PRIMARY_MODEL} failed for CSF extraction, falling back to ${FALLBACK_MODEL}`, err);
+        response = await client.beta.messages.parse({ ...csfParams, model: FALLBACK_MODEL });
+      }
       const data = response.parsed_output;
       if (!data || !data.es_csf) {
         return res.status(200).json({ ok: false, error: "no_match" });
@@ -129,20 +155,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json({ ok: true, kind, data });
     }
 
-    const response = await client.beta.messages.parse({
-      model: "claude-opus-5",
+    const ticketParams = {
       max_tokens: 1000,
       system:
         "Extraes datos de un ticket o recibo de compra mexicano (cafetería). " +
         "Si un dato no es legible o no aparece, devuélvelo como null en vez de inventarlo.",
       messages: [
         {
-          role: "user",
-          content: [block, { type: "text", text: "Extrae los datos de este ticket de compra." }],
+          role: "user" as const,
+          content: [block, { type: "text" as const, text: "Extrae los datos de este ticket de compra." }],
         },
       ],
       output_format: betaZodOutputFormat(TicketSchema),
-    });
+    };
+    let response;
+    try {
+      response = await client.beta.messages.parse({ ...ticketParams, model: PRIMARY_MODEL });
+    } catch (err) {
+      console.error(`${PRIMARY_MODEL} failed for ticket extraction, falling back to ${FALLBACK_MODEL}`, err);
+      response = await client.beta.messages.parse({ ...ticketParams, model: FALLBACK_MODEL });
+    }
     const data = response.parsed_output;
     if (!data || !data.es_ticket) {
       return res.status(200).json({ ok: false, error: "no_match" });
