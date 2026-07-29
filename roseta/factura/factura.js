@@ -70,6 +70,28 @@
     csfHintEl.textContent = flag ? CSF_HINT_KNOWN : CSF_HINT_DEFAULT;
   }
 
+  var movimientoInput = document.getElementById('folio_ticket');
+  var movimientoReqMark = document.getElementById('movimiento-req-mark');
+  var movimientoHint = document.getElementById('movimiento-hint');
+  var sinMovimientoCheckbox = document.getElementById('sin_movimiento');
+
+  // Movimiento is required by default — it's the exact key Roseta uses to
+  // find the sale in her point-of-sale system. Only when the customer
+  // explicitly says they don't have it do we fall back to RFC + fecha +
+  // monto + correo (factura-submit.ts already uses that same combination
+  // for its duplicate-request check).
+  function setSinMovimiento(flag) {
+    sinMovimientoCheckbox.checked = flag;
+    movimientoInput.required = !flag;
+    movimientoInput.disabled = flag;
+    if (flag) movimientoInput.value = '';
+    movimientoReqMark.style.display = flag ? 'none' : '';
+    movimientoHint.style.display = flag ? 'block' : 'none';
+  }
+  sinMovimientoCheckbox.addEventListener('change', function () {
+    setSinMovimiento(sinMovimientoCheckbox.checked);
+  });
+
   function setStatus(msg, kind) {
     statusEl.textContent = msg || '';
     statusEl.className = kind || '';
@@ -213,6 +235,7 @@
         if (has) sel.value = data.forma_pago;
       }
     }
+    if (data.folio_ticket && sinMovimientoCheckbox.checked) setSinMovimiento(false);
     fillIfEmpty(document.getElementById('folio_ticket'), data.folio_ticket);
     lastTicketSubtotal = typeof data.subtotal === 'number' ? data.subtotal : null;
   }
@@ -385,7 +408,12 @@
     addRow(reviewConsumoEl, 'Fecha de consumo', form.fecha_consumo.value);
     addRow(reviewConsumoEl, 'Monto', form.monto.value ? ('$' + form.monto.value + ' MXN') : '');
     addRow(reviewConsumoEl, 'Forma de pago', form.forma_pago.value);
-    addRow(reviewConsumoEl, 'Movimiento', form.folio_ticket.value.trim());
+    addRow(
+      reviewConsumoEl,
+      'Movimiento',
+      form.folio_ticket.value.trim() ||
+        (sinMovimientoCheckbox.checked ? 'No cuenta con él — se identificará por RFC, fecha, monto y correo' : ''),
+    );
     var csfFile = document.getElementById('csf').files[0];
     var ticketFile = document.getElementById('ticket_file').files[0];
     addRow(reviewConsumoEl, 'CSF adjunta', csfFile ? csfFile.name : (csfOptional ? 'No adjuntada — ya en archivo' : ''));
@@ -454,6 +482,7 @@
           monto: form.monto.value,
           forma_pago: form.forma_pago.value,
           folio_ticket: form.folio_ticket.value.trim(),
+          sin_movimiento: sinMovimientoCheckbox.checked,
           ticket_subtotal: lastTicketSubtotal,
           csf: prepared.csf,
           ticket: prepared.ticket,
