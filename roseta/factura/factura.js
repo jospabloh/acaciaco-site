@@ -385,7 +385,7 @@
     addRow(reviewConsumoEl, 'Fecha de consumo', form.fecha_consumo.value);
     addRow(reviewConsumoEl, 'Monto', form.monto.value ? ('$' + form.monto.value + ' MXN') : '');
     addRow(reviewConsumoEl, 'Forma de pago', form.forma_pago.value);
-    addRow(reviewConsumoEl, 'Folio de ticket', form.folio_ticket.value.trim());
+    addRow(reviewConsumoEl, 'Movimiento', form.folio_ticket.value.trim());
     var csfFile = document.getElementById('csf').files[0];
     var ticketFile = document.getElementById('ticket_file').files[0];
     addRow(reviewConsumoEl, 'CSF adjunta', csfFile ? csfFile.name : (csfOptional ? 'No adjuntada — ya en archivo' : ''));
