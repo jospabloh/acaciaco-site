@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Estatus de tu factura · Roseta Café</title>
+  <meta name="description" content="Consulta si la factura de tu consumo en Roseta Café ya fue emitida o sigue pendiente, con tu folio o tu RFC." />
+  <link rel="canonical" href="https://acaciaco.com.mx/roseta/factura/estatus" />
+  <meta name="robots" content="noindex, follow" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%239E1B2A'/%3E%3Ccircle cx='29' cy='33' r='19' stroke='white' stroke-width='3' fill='none'/%3E%3Cpath d='M46 22c6 .5 10 4 10 9s-4 8.5-10 9' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Cpath d='M29 44c-7-2-11-7.5-11-14 0-1.5.2-3 .6-4.4C21.5 27 25 30.5 26 35.5c1-5.5 5-9 7.8-7.1 2.4 1.6 3.2 4.6 3.2 7.6 0 6.3-3.3 11.3-8 8z' fill='white'/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#9E1B2A" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('acacia-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/styles/base.css" />
+
+  <style>
+    :root{ --primary:#9E1B2A; --glow:rgba(158,27,42,.22); --roseta-blush:#F1DCD6; --roseta-ink:#3C0B12; }
+    .btn-primary{ background: linear-gradient(180deg, #B23A47, var(--primary)); box-shadow: 0 8px 24px var(--glow), inset 0 1px 0 rgba(255,255,255,.18); }
+
+    .es-shell{max-width:640px;margin:0 auto;}
+    .es-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-card);box-shadow:var(--shadow-md);padding:clamp(1.5rem,4vw,2.5rem);}
+    .es-row{display:flex;gap:.8rem;}
+    .es-row input{flex:1;padding:.8rem 1rem;border:1px solid var(--border);border-radius:.7rem;font:inherit;background:var(--bg);color:var(--text);}
+    .es-row input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--glow);}
+    .es-hint{font-size:.82rem;color:var(--text-muted);margin-top:.5rem;}
+    #es-status{margin-top:1rem;font-size:.92rem;}
+    #es-status.error{color:#c33;}
+
+    .es-result{display:none;margin-top:1.6rem;border-top:1px solid var(--border);padding-top:1.6rem;}
+    .es-result.show{display:block;}
+    .es-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;border-radius:99px;font-size:.85rem;font-weight:700;}
+    .es-badge.pendiente{background:#FFF3D6;color:#8A5A00;}
+    .es-badge.facturada{background:#DCFCE7;color:#0a7;}
+    .es-result dl{display:grid;grid-template-columns:auto 1fr;gap:.4rem 1rem;margin-top:1.2rem;font-size:.92rem;}
+    .es-result dt{color:var(--text-muted);}
+    .es-result dd{font-weight:600;}
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+  <header class="site-nav" role="banner">
+    <div class="nav-inner">
+      <a href="/roseta" class="brand" aria-label="Roseta Café inicio">
+        <svg width="32" height="32" viewBox="0 0 120 120" fill="none" style="color:var(--primary)"><circle cx="54" cy="60" r="42" stroke="currentColor" stroke-width="8"/><path d="M93 42c12 1 20 8 20 18s-8 17-20 18" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><path d="M54 84c-14-4-22-15-22-28 0-3 .4-6 1.2-9C39 51 46 58 48 68c2-11 10-18 15.6-14.2C68.4 57 70 62 70 67.4c0 12.6-6.6 22.6-16 24.6z" fill="currentColor"/></svg>
+        Roseta Café
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links" role="list">
+          <li><a href="/roseta">Inicio</a></li>
+          <li><a href="/roseta/factura">Solicitar factura</a></li>
+          <li><a href="/roseta/factura/estatus" aria-current="page">Estatus</a></li>
+        </ul>
+      </nav>
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <a href="/roseta/factura" class="btn btn-primary btn-sm nav-cta">Solicitar factura</a>
+        <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section" style="padding-block: clamp(6rem, 12vw, 8rem) 2rem;">
+      <div class="container es-shell">
+        <div class="reveal" style="margin-bottom:2.2rem;">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Facturación · Roseta Café</span>
+          <h1 style="margin-top:1rem;">¿Ya está lista tu factura?</h1>
+          <p class="lead" style="margin-top:.6rem;">Ingresa el folio que te dimos al enviar tu solicitud, o tu RFC, para ver el estatus.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0;">
+      <div class="container es-shell">
+        <div class="es-card reveal">
+          <form id="es-form">
+            <div class="es-row">
+              <input id="es-query" name="query" placeholder="Folio (RF-0000) o RFC" required autocomplete="off" />
+              <button class="btn btn-primary" type="submit">Consultar</button>
+            </div>
+            <p class="es-hint">Ejemplo de folio: RF-2026-0001</p>
+          </form>
+          <p id="es-status" role="status" aria-live="polite"></p>
+
+          <div class="es-result" id="es-result">
+            <span class="es-badge" id="es-badge"></span>
+            <dl id="es-data"></dl>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo" style="padding-top:2.5rem;">
+    <div class="footer-bottom" style="border-top:0;">
+      <span>© 2026 Roseta Café · Sitio operado por ACACIA</span>
+      <a href="mailto:roseta.cafeteria@gmail.com">roseta.cafeteria@gmail.com</a>
+    </div>
+  </footer>
+
+  <div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Aviso de cookies" aria-live="polite">
+    <h4>Cookies y privacidad</h4>
+    <p>Usamos cookies para mejorar tu experiencia. Consulta nuestra <a href="/legal/privacidad">política de privacidad</a>.</p>
+    <div class="actions">
+      <button class="btn btn-primary btn-sm" data-cookies="all">Aceptar</button>
+      <button class="btn btn-ghost btn-sm" data-cookies="essential">Solo esenciales</button>
+    </div>
+  </div>
+
+  <script src="/scripts/shared.js"></script>
+  <script src="/scripts/analytics.js" defer></script>
+  <script>
+  (function () {
+    var form = document.getElementById('es-form');
+    var statusEl = document.getElementById('es-status');
+    var resultEl = document.getElementById('es-result');
+    var badgeEl = document.getElementById('es-badge');
+    var dataEl = document.getElementById('es-data');
+    var input = document.getElementById('es-query');
+
+    function labelFor(key) {
+      return {
+        folio: 'Folio', fecha_solicitud: 'Solicitada el', sucursal: 'Sucursal',
+        monto: 'Monto', fecha_facturacion: 'Facturada el'
+      }[key] || key;
+    }
+
+    function render(json) {
+      resultEl.classList.add('show');
+      badgeEl.className = 'es-badge ' + (json.estatus === 'Facturada' ? 'facturada' : 'pendiente');
+      badgeEl.textContent = json.estatus === 'Facturada' ? '✓ Facturada' : '⏳ Pendiente';
+      dataEl.innerHTML = '';
+      ['folio', 'fecha_solicitud', 'sucursal', 'monto', 'fecha_facturacion'].forEach(function (key) {
+        if (!json[key]) return;
+        var dt = document.createElement('dt'); dt.textContent = labelFor(key);
+        var dd = document.createElement('dd'); dd.textContent = json[key];
+        dataEl.appendChild(dt); dataEl.appendChild(dd);
+      });
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var q = input.value.trim();
+      if (!q) return;
+      resultEl.classList.remove('show');
+      statusEl.className = '';
+      statusEl.textContent = 'Buscando…';
+      fetch('/api/roseta/factura-status?query=' + encodeURIComponent(q))
+        .then(function (r) { return r.json().then(function (json) { return { ok: r.ok, json: json }; }); })
+        .then(function (res) {
+          if (!res.ok || !res.json || !res.json.found) {
+            statusEl.className = 'error';
+            statusEl.textContent = 'No encontramos una solicitud con ese dato. Verifica tu folio o RFC, o escríbenos a roseta.cafeteria@gmail.com.';
+            return;
+          }
+          statusEl.textContent = '';
+          render(res.json);
+        })
+        .catch(function () {
+          statusEl.className = 'error';
+          statusEl.textContent = 'No se pudo consultar el estatus. Intenta de nuevo en un momento.';
+        });
+    });
+
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var folio = params.get('folio');
+      if (folio) { input.value = folio; form.dispatchEvent(new Event('submit')); }
+    } catch (e) {}
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roseta Café · Café de especialidad en Aguascalientes</title>
+<meta name="description" content="Roseta Café: café 100% mexicano y cocina fresca en cuatro sucursales de Aguascalientes. Conoce el menú, encuentra tu sucursal y solicita tu factura en línea.">
+<link rel="canonical" href="https://acaciaco.com.mx/roseta">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_MX">
+<meta property="og:url" content="https://acaciaco.com.mx/roseta">
+<meta property="og:title" content="Roseta Café · Café de especialidad en Aguascalientes">
+<meta property="og:description" content="Café 100% mexicano y cocina fresca en cuatro sucursales de Aguascalientes.">
+<meta property="og:site_name" content="Roseta Café">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Roseta Café · Café de especialidad en Aguascalientes">
+<meta name="twitter:description" content="Café 100% mexicano y cocina fresca en cuatro sucursales de Aguascalientes.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%239E1B2A'/%3E%3Ccircle cx='29' cy='33' r='19' stroke='white' stroke-width='3' fill='none'/%3E%3Cpath d='M46 22c6 .5 10 4 10 9s-4 8.5-10 9' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Cpath d='M29 44c-7-2-11-7.5-11-14 0-1.5.2-3 .6-4.4C21.5 27 25 30.5 26 35.5c1-5.5 5-9 7.8-7.1 2.4 1.6 3.2 4.6 3.2 7.6 0 6.3-3.3 11.3-8 8z' fill='white'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#9E1B2A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CafeOrCoffeeShop",
+  "name": "Roseta Café",
+  "url": "https://acaciaco.com.mx/roseta",
+  "servesCuisine": "Café de especialidad",
+  "slogan": "Café 100% mexicano",
+  "email": "roseta.cafeteria@gmail.com",
+  "sameAs": [
+    "https://www.facebook.com/p/Roseta-Caf%C3%A9-100063471039734/",
+    "https://instagram.com/roseta.cafe"
+  ],
+  "areaServed": "Aguascalientes, México"
+}
+</script>
+<style>
+:root{
+  --wine:#9E1B2A;
+  --wine-deep:#6B121E;
+  --wine-ink:#3C0B12;
+  --cream:#FAF3EC;
+  --cream-card:#FFFFFF;
+  --blush:#F1DCD6;
+  --blush-line:rgba(158,27,42,.16);
+  --ink:#241512;
+  --muted:#7A6660;
+  --pad:clamp(20px,5vw,72px);
+  --maxw:1200px;
+  --shadow-card:0 1px 0 rgba(255,255,255,.6) inset,0 18px 40px -28px rgba(60,11,18,.28);
+  --shadow-float:0 30px 70px -40px rgba(60,11,18,.4),0 6px 18px -12px rgba(60,11,18,.22);
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif;font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased;
+  font-feature-settings:"kern" 1,"liga" 1}
+h1,h2,h3{font-family:"Bodoni Moda",Georgia,serif;font-weight:600;line-height:1.05;margin:0;letter-spacing:-.01em;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+.eyebrow{font-family:"Inter";font-size:12px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;display:inline-flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:26px;height:1px;background:currentColor;opacity:.6}
+.mark{color:var(--wine)}
+.btn{position:relative;display:inline-flex;align-items:center;gap:.55em;font-family:"Inter";font-weight:600;font-size:15px;
+  padding:14px 26px;border-radius:99px;border:1px solid transparent;cursor:pointer;overflow:hidden;isolation:isolate;
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .3s ease,color .3s ease,border-color .3s ease}
+.btn::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.4) 50%,transparent 70%);
+  transform:translateX(-120%);transition:transform .7s var(--ease)}
+.btn:hover::after{transform:translateX(120%)}
+.btn:focus-visible{outline:3px solid var(--wine);outline-offset:3px}
+.btn-wine{background:var(--wine);color:#fff;box-shadow:0 10px 24px -12px rgba(158,27,42,.6)}
+.btn-wine:hover{background:var(--wine-deep);transform:translateY(-2px);box-shadow:0 16px 32px -14px rgba(158,27,42,.7)}
+.btn-ghost{border-color:var(--blush-line);background:transparent;color:var(--wine-ink)}
+.btn-ghost:hover{background:var(--blush);border-color:var(--wine);transform:translateY(-2px)}
+.btn-cream{background:var(--cream);color:var(--wine-ink)}
+.btn-cream:hover{background:#fff;transform:translateY(-2px)}
+.btn svg{transition:transform .35s var(--ease)}
+.btn:hover svg{transform:translateX(3px)}
+a:focus-visible{outline:3px solid var(--wine);outline-offset:3px;border-radius:4px}
+
+/* NAV */
+header.nav{position:sticky;top:0;z-index:60;background:rgba(250,243,236,.86);backdrop-filter:blur(14px) saturate(1.15);
+  border-bottom:1px solid var(--blush-line);transition:background .4s ease,box-shadow .4s ease}
+header.nav.scrolled{background:rgba(250,243,236,.97);box-shadow:0 14px 40px -30px rgba(60,11,18,.5)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:74px;transition:height .4s var(--ease)}
+header.nav.scrolled .wrap{height:62px}
+.brand{display:flex;align-items:center;gap:11px;color:var(--wine-ink);font-family:"Bodoni Moda";font-weight:600;font-size:20px;letter-spacing:.01em}
+.brand svg{width:32px;height:32px;flex:none}
+.nav-links{display:flex;gap:28px;color:var(--muted);font-size:14px;font-weight:500}
+.nav-links a{position:relative;padding:4px 0;transition:color .25s ease}
+.nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:1.5px;background:var(--wine);
+  transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.nav-links a:hover{color:var(--wine-ink)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav .btn{padding:9px 18px;font-size:14px}
+@media(max-width:860px){.nav-links{display:none}}
+
+/* HERO */
+.hero{position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(50% 60% at 92% 10%,var(--blush),transparent 60%)}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.08fr .92fr;gap:56px;align-items:center;
+  padding-top:88px;padding-bottom:96px}
+.hero h1{font-size:clamp(42px,6vw,78px);margin:22px 0 0;letter-spacing:-.02em}
+.hero h1 em{font-style:italic;color:var(--wine)}
+.hero-sub{margin-top:24px;max-width:42ch;color:var(--muted);font-size:clamp(17px,2vw,19px);line-height:1.62}
+.hero-cta{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap}
+.hero-trust{margin-top:38px;display:flex;gap:12px 26px;flex-wrap:wrap;color:var(--muted);font-size:13.5px;
+  padding-top:24px;border-top:1px solid var(--blush-line)}
+.hero-trust span{display:flex;align-items:center;gap:8px}
+.hero-trust svg{flex:none;color:var(--wine)}
+.hero .eyebrow,.hero h1,.hero-sub,.hero-cta,.hero-trust{opacity:0;transform:translateY(16px);animation:rise .9s var(--ease) forwards}
+.hero h1{animation-delay:.1s}.hero-sub{animation-delay:.2s}.hero-cta{animation-delay:.3s}.hero-trust{animation-delay:.4s}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* HERO DEVICE — signature: the rosetta pour inside the ring */
+.device{position:relative;aspect-ratio:1/1;max-width:420px;margin-left:auto;border-radius:50%;
+  background:radial-gradient(60% 60% at 40% 30%,#fff,var(--cream) 70%);box-shadow:var(--shadow-float);
+  display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.94);animation:pop 1s var(--ease) .3s forwards}
+@keyframes pop{to{opacity:1;transform:none}}
+.device svg{width:78%;height:78%}
+.device .ring{stroke:var(--wine)}
+.device .handle{stroke:var(--wine)}
+.device .rosetta{stroke:var(--wine-deep);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:340;stroke-dashoffset:340;animation:pour 2.4s var(--ease) .9s forwards}
+@keyframes pour{to{stroke-dashoffset:0}}
+@media(max-width:900px){
+  .hero .wrap{grid-template-columns:1fr;gap:34px;padding-top:48px;padding-bottom:56px}
+  .device{max-width:280px;margin:0 auto;order:-1}
+}
+
+/* DIVIDER — small recurring rosetta squiggle */
+.divider{display:flex;justify-content:center;padding-block:6px}
+.divider svg{color:var(--wine);opacity:.55}
+
+section{padding-top:clamp(60px,8vw,108px);padding-bottom:clamp(60px,8vw,108px)}
+.sec-head{max-width:62ch}
+.sec-head h2{font-size:clamp(32px,4.4vw,50px);margin-top:16px;letter-spacing:-.018em}
+.sec-head p{margin-top:16px;color:var(--muted);font-size:17.5px;max-width:56ch;line-height:1.6}
+.sec-head.center{margin-inline:auto;text-align:center}
+
+/* QUICK STRIP */
+.strip{background:var(--wine-ink);color:var(--blush)}
+.strip .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;padding-top:26px;padding-bottom:26px}
+.strip .it{position:relative;padding-left:18px}
+.strip .it::before{content:"";position:absolute;left:0;top:3px;bottom:3px;width:2px;background:var(--wine);border-radius:2px}
+.strip .it b{display:block;font-family:"Bodoni Moda";color:#fff;font-size:22px;font-weight:600;letter-spacing:-.01em}
+.strip .it span{font-size:12.5px;letter-spacing:.02em}
+@media(max-width:680px){.strip .wrap{grid-template-columns:1fr 1fr;gap:20px 22px}}
+
+/* NAME NOTE */
+.namenote{background:var(--blush)}
+.namenote .wrap{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.namenote svg{width:64px;height:64px;flex:none;color:var(--wine)}
+.namenote p{font-size:18px;max-width:60ch;color:var(--wine-ink);font-style:italic;font-family:"Bodoni Moda";font-weight:500;line-height:1.5}
+
+/* MENU */
+.menu-cols{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:52px}
+.menu-block{background:var(--cream-card);border:1px solid var(--blush-line);border-radius:22px;padding:36px 32px;box-shadow:var(--shadow-card)}
+.menu-block h3{font-size:22px;display:flex;align-items:center;gap:12px}
+.menu-block h3 .tag{font-family:"Inter";font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--wine);background:var(--blush);padding:5px 12px;border-radius:999px}
+.menu-block ul{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:14px}
+.menu-block li{display:flex;gap:12px;align-items:baseline;padding-bottom:14px;border-bottom:1px solid var(--blush-line);font-size:15.5px}
+.menu-block li:last-child{border-bottom:0;padding-bottom:0}
+.menu-block li b{font-family:"Bodoni Moda";font-weight:600;font-size:16.5px;color:var(--wine-ink)}
+.menu-block li span{color:var(--muted);font-size:14px}
+@media(max-width:820px){.menu-cols{grid-template-columns:1fr}}
+
+/* SUCURSALES */
+.branches{background:var(--wine-ink);color:var(--blush)}
+.branches .sec-head .eyebrow{color:var(--blush)}
+.branches .sec-head h2{color:#fff}
+.branches .sec-head p{color:#D9B6AF}
+.bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:48px}
+.bcard{background:rgba(250,243,236,.05);border:1px solid rgba(250,243,236,.14);border-radius:18px;padding:26px 22px;
+  transition:transform .4s var(--ease),border-color .4s ease,background .4s ease}
+.bcard:hover{transform:translateY(-4px);border-color:rgba(250,243,236,.3);background:rgba(250,243,236,.08)}
+.bcard .bi{width:30px;height:30px;color:var(--blush)}
+.bcard h4{font-family:"Bodoni Moda";font-size:19px;margin-top:14px;color:#fff}
+.bcard p{margin-top:8px;font-size:13.5px;color:#D9B6AF;line-height:1.5}
+.bcard a{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:13px;font-weight:600;color:var(--blush)}
+.bcard a:hover{color:#fff}
+@media(max-width:920px){.bgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.bgrid{grid-template-columns:1fr}}
+
+/* VALUES */
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:50px}
+.v{padding:26px 24px;border:1px solid var(--blush-line);border-radius:18px;background:var(--cream-card);box-shadow:var(--shadow-card);
+  transition:transform .4s var(--ease)}
+.v:hover{transform:translateY(-4px)}
+.v svg{width:32px;height:32px;color:var(--wine)}
+.v h4{font-family:"Bodoni Moda";font-size:20px;margin-top:16px}
+.v p{margin-top:9px;color:var(--muted);font-size:15px;line-height:1.55}
+@media(max-width:820px){.vgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.vgrid{grid-template-columns:1fr}}
+
+/* FACTURA TEASER */
+.fact{background:var(--blush)}
+.fact-panel{display:grid;grid-template-columns:1.1fr .9fr;gap:44px;align-items:center}
+.fact-steps{display:grid;gap:16px;margin-top:26px}
+.fstep{display:flex;gap:14px;align-items:flex-start}
+.fstep .fn{font-family:"Bodoni Moda";font-size:15px;color:var(--wine);font-weight:600;flex:none;width:26px}
+.fstep div b{display:block;font-size:15.5px;color:var(--wine-ink)}
+.fstep div span{font-size:14px;color:var(--muted)}
+.fact-card{background:var(--cream-card);border-radius:22px;padding:38px 34px;box-shadow:var(--shadow-float);text-align:center}
+.fact-card svg{width:46px;height:46px;color:var(--wine);margin:0 auto}
+.fact-card h3{font-size:22px;margin-top:16px}
+.fact-card p{margin-top:10px;color:var(--muted);font-size:14.5px}
+.fact-card .btn{width:100%;justify-content:center;margin-top:20px}
+.fact-card .status-link{display:block;margin-top:14px;font-size:13.5px;color:var(--wine);font-weight:600}
+@media(max-width:880px){.fact-panel{grid-template-columns:1fr}}
+
+/* QUOTE */
+.quote-sec{position:relative;background:var(--wine);color:#fff;overflow:hidden}
+.quote-sec::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(60% 80% at 50% -10%,rgba(255,255,255,.12),transparent 55%)}
+.quote-sec .wrap{position:relative;max-width:760px;text-align:center}
+.quote-sec blockquote{position:relative;margin:0;font-family:"Bodoni Moda";font-style:italic;font-weight:500;
+  font-size:clamp(28px,4vw,46px);line-height:1.2;letter-spacing:-.01em}
+.quote-sec cite{display:block;margin-top:20px;font-style:normal;font-size:13.5px;color:var(--blush);letter-spacing:.1em;text-transform:uppercase}
+
+/* CTA */
+.cta{background:var(--cream)}
+.cta .panel{background:linear-gradient(160deg,var(--wine),var(--wine-deep));color:#fff;
+  border-radius:28px;padding:clamp(34px,6vw,64px);display:grid;grid-template-columns:1fr 1fr;gap:48px;
+  position:relative;overflow:hidden;box-shadow:var(--shadow-float)}
+.cta .panel::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(50% 70% at 88% 8%,rgba(255,255,255,.14),transparent 60%);pointer-events:none}
+.cta .eyebrow{color:var(--blush)}
+.cta h2{font-size:clamp(30px,4vw,44px);margin-top:14px;color:#fff;position:relative;letter-spacing:-.018em}
+.cta .ctxt{margin-top:16px;color:#EAD1CB;position:relative;max-width:38ch}
+.cta .info{margin-top:28px;display:grid;gap:14px;position:relative}
+.cta .info a,.cta .info div{display:flex;gap:12px;align-items:flex-start;font-size:14.5px}
+.cta .info .who{display:block;color:#EAD1CB;font-size:12.5px;margin-bottom:1px}
+.cta .info a:hover{color:var(--blush)}
+.cta .info svg{flex:none;margin-top:2px}
+.form{position:relative;display:grid;gap:13px}
+.field label{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#EAD1CB;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);
+  border-radius:11px;padding:13px 15px;color:#fff;font-family:inherit;font-size:15px;
+  transition:border-color .25s ease,background .25s ease,box-shadow .25s ease}
+.field input::placeholder,.field textarea::placeholder{color:#D9B6AF}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blush);
+  background:rgba(255,255,255,.14);box-shadow:0 0 0 3px rgba(255,255,255,.14)}
+.field select option{color:var(--ink)}
+.form .btn-cream{margin-top:6px;justify-content:center;width:100%}
+.form small{color:#EAD1CB;font-size:12px;text-align:center}
+@media(max-width:880px){.cta .panel{grid-template-columns:1fr;gap:30px}}
+
+/* FOOTER */
+footer{position:relative;background:var(--wine-ink);color:#D9B6AF;padding:48px 0 34px}
+footer .wrap{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
+footer a{transition:color .25s ease}
+footer .brand{color:#fff;margin-bottom:8px}
+footer .fcol{font-size:14px;display:grid;gap:9px;max-width:30ch}
+footer .fcol strong{color:#fff;font-family:"Inter";font-weight:600}
+footer a:hover{color:#fff}
+footer .legal{width:100%;border-top:1px solid rgba(217,182,175,.2);margin-top:32px;padding-top:20px;
+  font-size:12.5px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .75s var(--ease),transform .75s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal-group>*{opacity:0;transform:translateY(20px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal-group.in>*{opacity:1;transform:none}
+.reveal-group.in>*:nth-child(2){transition-delay:.08s}
+.reveal-group.in>*:nth-child(3){transition-delay:.16s}
+.reveal-group.in>*:nth-child(4){transition-delay:.24s}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal,.reveal-group>*,.hero .eyebrow,.hero h1,.hero-sub,.hero-cta,.hero-trust,.device,.device .rosetta{opacity:1!important;transform:none!important;stroke-dashoffset:0!important}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Roseta Café inicio">
+      <svg viewBox="0 0 120 120" fill="none"><circle class="ring" cx="54" cy="60" r="42" stroke="currentColor" stroke-width="7"/><path class="handle" d="M93 42c12 1 20 8 20 18s-8 17-20 18" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><path d="M54 84c-14-4-22-15-22-28 0-3 .4-6 1.2-9C39 51 46 58 48 68c2-11 10-18 15.6-14.2C68.4 57 70 62 70 67.4c0 12.6-6.6 22.6-16 24.6z" fill="currentColor"/></svg>
+      Roseta Café
+    </a>
+    <nav class="nav-links" aria-label="Principal">
+      <a href="#especialidades">Especialidades</a>
+      <a href="#sucursales">Sucursales</a>
+      <a href="#facturacion">Facturación</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <a class="btn btn-wine" href="/roseta/factura">Solicitar factura</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-copy">
+      <p class="eyebrow mark">Café de especialidad · Aguascalientes</p>
+      <h1>Café 100% <em>mexicano</em>, hecho a mano.</h1>
+      <p class="hero-sub">De grano a taza en cuatro sucursales de Aguascalientes: café de método, clásicos con acento y una cocina fresca para acompañar. El mismo cuidado, todos los días.</p>
+      <div class="hero-cta">
+        <a class="btn btn-wine" href="#sucursales">Ver sucursales
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="/roseta/factura">Solicitar tu factura →</a>
+      </div>
+      <div class="hero-trust">
+        <span><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1c-2.8 0-5 2.2-5 5 0 3.6 5 9 5 9s5-5.4 5-9c0-2.8-2.2-5-5-5z" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="6" r="1.7" stroke="currentColor" stroke-width="1.3"/></svg>4 sucursales en Aguascalientes</span>
+        <span><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M12 4c-3 2-3 4-3 6s1.5 3 3 3 3-1.4 3-3-0-4-3-6z" stroke="currentColor" stroke-width="1.3"/><path d="M4 13h11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Café de especialidad</span>
+        <span><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v3l2 1.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Cocina fresca todos los días</span>
+      </div>
+    </div>
+
+    <div class="device" aria-hidden="true">
+      <svg viewBox="0 0 200 200" fill="none">
+        <circle class="ring" cx="90" cy="100" r="70" stroke-width="9"/>
+        <circle cx="90" cy="100" r="56" stroke="var(--blush-line)" stroke-width="2"/>
+        <path class="handle" d="M158 66c20 2 34 14 34 34s-14 32-34 34" stroke-width="9" stroke-linecap="round"/>
+        <!-- rosetta pour -->
+        <path class="rosetta" d="M90 138c0-40 0-56 0-72M90 122c-14-6-22-16-16-24 5-7 16-4 16 6M90 108c-16-5-25-15-19-23 5-6 16-3 19 7M90 94c-14-5-22-14-17-21 5-6 15-3 17 6M90 80c-11-4-17-11-13-17 4-5 12-2 13 5" stroke-width="3"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK STRIP -->
+<div class="strip">
+  <div class="wrap">
+    <div class="it"><b>100%</b><span>Café mexicano</span></div>
+    <div class="it"><b>4</b><span>Sucursales en Aguascalientes</span></div>
+    <div class="it"><b>A mano</b><span>Cada bebida, cada plato</span></div>
+    <div class="it"><b>3 días</b><span>Hábiles para tu factura</span></div>
+  </div>
+</div>
+
+<div class="divider" aria-hidden="true">
+  <svg width="120" height="16" viewBox="0 0 120 16" fill="none"><path d="M60 15c0-10 0-10 0-14M60 10c-6-3-9-7-6-10 2-3 6-1 6 2M60 10c6-3 9-7 6-10-2-3-6-1-6 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+</div>
+
+<!-- NAME NOTE -->
+<section class="namenote">
+  <div class="wrap reveal">
+    <svg viewBox="0 0 64 64" fill="none"><path d="M32 58c0-30 0-42 0-54M32 44c-11-5-17-13-13-19 4-6 13-3 13 5M32 30c-13-4-20-12-15-19 4-5 13-2 15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+    <p>Como la rosetta: el trazo en forma de hoja que un barista dibuja al servir un latte perfecto. Así nace cada taza en Roseta.</p>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="especialidades">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow mark">Lo que servimos</p>
+      <h2>Especialidad en la barra, cuidado en la cocina.</h2>
+      <p>Una carta pensada para quedarse: cafés de método y clásicos con acento, más una cocina fresca para acompañar.</p>
+    </div>
+    <div class="menu-cols">
+      <article class="menu-block reveal">
+        <h3>Café <span class="tag">Barra</span></h3>
+        <ul>
+          <li><div><b>Latte</b><br><span>Espresso, jarabe y leche vaporizada</span></div></li>
+          <li><div><b>Mocha latte</b><br><span>Espresso, chocolate y leche vaporizada</span></div></li>
+          <li><div><b>Frappé</b><br><span>Con y sin café, en varios sabores</span></div></li>
+          <li><div><b>Cold brew</b><br><span>Solo o con tónica y limón</span></div></li>
+          <li><div><b>Cortado</b><br><span>Espresso equilibrado con leche</span></div></li>
+          <li><div><b>Chai de carbón activado</b><br><span>16 oz</span></div></li>
+        </ul>
+      </article>
+      <article class="menu-block reveal">
+        <h3>Cocina <span class="tag">Fresca</span></h3>
+        <ul>
+          <li><div><b>Baguette serrano y manchego</b><br><span>Lechuga, jitomate, pepino, aguacate, mostaza y mayonesa · con papas</span></div></li>
+          <li><div><b>Huevo revuelto con espinaca y panela</b><br><span>Con salsa y pan tostado</span></div></li>
+          <li><div><b>Ensalada verde con atún</b><br><span>Elote, crutones, panela, jitomate y pepino</span></div></li>
+          <li><div><b>Pan tostado dulce</b><br><span>Crema de avellana o cacahuate, plátano y nuez</span></div></li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- SUCURSALES -->
+<section class="branches" id="sucursales">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Sucursales</p>
+      <h2>Cuatro puntos de encuentro en Aguascalientes.</h2>
+      <p>La misma taza, más cerca de ti. Encuentra la sucursal Roseta que te quede a mano.</p>
+    </div>
+    <div class="bgrid reveal-group">
+      <div class="bcard">
+        <svg class="bi" viewBox="0 0 24 24" fill="none"><path d="M12 2c-4 0-7 3-7 7 0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="9" r="2.4" stroke="currentColor" stroke-width="1.7"/></svg>
+        <h4>Tres Centurias</h4>
+        <p>Zona Tres Centurias, Aguascalientes</p>
+        <a href="https://www.google.com/maps/search/?api=1&query=Roseta+Cafe+Tres+Centurias" target="_blank" rel="noopener">Ver en Maps →</a>
+      </div>
+      <div class="bcard">
+        <svg class="bi" viewBox="0 0 24 24" fill="none"><path d="M12 2c-4 0-7 3-7 7 0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="9" r="2.4" stroke="currentColor" stroke-width="1.7"/></svg>
+        <h4>Plaza Universidad</h4>
+        <p>Av. Universidad 935 N21, Aguascalientes</p>
+        <a href="https://www.google.com/maps/search/?api=1&query=Roseta+Cafe+Plaza+Universidad+Aguascalientes" target="_blank" rel="noopener">Ver en Maps →</a>
+      </div>
+      <div class="bcard">
+        <svg class="bi" viewBox="0 0 24 24" fill="none"><path d="M12 2c-4 0-7 3-7 7 0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="9" r="2.4" stroke="currentColor" stroke-width="1.7"/></svg>
+        <h4>Lomas del Campestre</h4>
+        <p>Fracc. Lomas del Campestre, Aguascalientes</p>
+        <a href="https://www.google.com/maps/search/?api=1&query=Roseta+Cafe+Lomas+del+Campestre+Aguascalientes" target="_blank" rel="noopener">Ver en Maps →</a>
+      </div>
+      <div class="bcard">
+        <svg class="bi" viewBox="0 0 24 24" fill="none"><path d="M12 2c-4 0-7 3-7 7 0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="9" r="2.4" stroke="currentColor" stroke-width="1.7"/></svg>
+        <h4>Exseminario</h4>
+        <p>Zona Exseminario, Aguascalientes</p>
+        <a href="https://www.google.com/maps/search/?api=1&query=Roseta+Cafe+Exseminario+Aguascalientes" target="_blank" rel="noopener">Ver en Maps →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section>
+  <div class="wrap">
+    <div class="sec-head center reveal" style="margin-inline:auto;text-align:center">
+      <p class="eyebrow mark" style="justify-content:center">Por qué Roseta</p>
+      <h2>Café que se nota, negocio que crece.</h2>
+    </div>
+    <div class="vgrid reveal-group">
+      <div class="v">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M4 9h16M4 15h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <h4>100% mexicano</h4>
+        <p>Café mexicano de principio a fin, servido con la misma receta en cada sucursal.</p>
+      </div>
+      <div class="v">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2c-4 0-7 3-7 7 0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z" stroke="currentColor" stroke-width="1.6"/></svg>
+        <h4>Ingredientes frescos</h4>
+        <p>Cocina de producción diaria: nada de más, nada de menos.</p>
+      </div>
+      <div class="v">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <h4>Un punto de encuentro</h4>
+        <p>Cuatro sucursales pensadas para quedarse a trabajar, platicar o solo tomarse un café.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FACTURACIÓN -->
+<section class="fact" id="facturacion">
+  <div class="wrap fact-panel">
+    <div class="reveal">
+      <p class="eyebrow mark">Facturación</p>
+      <h2>¿Necesitas tu factura por un consumo?</h2>
+      <p style="margin-top:16px;color:var(--muted);font-size:17px;max-width:48ch">Llena el formulario, adjunta tu Constancia de Situación Fiscal vigente y te la enviamos por correo — sin ir y venir de mensajes.</p>
+      <div class="fact-steps">
+        <div class="fstep"><span class="fn">01</span><div><b>Cuéntanos tus datos</b><span>Y los de tu consumo</span></div></div>
+        <div class="fstep"><span class="fn">02</span><div><b>Adjunta tu CSF vigente</b><span>El PDF de tu Constancia de Situación Fiscal</span></div></div>
+        <div class="fstep"><span class="fn">03</span><div><b>Recíbela por correo</b><span>En un máximo de 3 días hábiles</span></div></div>
+      </div>
+    </div>
+    <div class="fact-card reveal">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.6"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="1.6"/><line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="1.6"/><line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="1.6"/></svg>
+      <h3>Solicita tu factura</h3>
+      <p>Un formulario, tu CSF y listo.</p>
+      <a class="btn btn-wine" href="/roseta/factura">Solicitar factura →</a>
+      <a class="status-link" href="/roseta/factura/estatus">¿Ya la pediste? Consulta el estatus →</a>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote-sec">
+  <div class="wrap reveal">
+    <blockquote>"Café 100% mexicano."</blockquote>
+    <cite>— Roseta Café</cite>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contacto">
+  <div class="wrap">
+    <div class="panel reveal">
+      <div>
+        <p class="eyebrow">Visítanos o escríbenos</p>
+        <h2>Hablemos de café.</h2>
+        <p class="ctxt">¿Ventas, alianzas o dudas sobre tu pedido? Este es el equipo Roseta.</p>
+        <div class="info">
+          <a href="https://wa.me/524494659347" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#F1DCD6"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <span><span class="who">Silvia Macías · Gerencia General y Ventas</span>449 465 9347</span></a>
+          <a href="https://wa.me/524498958291" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#F1DCD6"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <span><span class="who">José Pablo Herrera · Facturación</span>449 895 8291</span></a>
+          <a href="mailto:roseta.cafeteria@gmail.com">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="#F1DCD6" stroke-width="1.7"/><path d="M4 7l8 6 8-6" stroke="#F1DCD6" stroke-width="1.7"/></svg>
+            roseta.cafeteria@gmail.com</a>
+          <a href="https://instagram.com/roseta.cafe" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="5" stroke="#F1DCD6" stroke-width="1.7"/><circle cx="12" cy="12" r="4" stroke="#F1DCD6" stroke-width="1.7"/><circle cx="17" cy="7" r="1.2" fill="#F1DCD6"/></svg>
+            @roseta.cafe</a>
+          <a href="https://www.facebook.com/p/Roseta-Caf%C3%A9-100063471039734/" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 8h2V5h-2c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h2.2l.8-3H14V8z" stroke="#F1DCD6" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            /RosetaCafe</a>
+        </div>
+      </div>
+
+      <div class="form">
+        <div class="field"><label for="f-name">Nombre</label><input id="f-name" type="text" placeholder="Tu nombre"></div>
+        <div class="field"><label for="f-need">¿En qué te ayudamos?</label>
+          <select id="f-need">
+            <option>Información de una sucursal</option>
+            <option>Ventas al mayoreo / eventos</option>
+            <option>Trabaja con nosotros</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="field"><label for="f-msg">Mensaje</label><textarea id="f-msg" rows="3" placeholder="Cuéntanos qué necesitas"></textarea></div>
+        <button class="btn btn-cream" id="sendBtn" type="button">Enviar por WhatsApp</button>
+        <small>¿Buscas tu factura? <a href="/roseta/factura" style="color:#fff;text-decoration:underline">Solicítala aquí</a>.</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fcol">
+      <span class="brand" style="display:flex;align-items:center;gap:11px">
+        <svg width="30" height="30" viewBox="0 0 120 120" fill="none"><circle cx="54" cy="60" r="42" stroke="currentColor" stroke-width="7"/><path d="M93 42c12 1 20 8 20 18s-8 17-20 18" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><path d="M54 84c-14-4-22-15-22-28 0-3 .4-6 1.2-9C39 51 46 58 48 68c2-11 10-18 15.6-14.2C68.4 57 70 62 70 67.4c0 12.6-6.6 22.6-16 24.6z" fill="currentColor"/></svg>
+        Roseta Café</span>
+      <p style="margin-top:4px">Café de especialidad y cocina fresca en cuatro sucursales de Aguascalientes.</p>
+    </div>
+    <div class="fcol">
+      <strong>Explora</strong>
+      <a href="#especialidades">Especialidades</a>
+      <a href="#sucursales">Sucursales</a>
+      <a href="/roseta/factura">Solicitar factura</a>
+      <a href="/roseta/factura/estatus">Estatus de mi factura</a>
+    </div>
+    <div class="fcol">
+      <strong>Contacto</strong>
+      <a href="mailto:roseta.cafeteria@gmail.com">roseta.cafeteria@gmail.com</a>
+      <a href="https://wa.me/524494659347">Silvia Macías · Ventas</a>
+      <a href="https://wa.me/524498958291">José Pablo Herrera · Facturación</a>
+      <a href="https://instagram.com/roseta.cafe">@roseta.cafe</a>
+      <a href="https://www.facebook.com/p/Roseta-Caf%C3%A9-100063471039734/">Facebook</a>
+    </div>
+    <div class="legal">
+      <span>© 2026 Roseta Café. Todos los derechos reservados.</span>
+      <span>Café 100% mexicano.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('sendBtn').addEventListener('click',function(){
+  var g=function(id){return document.getElementById(id).value.trim();};
+  var txt='Hola Roseta, soy '+(g('f-name')||'(nombre)')+'. '+document.getElementById('f-need').value+'. '+g('f-msg');
+  window.open('https://wa.me/524494659347?text='+encodeURIComponent(txt),'_blank');
+});
+var io=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+},{threshold:.14,rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.reveal,.reveal-group').forEach(function(n){io.observe(n);});
+
+var nav=document.querySelector('header.nav');
+var onScroll=function(){nav.classList.toggle('scrolled',window.scrollY>24);};
+onScroll();
+window.addEventListener('scroll',onScroll,{passive:true});
+</script>
+  <script src="/scripts/analytics.js" defer></script>
+</body>
+</html>
