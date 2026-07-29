@@ -83,9 +83,31 @@
 
     .rf-honeypot{position:absolute;left:-9999px;top:-9999px;}
 
+    .rf-extract-status{font-size:.8rem;margin-top:.5rem;min-height:1.2em;color:var(--text-muted);}
+    .rf-extract-status.busy{color:var(--primary);}
+    .rf-extract-status.ok{color:#0a7;font-weight:600;}
+    .rf-extract-status.warn{color:#8A5A00;}
+
+    .rf-regimen-hint{font-size:.78rem;color:#0a7;font-weight:600;display:none;margin-top:.3rem;}
+    .rf-regimen-hint.show{display:block;}
+
     #rf-status{margin-top:1rem;font-size:.92rem;min-height:1.3em;}
     #rf-status.error{color:#c33;}
     #rf-status.info{color:var(--text-muted);}
+    #rf-review-status{margin-top:1rem;font-size:.92rem;min-height:1.3em;}
+    #rf-review-status.error{color:#c33;}
+    #rf-review-status.info{color:var(--text-muted);}
+
+    .rf-form.hide{display:none;}
+    .rf-review{display:none;}
+    .rf-review.show{display:block;}
+    .rf-review h3{margin:0 0 .3rem;}
+    .rf-review-data{display:grid;grid-template-columns:auto 1fr;gap:.4rem 1rem;font-size:.9rem;margin:1.3rem 0 0;}
+    .rf-review-data dt{color:var(--text-muted);font-weight:600;}
+    .rf-review-data dd{margin:0;}
+    .rf-review-data.section-break{margin-top:.4rem;padding-top:1rem;border-top:1px solid var(--border);}
+    .rf-review-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.6rem;}
+    .rf-review-actions .btn{flex:1;justify-content:center;}
 
     .rf-success{display:none;text-align:center;padding:1rem 0;}
     .rf-success.show{display:block;}
@@ -143,7 +165,34 @@
       <div class="container rf-shell">
         <div class="rf-card reveal">
 
-          <form id="rf-form" novalidate>
+          <form id="rf-form" class="rf-form" novalidate>
+            <fieldset class="rf-fieldset">
+              <legend>Tus documentos</legend>
+              <p class="rf-hint" style="margin:-0.6rem 0 1.1rem;">Sube tu ticket y tu CSF y adelantamos el llenado por ti — revisa siempre los datos antes de enviar.</p>
+
+              <div class="rf-field">
+                <label>Foto o PDF de tu ticket (opcional, agiliza tu factura)</label>
+                <label class="rf-drop" id="ticket-drop">
+                  <input type="file" id="ticket_file" name="ticket_file" accept=".pdf,.jpg,.jpeg,.png" />
+                  <span class="rf-drop-label">Arrastra tu ticket aquí o haz clic para subirlo</span>
+                  <span class="rf-drop-hint">PDF, JPG o PNG · máx. 4 MB</span>
+                  <span class="rf-drop-file" id="ticket-filename"></span>
+                </label>
+                <p class="rf-extract-status" id="ticket-extract-status"></p>
+              </div>
+
+              <div class="rf-field">
+                <label>Constancia de Situación Fiscal (CSF) vigente <span class="req">*</span></label>
+                <label class="rf-drop" id="csf-drop">
+                  <input type="file" id="csf" name="csf" accept=".pdf,.jpg,.jpeg,.png" required />
+                  <span class="rf-drop-label">Arrastra tu CSF aquí o haz clic para subirla</span>
+                  <span class="rf-drop-hint">PDF, JPG o PNG · vigente (no mayor a 3 meses) · máx. 4 MB</span>
+                  <span class="rf-drop-file" id="csf-filename"></span>
+                </label>
+                <p class="rf-extract-status" id="csf-extract-status"></p>
+              </div>
+            </fieldset>
+
             <fieldset class="rf-fieldset">
               <legend>Datos fiscales</legend>
 
@@ -186,6 +235,7 @@
                     <option value="625">625 · Actividades Empresariales por Plataformas Tecnológicas</option>
                     <option value="626">626 · Régimen Simplificado de Confianza (RESICO)</option>
                   </select>
+                  <span class="rf-regimen-hint" id="regimen-hint">✓ Regímenes detectados en tu CSF</span>
                 </div>
                 <div class="rf-field">
                   <label for="usocfdi">Uso de CFDI <span class="req">*</span></label>
@@ -198,6 +248,7 @@
                     <option value="S01">S01 · Sin efectos fiscales</option>
                     <option value="CP01">CP01 · Pagos</option>
                   </select>
+                  <span class="rf-hint">¿No estás seguro? Elige "Gastos en general". Nuestro equipo confirma el uso correcto antes de timbrar.</span>
                 </div>
               </div>
 
@@ -261,36 +312,24 @@
               </div>
             </fieldset>
 
-            <fieldset class="rf-fieldset">
-              <legend>Documentos</legend>
-
-              <div class="rf-field">
-                <label>Constancia de Situación Fiscal (CSF) vigente <span class="req">*</span></label>
-                <label class="rf-drop" id="csf-drop">
-                  <input type="file" id="csf" name="csf" accept=".pdf,.jpg,.jpeg,.png" required />
-                  <span class="rf-drop-label">Arrastra tu CSF aquí o haz clic para subirla</span>
-                  <span class="rf-drop-hint">PDF, JPG o PNG · vigente (no mayor a 3 meses) · máx. 4 MB</span>
-                  <span class="rf-drop-file" id="csf-filename"></span>
-                </label>
-              </div>
-
-              <div class="rf-field">
-                <label>Foto o PDF de tu ticket (opcional, agiliza tu factura)</label>
-                <label class="rf-drop" id="ticket-drop">
-                  <input type="file" id="ticket_file" name="ticket_file" accept=".pdf,.jpg,.jpeg,.png" />
-                  <span class="rf-drop-label">Arrastra tu ticket aquí o haz clic para subirlo</span>
-                  <span class="rf-drop-hint">PDF, JPG o PNG · máx. 4 MB</span>
-                  <span class="rf-drop-file" id="ticket-filename"></span>
-                </label>
-              </div>
-            </fieldset>
-
             <input type="text" name="website" id="website" class="rf-honeypot" tabindex="-1" autocomplete="off" />
 
-            <button class="btn btn-primary" type="submit" id="rf-submit" style="width:100%;justify-content:center;">Enviar solicitud</button>
+            <button class="btn btn-primary" type="submit" id="rf-submit" style="width:100%;justify-content:center;">Revisar solicitud</button>
             <p id="rf-status" role="status" aria-live="polite"></p>
             <p class="rf-hint" style="text-align:center;margin-top:.8rem;">Tus datos y tu CSF se usan únicamente para emitir tu factura. No se comparten con terceros.</p>
           </form>
+
+          <div class="rf-review" id="rf-review">
+            <h3>Revisa tu solicitud</h3>
+            <p class="rf-hint">Confirma que estos datos sean correctos. Una vez enviada, escríbenos si necesitas corregir algo.</p>
+            <dl class="rf-review-data" id="rf-review-fiscal"></dl>
+            <dl class="rf-review-data section-break" id="rf-review-consumo"></dl>
+            <div class="rf-review-actions">
+              <button type="button" class="btn btn-ghost" id="rf-review-edit">Editar</button>
+              <button type="button" class="btn btn-primary" id="rf-review-confirm">Confirmar y enviar</button>
+            </div>
+            <p id="rf-review-status" role="status" aria-live="polite"></p>
+          </div>
 
           <div class="rf-success" id="rf-success">
             <div class="rf-check">

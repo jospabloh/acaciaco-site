@@ -12,7 +12,9 @@ Static marketing site and serverless API routes for AcaciaCo properties.
   - `api/roseta/`: Roseta Café's invoice-request flow — emails the
     "Factura por consumo solicitada" request (with CSF and ticket
     attachments) via Resend, tracks status and RFC autofill data in Google
-    Sheets. See `.env.example` for required env vars.
+    Sheets, and best-effort pre-fills the form by reading the uploaded CSF
+    and ticket with Claude vision (`factura-extract.ts`). See `.env.example`
+    for required env vars.
 - `vercel.json`: Vercel runtime and routing configuration.
 
 ## Local development

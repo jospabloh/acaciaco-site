@@ -8,6 +8,21 @@
   var COMBINED_MAX_BYTES = 3.2 * 1024 * 1024; // CSF + ticket raw, combined
   var RFC_RE = /^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/;
 
+  // Régimen 605 (Sueldos y Salarios) receptors don't have deductible business
+  // activity, so in practice only S01/CP01 apply to them — this is the one
+  // régimen↔uso restriction corroborated consistently enough to encode here.
+  // Everything else stays open: this form only *requests* an invoice, it
+  // doesn't stamp the CFDI — Roseta's team confirms the final Uso de CFDI
+  // with their invoicing software before timbrado.
+  var USO_OPTIONS = [
+    { value: 'G01', label: 'G01 · Adquisición de mercancías' },
+    { value: 'G03', label: 'G03 · Gastos en general' },
+    { value: 'I08', label: 'I08 · Otra maquinaria y equipo' },
+    { value: 'P01', label: 'P01 · Por definir' },
+    { value: 'S01', label: 'S01 · Sin efectos fiscales' },
+    { value: 'CP01', label: 'CP01 · Pagos' }
+  ];
+
   var form = document.getElementById('rf-form');
   if (!form) return;
 
@@ -17,7 +32,19 @@
   var folioEl = document.getElementById('rf-folio');
   var statusLinkEl = document.getElementById('rf-status-link');
 
+  var reviewEl = document.getElementById('rf-review');
+  var reviewFiscalEl = document.getElementById('rf-review-fiscal');
+  var reviewConsumoEl = document.getElementById('rf-review-consumo');
+  var reviewStatusEl = document.getElementById('rf-review-status');
+  var reviewEditBtn = document.getElementById('rf-review-edit');
+  var reviewConfirmBtn = document.getElementById('rf-review-confirm');
+
   var rfcInput = document.getElementById('rfc');
+  var razonInput = document.getElementById('razon');
+  var regimenSelect = document.getElementById('regimen');
+  var usocfdiSelect = document.getElementById('usocfdi');
+  var regimenHint = document.getElementById('regimen-hint');
+  var cpInput = document.getElementById('cp');
   var matchBox = document.getElementById('rfc-match');
   var matchData = document.getElementById('rfc-match-data');
   var matchUseBtn = document.getElementById('rfc-use');
@@ -27,6 +54,12 @@
   function setStatus(msg, kind) {
     statusEl.textContent = msg || '';
     statusEl.className = kind || '';
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
   }
 
   // Downscales a photo client-side (max 1400px, JPEG ~0.72) so ticket photos
@@ -89,7 +122,77 @@
       });
   }
 
-  function setupDrop(dropId, inputId, filenameId) {
+  // Sends a document to Claude vision for a best-effort read. Always
+  // resolves (never rejects) with { ok:false } on any failure — extraction is
+  // a convenience, the form must stay usable without it.
+  function extractDocument(kind, file) {
+    return readAsBase64(file)
+      .then(function (fileField) {
+        return fetch('/api/roseta/factura-extract', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ kind: kind, file: fileField })
+        });
+      })
+      .then(function (r) { return r.json(); })
+      .catch(function () { return { ok: false }; });
+  }
+
+  function fillIfEmpty(el, value) {
+    if (el && value != null && value !== '' && !el.value) el.value = value;
+  }
+
+  function renderUsoOptions(regimenCode) {
+    var current = usocfdiSelect.value;
+    var opts = regimenCode === '605'
+      ? USO_OPTIONS.filter(function (o) { return o.value === 'S01' || o.value === 'CP01'; })
+      : USO_OPTIONS;
+    usocfdiSelect.innerHTML = '<option value="">Selecciona…</option>' +
+      opts.map(function (o) { return '<option value="' + o.value + '">' + o.label + '</option>'; }).join('');
+    if (opts.some(function (o) { return o.value === current; })) usocfdiSelect.value = current;
+  }
+  regimenSelect.addEventListener('change', function () { renderUsoOptions(regimenSelect.value); });
+
+  function renderRegimenFromCsf(regimenes) {
+    if (!regimenes || !regimenes.length) return;
+    var vigentes = regimenes.filter(function (r) { return r.vigente; });
+    var list = vigentes.length ? vigentes : regimenes;
+    var current = regimenSelect.value;
+    regimenSelect.innerHTML = '<option value="">Selecciona…</option>' +
+      list.map(function (r) {
+        var label = escapeHtml(r.clave) + ' · ' + escapeHtml(r.descripcion || '');
+        return '<option value="' + escapeHtml(r.clave) + '">' + label + '</option>';
+      }).join('');
+    if (list.some(function (r) { return r.clave === current; })) {
+      regimenSelect.value = current;
+    } else if (list.length === 1) {
+      regimenSelect.value = list[0].clave;
+    }
+    regimenHint.classList.add('show');
+    renderUsoOptions(regimenSelect.value);
+  }
+
+  function applyCsfData(data) {
+    fillIfEmpty(razonInput, data.razon_social);
+    fillIfEmpty(rfcInput, data.rfc ? String(data.rfc).toUpperCase() : null);
+    fillIfEmpty(cpInput, data.codigo_postal);
+    renderRegimenFromCsf(data.regimenes);
+  }
+
+  function applyTicketData(data) {
+    fillIfEmpty(document.getElementById('fecha'), data.fecha);
+    if (data.monto != null) fillIfEmpty(document.getElementById('monto'), String(data.monto));
+    if (data.forma_pago) {
+      var sel = document.getElementById('forma_pago');
+      if (sel && !sel.value) {
+        var has = Array.prototype.some.call(sel.options, function (o) { return o.value === data.forma_pago; });
+        if (has) sel.value = data.forma_pago;
+      }
+    }
+    fillIfEmpty(document.getElementById('folio_ticket'), data.folio_ticket);
+  }
+
+  function setupDrop(dropId, inputId, filenameId, onFile) {
     var drop = document.getElementById(dropId);
     var input = document.getElementById(inputId);
     var filenameEl = document.getElementById(filenameId);
@@ -104,6 +207,7 @@
         filenameEl.textContent = '';
         drop.classList.remove('has-file');
       }
+      if (onFile) onFile(f || null);
     }
     input.addEventListener('change', updateName);
     ['dragenter', 'dragover'].forEach(function (evt) {
@@ -119,8 +223,42 @@
       }
     });
   }
-  setupDrop('csf-drop', 'csf', 'csf-filename');
-  setupDrop('ticket-drop', 'ticket_file', 'ticket-filename');
+
+  var csfStatusEl = document.getElementById('csf-extract-status');
+  setupDrop('csf-drop', 'csf', 'csf-filename', function (file) {
+    if (!file) { csfStatusEl.textContent = ''; csfStatusEl.className = 'rf-extract-status'; return; }
+    csfStatusEl.textContent = 'Leyendo tu CSF…';
+    csfStatusEl.className = 'rf-extract-status busy';
+    extractDocument('csf', file).then(function (res) {
+      if (res && res.ok && res.data) {
+        applyCsfData(res.data);
+        csfStatusEl.textContent = '✓ Detectamos tus datos fiscales. Revísalos abajo.';
+        csfStatusEl.className = 'rf-extract-status ok';
+      } else {
+        csfStatusEl.textContent = 'No pudimos leer tu CSF automáticamente. Llena tus datos fiscales a mano.';
+        csfStatusEl.className = 'rf-extract-status warn';
+      }
+    });
+  });
+
+  var ticketStatusEl = document.getElementById('ticket-extract-status');
+  setupDrop('ticket-drop', 'ticket_file', 'ticket-filename', function (file) {
+    if (!file) { ticketStatusEl.textContent = ''; ticketStatusEl.className = 'rf-extract-status'; return; }
+    ticketStatusEl.textContent = 'Leyendo tu ticket…';
+    ticketStatusEl.className = 'rf-extract-status busy';
+    compressImageFile(file).then(function (compressed) {
+      return extractDocument('ticket', compressed);
+    }).then(function (res) {
+      if (res && res.ok && res.data) {
+        applyTicketData(res.data);
+        ticketStatusEl.textContent = '✓ Detectamos datos de tu ticket. Revísalos en "Tu consumo".';
+        ticketStatusEl.className = 'rf-extract-status ok';
+      } else {
+        ticketStatusEl.textContent = 'No pudimos leer tu ticket automáticamente. Llena "Tu consumo" a mano.';
+        ticketStatusEl.className = 'rf-extract-status warn';
+      }
+    });
+  });
 
   function fieldLabels() {
     return {
@@ -191,6 +329,54 @@
     matchBox.classList.remove('show');
   });
 
+  function selectedLabel(selectEl) {
+    var opt = selectEl.options[selectEl.selectedIndex];
+    return opt ? opt.textContent : '';
+  }
+
+  function addRow(dl, label, value) {
+    if (!value) return;
+    var dt = document.createElement('dt'); dt.textContent = label;
+    var dd = document.createElement('dd'); dd.textContent = value;
+    dl.appendChild(dt); dl.appendChild(dd);
+  }
+
+  function renderReview() {
+    reviewFiscalEl.innerHTML = '';
+    addRow(reviewFiscalEl, 'RFC', rfcInput.value.trim().toUpperCase());
+    addRow(reviewFiscalEl, 'Razón social', form.razon_social.value.trim());
+    addRow(reviewFiscalEl, 'Régimen fiscal', selectedLabel(regimenSelect));
+    addRow(reviewFiscalEl, 'Uso de CFDI', selectedLabel(usocfdiSelect));
+    addRow(reviewFiscalEl, 'Código postal', form.codigo_postal.value.trim());
+    addRow(reviewFiscalEl, 'Correo', form.email.value.trim());
+    addRow(reviewFiscalEl, 'Teléfono', form.telefono.value.trim());
+
+    reviewConsumoEl.innerHTML = '';
+    addRow(reviewConsumoEl, 'Sucursal', form.sucursal.value);
+    addRow(reviewConsumoEl, 'Fecha de consumo', form.fecha_consumo.value);
+    addRow(reviewConsumoEl, 'Monto', form.monto.value ? ('$' + form.monto.value + ' MXN') : '');
+    addRow(reviewConsumoEl, 'Forma de pago', form.forma_pago.value);
+    addRow(reviewConsumoEl, 'Folio de ticket', form.folio_ticket.value.trim());
+    var csfFile = document.getElementById('csf').files[0];
+    var ticketFile = document.getElementById('ticket_file').files[0];
+    addRow(reviewConsumoEl, 'CSF adjunta', csfFile ? csfFile.name : '');
+    addRow(reviewConsumoEl, 'Ticket adjunto', ticketFile ? ticketFile.name : 'No adjuntado');
+  }
+
+  function showReview() {
+    renderReview();
+    form.classList.add('hide');
+    reviewEl.classList.add('show');
+    reviewStatusEl.textContent = '';
+  }
+
+  function showForm() {
+    reviewEl.classList.remove('show');
+    form.classList.remove('hide');
+  }
+
+  reviewEditBtn.addEventListener('click', showForm);
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     setStatus('', '');
@@ -207,16 +393,23 @@
       form.reportValidity();
       return;
     }
-
     var csfFile = document.getElementById('csf').files[0];
     if (!csfFile) {
       setStatus('Adjunta tu Constancia de Situación Fiscal vigente.', 'error');
       return;
     }
+
+    showReview();
+  });
+
+  reviewConfirmBtn.addEventListener('click', function () {
+    var rfc = rfcInput.value.trim().toUpperCase();
+    var csfFile = document.getElementById('csf').files[0];
     var ticketFile = document.getElementById('ticket_file').files[0] || null;
 
-    submitBtn.disabled = true;
-    setStatus('Enviando tu solicitud…', 'info');
+    reviewConfirmBtn.disabled = true;
+    reviewStatusEl.className = 'info';
+    reviewStatusEl.textContent = 'Enviando tu solicitud…';
 
     var sucursalForTracking = form.sucursal.value;
     prepareAttachments(csfFile, ticketFile)
@@ -250,7 +443,7 @@
         if (!res.ok || !res.json || !res.json.ok) {
           throw new Error((res.json && res.json.error) || 'No se pudo enviar tu solicitud.');
         }
-        form.style.display = 'none';
+        reviewEl.classList.remove('show');
         successEl.classList.add('show');
         folioEl.textContent = res.json.folio || '';
         if (res.json.folio) {
@@ -263,10 +456,11 @@
         if (window.acaciaTrack) window.acaciaTrack('roseta_factura_submit', { sucursal: sucursalForTracking });
       })
       .catch(function (err) {
-        setStatus((err && err.message) || 'No se pudo enviar tu solicitud. Escríbenos a roseta.cafeteria@gmail.com.', 'error');
+        reviewStatusEl.className = 'error';
+        reviewStatusEl.textContent = (err && err.message) || 'No se pudo enviar tu solicitud. Escríbenos a roseta.cafeteria@gmail.com.';
       })
       .finally(function () {
-        submitBtn.disabled = false;
+        reviewConfirmBtn.disabled = false;
       });
   });
 })();
