@@ -90,8 +90,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ ok: false, error: "Revisa los datos del formulario, algo no es válido." });
     }
 
+    // Roseta can reuse a CSF she already has on file, so returning customers
+    // don't need to re-upload one — but that's only trustworthy if *we*
+    // verify the RFC is actually known, not a flag the client could send.
+    // A lookup failure fails safe (treated as unknown) so an outage can't
+    // silently waive the requirement for a genuinely new customer.
+    let existingClientRows: string[][] = [];
+    let isKnownRfc = false;
+    try {
+      existingClientRows = await getValues("ClientesRFC!A:H");
+      isKnownRfc = existingClientRows.some((r, i) => i > 0 && (r[0] || "").toUpperCase() === rfc);
+    } catch (err) {
+      console.error("ClientesRFC lookup failed", err);
+    }
+
     const csf = parseDataUrl(body.csf);
-    if (!csf) {
+    if (!csf && !isKnownRfc) {
       return res.status(400).json({ ok: false, error: "Adjunta tu Constancia de Situación Fiscal vigente (máx. 3 MB)." });
     }
     const ticket = parseDataUrl(body.ticket);
@@ -132,9 +146,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       rows.map(([k, v]) => `<tr><td><strong>${escapeHtml(k)}</strong></td><td>${escapeHtml(v)}</td></tr>`).join("") +
       `</table>` +
       (ticket ? `` : `<p><em>El cliente no adjuntó foto del ticket.</em></p>`) +
+      (csf ? `` : `<p><em>Cliente recurrente — no se adjuntó una CSF nueva, ya contamos con la suya de una solicitud anterior (RFC ${escapeHtml(rfc)}).</em></p>`) +
       `<p style="margin-top:16px;color:#888;font-size:12px;">Se le indicó al cliente que recibirá su factura en un máximo de 3 días hábiles.</p>`;
 
-    const attachments = [{ filename: csf.filename, content: csf.content }];
+    const attachments: { filename: string; content: string }[] = [];
+    if (csf) attachments.push({ filename: csf.filename, content: csf.content });
     if (ticket) attachments.push({ filename: ticket.filename, content: ticket.content });
 
     const sendResult = await resend.emails.send({
@@ -177,8 +193,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     try {
-      const existing = await getValues("ClientesRFC!A:H");
-      const rowIndex = existing.findIndex((r, i) => i > 0 && (r[0] || "").toUpperCase() === rfc);
+      const rowIndex = existingClientRows.findIndex((r, i) => i > 0 && (r[0] || "").toUpperCase() === rfc);
       const clientRow = [
         rfc,
         sanitizeCell(razonSocial),
