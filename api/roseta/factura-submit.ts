@@ -74,6 +74,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const monto = String(body.monto || "").trim();
     const formaPago = String(body.forma_pago || "").trim();
     const folioTicket = String(body.folio_ticket || "").trim();
+    const sinMovimiento = body.sin_movimiento === true;
 
     if (
       !RFC_RE.test(rfc) ||
@@ -85,7 +86,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       !required(sucursal) ||
       !required(fechaConsumo) ||
       !required(formaPago) ||
-      !(Number(monto) > 0)
+      !(Number(monto) > 0) ||
+      (!required(folioTicket) && !sinMovimiento)
     ) {
       return res.status(400).json({ ok: false, error: "Revisa los datos del formulario, algo no es válido." });
     }
@@ -185,7 +187,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ["Subtotal (antes de IVA)", `$${subtotal.toFixed(2)} MXN (${subtotalSource})`],
       ["IVA", `$${iva.toFixed(2)} MXN`],
       ["Forma de pago", formaPago],
-      ["Movimiento / folio de ticket", folioTicket || "—"],
+      ["Movimiento / folio de ticket", folioTicket || (sinMovimiento ? "No cuenta con él — identificar por RFC + fecha + monto + correo" : "—")],
     ];
     const html =
       `<h2>Factura por consumo solicitada</h2>` +

@@ -91,6 +91,10 @@
     .rf-regimen-hint{font-size:.78rem;color:#0a7;font-weight:600;display:none;margin-top:.3rem;}
     .rf-regimen-hint.show{display:block;}
 
+    .rf-check{display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--text-muted);margin-top:.6rem;cursor:pointer;}
+    .rf-check input[type=checkbox]{width:auto;padding:0;border:1px solid var(--border);accent-color:var(--primary);box-shadow:none;}
+    .rf-field input:disabled{opacity:.55;cursor:not-allowed;}
+
     #rf-status{margin-top:1rem;font-size:.92rem;min-height:1.3em;}
     #rf-status.error{color:#c33;}
     #rf-status.info{color:var(--text-muted);}
@@ -315,8 +319,13 @@
               </div>
 
               <div class="rf-field">
-                <label for="folio_ticket">Movimiento (opcional)</label>
-                <input id="folio_ticket" name="folio_ticket" maxlength="60" placeholder="Este número está impreso en tu ticket" />
+                <label for="folio_ticket">Movimiento <span class="req" id="movimiento-req-mark">*</span></label>
+                <input id="folio_ticket" name="folio_ticket" maxlength="60" required placeholder="Este número está impreso en tu ticket" />
+                <label class="rf-check">
+                  <input type="checkbox" id="sin_movimiento" name="sin_movimiento">
+                  No tengo mi ticket ni el número de Movimiento
+                </label>
+                <span class="rf-hint" id="movimiento-hint" style="display:none;">Sin problema — usaremos tu RFC, fecha de consumo, monto y correo para identificar tu consumo.</span>
               </div>
             </fieldset>
 
