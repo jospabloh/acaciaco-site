@@ -103,9 +103,24 @@ window.GVPdf = (function () {
     rule(page, y); y -= 26
 
     // Bloque de cifras
+    text(page, t("pdf_total"), M, y, 11, font, gray)
+    rtext(page, money(totals.totalCents) + " " + cur, W - M, y, 11, font)
+    y -= 18
+
+    // El desglose por método es lo que explica por qué el saldo no es el total:
+    // lo de la tarjeta de la empresa no se liquida con el viajero.
+    for (var pm = 0; pm < C.PAYMENTS.length; pm++) {
+      var method = C.PAYMENTS[pm]
+      if (!totals.byPayment[method]) continue
+      text(page, "· " + t("pdf_pay_" + method), M + 12, y, 9.5, font, gray)
+      rtext(page, money(totals.byPayment[method]), W - M, y, 9.5, font, gray)
+      y -= 15
+    }
+    y -= 4
+
     var figs = [
-      [t("pdf_total"), money(totals.totalCents)],
       [t("pdf_tax"), money(totals.taxCents)],
+      [t("pdf_settleable"), money(totals.settleableCents)],
       [t("pdf_advance"), money(totals.advanceCents)],
     ]
     for (var k = 0; k < figs.length; k++) {
@@ -137,19 +152,20 @@ window.GVPdf = (function () {
     }
 
     // ── 2. Tabla de gastos ──────────────────────────────────────────────────
-    // El ancho útil es W - 2M = 516 pt. Las columnas se reparten dejando al
-    // menos 6 pt entre el borde de una y el inicio de la siguiente: con menos,
-    // el IVA y la marca de deducible se leen como un solo dato.
+    // El ancho útil es W - 2M = 516 pt, repartidos dejando aire entre columnas.
+    // No hay columna de "facturado": la de IVA ya lo dice — trae importe cuando
+    // hubo factura y un guion cuando no. Una columna menos y el mismo dato.
     var COLS = [
-      { key: "n", label: "#", x: M, w: 16, align: "l" },
-      { key: "date", label: t("pdf_col_date"), x: M + 18, w: 52, align: "l" },
-      { key: "cat", label: t("pdf_col_category"), x: M + 74, w: 76, align: "l" },
-      { key: "desc", label: t("pdf_col_description"), x: M + 154, w: 116, align: "l" },
-      { key: "curr", label: t("pdf_col_currency"), x: M + 274, w: 30, align: "l" },
-      { key: "fx", label: t("pdf_col_fx"), x: M + 308, w: 40, align: "r" },
-      { key: "amt", label: t("pdf_col_amount"), x: M + 356, w: 76, align: "r" },
-      { key: "tax", label: t("pdf_col_tax"), x: M + 440, w: 52, align: "r" },
-      { key: "ded", label: t("pdf_col_deductible"), x: M + 498, w: 18, align: "l" },
+      { key: "n", label: "#", x: M, w: 14, align: "l" },
+      { key: "date", label: t("pdf_col_date"), x: M + 16, w: 48, align: "l" },
+      { key: "cat", label: t("pdf_col_category"), x: M + 68, w: 58, align: "l" },
+      { key: "desc", label: t("pdf_col_description"), x: M + 132, w: 84, align: "l" },
+      { key: "pay", label: t("pdf_col_payment"), x: M + 222, w: 56, align: "l" },
+      { key: "curr", label: t("pdf_col_currency"), x: M + 284, w: 26, align: "l" },
+      { key: "fx", label: t("pdf_col_fx"), x: M + 316, w: 30, align: "r" },
+      { key: "tip", label: t("pdf_col_tip"), x: M + 354, w: 44, align: "r" },
+      { key: "amt", label: t("pdf_col_amount"), x: M + 406, w: 60, align: "r" },
+      { key: "tax", label: t("pdf_col_tax"), x: M + 474, w: 42, align: "r" },
     ]
 
     function newTablePage(title) {
@@ -180,16 +196,18 @@ window.GVPdf = (function () {
       }
       var ex = report.expenses[e]
       var fx = C.expenseFx(ex, cur)
+      var tipCents = C.expenseTipCents(ex, cur)
       var row = {
         n: String(e + 1),
         date: fmtDate(ex.date),
         cat: t("cat_" + ex.category),
         desc: ex.description || "—",
+        pay: t("pdf_short_" + ex.payment),
         curr: ex.currency,
         fx: fx === 1 ? "—" : String(fx),
-        amt: money(C.expenseCents(ex, cur)),
-        tax: ex.deductible ? money(C.expenseTaxCents(ex, cur)) : "—",
-        ded: ex.deductible ? t("pdf_yes") : "—",
+        tip: tipCents ? money(tipCents) : "—",
+        amt: money(C.expenseGrossCents(ex, cur)),
+        tax: ex.invoiced ? money(C.expenseTaxCents(ex, cur)) : "—",
       }
       for (var c2 = 0; c2 < COLS.length; c2++) {
         var col2 = COLS[c2]
@@ -225,7 +243,7 @@ window.GVPdf = (function () {
       var heading = t("pdf_annex_item", {
         n: item.n, date: fmtDate(item.ex.date),
         cat: t("cat_" + item.ex.category),
-        amount: money(C.expenseCents(item.ex, cur)) + " " + cur,
+        amount: money(C.expenseGrossCents(item.ex, cur)) + " " + cur,
       })
       var bytes = new Uint8Array(await rec.blob.arrayBuffer())
 
