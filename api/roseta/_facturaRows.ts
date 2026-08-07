@@ -91,3 +91,31 @@ export function findRowNumber(rows: string[][], folio: string): number {
   }
   return -1;
 }
+
+// A folio is a direct reference to one request, so it is never time-boxed —
+// hiding someone's own request because it is old would be absurd. The window
+// applies only to the RFC listing below.
+export function selectByFolio(rows: string[][], folio: string): PublicSolicitud[] {
+  const target = String(folio || "").trim().toUpperCase();
+  const hit = rows.find((row, i) => i > 0 && cell(row, COL.FOLIO).toUpperCase() === target);
+  return hit ? [publicSolicitud(hit)] : [];
+}
+
+// `rfcExists` lets the page tell "we have nothing for that RFC" apart from
+// "we have older requests but none in the window" — the difference between a
+// dead end and a useful instruction.
+export function selectByRfc(
+  rows: string[][],
+  rfc: string,
+  today: string,
+): { solicitudes: PublicSolicitud[]; rfcExists: boolean } {
+  const target = String(rfc || "").trim().toUpperCase();
+  const mine = rows.filter((row, i) => i > 0 && cell(row, COL.RFC).toUpperCase() === target);
+  const inWindow = mine.filter((row) =>
+    isWithinDays(cell(row, COL.FECHA_SOLICITUD), RFC_WINDOW_DAYS, today),
+  );
+  inWindow.sort((a, b) =>
+    cell(b, COL.FECHA_SOLICITUD).localeCompare(cell(a, COL.FECHA_SOLICITUD)),
+  );
+  return { solicitudes: inWindow.map(publicSolicitud), rfcExists: mine.length > 0 };
+}
