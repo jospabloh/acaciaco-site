@@ -21,7 +21,10 @@ Static marketing site and serverless API routes for AcaciaCo properties.
     protected by `ROSETA_ADMIN_PASSWORD`. `factura-admin-list.ts` lists the
     requests; `factura-admin-send.ts` mails the stamped CFDI (PDF + XML) to
     the customer, marks the row `Facturada` and records the send in the
-    Sheet's `Notificado el` (S) and `Archivos enviados` (T) columns. Files
+    Sheet's `Notificado el` (S), `Archivos enviados` (T) and `ID de Resend`
+    (U) columns. The last one is what the panel links to so Roseta can see
+    whether the mail was delivered or bounced — the Sheet only knows it was
+    sent, Resend knows what happened to it afterwards. Files
     prefixed with `_` are shared helpers, not endpoints — Vercel skips them
     when building functions. See `.env.example` for required env vars.
 - `vercel.json`: Vercel runtime and routing configuration.

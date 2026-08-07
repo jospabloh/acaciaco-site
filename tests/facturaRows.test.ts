@@ -7,15 +7,17 @@ import {
   isWithinDays,
   publicSolicitud,
   findRowNumber,
+  resendEmailUrl,
+  SOLICITUDES_RANGE,
 } from "../api/roseta/_facturaRows.ts";
 
-// A row shaped exactly like factura-submit.ts writes it, extended to T.
+// A row shaped exactly like factura-submit.ts writes it, extended to U.
 function row(over: Record<string, string> = {}): string[] {
   const r = [
     "RF-20260801-AB12", "2026-08-01", "XAXX010101000", "Juan Pérez",
     "612", "G03", "20000", "juan@ejemplo.com", "4490000000", "UAA",
     "2026-07-31", "348.00", "Efectivo", "MOV-991",
-    "Pendiente", "", "300.00", "48.00", "", "",
+    "Pendiente", "", "300.00", "48.00", "", "", "",
   ];
   for (const [k, v] of Object.entries(over)) r[COL[k as keyof typeof COL]] = v;
   return r;
@@ -91,4 +93,25 @@ test("findRowNumber ignora el encabezado y no distingue mayúsculas", () => {
 
 test("findRowNumber devuelve -1 si el folio no existe", () => {
   assert.equal(findRowNumber([["Folio"], row()], "RF-NOPE"), -1);
+});
+
+test("el rango cubre hasta la columna U", () => {
+  assert.equal(SOLICITUDES_RANGE, "Solicitudes!A:U");
+});
+
+test("resendEmailUrl arma la URL del dashboard", () => {
+  assert.equal(resendEmailUrl("abc-123"), "https://resend.com/emails/abc-123");
+});
+
+test("resendEmailUrl escapa lo que reciba", () => {
+  assert.equal(resendEmailUrl(" a/b "), "https://resend.com/emails/a%2Fb");
+});
+
+// The Resend id points at a delivery record with the customer's address in
+// it; it is operator-only and must never reach the public lookup.
+test("publicSolicitud no expone el ID de Resend", () => {
+  const r = row({ RESEND_ID: "re_secreto_123" });
+  const blob = JSON.stringify(publicSolicitud(r));
+  assert.equal(blob.includes("re_secreto_123"), false);
+  assert.equal("resend_url" in publicSolicitud(r), false);
 });

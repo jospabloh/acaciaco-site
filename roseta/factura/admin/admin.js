@@ -214,6 +214,20 @@
       note.className = 'ad-sent-note';
       note.textContent = 'Enviada al cliente el ' + s.notificado_el.slice(0, 10) +
         (s.archivos ? ' · ' + s.archivos : '');
+      // The Sheet records that we sent it. Whether it actually landed — or
+      // bounced, or is sitting in spam — only Resend knows, so link straight
+      // to that message's delivery record. Missing on requests sent before
+      // the id was stored.
+      if (s.resend_url) {
+        note.appendChild(document.createTextNode(' · '));
+        var link = document.createElement('a');
+        link.className = 'ad-resend-link';
+        link.href = s.resend_url;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.textContent = 'Ver entrega en Resend ↗';
+        note.appendChild(link);
+      }
       body.appendChild(note);
     }
 

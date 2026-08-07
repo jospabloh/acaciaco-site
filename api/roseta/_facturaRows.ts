@@ -25,9 +25,17 @@ export const COL = {
   IVA: 17,
   NOTIFICADO_EL: 18,
   ARCHIVOS: 19,
+  RESEND_ID: 20,
 } as const;
 
-export const SOLICITUDES_RANGE = "Solicitudes!A:T";
+export const SOLICITUDES_RANGE = "Solicitudes!A:U";
+
+// Resend's dashboard URL for a single email. Kept here so the panel and any
+// future consumer agree on it, and so there is one place to fix if Resend
+// ever changes the path.
+export function resendEmailUrl(id: string): string {
+  return `https://resend.com/emails/${encodeURIComponent(String(id || "").trim())}`;
+}
 export const RFC_WINDOW_DAYS = 30;
 
 export interface PublicSolicitud {

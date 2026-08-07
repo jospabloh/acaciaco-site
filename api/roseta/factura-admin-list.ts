@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getValues } from "./_sheets";
 import { requireAdmin } from "./_adminGuard";
-import { COL, cell, SOLICITUDES_RANGE } from "./_facturaRows";
+import { COL, cell, resendEmailUrl, SOLICITUDES_RANGE } from "./_facturaRows";
 
 // Unlike the public status lookup, this one is authenticated and returns the
 // full fiscal record — Roseta needs it to key the invoice into her stamping
@@ -28,6 +28,9 @@ function adminSolicitud(row: string[]) {
     fecha_facturacion: cell(row, COL.FECHA_FACTURACION),
     notificado_el: cell(row, COL.NOTIFICADO_EL),
     archivos: cell(row, COL.ARCHIVOS),
+    // Built here rather than in the browser so the dashboard path lives in
+    // one place. Empty for requests sent before this column existed.
+    resend_url: cell(row, COL.RESEND_ID) ? resendEmailUrl(cell(row, COL.RESEND_ID)) : "",
   };
 }
 
