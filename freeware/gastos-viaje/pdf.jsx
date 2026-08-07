@@ -128,7 +128,27 @@ window.GVPdf = (function () {
       rtext(page, figs[k][1] + " " + cur, W - M, y, 11, font)
       y -= 20
     }
-    y -= 4; rule(page, y); y -= 30
+    y -= 4; rule(page, y); y -= 18
+
+    // Cómo se salda: las dos cifras operativas. Su diferencia es el saldo que
+    // va abajo en grande, y verlas juntas evita el ida y vuelta de devolver
+    // efectivo para que luego te lo transfieran de regreso.
+    if (totals.toTransferCents > 0 || totals.cashToReturnCents > 0) {
+      text(page, t("pdf_how_settled").toUpperCase(), M, y, 7.5, bold, gray)
+      y -= 15
+      var settle = [
+        [t("pdf_transfer"), money(totals.toTransferCents)],
+        [t("pdf_return"), money(totals.cashToReturnCents)],
+      ]
+      for (var st = 0; st < settle.length; st++) {
+        text(page, settle[st][0], M + 12, y, 10, font, gray)
+        rtext(page, settle[st][1] + " " + cur, W - M, y, 10, font, gray)
+        y -= 16
+      }
+      y -= 2
+      rule(page, y)
+    }
+    y -= 30
 
     var kind = C.balanceKind(totals.balanceCents)
     var balLabel = kind === "refund" ? t("pdf_bal_refund")
@@ -202,7 +222,8 @@ window.GVPdf = (function () {
         date: fmtDate(ex.date),
         cat: t("cat_" + ex.category),
         desc: ex.description || "—",
-        pay: t("pdf_short_" + ex.payment),
+        pay: t("pdf_short_" + ex.payment) +
+             ((ex.payment === "tdc_propia" && ex.fromAdvance) ? " *" : ""),
         curr: ex.currency,
         fx: fx === 1 ? "—" : String(fx),
         tip: tipCents ? money(tipCents) : "—",
@@ -224,6 +245,10 @@ window.GVPdf = (function () {
     ty -= 16
     text(tPage, t("pdf_total") + ": " + money(totals.totalCents) + " " + cur, M, ty, 10, bold)
     rtext(tPage, t("pdf_count", { n: totals.count }), W - M, ty, 9, font, gray)
+    if (totals.coveredByAdvanceCents > 0) {
+      ty -= 14
+      text(tPage, t("pdf_adv_mark"), M, ty, 8, font, gray)
+    }
 
     // Firmas — es lo que convierte la tabla en un comprobante entregable.
     var sy = Math.max(ty - 70, M + 40)

@@ -198,3 +198,116 @@ test('toCsv emits a header plus one row per expense and escapes quotes', () => {
   assert.match(lines[1], /"Hotel ""Centro"""/)
   assert.match(lines[1], /Mi tarjeta/)
 })
+
+// ── Cubrir un cargo de la tarjeta propia con el anticipo que sobró ──────────
+
+const split = (over) => C.totals(report(over))
+
+test('the advance pool for card charges is what cash did not eat', () => {
+  const t = split({
+    trip: { currency: 'MXN', advance: 3000 },
+    expenses: [
+      exp({ id: 'c', amount: 1360, payment: 'efectivo' }),
+      exp({ id: 'k', amount: 2400, payment: 'tdc_propia' }),
+    ],
+  })
+  assert.equal(t.coverage.k.availableBefore, 164000)
+  assert.equal(t.coverage.k.applied, 0)
+  assert.equal(t.toTransferCents, 240000)
+  assert.equal(t.cashToReturnCents, 164000)
+})
+
+test('marking a card charge as taken from the advance moves it, not the net', () => {
+  const plain = split({
+    trip: { currency: 'MXN', advance: 3000 },
+    expenses: [
+      exp({ id: 'c', amount: 1360, payment: 'efectivo' }),
+      exp({ id: 'k', amount: 2400, payment: 'tdc_propia' }),
+    ],
+  })
+  const taken = split({
+    trip: { currency: 'MXN', advance: 3000 },
+    expenses: [
+      exp({ id: 'c', amount: 1360, payment: 'efectivo' }),
+      exp({ id: 'k', amount: 2400, payment: 'tdc_propia', fromAdvance: true }),
+    ],
+  })
+  assert.equal(taken.coveredByAdvanceCents, 164000)
+  assert.equal(taken.toTransferCents, 76000)
+  assert.equal(taken.cashToReturnCents, 0)
+  // Lo mismo se debe al final; sólo cambia cómo se liquida.
+  assert.equal(taken.balanceCents, plain.balanceCents)
+  assert.equal(taken.toTransferCents - taken.cashToReturnCents, taken.balanceCents)
+  assert.equal(plain.toTransferCents - plain.cashToReturnCents, plain.balanceCents)
+})
+
+test('coverage never exceeds what is left of the advance', () => {
+  const t = split({
+    trip: { currency: 'MXN', advance: 1000 },
+    expenses: [
+      exp({ id: 'c', amount: 900, payment: 'efectivo' }),
+      exp({ id: 'k', amount: 5000, payment: 'tdc_propia', fromAdvance: true }),
+    ],
+  })
+  assert.equal(t.coveredByAdvanceCents, 10000)
+  assert.equal(t.toTransferCents, 490000)
+  assert.equal(t.cashToReturnCents, 0)
+})
+
+test('two card charges drain the pool in order and the second sees less', () => {
+  const t = split({
+    trip: { currency: 'MXN', advance: 3000 },
+    expenses: [
+      exp({ id: 'a', amount: 2000, payment: 'tdc_propia', fromAdvance: true }),
+      exp({ id: 'b', amount: 2000, payment: 'tdc_propia', fromAdvance: true }),
+    ],
+  })
+  assert.equal(t.coverage.a.availableBefore, 300000)
+  assert.equal(t.coverage.a.applied, 200000)
+  assert.equal(t.coverage.b.availableBefore, 100000)
+  assert.equal(t.coverage.b.applied, 100000)
+  assert.equal(t.coveredByAdvanceCents, 300000)
+  assert.equal(t.toTransferCents, 100000)
+  assert.equal(t.cashToReturnCents, 0)
+})
+
+test('with no advance left there is nothing to take and the flag is inert', () => {
+  const t = split({
+    trip: { currency: 'MXN', advance: 500 },
+    expenses: [
+      exp({ id: 'c', amount: 900, payment: 'efectivo' }),
+      exp({ id: 'k', amount: 300, payment: 'tdc_propia', fromAdvance: true }),
+    ],
+  })
+  assert.equal(t.coverage.k.availableBefore, 0)
+  assert.equal(t.coveredByAdvanceCents, 0)
+  // El efectivo se pasó del anticipo por 400, y eso también se transfiere.
+  assert.equal(t.toTransferCents, 30000 + 40000)
+  assert.equal(t.cashToReturnCents, 0)
+  assert.equal(t.toTransferCents - t.cashToReturnCents, t.balanceCents)
+})
+
+test('the flag does nothing on cash or on the company card', () => {
+  const t = split({
+    trip: { currency: 'MXN', advance: 5000 },
+    expenses: [
+      exp({ id: 'c', amount: 100, payment: 'efectivo', fromAdvance: true }),
+      exp({ id: 'e', amount: 100, payment: 'tdc_empresa', fromAdvance: true }),
+    ],
+  })
+  assert.equal(t.coveredByAdvanceCents, 0)
+  assert.equal(Object.keys(t.coverage).length, 0)
+})
+
+test('a v2 report without the flag settles as if nothing were taken', () => {
+  const t = split({
+    trip: { currency: 'MXN', advance: 3000 },
+    expenses: [exp({ id: 'k', amount: 2400, payment: 'tdc_propia' })],
+  })
+  assert.equal(t.coveredByAdvanceCents, 0)
+  // Sin marcar nada devuelve el anticipo completo y le transfieren el cargo
+  // entero — el ida y vuelta absurdo que la opción existe para evitar.
+  assert.equal(t.toTransferCents, 240000)
+  assert.equal(t.cashToReturnCents, 300000)
+  assert.equal(t.toTransferCents - t.cashToReturnCents, t.balanceCents)
+})
