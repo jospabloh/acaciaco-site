@@ -38,6 +38,10 @@ const STRINGS = {
     pay_efectivo: "Efectivo", pay_tdc_propia: "Mi tarjeta", pay_tdc_empresa: "Tarjeta empresa",
     consequence_efectivo: "Sale de tu anticipo.",
     consequence_tdc_propia: "Lo pusiste tú: se te reembolsa.",
+    consequence_tdc_propia_adv: "Lo cubres con el anticipo que traes: no te lo transfieren.",
+    from_advance: "Tomarlo del anticipo",
+    from_advance_hint: "quedan {n}",
+    from_advance_partial: "alcanza para {n} de este cargo",
     consequence_tdc_empresa: "Ya lo pagó la empresa: no afecta tu saldo.",
     e_invoiced: "Con factura",
     e_tax: "IVA", e_tax_auto: "se calcula solo, edítalo si difiere",
@@ -55,6 +59,8 @@ const STRINGS = {
     doc_noname: "Sin viajero", doc_period: "Sin fechas",
     f_total: "Total del viaje", f_tax: "IVA acreditable", f_advance: "Anticipo",
     f_settleable: "A liquidar contigo",
+    f_transfer: "Te transfieren", f_return: "Devuelves en efectivo",
+    f_how_settled: "Cómo se salda",
     bal_refund: "Te deben", bal_return: "Debes devolver", bal_settled: "Cuentas saldadas",
     download: "Descargar reporte (PDF)", download_busy: "Armando el PDF…",
     csv: "CSV", json_export: "Guardar .json", json_import: "Abrir .json",
@@ -89,6 +95,9 @@ const STRINGS = {
     pdf_destination: "Destino", pdf_period: "Periodo", pdf_purpose: "Motivo",
     pdf_total: "Total del viaje", pdf_tax: "IVA acreditable", pdf_advance: "Anticipo recibido",
     pdf_settleable: "A liquidar con el viajero",
+    pdf_how_settled: "Cómo se salda",
+    pdf_transfer: "Se le transfiere", pdf_return: "Devuelve en efectivo",
+    pdf_adv_mark: "* Cubierto con el anticipo.",
     pdf_pay_efectivo: "En efectivo", pdf_pay_tdc_propia: "Con tarjeta del viajero",
     pdf_pay_tdc_empresa: "Con tarjeta de la empresa",
     pdf_bal_refund: "Saldo a reembolsar al viajero",
@@ -111,6 +120,7 @@ const STRINGS = {
     csv_currency: "Moneda", csv_amount: "Monto", csv_fx: "Tipo de cambio",
     csv_converted: "Importe", csv_tax: "IVA", csv_invoiced: "Con factura",
     csv_payment: "Pago", csv_tip: "Propina", csv_settles: "Cuenta al saldo",
+    csv_from_advance: "Del anticipo",
   },
   en: {
     nav_more: "← More tools", theme_label: "Toggle theme", lang_label: "Language",
@@ -142,6 +152,10 @@ const STRINGS = {
     pay_efectivo: "Cash", pay_tdc_propia: "My card", pay_tdc_empresa: "Company card",
     consequence_efectivo: "Comes out of your advance.",
     consequence_tdc_propia: "You fronted it: you get reimbursed.",
+    consequence_tdc_propia_adv: "Covered by the advance you are holding: nothing gets transferred.",
+    from_advance: "Take it from the advance",
+    from_advance_hint: "{n} left",
+    from_advance_partial: "covers {n} of this charge",
     consequence_tdc_empresa: "The company already paid: your balance is untouched.",
     e_invoiced: "Has an invoice",
     e_tax: "Tax", e_tax_auto: "worked out for you, edit if it differs",
@@ -159,6 +173,8 @@ const STRINGS = {
     doc_noname: "No traveler", doc_period: "No dates",
     f_total: "Trip total", f_tax: "Creditable tax", f_advance: "Advance",
     f_settleable: "To settle with you",
+    f_transfer: "Transferred to you", f_return: "Cash you hand back",
+    f_how_settled: "How it settles",
     bal_refund: "You are owed", bal_return: "You must return", bal_settled: "All settled",
     download: "Download report (PDF)", download_busy: "Building the PDF…",
     csv: "CSV", json_export: "Save .json", json_import: "Open .json",
@@ -193,6 +209,9 @@ const STRINGS = {
     pdf_destination: "Destination", pdf_period: "Period", pdf_purpose: "Purpose",
     pdf_total: "Trip total", pdf_tax: "Creditable tax", pdf_advance: "Advance received",
     pdf_settleable: "To settle with the traveler",
+    pdf_how_settled: "How it settles",
+    pdf_transfer: "Transferred to them", pdf_return: "Cash handed back",
+    pdf_adv_mark: "* Covered by the advance.",
     pdf_pay_efectivo: "In cash", pdf_pay_tdc_propia: "On the traveler's card",
     pdf_pay_tdc_empresa: "On the company card",
     pdf_bal_refund: "Balance to reimburse the traveler",
@@ -215,6 +234,7 @@ const STRINGS = {
     csv_currency: "Currency", csv_amount: "Amount", csv_fx: "Rate",
     csv_converted: "Converted", csv_tax: "Tax", csv_invoiced: "Has invoice",
     csv_payment: "Payment", csv_tip: "Tip", csv_settles: "Counts to balance",
+    csv_from_advance: "From advance",
   },
 }
 
@@ -252,7 +272,7 @@ function newExpense(currency) {
   return {
     id: Store.uid(), date: "", category: "alimentos", description: "",
     amount: "", tip: "", currency: currency, fx: "", payment: "efectivo",
-    invoiced: false, taxAmount: "",
+    invoiced: false, taxAmount: "", fromAdvance: false,
     receiptId: null, receiptName: "", receiptType: "",
   }
 }
@@ -356,7 +376,7 @@ function DayPicker({ value, days, lang, onPick, onChange }) {
   )
 }
 
-function ExpenseRow({ expense, index, reportCurrency, trip, lang, t, onChange, onDelete, onAttach, onDetach, onSuggestFx }) {
+function ExpenseRow({ expense, index, reportCurrency, trip, lang, coverage, t, onChange, onDelete, onAttach, onDetach, onSuggestFx }) {
   const fileRef = useRef(null)
   const set = (k) => (ev) => {
     const v = ev.target.type === "checkbox" ? ev.target.checked : ev.target.value
@@ -368,6 +388,9 @@ function ExpenseRow({ expense, index, reportCurrency, trip, lang, t, onChange, o
   const withTip = C.allowsTip(expense.category)
   const days = useMemo(() => tripDays(trip), [trip.dateFrom, trip.dateTo])
 
+  // Lo que quedaba del anticipo justo antes de este gasto, ya descontado el
+  // efectivo y lo que se llevaron los cargos marcados antes que él.
+  const available = (coverage && coverage.availableBefore) || 0
   const ownSym = symbolFor(expense.currency)
   const grossOwn = C.toCents(expense.amount) + (withTip ? C.toCents(expense.tip) : 0)
   const grossReport = C.expenseGrossCents(expense, reportCurrency)
@@ -456,7 +479,24 @@ function ExpenseRow({ expense, index, reportCurrency, trip, lang, t, onChange, o
               onClick={() => onChange({ ...expense, payment: p })}>{t("pay_" + p)}</button>
           ))}
         </div>
-        <div className="consequence">{t("consequence_" + expense.payment)}</div>
+        <div className="consequence">
+          {t("consequence_" + expense.payment + (expense.fromAdvance && expense.payment === "tdc_propia" ? "_adv" : ""))}
+        </div>
+
+        {/* Sólo tiene sentido ofrecerlo si de verdad queda anticipo por usar.
+            Sin remanente el check no haría nada, así que no aparece. */}
+        {expense.payment === "tdc_propia" && (available > 0 || expense.fromAdvance) && (
+          <label className="check adv-check">
+            <input type="checkbox" checked={!!expense.fromAdvance}
+              onChange={(ev) => onChange({ ...expense, fromAdvance: ev.target.checked })} />
+            {t("from_advance")}
+            <span className="hint">
+              {available < grossReport && available > 0
+                ? t("from_advance_partial", { n: C.formatMoney(available, symbolFor(reportCurrency)) })
+                : t("from_advance_hint", { n: C.formatMoney(available, symbolFor(reportCurrency)) })}
+            </span>
+          </label>
+        )}
 
         <div className="tax-row">
           <label className="check" style={{ paddingBottom: 11 }}>
@@ -621,6 +661,7 @@ function App() {
       currency: t("csv_currency"), amount: t("csv_amount"), fx: t("csv_fx"),
       converted: t("csv_converted"), tax: t("csv_tax"), invoiced: t("csv_invoiced"),
       payment: t("csv_payment"), tip: t("csv_tip"), settles: t("csv_settles"),
+      fromAdvance: t("csv_from_advance"),
       pay_efectivo: t("pay_efectivo"), pay_tdc_propia: t("pay_tdc_propia"),
       pay_tdc_empresa: t("pay_tdc_empresa"),
     })
@@ -740,7 +781,7 @@ function App() {
 
             {report.expenses.map((e, i) => (
               <ExpenseRow key={e.id} expense={e} index={i} reportCurrency={report.trip.currency}
-                trip={report.trip} lang={lang}
+                trip={report.trip} lang={lang} coverage={totals.coverage[e.id]}
                 t={t} onChange={updateExpense} onDelete={deleteExpense}
                 onAttach={attachReceipt} onDetach={detachReceipt} onSuggestFx={suggestFx} />
             ))}
@@ -786,7 +827,23 @@ function App() {
                   <span>{t("f_tax")}</span><span className="v">{money(totals.taxCents)}</span>
                 </div>
                 <div className="fig"><span>{t("f_settleable")}</span><span className="v">{money(totals.settleableCents)}</span></div>
-                <div className="fig"><span>{t("f_advance")}</span><span className="v">−{money(totals.advanceCents)}</span></div>
+                <div className="fig rule"><span>{t("f_advance")}</span><span className="v">−{money(totals.advanceCents)}</span></div>
+
+                {/* Las dos cifras con las que de verdad se cierra: cuánto entra
+                    a tu cuenta y cuánto efectivo entregas. Su diferencia es el
+                    saldo de abajo. */}
+                {(totals.toTransferCents > 0 || totals.cashToReturnCents > 0) && (
+                  <>
+                    <div className="fig sub" style={{ paddingTop: 8 }}>
+                      <span>{t("f_transfer")}</span>
+                      <span className="v">{money(totals.toTransferCents)}</span>
+                    </div>
+                    <div className="fig sub">
+                      <span>{t("f_return")}</span>
+                      <span className="v">{money(totals.cashToReturnCents)}</span>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className={"balance " + kind}>

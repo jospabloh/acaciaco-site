@@ -112,6 +112,10 @@
   .tax-row{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-top:12px;}
   .tax-row .slot{display:flex;flex-direction:column;gap:6px;}
   .tax-row .slot > label{font-size:12px;font-weight:600;color:var(--ink-2);}
+  /* Tomar del anticipo: cuelga del bloque de pago, con el remanente a la vista
+     para que la decisión no requiera ir a buscar la cifra al resumen. */
+  .adv-check{margin-top:9px;padding:8px 11px;border:1px solid var(--line);border-radius:10px;background:var(--paper-2);align-items:baseline;}
+  .adv-check .hint{margin-left:2px;font-variant-numeric:tabular-nums;}
   .tax-row input{width:132px;text-align:right;}
   /* Las reglas de ancho de arriba usan la misma especificidad que
      input[type="checkbox"] y, por venir después, se lo llevaban también: la

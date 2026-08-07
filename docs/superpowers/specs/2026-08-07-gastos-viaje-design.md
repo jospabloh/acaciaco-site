@@ -297,3 +297,51 @@ migración corre al cargar de IndexedDB y al importar un `.json`.
 
 Tasa de IVA por reporte o por gasto (se evaluó y se descartó: 16% cubre el caso
 y el campo editable resuelve el resto), y propina fuera de alimentos.
+
+---
+
+## Enmienda · 2026-08-07 · Cubrir un cargo de tu tarjeta con el anticipo
+
+Con el modelo anterior, un viajero al que le dieron $3,000 en efectivo, gastó
+$1,360 en efectivo y $2,400 con su tarjeta terminaba devolviendo $1,640 en
+efectivo para que la empresa le transfiriera $2,400. Un ida y vuelta por dinero
+que ya traía en la bolsa.
+
+### Qué se agrega
+
+Un campo `fromAdvance` por gasto, disponible sólo cuando el pago es
+`tdc_propia`. Marcarlo significa "este cargo lo cubro con el anticipo que traigo"
+en vez de pedir transferencia.
+
+El resumen deja de dar una sola cifra y muestra **cómo se salda**:
+
+- **Te transfieren** = cargos con tu tarjeta − lo cubierto con el anticipo +
+  el exceso de efectivo sobre el anticipo.
+- **Devuelves en efectivo** = lo que quede del anticipo después del efectivo
+  gastado y de los cargos cubiertos.
+
+**El neto no se mueve.** `toTransfer − cashToReturn` sigue siendo exactamente
+`balanceCents`, y hay una prueba que lo fija. Lo único que cambia es cómo se
+liquida, que es el punto.
+
+### Reglas
+
+- El efectivo consume el anticipo primero, siempre: se pagó con ese dinero.
+- Sólo el remanente puede cubrir cargos de tarjeta propia, y se reparte **en el
+  orden en que están capturados los gastos**, tomando de cada uno lo que alcance.
+  La cobertura puede ser parcial.
+- El check aparece únicamente si queda anticipo disponible en ese punto, o si el
+  gasto ya está marcado —para poder deshacerlo—. Sin remanente y sin marca, no
+  hay nada que ofrecer y no se muestra.
+- La bandera es inerte en efectivo y en tarjeta de la empresa.
+
+### En el entregable
+
+La carátula gana un bloque *Cómo se salda* con las dos cifras, arriba del saldo.
+En la tabla, los cargos cubiertos llevan un asterisco junto al método de pago,
+con su leyenda al pie. El CSV gana la columna `Del anticipo`.
+
+### Compatibilidad
+
+Sin cambio de versión. Un reporte `v: 2` guardado antes de esto no trae
+`fromAdvance`; ausente equivale a `false`, que es el comportamiento anterior.

@@ -79,20 +79,48 @@
     var cur = report.trip.currency
     var total = 0, tax = 0, settleable = 0, incomplete = 0
     var byPayment = { efectivo: 0, tdc_propia: 0, tdc_empresa: 0 }
+    var gross = []
     for (var i = 0; i < report.expenses.length; i++) {
       var e = report.expenses[i]
-      var gross = expenseGrossCents(e, cur)
-      total += gross
+      var g = expenseGrossCents(e, cur)
+      gross.push(g)
+      total += g
       if (byPayment[e.payment] === undefined) byPayment[e.payment] = 0
-      byPayment[e.payment] += gross
-      if (countsToBalance(e)) settleable += gross
+      byPayment[e.payment] += g
+      if (countsToBalance(e)) settleable += g
       tax += expenseTaxCents(e, cur)
       if (isIncomplete(e, cur)) incomplete++
     }
     var advance = toCents(report.trip.advance)
+
+    // Cómo se salda, que no es lo mismo que cuánto se debe. El efectivo salió
+    // necesariamente del anticipo, así que sólo el remanente puede cubrir
+    // cargos de la tarjeta del viajero — y sólo los que él marcó, en el orden
+    // en que están capturados. El neto no se mueve: lo que cambia es cuánto
+    // devuelve en efectivo y cuánto le transfieren.
+    var pool = Math.max(0, advance - byPayment.efectivo)
+    var covered = 0
+    var coverage = {}
+    for (var j = 0; j < report.expenses.length; j++) {
+      var ex = report.expenses[j]
+      if (ex.payment !== 'tdc_propia') continue
+      coverage[ex.id] = { availableBefore: pool, applied: 0 }
+      if (!ex.fromAdvance) continue
+      var applied = Math.min(pool, gross[j])
+      pool -= applied
+      covered += applied
+      coverage[ex.id].applied = applied
+    }
+    // Si el efectivo se pasó del anticipo, ese exceso también se le transfiere.
+    var cashOverspend = Math.max(0, byPayment.efectivo - advance)
+
     return {
       totalCents: total, byPayment: byPayment, settleableCents: settleable,
       taxCents: tax, advanceCents: advance, balanceCents: settleable - advance,
+      coveredByAdvanceCents: covered,
+      toTransferCents: byPayment.tdc_propia - covered + cashOverspend,
+      cashToReturnCents: pool,
+      coverage: coverage,
       count: report.expenses.length, incompleteCount: incomplete,
     }
   }
@@ -136,14 +164,16 @@
   function toCsv(report, L) {
     var cur = report.trip.currency
     var head = ['#', L.date, L.category, L.description, L.payment, L.currency, L.amount,
-      L.tip, L.fx, L.converted + ' (' + cur + ')', L.tax, L.invoiced, L.settles]
+      L.tip, L.fx, L.converted + ' (' + cur + ')', L.tax, L.invoiced, L.settles,
+      L.fromAdvance]
     var rows = report.expenses.map(function (e, i) {
       return [i + 1, e.date, e.category, e.description, L['pay_' + e.payment] || e.payment,
         e.currency, centsToNumber(toCents(e.amount)).toFixed(2),
         centsToNumber(allowsTip(e.category) ? toCents(e.tip) : 0).toFixed(2),
         expenseFx(e, cur), centsToNumber(expenseGrossCents(e, cur)).toFixed(2),
         centsToNumber(expenseTaxCents(e, cur)).toFixed(2),
-        e.invoiced ? '1' : '0', countsToBalance(e) ? '1' : '0'].map(csvCell).join(',')
+        e.invoiced ? '1' : '0', countsToBalance(e) ? '1' : '0',
+        (e.payment === 'tdc_propia' && e.fromAdvance) ? '1' : '0'].map(csvCell).join(',')
     })
     return [head.map(csvCell).join(',')].concat(rows).join('\n') + '\n'
   }
