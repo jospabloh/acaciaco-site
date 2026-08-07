@@ -101,13 +101,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // "Facturada" is an expensive mistake for a cheap check.
     const archivos = `${pdf.filename}, ${xml.filename}`;
     const notificadoEl = new Date().toISOString();
+    // Resend's id for this message. Storing it is what lets the panel link
+    // straight to the delivery record — whether it landed, bounced or is
+    // still queued is Resend's to answer, and this is the pointer to the
+    // answer. Never surfaced publicly.
+    const resendId = sent.data?.id || "";
 
     async function writeBookkeeping(): Promise<void> {
       const fresh = await getValues(SOLICITUDES_RANGE);
       const freshRow = findRowNumber(fresh, folio);
       if (freshRow < 0) throw new Error(`folio ${folio} disappeared from the sheet`);
       await updateRow(`Solicitudes!O${freshRow}:P${freshRow}`, ["Facturada", todayISO()]);
-      await updateRow(`Solicitudes!S${freshRow}:T${freshRow}`, [notificadoEl, archivos]);
+      await updateRow(`Solicitudes!S${freshRow}:U${freshRow}`, [notificadoEl, archivos, resendId]);
     }
 
     try {

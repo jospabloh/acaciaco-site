@@ -272,10 +272,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // never shift. Subtotal/IVA are appended strictly after them (Q, R),
       // and the delivery bookkeeping after those (S, T).
       //
-      // The range spans the full table (A:T) even though the last two cells
-      // are empty: appending a shorter range than the table occupies leaves
-      // Sheets to guess the table bounds. Empty S/T is exactly right for a
-      // new request — it has not been mailed to the customer yet, and
+      // The range spans the full table (A:U) even though the last three
+      // cells are empty: appending a shorter range than the table occupies
+      // leaves Sheets to guess the table bounds. Empty S/T/U is exactly right
+      // for a new request — it has not been mailed to the customer yet, and
       // factura-admin-send.ts fills them in when it is.
       await appendRow(SOLICITUDES_RANGE, [
         folio,
@@ -298,6 +298,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         iva.toFixed(2),
         "", // S · Notificado el — filled in when the CFDI is mailed
         "", // T · Archivos enviados
+        "", // U · ID de Resend
       ]);
     } catch (err) {
       console.error("Sheets append (Solicitudes) failed", err);
