@@ -43,7 +43,7 @@ En `package.json`, añadir la clave `scripts` antes de `dependencies`:
 ```json
 {
   "scripts": {
-    "test": "node --test tests/"
+    "test": "node --test \"tests/**/*.test.ts\""
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.0",

@@ -1,19 +1,15 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getValues } from "./_sheets";
 import { getClientKey, isRateLimited } from "./_ratelimit";
+import {
+  RFC_WINDOW_DAYS,
+  SOLICITUDES_RANGE,
+  selectByFolio,
+  selectByRfc,
+  todayISO,
+} from "./_facturaRows";
 
 const RFC_RE = /^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/i;
-
-// Column order in the Solicitudes tab, written by factura-submit.ts:
-// Folio, FechaSolicitud, RFC, RazonSocial, RegimenFiscal, UsoCFDI, CP,
-// Email, Telefono, Sucursal, FechaConsumo, Monto, FormaPago, FolioTicket,
-// Estatus, FechaFacturacion
-const FOLIO = 0, FECHA_SOLICITUD = 1, RFC = 2, SUCURSAL = 9, MONTO = 11, ESTATUS = 14, FECHA_FACTURACION = 15;
-
-function fmtMoney(v: string): string {
-  const n = Number(v);
-  return isFinite(n) ? `$${n.toFixed(2)} MXN` : v;
-}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
@@ -30,34 +26,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ found: false, error: "Ingresa un folio o RFC." });
     }
 
-    const rows = await getValues("Solicitudes!A:P");
-    const data = rows.slice(1); // drop header
+    const rows = await getValues(SOLICITUDES_RANGE);
 
-    let match: string[] | undefined;
+    // A folio is looked up exactly and without a time window; an RFC returns
+    // every request inside the window, newest first.
     if (query.startsWith("RF-")) {
-      match = data.find((r) => (r[FOLIO] || "").toUpperCase() === query);
-    } else if (RFC_RE.test(query)) {
-      // Most recent request for that RFC — rows are appended chronologically.
-      for (let i = data.length - 1; i >= 0; i--) {
-        if ((data[i][RFC] || "").toUpperCase() === query) { match = data[i]; break; }
-      }
-    } else {
-      return res.status(400).json({ found: false, error: "Ingresa un folio (RF-...) o un RFC válido." });
+      const solicitudes = selectByFolio(rows, query);
+      return res.status(200).json({ found: solicitudes.length > 0, solicitudes });
     }
 
-    if (!match) {
-      return res.status(200).json({ found: false });
+    if (RFC_RE.test(query)) {
+      const { solicitudes, rfcExists } = selectByRfc(rows, query, todayISO());
+      return res.status(200).json({
+        found: solicitudes.length > 0,
+        solicitudes,
+        rfc_exists: rfcExists,
+        window_days: RFC_WINDOW_DAYS,
+      });
     }
 
-    return res.status(200).json({
-      found: true,
-      folio: match[FOLIO] || "",
-      fecha_solicitud: match[FECHA_SOLICITUD] || "",
-      sucursal: match[SUCURSAL] || "",
-      monto: match[MONTO] ? fmtMoney(match[MONTO]) : "",
-      estatus: match[ESTATUS] || "Pendiente",
-      fecha_facturacion: match[FECHA_FACTURACION] || "",
-    });
+    return res.status(400).json({ found: false, error: "Ingresa un folio (RF-...) o un RFC válido." });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ found: false, error: "No se pudo consultar el estatus en este momento." });

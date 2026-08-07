@@ -42,14 +42,43 @@
     #es-status{margin-top:1rem;font-size:.92rem;}
     #es-status.error{color:#c33;}
 
-    .es-result{display:none;margin-top:1.6rem;border-top:1px solid var(--border);padding-top:1.6rem;}
-    .es-result.show{display:block;}
-    .es-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;border-radius:99px;font-size:.85rem;font-weight:700;}
-    .es-badge.pendiente{background:#FFF3D6;color:#8A5A00;}
-    .es-badge.facturada{background:#DCFCE7;color:#0a7;}
-    .es-result dl{display:grid;grid-template-columns:auto 1fr;gap:.4rem 1rem;margin-top:1.2rem;font-size:.92rem;}
-    .es-result dt{color:var(--text-muted);}
-    .es-result dd{font-weight:600;}
+    /* Status colours are declared as tokens so the dark theme can restate
+       them; the old hard-coded pastels washed out on the dark background. */
+    :root{
+      --es-pend-bg:#FFF3D6; --es-pend-fg:#8A5A00; --es-pend-rule:#D9A21B;
+      --es-done-bg:#DCFCE7; --es-done-fg:#0A7A55; --es-done-rule:#0A9E6B;
+    }
+    [data-theme="dark"]{
+      --es-pend-bg:rgba(217,162,27,.14); --es-pend-fg:#E8B849; --es-pend-rule:#B8860F;
+      --es-done-bg:rgba(10,158,107,.15); --es-done-fg:#4BD6A0; --es-done-rule:#0A9E6B;
+    }
+
+    .es-results{display:none;margin-top:1.6rem;border-top:1px solid var(--border);padding-top:1.6rem;}
+    .es-results.show{display:block;}
+    .es-count{font-size:.78rem;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin:0 0 1rem;}
+
+    /* No background of its own: the item sits inside .es-card, and a second
+       card surface on top of the first reads as flat. The left rule carries
+       the state instead, so a list of several requests is scannable without
+       reading each badge. */
+    .es-item{position:relative;border:1px solid var(--border);border-left:3px solid var(--es-pend-rule);
+      border-radius:.9rem;padding:1.05rem 1.15rem;margin-bottom:.85rem;}
+    .es-item:last-child{margin-bottom:0;}
+    .es-item.facturada{border-left-color:var(--es-done-rule);}
+    .es-item-head{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;}
+    /* Same treatment as .rf-folio on the request page — a folio should look
+       like a folio everywhere in the micro-site. */
+    .es-folio{font-family:'Space Grotesk',monospace;font-weight:700;letter-spacing:.03em;font-size:.95rem;}
+    .es-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .85rem;border-radius:var(--radius-pill);
+      font-size:.76rem;font-weight:700;white-space:nowrap;}
+    .es-badge.pendiente{background:var(--es-pend-bg);color:var(--es-pend-fg);}
+    .es-badge.facturada{background:var(--es-done-bg);color:var(--es-done-fg);}
+    .es-item dl{display:grid;grid-template-columns:auto 1fr;gap:.35rem 1rem;margin:.9rem 0 0;font-size:.88rem;}
+    .es-item dt{color:var(--text-muted);}
+    .es-item dd{margin:0;font-weight:600;}
+    /* The one thing the customer came to find out. */
+    .es-sent{display:flex;align-items:center;gap:.45rem;margin:.9rem 0 0;padding-top:.8rem;
+      border-top:1px dashed var(--border);font-size:.85rem;color:var(--es-done-fg);font-weight:600;}
   </style>
 </head>
 
@@ -101,13 +130,13 @@
               <input id="es-query" name="query" placeholder="Folio (RF-0000) o RFC" required autocomplete="off" />
               <button class="btn btn-primary" type="submit">Consultar</button>
             </div>
-            <p class="es-hint">Ejemplo de folio: RF-2026-0001</p>
+            <p class="es-hint">Con tu RFC ves tus solicitudes de los últimos 30 días. Con el folio ves esa solicitud, sin importar la fecha.</p>
           </form>
           <p id="es-status" role="status" aria-live="polite"></p>
 
-          <div class="es-result" id="es-result">
-            <span class="es-badge" id="es-badge"></span>
-            <dl id="es-data"></dl>
+          <div class="es-results" id="es-results">
+            <p class="es-count" id="es-count"></p>
+            <div id="es-list"></div>
           </div>
         </div>
       </div>
@@ -136,48 +165,94 @@
   (function () {
     var form = document.getElementById('es-form');
     var statusEl = document.getElementById('es-status');
-    var resultEl = document.getElementById('es-result');
-    var badgeEl = document.getElementById('es-badge');
-    var dataEl = document.getElementById('es-data');
+    var resultsEl = document.getElementById('es-results');
+    var countEl = document.getElementById('es-count');
+    var listEl = document.getElementById('es-list');
     var input = document.getElementById('es-query');
 
-    function labelFor(key) {
-      return {
-        folio: 'Folio', fecha_solicitud: 'Solicitada el', sucursal: 'Sucursal',
-        monto: 'Monto', fecha_facturacion: 'Facturada el'
-      }[key] || key;
+    var LABELS = {
+      fecha_solicitud: 'Solicitada el',
+      sucursal: 'Sucursal',
+      monto: 'Monto',
+      fecha_facturacion: 'Facturada el'
+    };
+    var ORDER = ['fecha_solicitud', 'sucursal', 'monto', 'fecha_facturacion'];
+
+    // Built with createElement/textContent rather than innerHTML: every value
+    // here comes from the Sheet, which is filled in by the public form.
+    function itemNode(s) {
+      var facturada = s.estatus === 'Facturada';
+      var item = document.createElement('article');
+      item.className = 'es-item' + (facturada ? ' facturada' : '');
+
+      var head = document.createElement('div');
+      head.className = 'es-item-head';
+      var folio = document.createElement('span');
+      folio.className = 'es-folio';
+      folio.textContent = s.folio;
+      var badge = document.createElement('span');
+      badge.className = 'es-badge ' + (facturada ? 'facturada' : 'pendiente');
+      badge.textContent = facturada ? 'Facturada' : 'Pendiente';
+      head.appendChild(folio);
+      head.appendChild(badge);
+      item.appendChild(head);
+
+      var dl = document.createElement('dl');
+      ORDER.forEach(function (key) {
+        if (!s[key]) return;
+        var dt = document.createElement('dt');
+        dt.textContent = LABELS[key];
+        var dd = document.createElement('dd');
+        dd.textContent = s[key];
+        dl.appendChild(dt);
+        dl.appendChild(dd);
+      });
+      item.appendChild(dl);
+
+      if (s.notificado_el) {
+        var sent = document.createElement('p');
+        sent.className = 'es-sent';
+        sent.textContent = 'Te la enviamos por correo el ' + s.notificado_el.slice(0, 10) + '.';
+        item.appendChild(sent);
+      }
+      return item;
     }
 
     function render(json) {
-      resultEl.classList.add('show');
-      badgeEl.className = 'es-badge ' + (json.estatus === 'Facturada' ? 'facturada' : 'pendiente');
-      badgeEl.textContent = json.estatus === 'Facturada' ? '✓ Facturada' : '⏳ Pendiente';
-      dataEl.innerHTML = '';
-      ['folio', 'fecha_solicitud', 'sucursal', 'monto', 'fecha_facturacion'].forEach(function (key) {
-        if (!json[key]) return;
-        var dt = document.createElement('dt'); dt.textContent = labelFor(key);
-        var dd = document.createElement('dd'); dd.textContent = json[key];
-        dataEl.appendChild(dt); dataEl.appendChild(dd);
-      });
+      var list = json.solicitudes || [];
+      listEl.innerHTML = '';
+      list.forEach(function (s) { listEl.appendChild(itemNode(s)); });
+      countEl.textContent = list.length === 1
+        ? '1 solicitud'
+        : list.length + ' solicitudes';
+      resultsEl.classList.add('show');
     }
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var q = input.value.trim();
       if (!q) return;
-      resultEl.classList.remove('show');
+      resultsEl.classList.remove('show');
       statusEl.className = '';
-      statusEl.textContent = 'Buscando…';
+      statusEl.textContent = 'Buscando\u2026';
       fetch('/api/roseta/factura-status?query=' + encodeURIComponent(q))
         .then(function (r) { return r.json().then(function (json) { return { ok: r.ok, json: json }; }); })
         .then(function (res) {
-          if (!res.ok || !res.json || !res.json.found) {
-            statusEl.className = 'error';
-            statusEl.textContent = 'No encontramos una solicitud con ese dato. Verifica tu folio o RFC, o escríbenos a roseta.cafeteria@gmail.com.';
+          var json = res.json || {};
+          if (res.ok && json.found) {
+            statusEl.textContent = '';
+            render(json);
             return;
           }
-          statusEl.textContent = '';
-          render(res.json);
+          statusEl.className = 'error';
+          if (res.ok && json.rfc_exists) {
+            statusEl.textContent = 'Ese RFC tiene solicitudes, pero ninguna de los \u00faltimos '
+              + (json.window_days || 30) + ' d\u00edas. Busca con tu folio si es m\u00e1s antigua.';
+          } else if (json.error) {
+            statusEl.textContent = json.error;
+          } else {
+            statusEl.textContent = 'No encontramos una solicitud con ese dato. Revisa tu folio o RFC, o escr\u00edbenos a roseta.cafeteria@gmail.com.';
+          }
         })
         .catch(function () {
           statusEl.className = 'error';

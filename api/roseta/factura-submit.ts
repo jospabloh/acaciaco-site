@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Resend } from "resend";
 import { appendRow, getValues, sanitizeCell, updateRow } from "./_sheets";
 import { getClientKey, isRateLimited } from "./_ratelimit";
+import { SOLICITUDES_RANGE } from "./_facturaRows";
 
 const RFC_RE = /^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/i;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -141,7 +142,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // a genuinely new request is worse than an occasional duplicate row.
     let existingSolicitudes: string[][] = [];
     try {
-      existingSolicitudes = await getValues("Solicitudes!A:R");
+      existingSolicitudes = await getValues(SOLICITUDES_RANGE);
     } catch (err) {
       console.error("Solicitudes lookup (dup-check) failed", err);
     }
@@ -268,8 +269,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     try {
       // Estatus (O) and Fecha de facturación (P) stay exactly where they've
       // always been — Roseta edits Estatus by hand, so those columns must
-      // never shift. Subtotal/IVA are appended strictly after them (Q, R).
-      await appendRow("Solicitudes!A:R", [
+      // never shift. Subtotal/IVA are appended strictly after them (Q, R),
+      // and the delivery bookkeeping after those (S, T).
+      //
+      // The range spans the full table (A:T) even though the last two cells
+      // are empty: appending a shorter range than the table occupies leaves
+      // Sheets to guess the table bounds. Empty S/T is exactly right for a
+      // new request — it has not been mailed to the customer yet, and
+      // factura-admin-send.ts fills them in when it is.
+      await appendRow(SOLICITUDES_RANGE, [
         folio,
         fechaSolicitud,
         rfc,
@@ -288,6 +296,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         "",
         subtotal.toFixed(2),
         iva.toFixed(2),
+        "", // S · Notificado el — filled in when the CFDI is mailed
+        "", // T · Archivos enviados
       ]);
     } catch (err) {
       console.error("Sheets append (Solicitudes) failed", err);
