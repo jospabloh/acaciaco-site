@@ -1326,15 +1326,92 @@
     padding: 20px;
     animation: pop-in 0.16s ease-out;
   }
-  .auth-modal {
+  /* === Sign-in pass ===
+     The dialog is issued for the trip you're looking at: a printed stub
+     (name, route, dates) torn along a perforation from the credential half.
+     The notches are real holes punched with a mask, so the tear reads as
+     paper rather than as a drawn line. That pins the stub to a fixed
+     height — --tear-y must equal --stub-h. */
+  .auth-pass {
+    --stub-h: 168px;
+    --tear-y: var(--stub-h);
+    --notch: 11px;
     background: var(--card);
     border: 1px solid var(--line);
     border-radius: 18px;
     box-shadow: 0 20px 60px -16px oklch(0.20 0.015 60 / 0.4);
     width: 100%;
-    max-width: 380px;
-    padding: 28px 28px 24px;
+    max-width: 390px;
     position: relative;
+    overflow: hidden;
+    -webkit-mask:
+      radial-gradient(circle var(--notch) at left var(--tear-y), #0000 96%, #000 100%),
+      radial-gradient(circle var(--notch) at right var(--tear-y), #0000 96%, #000 100%);
+    -webkit-mask-composite: source-in;
+    mask:
+      radial-gradient(circle var(--notch) at left var(--tear-y), #0000 96%, #000 100%),
+      radial-gradient(circle var(--notch) at right var(--tear-y), #0000 96%, #000 100%);
+    mask-composite: intersect;
+  }
+  .auth-pass-stub {
+    height: var(--stub-h);
+    padding: 22px 26px;
+    display: flex;
+    flex-direction: column;
+    /* ticket stock — the page's own accents, calmed down to a print wash */
+    background:
+      radial-gradient(120% 140% at 0% 0%, oklch(from var(--mx) l c h / 0.11), transparent 62%),
+      radial-gradient(120% 150% at 100% 6%, oklch(from var(--cr) l c h / 0.11), transparent 60%),
+      var(--paper-2);
+  }
+  .pass-brand {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    margin-bottom: 14px;
+    padding-right: 26px; /* clear the close button */
+  }
+  .pass-wordmark {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.2em;
+    color: var(--ink-2);
+  }
+  .pass-wordmark span { color: var(--ink-3); }
+  .pass-eyebrow {
+    font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .pass-trip {
+    font-size: 25px; font-weight: 400; line-height: 1.15; letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0 0 auto;
+    /* one line, always — the tear position depends on this box not growing */
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .pass-row {
+    display: grid; grid-template-columns: 46px 1fr;
+    align-items: baseline; gap: 10px;
+    margin-top: 7px;
+  }
+  .pass-label {
+    font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .pass-legs {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 5px;
+    font-size: 12px; color: var(--ink-2); letter-spacing: 0.04em;
+  }
+  .pass-leg { display: inline-flex; align-items: center; gap: 5px; }
+  .pass-leg-sep { color: var(--ink-3); }
+  .pass-dates { font-size: 12.5px; color: var(--ink-2); }
+  .auth-pass-tear {
+    border-top: 1px dashed var(--line-2);
+    opacity: 0.9;
+  }
+  .auth-pass-body { padding: 22px 26px 22px; }
+  .pass-subtitle {
+    margin: 0 0 18px;
+    color: var(--ink-3);
+    font-size: 13px;
+    line-height: 1.5;
+    text-wrap: pretty;
   }
   .auth-modal-close {
     position: absolute;
@@ -1348,21 +1425,7 @@
     font-size: 18px;
     font-family: inherit;
   }
-  .auth-modal-close:hover { background: var(--paper-2); color: var(--ink); }
-  .auth-modal h2 {
-    font-family: "Space Grotesk", serif;
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 1.1;
-    margin: 0 0 4px;
-    color: var(--ink);
-    text-wrap: balance;
-  }
-  .auth-modal p {
-    margin: 0 0 20px;
-    color: var(--ink-3);
-    font-size: 13px;
-  }
+  .auth-modal-close:hover { background: var(--card); color: var(--ink); }
   .auth-google {
     width: 100%;
     display: inline-flex; align-items: center; justify-content: center; gap: 10px;
@@ -1403,6 +1466,30 @@
     transition: border-color 0.15s;
   }
   .auth-field:focus { border-color: var(--ink-2); }
+  .auth-field-pw { position: relative; }
+  .auth-field-pw .auth-field { padding-right: 40px; }
+  .auth-pw-toggle {
+    position: absolute;
+    top: 0; right: 0;
+    height: 39px; width: 38px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: transparent; border: none;
+    color: var(--ink-3);
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  .auth-pw-toggle:hover { color: var(--ink-2); }
+  .auth-hint {
+    font-size: 11px;
+    color: var(--ink-3);
+    margin: 0 0 10px;
+  }
+  .auth-info {
+    color: var(--ink-2);
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 0 0 10px;
+  }
   .auth-submit {
     width: 100%;
     background: var(--ink);
@@ -1436,9 +1523,24 @@
   .auth-error {
     color: oklch(0.55 0.18 25);
     font-size: 12px;
+    line-height: 1.5;
     margin: 0 0 10px;
-    min-height: 16px;
   }
+  .theme-ink .auth-error { color: oklch(0.72 0.15 25); }
+  /* The SDK-missing case isn't the user's fault — give it room, not a red line */
+  .auth-error-block {
+    background: oklch(0.55 0.18 25 / 0.08);
+    border: 1px solid oklch(0.55 0.18 25 / 0.22);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+  }
+  .auth-google:disabled,
+  .auth-field:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .auth-google:disabled:hover { border-color: var(--line); background: var(--paper); }
   .auth-note {
     font-size: 11px;
     color: var(--ink-3);
@@ -1519,11 +1621,38 @@
     margin: 0;
     line-height: 1.5;
   }
+  /* Privacy terms sit under the buttons and open on demand — present, but not
+     louder than the decision they qualify. */
   .budget-cta-note {
     color: var(--ink-3);
     font-size: 12px;
-    margin: 6px 0 0;
+    margin: 2px 0 0;
     line-height: 1.5;
+  }
+  .budget-cta-note > summary {
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+    list-style: none;
+    color: var(--ink-3);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--line-2);
+    width: fit-content;
+    border-radius: 4px;
+  }
+  .budget-cta-note > summary::-webkit-details-marker { display: none; }
+  .budget-cta-note > summary::before {
+    content: "";
+    width: 0; height: 0;
+    border-left: 4px solid currentColor;
+    border-top: 3.5px solid transparent;
+    border-bottom: 3.5px solid transparent;
+    transition: transform 0.15s;
+  }
+  .budget-cta-note[open] > summary::before { transform: rotate(90deg); }
+  .budget-cta-note > summary:hover { color: var(--ink-2); }
+  .budget-cta-note > p {
+    margin: 10px 0 0;
     padding: 10px 12px;
     background: var(--paper-2);
     border-radius: 10px;
@@ -1531,7 +1660,7 @@
   }
   .budget-cta-actions {
     display: flex; gap: 10px; flex-wrap: wrap;
-    margin-top: 6px;
+    margin-top: 2px;
   }
   .btn-primary {
     background: var(--ink);
@@ -1970,11 +2099,20 @@
 
     /* ── Auth modal + cookie: bottom sheet ──── */
     .auth-overlay { padding: 0; align-items: flex-end; animation: fade-in 0.22s ease-out; }
-    .auth-modal {
+    .auth-pass {
+      --stub-h: 152px;
       border-radius: 28px 28px 0 0;
       max-width: 100%;
-      padding-bottom: max(30px, env(safe-area-inset-bottom));
       animation: slide-up 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      /* full-bleed sheet: notches would hang off the screen edges, so the
+         perforation carries the tear on its own here */
+      -webkit-mask: none;
+      mask: none;
+    }
+    .auth-pass-stub { padding: 20px 22px; }
+    .pass-trip { font-size: 22px; }
+    .auth-pass-body {
+      padding: 20px 22px max(26px, env(safe-area-inset-bottom));
     }
     .cookie-banner { align-items: flex-end; padding: 0; }
     .cookie-banner-inner {
@@ -2202,8 +2340,10 @@
   <script src="/assets/vendor/react@18.3.1/react.production.min.js"></script>
   <script src="/assets/vendor/react-dom@18.3.1/react-dom.production.min.js"></script>
   <script src="/assets/vendor/babel-standalone@7.29.0/babel.min.js"></script>
-  <script src="https://unpkg.com/@supabase/supabase-js@2.46.1/dist/umd/supabase.min.js"></script>
-  <script src="https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+  <!-- Vendored: @supabase/supabase-js only ships dist/umd/supabase.js (no .min),
+       so the old unpkg URL 404'd and auth silently did nothing. -->
+  <script src="/assets/vendor/supabase-js@2.46.1/supabase.js"></script>
+  <script src="https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
 
   <script type="text/babel" src="/freeware/plink-fx/tweaks-panel.jsx"></script>
   <script type="text/babel" src="/freeware/plink-fx/app.jsx"></script>
