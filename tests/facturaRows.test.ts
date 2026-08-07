@@ -1,0 +1,94 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import {
+  COL,
+  cell,
+  fmtMoney,
+  isWithinDays,
+  publicSolicitud,
+  findRowNumber,
+} from "../api/roseta/_facturaRows.ts";
+
+// A row shaped exactly like factura-submit.ts writes it, extended to T.
+function row(over: Record<string, string> = {}): string[] {
+  const r = [
+    "RF-20260801-AB12", "2026-08-01", "XAXX010101000", "Juan Pérez",
+    "612", "G03", "20000", "juan@ejemplo.com", "4490000000", "UAA",
+    "2026-07-31", "348.00", "Efectivo", "MOV-991",
+    "Pendiente", "", "300.00", "48.00", "", "",
+  ];
+  for (const [k, v] of Object.entries(over)) r[COL[k as keyof typeof COL]] = v;
+  return r;
+}
+
+test("cell devuelve cadena vacía para índices ausentes", () => {
+  assert.equal(cell(["a"], 5), "");
+  assert.equal(cell(["a", " b "], 1), "b");
+});
+
+test("fmtMoney formatea números y deja pasar lo no numérico", () => {
+  assert.equal(fmtMoney("348"), "$348.00 MXN");
+  assert.equal(fmtMoney("no-es-numero"), "no-es-numero");
+});
+
+test("isWithinDays acepta una fecha dentro de la ventana", () => {
+  assert.equal(isWithinDays("2026-07-20", 30, "2026-08-05"), true);
+});
+
+test("isWithinDays rechaza una fecha fuera de la ventana", () => {
+  assert.equal(isWithinDays("2026-06-01", 30, "2026-08-05"), false);
+});
+
+test("isWithinDays incluye el borde exacto de la ventana", () => {
+  assert.equal(isWithinDays("2026-07-06", 30, "2026-08-05"), true);
+});
+
+test("isWithinDays muestra filas con fecha vacía o malformada", () => {
+  assert.equal(isWithinDays("", 30, "2026-08-05"), true);
+  assert.equal(isWithinDays("no-es-fecha", 30, "2026-08-05"), true);
+});
+
+test("isWithinDays muestra fechas futuras en vez de esconderlas", () => {
+  assert.equal(isWithinDays("2026-09-01", 30, "2026-08-05"), true);
+});
+
+test("publicSolicitud expone sólo los campos públicos", () => {
+  const s = publicSolicitud(row());
+  assert.deepEqual(s, {
+    folio: "RF-20260801-AB12",
+    fecha_solicitud: "2026-08-01",
+    sucursal: "UAA",
+    monto: "$348.00 MXN",
+    estatus: "Pendiente",
+    fecha_facturacion: "",
+    notificado_el: "",
+  });
+});
+
+test("publicSolicitud nunca filtra datos personales", () => {
+  const s = publicSolicitud(row()) as unknown as Record<string, string>;
+  for (const leaked of ["juan@ejemplo.com", "Juan Pérez", "20000", "4490000000"]) {
+    assert.equal(
+      Object.values(s).includes(leaked), false,
+      `publicSolicitud filtró ${leaked}`,
+    );
+  }
+});
+
+test("publicSolicitud asume Pendiente cuando la columna está vacía", () => {
+  assert.equal(publicSolicitud(row({ ESTATUS: "" })).estatus, "Pendiente");
+});
+
+test("findRowNumber devuelve el número de fila 1-based del Sheet", () => {
+  const rows = [["Folio"], row(), row({ FOLIO: "RF-20260802-CD34" })];
+  assert.equal(findRowNumber(rows, "RF-20260802-CD34"), 3);
+});
+
+test("findRowNumber ignora el encabezado y no distingue mayúsculas", () => {
+  const rows = [["Folio"], row()];
+  assert.equal(findRowNumber(rows, "rf-20260801-ab12"), 2);
+});
+
+test("findRowNumber devuelve -1 si el folio no existe", () => {
+  assert.equal(findRowNumber([["Folio"], row()], "RF-NOPE"), -1);
+});
