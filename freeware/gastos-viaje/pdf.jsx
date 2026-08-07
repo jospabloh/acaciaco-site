@@ -80,7 +80,9 @@ window.GVPdf = (function () {
     ]
     var right = [
       [t("pdf_destination"), trip.destination],
-      [t("pdf_period"), (trip.dateFrom || trip.dateTo) ? fmtDate(trip.dateFrom) + " – " + fmtDate(trip.dateTo) : ""],
+      // Guion simple, no guion largo: safe() descarta lo que no está en WinAnsi
+      // y un "–" desaparecería, dejando dos fechas pegadas sin separador.
+      [t("pdf_period"), (trip.dateFrom || trip.dateTo) ? fmtDate(trip.dateFrom) + " - " + fmtDate(trip.dateTo) : ""],
       [t("pdf_purpose"), trip.purpose],
     ]
     var blockTop = y
@@ -135,16 +137,19 @@ window.GVPdf = (function () {
     }
 
     // ── 2. Tabla de gastos ──────────────────────────────────────────────────
+    // El ancho útil es W - 2M = 516 pt. Las columnas se reparten dejando al
+    // menos 6 pt entre el borde de una y el inicio de la siguiente: con menos,
+    // el IVA y la marca de deducible se leen como un solo dato.
     var COLS = [
-      { key: "n", label: "#", x: M, w: 20, align: "l" },
-      { key: "date", label: t("pdf_col_date"), x: M + 22, w: 54, align: "l" },
-      { key: "cat", label: t("pdf_col_category"), x: M + 78, w: 78, align: "l" },
-      { key: "desc", label: t("pdf_col_description"), x: M + 158, w: 120, align: "l" },
-      { key: "curr", label: t("pdf_col_currency"), x: M + 280, w: 34, align: "l" },
-      { key: "fx", label: t("pdf_col_fx"), x: M + 316, w: 40, align: "r" },
-      { key: "amt", label: t("pdf_col_amount"), x: M + 358, w: 78, align: "r" },
-      { key: "tax", label: t("pdf_col_tax"), x: M + 438, w: 56, align: "r" },
-      { key: "ded", label: t("pdf_col_deductible"), x: M + 496, w: 20, align: "l" },
+      { key: "n", label: "#", x: M, w: 16, align: "l" },
+      { key: "date", label: t("pdf_col_date"), x: M + 18, w: 52, align: "l" },
+      { key: "cat", label: t("pdf_col_category"), x: M + 74, w: 76, align: "l" },
+      { key: "desc", label: t("pdf_col_description"), x: M + 154, w: 116, align: "l" },
+      { key: "curr", label: t("pdf_col_currency"), x: M + 274, w: 30, align: "l" },
+      { key: "fx", label: t("pdf_col_fx"), x: M + 308, w: 40, align: "r" },
+      { key: "amt", label: t("pdf_col_amount"), x: M + 356, w: 76, align: "r" },
+      { key: "tax", label: t("pdf_col_tax"), x: M + 440, w: 52, align: "r" },
+      { key: "ded", label: t("pdf_col_deductible"), x: M + 498, w: 18, align: "l" },
     ]
 
     function newTablePage(title) {
