@@ -30,9 +30,18 @@ const STRINGS = {
     empty: "Aún no hay gastos. Agrega el primero y aparecerá aquí con su comprobante.",
     e_date: "Fecha", e_category: "Categoría", e_description: "Descripción",
     e_description_ph: "Hotel Centro, 2 noches",
-    e_amount: "Monto", e_currency: "Moneda", e_fx: "Tipo de cambio",
+    e_amount: "Consumo", e_tip: "Propina", e_currency: "Moneda",
+    e_fx: "Tipo de cambio",
     e_fx_hint: "1 {cur} = ? {base}", e_fx_suggest: "Traer del día",
-    e_tax: "IVA", e_deductible: "Deducible",
+    e_fx_missing: "Falta el tipo de cambio",
+    e_how_paid: "Cómo se pagó",
+    pay_efectivo: "Efectivo", pay_tdc_propia: "Mi tarjeta", pay_tdc_empresa: "Tarjeta empresa",
+    consequence_efectivo: "Sale de tu anticipo.",
+    consequence_tdc_propia: "Lo pusiste tú: se te reembolsa.",
+    consequence_tdc_empresa: "Ya lo pagó la empresa: no afecta tu saldo.",
+    e_invoiced: "Con factura",
+    e_tax: "IVA", e_tax_auto: "se calcula solo, edítalo si difiere",
+    e_tax_none: "Sin factura no hay IVA que acreditar.",
     e_delete: "Eliminar gasto",
     receipt_add: "Adjuntar comprobante", receipt_change: "Cambiar", receipt_remove: "Quitar",
     receipt_none: "Sin comprobante",
@@ -44,7 +53,8 @@ const STRINGS = {
 
     doc_kicker: "Reporte de gastos", doc_untitled: "Viaje sin destino",
     doc_noname: "Sin viajero", doc_period: "Sin fechas",
-    f_total: "Total gastado", f_tax: "IVA acreditable", f_advance: "Anticipo",
+    f_total: "Total del viaje", f_tax: "IVA acreditable", f_advance: "Anticipo",
+    f_settleable: "A liquidar contigo",
     bal_refund: "Te deben", bal_return: "Debes devolver", bal_settled: "Cuentas saldadas",
     download: "Descargar reporte (PDF)", download_busy: "Armando el PDF…",
     csv: "CSV", json_export: "Guardar .json", json_import: "Abrir .json",
@@ -77,7 +87,10 @@ const STRINGS = {
     pdf_title: "Reporte de gastos de viaje",
     pdf_traveler: "Viajero", pdf_employee: "No. de empleado", pdf_company: "Empresa",
     pdf_destination: "Destino", pdf_period: "Periodo", pdf_purpose: "Motivo",
-    pdf_total: "Total gastado", pdf_tax: "IVA acreditable", pdf_advance: "Anticipo recibido",
+    pdf_total: "Total del viaje", pdf_tax: "IVA acreditable", pdf_advance: "Anticipo recibido",
+    pdf_settleable: "A liquidar con el viajero",
+    pdf_pay_efectivo: "En efectivo", pdf_pay_tdc_propia: "Con tarjeta del viajero",
+    pdf_pay_tdc_empresa: "Con tarjeta de la empresa",
     pdf_bal_refund: "Saldo a reembolsar al viajero",
     pdf_bal_return: "Saldo a devolver a la empresa",
     pdf_bal_settled: "Cuentas saldadas",
@@ -85,7 +98,9 @@ const STRINGS = {
     pdf_table_title: "Detalle de gastos", pdf_table_title_cont: "Detalle de gastos (continúa)",
     pdf_col_date: "Fecha", pdf_col_category: "Categoría", pdf_col_description: "Descripción",
     pdf_col_currency: "Mon.", pdf_col_fx: "TC", pdf_col_amount: "Importe",
-    pdf_col_tax: "IVA", pdf_col_deductible: "Ded.",
+    pdf_col_tax: "IVA", pdf_col_payment: "Pago", pdf_col_tip: "Propina",
+    pdf_short_efectivo: "Efectivo", pdf_short_tdc_propia: "T. viajero",
+    pdf_short_tdc_empresa: "T. empresa",
     pdf_yes: "Sí", pdf_count: "{n} gasto(s)",
     pdf_signed_by: "Elaboró (viajero)", pdf_approved_by: "Autorizó",
     pdf_annex_title: "ANEXO DE COMPROBANTES",
@@ -94,7 +109,8 @@ const STRINGS = {
     pdf_footer: "Generado en acaciaco.com.mx/freeware/gastos-viaje",
     csv_date: "Fecha", csv_category: "Categoría", csv_description: "Descripción",
     csv_currency: "Moneda", csv_amount: "Monto", csv_fx: "Tipo de cambio",
-    csv_converted: "Importe", csv_tax: "IVA", csv_deductible: "Deducible",
+    csv_converted: "Importe", csv_tax: "IVA", csv_invoiced: "Con factura",
+    csv_payment: "Pago", csv_tip: "Propina", csv_settles: "Cuenta al saldo",
   },
   en: {
     nav_more: "← More tools", theme_label: "Toggle theme", lang_label: "Language",
@@ -118,9 +134,18 @@ const STRINGS = {
     empty: "No expenses yet. Add the first one and it shows up here with its receipt.",
     e_date: "Date", e_category: "Category", e_description: "Description",
     e_description_ph: "Hotel Centro, 2 nights",
-    e_amount: "Amount", e_currency: "Currency", e_fx: "Exchange rate",
+    e_amount: "Charge", e_tip: "Tip", e_currency: "Currency",
+    e_fx: "Exchange rate",
     e_fx_hint: "1 {cur} = ? {base}", e_fx_suggest: "Today's rate",
-    e_tax: "Tax", e_deductible: "Deductible",
+    e_fx_missing: "Exchange rate missing",
+    e_how_paid: "How it was paid",
+    pay_efectivo: "Cash", pay_tdc_propia: "My card", pay_tdc_empresa: "Company card",
+    consequence_efectivo: "Comes out of your advance.",
+    consequence_tdc_propia: "You fronted it: you get reimbursed.",
+    consequence_tdc_empresa: "The company already paid: your balance is untouched.",
+    e_invoiced: "Has an invoice",
+    e_tax: "Tax", e_tax_auto: "worked out for you, edit if it differs",
+    e_tax_none: "No invoice, no tax to credit.",
     e_delete: "Delete expense",
     receipt_add: "Attach receipt", receipt_change: "Replace", receipt_remove: "Remove",
     receipt_none: "No receipt",
@@ -132,7 +157,8 @@ const STRINGS = {
 
     doc_kicker: "Expense report", doc_untitled: "Trip with no destination",
     doc_noname: "No traveler", doc_period: "No dates",
-    f_total: "Total spent", f_tax: "Deductible tax", f_advance: "Advance",
+    f_total: "Trip total", f_tax: "Creditable tax", f_advance: "Advance",
+    f_settleable: "To settle with you",
     bal_refund: "You are owed", bal_return: "You must return", bal_settled: "All settled",
     download: "Download report (PDF)", download_busy: "Building the PDF…",
     csv: "CSV", json_export: "Save .json", json_import: "Open .json",
@@ -165,7 +191,10 @@ const STRINGS = {
     pdf_title: "Travel expense report",
     pdf_traveler: "Traveler", pdf_employee: "Employee ID", pdf_company: "Company",
     pdf_destination: "Destination", pdf_period: "Period", pdf_purpose: "Purpose",
-    pdf_total: "Total spent", pdf_tax: "Deductible tax", pdf_advance: "Advance received",
+    pdf_total: "Trip total", pdf_tax: "Creditable tax", pdf_advance: "Advance received",
+    pdf_settleable: "To settle with the traveler",
+    pdf_pay_efectivo: "In cash", pdf_pay_tdc_propia: "On the traveler's card",
+    pdf_pay_tdc_empresa: "On the company card",
     pdf_bal_refund: "Balance to reimburse the traveler",
     pdf_bal_return: "Balance to return to the company",
     pdf_bal_settled: "All settled",
@@ -173,7 +202,9 @@ const STRINGS = {
     pdf_table_title: "Expense detail", pdf_table_title_cont: "Expense detail (continued)",
     pdf_col_date: "Date", pdf_col_category: "Category", pdf_col_description: "Description",
     pdf_col_currency: "Curr.", pdf_col_fx: "Rate", pdf_col_amount: "Amount",
-    pdf_col_tax: "Tax", pdf_col_deductible: "Ded.",
+    pdf_col_tax: "Tax", pdf_col_payment: "Paid", pdf_col_tip: "Tip",
+    pdf_short_efectivo: "Cash", pdf_short_tdc_propia: "Own card",
+    pdf_short_tdc_empresa: "Co. card",
     pdf_yes: "Yes", pdf_count: "{n} expense(s)",
     pdf_signed_by: "Prepared by (traveler)", pdf_approved_by: "Approved by",
     pdf_annex_title: "RECEIPT ANNEX",
@@ -182,7 +213,8 @@ const STRINGS = {
     pdf_footer: "Generated at acaciaco.com.mx/freeware/gastos-viaje",
     csv_date: "Date", csv_category: "Category", csv_description: "Description",
     csv_currency: "Currency", csv_amount: "Amount", csv_fx: "Rate",
-    csv_converted: "Converted", csv_tax: "Tax", csv_deductible: "Deductible",
+    csv_converted: "Converted", csv_tax: "Tax", csv_invoiced: "Has invoice",
+    csv_payment: "Payment", csv_tip: "Tip", csv_settles: "Counts to balance",
   },
 }
 
@@ -206,7 +238,7 @@ const symbolFor = (c) => SYMBOLS[c] || ""
 
 function emptyReport() {
   return {
-    v: 1,
+    v: 2,
     trip: {
       traveler: "", employeeId: "", company: "", destination: "", purpose: "",
       dateFrom: "", dateTo: "", currency: "MXN", advance: "", notes: "",
@@ -219,7 +251,8 @@ function emptyReport() {
 function newExpense(currency) {
   return {
     id: Store.uid(), date: "", category: "alimentos", description: "",
-    amount: "", currency: currency, fx: "", taxAmount: "", deductible: false,
+    amount: "", tip: "", currency: currency, fx: "", payment: "efectivo",
+    invoiced: false, taxAmount: "",
     receiptId: null, receiptName: "", receiptType: "",
   }
 }
@@ -283,7 +316,47 @@ function ReceiptThumb({ expense, t }) {
   )
 }
 
-function ExpenseRow({ expense, index, reportCurrency, t, onChange, onDelete, onAttach, onDetach, onSuggestFx }) {
+// Los días del viaje como botones. Se listan sólo si el rango es corto: en un
+// viaje de tres semanas, veintiún botones estorban más de lo que ayudan y el
+// calendario nativo vuelve a ser lo correcto.
+const MAX_DAY_CHIPS = 10
+function tripDays(trip) {
+  if (!trip.dateFrom || !trip.dateTo) return []
+  const from = new Date(trip.dateFrom + "T00:00:00")
+  const to = new Date(trip.dateTo + "T00:00:00")
+  if (isNaN(from) || isNaN(to) || to < from) return []
+  const days = []
+  for (let d = new Date(from); d <= to && days.length <= MAX_DAY_CHIPS; d.setDate(d.getDate() + 1)) {
+    days.push(d.toISOString().slice(0, 10))
+  }
+  return days.length > MAX_DAY_CHIPS ? [] : days
+}
+
+function DayPicker({ value, days, lang, onPick, onChange }) {
+  const fmt = (iso) => {
+    const d = new Date(iso + "T00:00:00")
+    return {
+      dow: d.toLocaleDateString(lang === "en" ? "en-US" : "es-MX", { weekday: "short" }).replace(".", ""),
+      num: d.getDate(),
+    }
+  }
+  return (
+    <div className="daypick">
+      {days.map((iso) => {
+        const { dow, num } = fmt(iso)
+        return (
+          <button type="button" key={iso} className="day" aria-pressed={value === iso}
+            onClick={() => onPick(iso)}>
+            <em>{dow}</em>{num}
+          </button>
+        )
+      })}
+      <input type="date" value={value} onChange={onChange} />
+    </div>
+  )
+}
+
+function ExpenseRow({ expense, index, reportCurrency, trip, lang, t, onChange, onDelete, onAttach, onDetach, onSuggestFx }) {
   const fileRef = useRef(null)
   const set = (k) => (ev) => {
     const v = ev.target.type === "checkbox" ? ev.target.checked : ev.target.value
@@ -292,6 +365,13 @@ function ExpenseRow({ expense, index, reportCurrency, t, onChange, onDelete, onA
   const foreign = expense.currency !== reportCurrency
   const flagged = C.isIncomplete(expense, reportCurrency)
   const canSuggest = expense.currency === "USD" && reportCurrency === "MXN"
+  const withTip = C.allowsTip(expense.category)
+  const days = useMemo(() => tripDays(trip), [trip.dateFrom, trip.dateTo])
+
+  const ownSym = symbolFor(expense.currency)
+  const grossOwn = C.toCents(expense.amount) + (withTip ? C.toCents(expense.tip) : 0)
+  const grossReport = C.expenseGrossCents(expense, reportCurrency)
+  const autoTax = C.autoTaxCents(expense)
 
   return (
     <div className={"exp" + (flagged ? " flag" : "")}>
@@ -300,10 +380,11 @@ function ExpenseRow({ expense, index, reportCurrency, t, onChange, onDelete, onA
         {flagged && <span title={t("incomplete")} aria-label={t("incomplete")}>!</span>}
       </div>
       <div className="exp-body">
-        <div className="row3">
+        <div className="row2">
           <div className="field">
             <label>{t("e_date")}</label>
-            <input type="date" value={expense.date} onChange={set("date")} />
+            <DayPicker value={expense.date} days={days} lang={lang}
+              onPick={(iso) => onChange({ ...expense, date: iso })} onChange={set("date")} />
           </div>
           <div className="field">
             <label>{t("e_category")}</label>
@@ -311,47 +392,87 @@ function ExpenseRow({ expense, index, reportCurrency, t, onChange, onDelete, onA
               {C.CATEGORIES.map((c) => <option key={c} value={c}>{t("cat_" + c)}</option>)}
             </select>
           </div>
-          <div className="field">
-            <label>{t("e_amount")}</label>
-            <input type="text" inputMode="decimal" className="mono" value={expense.amount}
-              onChange={set("amount")} placeholder="0.00" />
-          </div>
-        </div>
-
-        {/* El tipo de cambio sólo existe cuando la moneda difiere de la del
-            reporte; sin él la fila es de dos columnas, no una de tres con hueco. */}
-        <div className={foreign ? "row3" : "row2"}>
-          <div className="field">
-            <label>{t("e_currency")}</label>
-            <select value={expense.currency} onChange={set("currency")}>
-              {C.CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
-            </select>
-          </div>
-          {foreign && (
-            <div className="field">
-              <label>{t("e_fx")} <span className="hint">{t("e_fx_hint", { cur: expense.currency, base: reportCurrency })}</span></label>
-              <div className="fx-row">
-                <input type="text" inputMode="decimal" className="mono" value={expense.fx}
-                  onChange={set("fx")} placeholder="18.42" />
-                {canSuggest && (
-                  <button type="button" className="btn-mini" onClick={() => onSuggestFx(expense)}>
-                    {t("e_fx_suggest")}
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
-          <div className="field">
-            <label>{t("e_tax")} <span className="hint">{expense.currency}</span></label>
-            <input type="text" inputMode="decimal" className="mono" value={expense.taxAmount}
-              onChange={set("taxAmount")} placeholder="0.00" />
-          </div>
         </div>
 
         <div className="field">
           <label>{t("e_description")}</label>
           <input type="text" value={expense.description} onChange={set("description")}
             placeholder={t("e_description_ph")} />
+        </div>
+
+        {/* Consumo + propina = importe. Los campos van dentro de la cuenta. */}
+        <div className="money">
+          <div className="slot">
+            <label>{t("e_amount")}</label>
+            <input type="text" inputMode="decimal" className="mono" value={expense.amount}
+              onChange={set("amount")} placeholder="0.00" />
+          </div>
+          {withTip && <span className="op" aria-hidden="true">+</span>}
+          {withTip && (
+            <div className="slot">
+              <label>{t("e_tip")}</label>
+              <input type="text" inputMode="decimal" className="mono" value={expense.tip}
+                onChange={set("tip")} placeholder="0.00" />
+            </div>
+          )}
+          <div className="slot">
+            <label>{t("e_currency")}</label>
+            <select value={expense.currency} onChange={set("currency")}>
+              {C.CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+          <div className="result">
+            <span className="v">{C.formatMoney(grossOwn, ownSym)}</span>
+            <span className="cur">{expense.currency}</span>
+            {foreign && (
+              <span className="conv">
+                {C.expenseFx(expense, reportCurrency) > 0
+                  ? "= " + C.formatMoney(grossReport, symbolFor(reportCurrency)) + " " + reportCurrency
+                  : t("e_fx_missing")}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {foreign && (
+          <div className="tax-row">
+            <div className="slot">
+              <label>{t("e_fx")} <span className="hint">{t("e_fx_hint", { cur: expense.currency, base: reportCurrency })}</span></label>
+              <input type="text" inputMode="decimal" className="mono" value={expense.fx}
+                onChange={set("fx")} placeholder="18.42" />
+            </div>
+            {canSuggest && (
+              <button type="button" className="btn-mini" style={{ marginBottom: 1 }}
+                onClick={() => onSuggestFx(expense)}>{t("e_fx_suggest")}</button>
+            )}
+          </div>
+        )}
+
+        <div className="split"><span>{t("e_how_paid")}</span></div>
+
+        <div className="pay-seg" role="group" aria-label={t("e_how_paid")}>
+          {C.PAYMENTS.map((p) => (
+            <button type="button" key={p} aria-pressed={expense.payment === p}
+              onClick={() => onChange({ ...expense, payment: p })}>{t("pay_" + p)}</button>
+          ))}
+        </div>
+        <div className="consequence">{t("consequence_" + expense.payment)}</div>
+
+        <div className="tax-row">
+          <label className="check" style={{ paddingBottom: 11 }}>
+            <input type="checkbox" checked={!!expense.invoiced} onChange={set("invoiced")} />
+            {t("e_invoiced")}
+          </label>
+          {expense.invoiced ? (
+            <div className="slot">
+              <label>{t("e_tax")} <span className="hint">{t("e_tax_auto")}</span></label>
+              <input type="text" inputMode="decimal" className="mono" value={expense.taxAmount}
+                onChange={set("taxAmount")}
+                placeholder={C.formatMoney(autoTax, ownSym).replace(ownSym, "")} />
+            </div>
+          ) : (
+            <span className="tax-off">{t("e_tax_none")}</span>
+          )}
         </div>
 
         <div className="receipt">
@@ -368,16 +489,8 @@ function ExpenseRow({ expense, index, reportCurrency, t, onChange, onDelete, onA
               {t("receipt_remove")}
             </button>
           )}
-        </div>
-
-        <div className="exp-actions">
-          <div className="exp-flags">
-            <label className="check">
-              <input type="checkbox" checked={!!expense.deductible} onChange={set("deductible")} />
-              {t("e_deductible")}
-            </label>
-          </div>
-          <button type="button" className="rowdel" onClick={() => onDelete(expense)}
+          <button type="button" className="rowdel" style={{ marginLeft: "auto" }}
+            onClick={() => onDelete(expense)}
             title={t("e_delete")} aria-label={t("e_delete")}>
             <Icon name="trash" />
           </button>
@@ -400,7 +513,7 @@ function App() {
 
   useEffect(() => {
     Store.load().then((saved) => {
-      if (saved && saved.v === 1) setReport(saved)
+      if (saved && (saved.v === 1 || saved.v === 2)) setReport(C.migrate(saved))
       setLoaded(true)
       if (!Store.available) setMessage({ kind: "warn", text: t("warn_nostore") })
     })
@@ -506,7 +619,10 @@ function App() {
     const csv = C.toCsv(report, {
       date: t("csv_date"), category: t("csv_category"), description: t("csv_description"),
       currency: t("csv_currency"), amount: t("csv_amount"), fx: t("csv_fx"),
-      converted: t("csv_converted"), tax: t("csv_tax"), deductible: t("csv_deductible"),
+      converted: t("csv_converted"), tax: t("csv_tax"), invoiced: t("csv_invoiced"),
+      payment: t("csv_payment"), tip: t("csv_tip"), settles: t("csv_settles"),
+      pay_efectivo: t("pay_efectivo"), pay_tdc_propia: t("pay_tdc_propia"),
+      pay_tdc_empresa: t("pay_tdc_empresa"),
     })
     download(new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" }), fileBase() + ".csv")
   }
@@ -517,7 +633,7 @@ function App() {
 
   const openJson = (file) => {
     Store.importJson(file)
-      .then((r) => { setReport(r); setMessage(null) })
+      .then((r) => { setReport(C.migrate(r)); setMessage(null) })
       .catch(() => setMessage({ kind: "warn", text: t("err_json") }))
   }
 
@@ -624,6 +740,7 @@ function App() {
 
             {report.expenses.map((e, i) => (
               <ExpenseRow key={e.id} expense={e} index={i} reportCurrency={report.trip.currency}
+                trip={report.trip} lang={lang}
                 t={t} onChange={updateExpense} onDelete={deleteExpense}
                 onAttach={attachReceipt} onDetach={detachReceipt} onSuggestFx={suggestFx} />
             ))}
@@ -655,7 +772,20 @@ function App() {
 
               <div className="doc-figs">
                 <div className="fig"><span>{t("f_total")}</span><span className="v">{money(totals.totalCents)}</span></div>
-                <div className="fig"><span>{t("f_tax")}</span><span className="v">{money(totals.taxCents)}</span></div>
+                {/* El desglose explica el total de arriba: lo de la tarjeta de
+                    la empresa se atenúa porque no entra en la liquidación. */}
+                {C.PAYMENTS.map((p) => (
+                  totals.byPayment[p] ? (
+                    <div key={p} className={"fig sub" + (p === "tdc_empresa" ? " off" : "")}>
+                      <span>{t("pay_" + p)}</span>
+                      <span className="v">{money(totals.byPayment[p])}</span>
+                    </div>
+                  ) : null
+                ))}
+                <div className="fig rule" style={{ paddingTop: 8 }}>
+                  <span>{t("f_tax")}</span><span className="v">{money(totals.taxCents)}</span>
+                </div>
+                <div className="fig"><span>{t("f_settleable")}</span><span className="v">{money(totals.settleableCents)}</span></div>
                 <div className="fig"><span>{t("f_advance")}</span><span className="v">−{money(totals.advanceCents)}</span></div>
               </div>
 

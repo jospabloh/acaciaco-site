@@ -249,3 +249,51 @@ cálculos.
 - Kilometraje como fila especial con tarifa por km.
 - Lista de varios viajes guardados.
 - Cuentas, aprobaciones o cualquier cosa que requiera backend.
+
+---
+
+## Enmienda · 2026-08-07 · Método de pago, propina e IVA automático
+
+La primera versión modelaba el saldo como `total − anticipo`, lo que sólo es
+correcto si el viajero pagó todo de su bolsillo. En un viaje real conviven tres
+formas de pagar y sólo dos se liquidan con él.
+
+### Qué cambia en el modelo
+
+| Concepto | Antes | Ahora |
+|---|---|---|
+| Método de pago | No existía | `efectivo` \| `tdc_propia` \| `tdc_empresa` por gasto |
+| Saldo | `total − anticipo` | `(efectivo + tdc_propia) − anticipo` |
+| Total del reporte | Lo mismo que el saldo base | Costo del viaje completo, con desglose por método |
+| `deductible` | Casilla que sólo decidía si el IVA sumaba | Sustituida por `invoiced` ("Con factura") |
+| IVA | Siempre a mano | Campo vacío = `monto × 16/116`; teclear un valor lo sustituye, borrarlo vuelve al automático |
+| Propina | No existía | Campo `tip`, sólo en alimentos: suma al gasto y a la liquidación, queda fuera de la base del IVA |
+| Fecha | Sólo el campo nativo | Botones con los días del viaje cuando el rango es de 10 días o menos, más el campo nativo |
+
+`deductible` nombraba una conclusión fiscal que el viajero no está en posición de
+tomar. `invoiced` nombra el hecho que sí conoce —si le dieron factura— y de ahí
+se deriva el IVA acreditable.
+
+La tarjeta de la empresa entra en el total porque el reporte debe decir cuánto
+costó el viaje; queda fuera del saldo porque esa plata nunca pasó por el
+viajero. En la carátula el desglose por método explica esa diferencia, que si no
+se ve como un error de suma.
+
+### Decisiones confirmadas con el usuario
+
+- El IVA automático se dispara con **cualquier** método de pago, no sólo con
+  tarjeta: el impuesto no depende de cómo se pagó.
+- Tasa **16% fija**, con el campo siempre editable para los casos raros.
+- El total del reporte **sí** incluye la tarjeta de la empresa, con desglose.
+
+### Compatibilidad
+
+Los reportes guardados como `v: 1` se migran a `v: 2` marcando cada gasto como
+`efectivo` e `invoiced = deductible`, lo que reproduce el saldo anterior sin
+cambiar una cifra. El IVA capturado a mano se conserva y no se recalcula. La
+migración corre al cargar de IndexedDB y al importar un `.json`.
+
+### Fuera de alcance, otra vez
+
+Tasa de IVA por reporte o por gasto (se evaluó y se descartó: 16% cubre el caso
+y el campo editable resuelve el resto), y propina fuera de alimentos.

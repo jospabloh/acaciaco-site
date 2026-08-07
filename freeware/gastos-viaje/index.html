@@ -74,6 +74,51 @@
   .exp-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;flex-wrap:wrap;}
   .exp-flags{display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap;}
   .check{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;}
+
+  /* ── Fecha: los días del viaje como botones. En un viaje corto es un clic
+        en vez de navegar un calendario; el campo nativo sigue ahí para todo
+        lo que caiga fuera del rango. ─────────────────────────────────────── */
+  .daypick{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .day{border:1px solid var(--line-2);background:var(--card);color:var(--ink-2);font-family:inherit;font-size:12.5px;font-weight:600;padding:7px 9px;border-radius:9px;cursor:pointer;font-variant-numeric:tabular-nums;line-height:1.15;text-align:center;min-width:38px;}
+  .day em{display:block;font-style:normal;font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);}
+  .day:hover{border-color:var(--accent);color:var(--accent-2);}
+  .day[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#062b24;}
+  .day[aria-pressed="true"] em{color:#062b24;opacity:.75;}
+  .daypick input[type="date"]{width:auto;flex:0 1 168px;}
+
+  /* ── La línea de dinero: los campos viven dentro de una operación, no en
+        cajas etiquetadas. El resultado se calcula y no se puede teclear. ─── */
+  .money{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-top:2px;}
+  .money .op{font-size:17px;font-weight:600;color:var(--ink-3);padding-bottom:9px;}
+  .money .slot{display:flex;flex-direction:column;gap:6px;min-width:0;}
+  .money .slot > label{font-size:12px;font-weight:600;color:var(--ink-2);}
+  .money input{width:132px;text-align:right;}
+  .money select{width:auto;min-width:82px;}
+  .money .result{margin-left:auto;text-align:right;padding-bottom:2px;}
+  .money .result .v{font-size:20px;font-weight:700;letter-spacing:-0.01em;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .money .result .cur{font-size:12px;font-weight:600;color:var(--ink-3);margin-left:4px;}
+  .money .result .conv{display:block;font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums;margin-top:2px;}
+  @media(max-width:560px){.money .result{margin-left:0;width:100%;text-align:left;}.money input{width:100%;}.money .slot{flex:1 1 120px;}}
+
+  /* ── Cómo se pagó: la regla parte la tarjeta entre lo que compraste y cómo
+        se liquida. La etiqueta va montada sobre la línea. ────────────────── */
+  .split{display:flex;align-items:center;gap:10px;margin:18px 0 12px;}
+  .split::after{content:"";flex:1;height:1px;background:var(--line);}
+  .split span{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);}
+  .pay-seg{display:inline-flex;background:var(--paper-2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap;}
+  .pay-seg button{border:none;background:transparent;color:var(--ink-2);font-family:inherit;font-size:13px;font-weight:600;padding:8px 12px;border-radius:8px;cursor:pointer;}
+  .pay-seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:var(--shadow);}
+  .consequence{font-size:12.5px;color:var(--ink-3);margin-top:7px;}
+  .tax-row{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-top:12px;}
+  .tax-row .slot{display:flex;flex-direction:column;gap:6px;}
+  .tax-row .slot > label{font-size:12px;font-weight:600;color:var(--ink-2);}
+  .tax-row input{width:132px;text-align:right;}
+  /* Las reglas de ancho de arriba usan la misma especificidad que
+     input[type="checkbox"] y, por venir después, se lo llevaban también: la
+     casilla salía de 132 px, despegada de su etiqueta. */
+  .money input[type="checkbox"],.tax-row input[type="checkbox"]{width:auto;}
+  .tax-row input::placeholder{color:var(--ink-3);opacity:1;}
+  .tax-off{font-size:12.5px;color:var(--ink-3);padding-bottom:11px;}
   .rowdel{width:32px;height:32px;border-radius:8px;border:1px solid var(--line-2);background:var(--card);color:var(--ink-3);cursor:pointer;display:grid;place-items:center;flex:none;} .rowdel:hover{border-color:oklch(0.6 0.18 25);color:oklch(0.6 0.18 25);} .rowdel svg{width:14px;height:14px;}
   .fx-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;}
   .receipt{margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
@@ -92,6 +137,12 @@
   .fig{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;font-size:13.5px;color:var(--ink-2);border-bottom:1px solid var(--line);}
   .fig:last-of-type{border-bottom:none;}
   .fig .v{font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink);}
+  /* Desglose por método de pago: sangrado y en gris, porque explica el total
+     de arriba en vez de competir con él. */
+  .fig.sub{padding:5px 0 5px 12px;font-size:12.5px;color:var(--ink-3);border-bottom:none;}
+  .fig.sub .v{font-weight:600;color:var(--ink-2);}
+  .fig.sub.off{opacity:.72;}
+  .fig.rule{border-bottom:1px solid var(--line);padding-bottom:10px;}
   .balance{padding:14px 18px 18px;border-top:1px solid var(--line);}
   .balance .lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);}
   .balance .amt{font-size:clamp(28px,6vw,38px);font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;line-height:1.1;margin-top:4px;}
