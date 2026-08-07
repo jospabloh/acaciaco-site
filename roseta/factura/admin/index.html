@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel de facturación · Roseta Café</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <link rel="icon" href="/roseta/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/roseta/favicon-32.png">
+  <link rel="apple-touch-icon" href="/roseta/apple-touch-icon.png">
+  <meta name="theme-color" content="#9E1B2A" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('acacia-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/styles/base.css" />
+
+  <style>
+    :root{
+      --primary:#9E1B2A; --glow:rgba(158,27,42,.22);
+      --roseta-blush:#F1DCD6; --roseta-ink:#3C0B12;
+      --pend-bg:#FFF3D6; --pend-fg:#8A5A00; --pend-rule:#D9A21B;
+      --done-bg:#DCFCE7; --done-fg:#0A7A55; --done-rule:#0A9E6B;
+      --warn-fg:#8A5A00; --err-fg:#c33;
+    }
+    [data-theme="dark"]{
+      --pend-bg:rgba(217,162,27,.14); --pend-fg:#E8B849; --pend-rule:#B8860F;
+      --done-bg:rgba(10,158,107,.15); --done-fg:#4BD6A0; --done-rule:#0A9E6B;
+      --warn-fg:#E8B849; --err-fg:#ff7676;
+    }
+    .btn-primary{ background: linear-gradient(180deg, #B23A47, var(--primary)); box-shadow: 0 8px 24px var(--glow), inset 0 1px 0 rgba(255,255,255,.18); }
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+    /* An operator tool, not a landing page: no hero, work starts immediately. */
+    .ad-shell{max-width:860px;margin:0 auto;}
+    .ad-bar{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.4rem;}
+    .ad-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.35rem;margin:0;}
+    .ad-sub{font-size:.82rem;color:var(--text-muted);margin:.2rem 0 0;}
+    .ad-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-card);box-shadow:var(--shadow-md);padding:clamp(1.3rem,3.5vw,2rem);}
+
+    /* Gate */
+    .ad-gate{max-width:420px;margin:0 auto;}
+    .ad-gate label{display:block;font-size:.85rem;font-weight:600;color:var(--text-muted);margin-bottom:.4rem;}
+    .ad-gate .ad-gate-row{display:flex;gap:.7rem;}
+    .ad-gate input{flex:1;padding:.8rem 1rem;border:1px solid var(--border);border-radius:.7rem;font:inherit;background:var(--bg);color:var(--text);}
+    .ad-gate input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--glow);}
+
+    .ad-filters{display:flex;gap:.5rem;flex-wrap:wrap;}
+    .ad-filter{padding:.4rem .9rem;border-radius:var(--radius-pill);border:1px solid var(--border);background:transparent;
+      font:inherit;font-size:.82rem;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all .15s ease;}
+    .ad-filter:hover{border-color:var(--border-hover);color:var(--text);}
+    .ad-filter[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:#fff;}
+    .ad-filter:focus-visible{outline:2px solid var(--primary);outline-offset:2px;}
+
+    .ad-msg{margin-top:1rem;font-size:.9rem;min-height:1.2em;}
+    .ad-msg.error{color:var(--err-fg);font-weight:600;}
+    .ad-msg.warn{color:var(--warn-fg);font-weight:600;}
+    .ad-msg.ok{color:var(--done-fg);font-weight:600;}
+
+    .ad-empty{text-align:center;color:var(--text-muted);font-size:.9rem;padding:2.4rem 1rem;}
+
+    /* Worklist */
+    .ad-item{border:1px solid var(--border);border-left:3px solid var(--pend-rule);border-radius:.9rem;margin-bottom:.8rem;overflow:hidden;}
+    .ad-item.facturada{border-left-color:var(--done-rule);}
+    .ad-item:last-child{margin-bottom:0;}
+    .ad-head{width:100%;display:grid;grid-template-columns:1fr auto;gap:.4rem 1rem;align-items:center;
+      padding:.95rem 1.1rem;background:transparent;border:0;font:inherit;text-align:left;cursor:pointer;color:var(--text);}
+    .ad-head:hover{background:var(--bg-subtle);}
+    .ad-head:focus-visible{outline:2px solid var(--primary);outline-offset:-2px;}
+    .ad-folio{font-family:'Space Grotesk',monospace;font-weight:700;letter-spacing:.03em;font-size:.92rem;}
+    .ad-who{font-size:.85rem;color:var(--text-muted);margin-top:.15rem;}
+    .ad-right{display:flex;align-items:center;gap:.7rem;justify-self:end;}
+    .ad-amount{font-family:'Space Grotesk',monospace;font-weight:600;font-size:.9rem;white-space:nowrap;}
+    .ad-badge{display:inline-flex;padding:.25rem .75rem;border-radius:var(--radius-pill);font-size:.72rem;font-weight:700;white-space:nowrap;}
+    .ad-badge.pendiente{background:var(--pend-bg);color:var(--pend-fg);}
+    .ad-badge.facturada{background:var(--done-bg);color:var(--done-fg);}
+
+    .ad-body{display:none;padding:0 1.1rem 1.2rem;border-top:1px dashed var(--border);}
+    .ad-item.open .ad-body{display:block;}
+
+    /* The signature of this page: the fiscal record laid out for
+       transcription. Roseta reads these off the screen and types them into
+       her stamping software, so every value is one click from the clipboard
+       and the codes are set in a face where 0/O and 1/l cannot be confused. */
+    .ad-capture{margin:1.1rem 0 0;display:grid;gap:.35rem;}
+    .ad-cap{display:grid;grid-template-columns:9.5rem 1fr auto;gap:.6rem;align-items:center;
+      padding:.42rem .5rem;border-radius:.5rem;}
+    .ad-cap:hover{background:var(--bg-subtle);}
+    .ad-cap dt{font-size:.78rem;color:var(--text-muted);}
+    .ad-cap dd{margin:0;font-size:.9rem;font-weight:600;word-break:break-word;}
+    .ad-cap.code dd{font-family:'Space Grotesk',monospace;letter-spacing:.02em;}
+    .ad-copy{border:1px solid var(--border);background:transparent;border-radius:.45rem;padding:.2rem .55rem;
+      font:inherit;font-size:.72rem;font-weight:600;color:var(--text-muted);cursor:pointer;white-space:nowrap;}
+    .ad-copy:hover{border-color:var(--primary);color:var(--primary);}
+    .ad-copy:focus-visible{outline:2px solid var(--primary);outline-offset:1px;}
+    .ad-copy.done{border-color:var(--done-rule);color:var(--done-fg);}
+
+    @media(max-width:560px){
+      .ad-cap{grid-template-columns:1fr auto;}
+      .ad-cap dt{grid-column:1/-1;}
+    }
+
+    .ad-upload{margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--border);}
+    .ad-upload h4{margin:0 0 .2rem;font-size:.95rem;}
+    .ad-upload p.ad-why{font-size:.8rem;color:var(--text-muted);margin:0 0 .9rem;}
+    .ad-drops{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+    @media(max-width:560px){.ad-drops{grid-template-columns:1fr;}}
+    .ad-drop{position:relative;border:1.5px dashed var(--border);border-radius:.8rem;padding:1rem .9rem;text-align:center;cursor:pointer;transition:border-color .15s ease,background .15s ease;}
+    .ad-drop:hover{border-color:var(--primary);}
+    .ad-drop:focus-within{border-color:var(--primary);box-shadow:0 0 0 3px var(--glow);}
+    .ad-drop.has-file{border-style:solid;border-color:var(--done-rule);}
+    .ad-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+    .ad-drop-kind{font-family:'Space Grotesk',monospace;font-weight:700;font-size:.8rem;letter-spacing:.06em;}
+    .ad-drop-state{display:block;font-size:.76rem;color:var(--text-muted);margin-top:.25rem;word-break:break-all;}
+    .ad-drop.has-file .ad-drop-state{color:var(--done-fg);font-weight:600;}
+
+    .ad-send{margin-top:1rem;width:100%;justify-content:center;}
+    .ad-send[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none;}
+    .ad-sent-note{margin:1rem 0 0;font-size:.82rem;color:var(--done-fg);font-weight:600;}
+    .ad-item-msg{margin-top:.8rem;font-size:.86rem;min-height:1.1em;}
+    .ad-item-msg.error{color:var(--err-fg);font-weight:600;}
+    .ad-item-msg.warn{color:var(--warn-fg);font-weight:600;}
+    .ad-item-msg.ok{color:var(--done-fg);font-weight:600;}
+
+    @media (prefers-reduced-motion: reduce){ *{transition:none !important;animation:none !important;} }
+  </style>
+</head>
+
+<body>
+  <main id="main">
+    <section class="section" style="padding-block: clamp(3rem, 8vw, 4.5rem) 3rem;">
+      <div class="container ad-shell">
+
+        <div id="ad-gate-wrap">
+          <div class="ad-card ad-gate">
+            <h1 class="ad-title" style="margin-bottom:.2rem;">Panel de facturación</h1>
+            <p class="ad-sub" style="margin-bottom:1.2rem;">Roseta Café · uso interno</p>
+            <form id="ad-gate-form">
+              <label for="ad-pass">Contraseña</label>
+              <div class="ad-gate-row">
+                <input type="password" id="ad-pass" autocomplete="current-password" required />
+                <button class="btn btn-primary" type="submit">Entrar</button>
+              </div>
+            </form>
+            <p class="ad-msg" id="ad-gate-msg" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div id="ad-panel" hidden>
+          <div class="ad-bar">
+            <div>
+              <h1 class="ad-title">Solicitudes de factura</h1>
+              <p class="ad-sub" id="ad-count"></p>
+            </div>
+            <div class="ad-filters" role="group" aria-label="Filtrar solicitudes">
+              <button class="ad-filter" type="button" data-filtro="pendientes" aria-pressed="true">Pendientes</button>
+              <button class="ad-filter" type="button" data-filtro="facturadas" aria-pressed="false">Facturadas</button>
+              <button class="ad-filter" type="button" data-filtro="todas" aria-pressed="false">Todas</button>
+            </div>
+          </div>
+
+          <div class="ad-card">
+            <p class="ad-msg" id="ad-msg" role="status" aria-live="polite"></p>
+            <div id="ad-list"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script src="/roseta/factura/admin/admin.js" defer></script>
+</body>
+</html>
