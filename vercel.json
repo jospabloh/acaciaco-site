@@ -63,6 +63,11 @@
       "permanent": true
     },
     {
+      "source": "/apps/ctrlhq",
+      "destination": "/ctrlhq",
+      "permanent": true
+    },
+    {
       "source": "/privacy",
       "destination": "/legal/privacidad",
       "permanent": true
