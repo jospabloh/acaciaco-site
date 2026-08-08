@@ -1426,32 +1426,6 @@
     font-family: inherit;
   }
   .auth-modal-close:hover { background: var(--card); color: var(--ink); }
-  .auth-google {
-    width: 100%;
-    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    color: var(--ink);
-    padding: 11px 16px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    font-family: inherit;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .auth-google:hover { border-color: var(--ink-3); background: var(--card); }
-  .auth-divider {
-    display: flex; align-items: center; gap: 10px;
-    color: var(--ink-3);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin: 16px 0;
-  }
-  .auth-divider::before, .auth-divider::after {
-    content: ""; flex: 1; height: 1px; background: var(--line);
-  }
   .auth-field {
     width: 100%;
     border: 1px solid var(--line);
@@ -1535,12 +1509,10 @@
     padding: 10px 12px;
     margin-bottom: 16px;
   }
-  .auth-google:disabled,
   .auth-field:disabled {
     opacity: 0.45;
     cursor: not-allowed;
   }
-  .auth-google:disabled:hover { border-color: var(--line); background: var(--paper); }
   .auth-note {
     font-size: 11px;
     color: var(--ink-3);
