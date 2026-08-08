@@ -229,8 +229,6 @@ const STRINGS = {
     auth_signin_title: "Sign in",
     auth_signup_title: "Create account",
     auth_subtitle: "Your expense log travels with you — sign in and it follows you to any device.",
-    auth_google: "Continue with Google",
-    auth_or: "or",
     auth_email: "Email",
     auth_password: "Password",
     auth_signin_btn: "Sign in",
@@ -337,8 +335,6 @@ const STRINGS = {
     auth_signin_title: "Iniciar sesión",
     auth_signup_title: "Crear cuenta",
     auth_subtitle: "Tu registro de gastos viaja contigo — inicia sesión y te sigue a cualquier dispositivo.",
-    auth_google: "Continuar con Google",
-    auth_or: "o",
     auth_email: "Correo",
     auth_password: "Contraseña",
     auth_signin_btn: "Iniciar sesión",
@@ -974,15 +970,14 @@ function AuthModal({ onClose, trip }) {
   // no-op — a dead form reads as "the site is rejecting me".
   const unavailable = !supabaseClient;
 
-  const signInGoogle = async () => {
-    if (!supabaseClient) { setErr(tr(lang, "auth_unavailable")); return; }
-    setErr(""); setInfo("");
-    const { error } = await supabaseClient.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: window.location.href }
-    });
-    if (error) fail(error);
-  };
+  // No "Continue with Google" here on purpose. The Google provider has never
+  // been enabled on the Supabase project — the button answered every click with
+  // {"code":400,"error_code":"validation_failed","msg":"Unsupported provider:
+  // provider is not enabled"}. To bring it back, enable Google under
+  // Authentication → Providers (Client ID + Secret from Google Cloud, with
+  // https://lsylxcraugllwegjjvaq.supabase.co/auth/v1/callback as the authorized
+  // redirect URI) and allowlist this page under URL Configuration. Until then a
+  // button that cannot work is worse than no button.
 
   const submit = async (e) => {
     e.preventDefault();
@@ -1055,18 +1050,6 @@ function AuthModal({ onClose, trip }) {
           {unavailable && (
             <p className="auth-error auth-error-block" role="alert">{tr(lang, "auth_unavailable")}</p>
           )}
-
-          <button className="auth-google" onClick={signInGoogle} disabled={unavailable}>
-            <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true">
-              <path fill="#4285F4" d="M17.64 9.205c0-.638-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
-              <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.583-5.036-3.711H.96v2.332A9 9 0 0 0 9 18z"/>
-              <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.96A9 9 0 0 0 0 9c0 1.452.348 2.827.96 4.042l3.004-2.332z"/>
-              <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A9 9 0 0 0 .96 4.958l3.004 2.332C4.672 5.163 6.656 3.58 9 3.58z"/>
-            </svg>
-            {tr(lang, "auth_google")}
-          </button>
-
-          <div className="auth-divider">{tr(lang, "auth_or")}</div>
 
           <form onSubmit={submit}>
             <input ref={firstFieldRef} className="auth-field" type="email" required placeholder={tr(lang, "auth_email")}
