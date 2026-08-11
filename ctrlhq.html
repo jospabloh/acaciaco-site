@@ -27,10 +27,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
 
   <script>
     (function () {
@@ -42,127 +39,6 @@
   </script>
 
   <link rel="stylesheet" href="/styles/base.css" />
-
-  <!--
-    CtrlHQ page-scoped identity — a ledger instrument, not the site's default
-    palette. Only this page's :root/[data-theme="dark"] tokens change; base.css
-    itself is untouched, so no other app page is affected. Same token names the
-    CtrlHQ app itself uses (see jospabloh/CtrlHQ CLAUDE.md "Visual identity") —
-    ink graphite, cool ledger-paper, brass "validated" accent, real ingreso/
-    egreso semantic colors.
-  -->
-  <style>
-    :root {
-      --bg: #eef0ea;
-      --bg-card: #fbfaf5;
-      --bg-subtle: #e4e7dd;
-      --border: rgba(21, 24, 29, 0.13);
-      --border-hover: rgba(21, 24, 29, 0.26);
-      --text: #15181d;
-      --text-muted: rgba(21, 24, 29, 0.55);
-      --text-dim: rgba(21, 24, 29, 0.32);
-      --nav-bg: rgba(238, 240, 234, 0.88);
-      --primary: #b08a3e;
-      --secondary: #3e7a5d;
-      --success: #3e7a5d;
-      --glow: rgba(176, 138, 62, 0.22);
-      --egreso: #8b4a3e;
-    }
-    [data-theme="dark"] {
-      --bg: #12151a;
-      --bg-card: #181c22;
-      --bg-subtle: #1e232a;
-      --border: rgba(255, 255, 255, 0.09);
-      --border-hover: rgba(255, 255, 255, 0.2);
-      --text: #ede9de;
-      --text-muted: rgba(237, 233, 222, 0.5);
-      --text-dim: rgba(237, 233, 222, 0.3);
-      --nav-bg: rgba(18, 21, 26, 0.85);
-      --primary: #c9a356;
-      --secondary: #4e9575;
-      --success: #4e9575;
-      --glow: rgba(201, 163, 86, 0.22);
-      --egreso: #a85f4e;
-    }
-
-    .figure { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
-
-    /* ---------- Signature: the monthly-close validation ledger ---------- */
-    .ledger {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-card);
-      box-shadow: var(--shadow-lg);
-      overflow: hidden;
-      max-width: 460px;
-    }
-    .ledger-head {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 20px; border-bottom: 1px solid var(--border);
-      font-size: 0.78rem; color: var(--text-muted);
-    }
-    .ledger-head b { color: var(--text); font-family: 'Space Grotesk', sans-serif; }
-    .ledger-rows { padding: 6px 0; }
-    .ledger-row {
-      display: flex; align-items: center; gap: 12px;
-      padding: 10px 20px; opacity: 0; transform: translateX(-6px);
-      transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
-    }
-    .ledger-row.in { opacity: 1; transform: none; }
-    .ledger-row .tick {
-      width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0;
-      border: 1.5px solid var(--border-hover);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px; color: transparent;
-      transition: background 0.3s, border-color 0.3s, color 0.3s;
-    }
-    .ledger-row.in .tick { background: var(--success); border-color: var(--success); color: #fff; }
-    .ledger-row .name { flex: 1; font-size: 0.85rem; color: var(--text); }
-    .ledger-row .amt { font-size: 0.85rem; }
-    .ledger-row .amt.pos { color: var(--success); }
-    .ledger-row .amt.neg { color: var(--egreso); }
-    .ledger-seal {
-      margin: 14px 20px 20px; padding: 14px 16px;
-      border: 1.5px dashed var(--border-hover); border-radius: 10px;
-      display: flex; align-items: center; justify-content: space-between;
-      opacity: 0; transition: opacity 0.6s var(--ease-out) 0.2s;
-    }
-    .ledger-seal.in { opacity: 1; }
-    .ledger-seal .label { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
-    .ledger-seal .hash { font-size: 0.78rem; color: var(--primary); }
-
-    /* ---------- Pricing: ledger tabs, not generic cards ---------- */
-    .tabs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; align-items: stretch; }
-    @media (max-width: 860px) { .tabs-grid { grid-template-columns: 1fr; max-width: 420px; margin-inline: auto; } }
-    .tab-card {
-      position: relative; background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: var(--radius-card); padding: 1.75rem 1.5rem 1.5rem;
-      display: flex; flex-direction: column; transition: border-color 0.25s, transform 0.25s;
-    }
-    .tab-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
-    .tab-card.featured { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
-    .tab-clip {
-      position: absolute; top: -11px; left: 1.5rem; padding: 3px 12px;
-      background: var(--primary); color: var(--bg-card); font-size: 0.68rem;
-      font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
-      border-radius: 5px 5px 0 0;
-    }
-    .tab-card h3 { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1.1rem; margin-bottom: 0.15rem; }
-    .tab-card .seats { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem; }
-    .tab-price { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 2.1rem; font-weight: 600; line-height: 1; margin-bottom: 0.35rem; }
-    .tab-price .unit { font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 400; color: var(--text-muted); }
-    .tab-desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem; min-height: 2.6em; }
-    .tab-features { list-style: none; padding: 0; margin: 0 0 1.5rem; flex: 1; }
-    .tab-features li { display: flex; gap: 8px; align-items: flex-start; font-size: 0.85rem; padding: 5px 0; }
-    .tab-features li::before { content: '✓'; color: var(--success); font-weight: 700; flex-shrink: 0; }
-    .tab-cta {
-      display: block; text-align: center; padding: 0.7rem 1rem; border-radius: var(--radius-button);
-      background: var(--primary); color: var(--bg-card); font-weight: 600; font-size: 0.9rem;
-      text-decoration: none; transition: opacity 0.2s;
-    }
-    .tab-cta:hover { opacity: 0.88; }
-    .tab-card.featured .tab-cta { background: var(--text); color: var(--bg); }
-  </style>
 
   <script type="application/ld+json">
   [
@@ -224,6 +100,11 @@
           <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         </button>
 
+        <div class="currency-toggle" role="group" aria-label="Moneda">
+          <button data-currency="MXN" aria-pressed="true" class="active">MXN</button>
+          <button data-currency="USD" aria-pressed="false">USD</button>
+        </div>
+
         <a href="https://ctrlhq.acaciaco.com.mx" class="btn btn-primary btn-sm nav-cta">Entrar</a>
 
         <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
@@ -245,32 +126,42 @@
               <img src="/assets/ctrlhq-logo.png" alt="CtrlHQ logo" width="56" height="56" />
               <span class="name">CtrlHQ</span>
             </div>
-            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Folio 2026 · 30 días gratis</span>
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Disponible · 30 días gratis</span>
             <h1 id="ctrlhq-h1">Cierra el mes <span class="accent">sin sorpresas.</span></h1>
             <p class="lead">Sucursales, cobranza B2B, compras, nómina y caja en un solo libro. Cuando cierras el mes, CtrlHQ te da un folio validado — no una hoja de cálculo con la esperanza de que cuadre.</p>
             <div class="hero-ctas">
-              <a href="#planes" class="btn btn-primary">Ver planes →</a>
-              <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20CtrlHQ%20para%20mi%20negocio" class="btn btn-ghost" rel="noopener noreferrer" target="_blank">Hablar por WhatsApp</a>
+              <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20probar%20CtrlHQ%20gratis%2030%20d%C3%ADas" class="btn btn-primary" rel="noopener noreferrer" target="_blank">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.522 5.851L0 24l6.335-1.501A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.002-1.366l-.36-.214-3.757.89.936-3.657-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
+                Iniciar prueba gratis
+              </a>
+              <a href="#planes" class="btn btn-ghost">Ver planes →</a>
             </div>
           </div>
 
           <div class="hero-visual reveal" aria-hidden="true">
-            <div class="ledger" id="ledger">
-              <div class="ledger-head">
-                <span>Cierre mensual · <b>Agosto 2026</b></span>
-                <span class="figure">folio 0847</span>
+            <div class="mock">
+              <div class="mock-head">
+                <div class="dots"><span></span><span></span><span></span></div>
+                <span class="title">CtrlHQ · Cierre Agosto 2026</span>
+                <span class="search">Folio 0847</span>
+                <span class="pill">Cierre validado ✓</span>
               </div>
-              <div class="ledger-rows">
-                <div class="ledger-row" data-row="0"><span class="tick">✓</span><span class="name">Ventas · Centro</span><span class="amt pos figure">+$182,400</span></div>
-                <div class="ledger-row" data-row="1"><span class="tick">✓</span><span class="name">Cobranza B2B · Norte</span><span class="amt pos figure">+$51,900</span></div>
-                <div class="ledger-row" data-row="2"><span class="tick">✓</span><span class="name">Nómina · Centro</span><span class="amt neg figure">−$64,200</span></div>
-                <div class="ledger-row" data-row="3"><span class="tick">✓</span><span class="name">Compras · Norte</span><span class="amt neg figure">−$28,750</span></div>
-                <div class="ledger-row" data-row="4"><span class="tick">✓</span><span class="name">Caja</span><span class="amt pos figure">+$2,650</span></div>
-              </div>
-              <div class="ledger-seal" id="ledger-seal">
-                <span class="label">Cierre validado</span>
-                <span class="hash figure">#A3F91C</span>
-              </div>
+              <table class="mock-table">
+                <thead>
+                  <tr>
+                    <th>Concepto</th>
+                    <th>Sucursal</th>
+                    <th class="num">Monto</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Ventas</td><td>Centro</td><td class="num" style="color:var(--success)">+$182,400</td></tr>
+                  <tr><td>Cobranza B2B</td><td>Norte</td><td class="num" style="color:var(--success)">+$51,900</td></tr>
+                  <tr><td>Nómina</td><td>Centro</td><td class="num" style="color:oklch(58% 0.20 25)">−$64,200</td></tr>
+                  <tr><td>Compras</td><td>Norte</td><td class="num" style="color:oklch(58% 0.20 25)">−$28,750</td></tr>
+                  <tr><td>Caja</td><td>Todas</td><td class="num" style="color:var(--success)">+$2,650</td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -329,50 +220,58 @@
           <p class="section-sub">Todos los módulos están incluidos en los tres planes. Lo que cambia es cuántas personas de tu equipo pueden entrar — y qué tan rápido te contestamos. 30 días de prueba gratuita en cualquiera.</p>
         </div>
 
-        <div class="tabs-grid reveal">
-          <div class="tab-card">
+        <div class="pricing-grid pricing-grid-3">
+
+          <!-- Start -->
+          <div class="reveal pricing-card">
             <h3>CtrlHQ Start</h3>
-            <p class="seats">Hasta 4 usuarios</p>
-            <div class="tab-price">$999 <span class="unit">MXN / mes</span></div>
-            <p class="tab-desc">Para negocios de una sucursal que quieren dejar las hojas de cálculo.</p>
-            <ul class="tab-features">
+            <div class="pricing-price"><span data-price="999">$999 MXN</span> <span class="pricing-unit">/ mes</span></div>
+            <p class="pricing-desc">Para negocios de una sucursal que quieren dejar las hojas de cálculo.</p>
+            <ul class="pricing-features">
+              <li>Hasta 4 usuarios</li>
               <li>Todos los módulos: captura, cobranza, compras, nómina, caja</li>
               <li>Cierre mensual con validación</li>
               <li>Centro de soporte</li>
               <li>Soporte por WhatsApp</li>
               <li>30 días gratis</li>
             </ul>
-            <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20el%20plan%20CtrlHQ%20Start" target="_blank" rel="noopener" class="tab-cta">Empezar prueba →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20el%20plan%20CtrlHQ%20Start" target="_blank" rel="noopener" class="btn-mp">Empezar prueba →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20CtrlHQ%20Start" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
           </div>
 
-          <div class="tab-card featured">
-            <span class="tab-clip">Más popular</span>
+          <!-- Growth (FEATURED) -->
+          <div class="reveal pricing-card featured">
+            <div class="pricing-badge">Más popular</div>
             <h3>CtrlHQ Growth</h3>
-            <p class="seats">Hasta 10 usuarios</p>
-            <div class="tab-price">$1,899 <span class="unit">MXN / mes</span></div>
-            <p class="tab-desc">Para equipos que ya reparten el trabajo entre varias personas y sucursales.</p>
-            <ul class="tab-features">
+            <div class="pricing-price"><span data-price="1899">$1,899 MXN</span> <span class="pricing-unit">/ mes</span></div>
+            <p class="pricing-desc">Para equipos que ya reparten el trabajo entre varias personas y sucursales.</p>
+            <ul class="pricing-features">
+              <li>Hasta 10 usuarios</li>
               <li>Todo lo de Start</li>
               <li>Permisos granulares por rol</li>
               <li>Código de invitación para tu equipo</li>
               <li>Soporte prioritario</li>
               <li>30 días gratis</li>
             </ul>
-            <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20el%20plan%20CtrlHQ%20Growth" target="_blank" rel="noopener" class="tab-cta">Empezar prueba →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20el%20plan%20CtrlHQ%20Growth" target="_blank" rel="noopener" class="btn-mp">Empezar prueba →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20CtrlHQ%20Growth" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
           </div>
 
-          <div class="tab-card">
+          <!-- Pro -->
+          <div class="reveal pricing-card">
             <h3>CtrlHQ Pro</h3>
-            <p class="seats">Hasta 20 usuarios</p>
-            <div class="tab-price">$2,899 <span class="unit">MXN / mes</span></div>
-            <p class="tab-desc">Para operaciones con equipos grandes y varias sucursales activas.</p>
-            <ul class="tab-features">
+            <div class="pricing-price"><span data-price="2899">$2,899 MXN</span> <span class="pricing-unit">/ mes</span></div>
+            <p class="pricing-desc">Para operaciones con equipos grandes y varias sucursales activas.</p>
+            <ul class="pricing-features">
+              <li>Hasta 20 usuarios</li>
               <li>Todo lo de Growth</li>
               <li>Soporte dedicado</li>
               <li>30 días gratis</li>
             </ul>
-            <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20el%20plan%20CtrlHQ%20Pro" target="_blank" rel="noopener" class="tab-cta">Empezar prueba →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20el%20plan%20CtrlHQ%20Pro" target="_blank" rel="noopener" class="btn-mp">Empezar prueba →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20CtrlHQ%20Pro" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
           </div>
+
         </div>
         <p class="pricing-note">¿Más de 20 usuarios o necesidades particulares? <a href="https://wa.me/524498958291?text=Hola,%20necesito%20un%20plan%20personalizado%20para%20CtrlHQ" target="_blank" rel="noopener">Cuéntanos por WhatsApp</a></p>
       </div>
@@ -482,28 +381,5 @@
 
   <script src="/scripts/shared.js"></script>
   <script src="/scripts/analytics.js" defer></script>
-  <script>
-    // Signature moment: check off the close's line items one by one, then
-    // stamp the validation hash — runs once the ledger scrolls into view.
-    (function () {
-      var ledger = document.getElementById('ledger');
-      var seal = document.getElementById('ledger-seal');
-      if (!ledger || !('IntersectionObserver' in window)) return;
-      var played = false;
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting || played) return;
-          played = true;
-          var rows = ledger.querySelectorAll('.ledger-row');
-          rows.forEach(function (row, i) {
-            setTimeout(function () { row.classList.add('in'); }, 220 * i);
-          });
-          setTimeout(function () { seal.classList.add('in'); }, 220 * rows.length + 150);
-          io.disconnect();
-        });
-      }, { threshold: 0.4 });
-      io.observe(ledger);
-    })();
-  </script>
 </body>
 </html>
