@@ -2270,6 +2270,173 @@
     .seo-uses li::before { opacity: 0.7; }
     .seo-use-no { background: rgba(217,138,100,0.14); }
   }
+
+  /* --- Floating calculator --- */
+  .calc-fab {
+    position: fixed;
+    right: 22px; bottom: 22px;
+    z-index: 150;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    border: 1px solid var(--line-2);
+    background:
+      radial-gradient(120% 120% at 30% 20%, oklch(from var(--card) calc(l + 0.03) c h) 0%, var(--card) 55%),
+      var(--card);
+    color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow:
+      0 1px 0 oklch(1 0 0 / 0.35) inset,
+      0 10px 28px -10px oklch(0.20 0.03 260 / 0.45),
+      0 2px 6px -2px oklch(0.20 0.03 260 / 0.35);
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s, border-color 0.18s;
+  }
+  .calc-fab:hover {
+    transform: translateY(-2px);
+    border-color: var(--mx);
+    box-shadow:
+      0 1px 0 oklch(1 0 0 / 0.4) inset,
+      0 16px 34px -10px oklch(0.20 0.03 260 / 0.5),
+      0 3px 8px -2px oklch(0.20 0.03 260 / 0.4);
+  }
+  .calc-fab:active { transform: translateY(0) scale(0.96); }
+  .calc-fab:focus-visible { outline: 2px solid var(--mx); outline-offset: 3px; }
+  .calc-fab.open { border-color: var(--line-2); }
+
+  .calc-panel {
+    position: fixed;
+    right: 22px; bottom: 90px;
+    z-index: 150;
+    width: 268px;
+    padding: 14px;
+    border-radius: 18px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    box-shadow:
+      0 1px 0 oklch(1 0 0 / 0.3) inset,
+      0 24px 60px -18px oklch(0.20 0.03 260 / 0.5);
+    animation: calc-rise 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
+    transform-origin: bottom right;
+  }
+  /* While being dragged: follow the pointer instantly (no entrance animation),
+     lift off the board, and don't let a fast drag select the UI text. */
+  .calc-panel.dragging {
+    animation: none;
+    user-select: none;
+    box-shadow:
+      0 1px 0 oklch(1 0 0 / 0.35) inset,
+      0 32px 70px -16px oklch(0.20 0.03 260 / 0.6);
+  }
+  @keyframes calc-rise {
+    from { opacity: 0; transform: translateY(12px) scale(0.94); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .calc-head {
+    display: flex; align-items: center; gap: 8px;
+    margin: -4px -4px 8px;
+    padding: 4px;
+    border-radius: 8px;
+    cursor: grab;
+    touch-action: none;         /* let pointer-drag work on touch without scrolling */
+    -webkit-user-select: none; user-select: none;
+  }
+  .calc-head:hover { background: var(--paper); }
+  .calc-panel.dragging .calc-head { cursor: grabbing; background: var(--paper); }
+  /* Grip affordance — three dot-rows drawn as a repeating gradient. */
+  .calc-grip {
+    width: 14px; height: 12px;
+    flex: none;
+    background-image: radial-gradient(currentColor 1px, transparent 1.4px);
+    background-size: 5px 5px;
+    background-position: 0 1px;
+    color: var(--ink-3);
+    opacity: 0.55;
+  }
+  .calc-head:hover .calc-grip { opacity: 0.85; }
+  .calc-title {
+    font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--ink-3);
+    font-weight: 600;
+    margin-right: auto;         /* push the minimize button to the right edge */
+  }
+  .calc-min {
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--paper);
+    color: var(--ink-3);
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .calc-min:hover { color: var(--ink); border-color: var(--line-2); background: var(--paper-2); }
+  .calc-min:focus-visible { outline: 2px solid var(--mx); outline-offset: 2px; }
+
+  .calc-display {
+    min-height: 56px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-size: 28px;
+    font-weight: 500;
+    text-align: right;
+    line-height: 1.2;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: flex; align-items: center; justify-content: flex-end;
+  }
+  .calc-keys {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .calc-key {
+    height: 48px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.08s, background 0.14s, border-color 0.14s, color 0.14s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .calc-key:hover { background: var(--paper-2); border-color: var(--line-2); }
+  .calc-key:active { transform: scale(0.94); }
+  .calc-key-wide { grid-column: span 2; }
+  .calc-key-fn { color: var(--ink-2); font-size: 18px; }
+  .calc-key-op {
+    color: var(--mx);
+    border-color: oklch(from var(--mx) l c h / 0.4);
+    background: oklch(from var(--mx) l c h / 0.08);
+  }
+  .calc-key-op:hover { background: oklch(from var(--mx) l c h / 0.16); border-color: var(--mx); }
+  .calc-key-op.active { background: var(--mx); color: var(--card); border-color: var(--mx); }
+  .calc-key-eq {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .calc-key-eq:hover { background: var(--ink-2); border-color: var(--ink-2); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .calc-fab, .calc-fab:hover, .calc-fab:active,
+    .calc-key:active { transform: none; }
+    .calc-panel { animation: none; }
+  }
+  @media (max-width: 390px) {
+    .calc-panel { width: calc(100vw - 32px); right: 16px; }
+    .calc-fab { right: 16px; bottom: 16px; }
+  }
 </style>
 </head>
 <body>

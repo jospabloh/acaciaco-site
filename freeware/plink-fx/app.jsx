@@ -278,6 +278,12 @@ const STRINGS = {
     pdf_spent: "Spent",
     pdf_remaining: "Remaining",
     pdf_footer: "Generated on {date}. Plink FX does not retain a copy of this data — once the trip ended, it was removed from our servers.",
+    calc_title: "Calculator",
+    calc_open: "Open calculator",
+    calc_minimize: "Minimize calculator",
+    calc_clear: "Clear",
+    calc_backspace: "Delete last digit",
+    calc_drag: "Drag to move",
   },
   es: {
     sign_in: "Iniciar sesión",
@@ -384,6 +390,12 @@ const STRINGS = {
     pdf_spent: "Gastado",
     pdf_remaining: "Disponible",
     pdf_footer: "Generado el {date}. Plink FX no conserva una copia de estos datos — una vez terminado el viaje, se eliminaron de nuestros servidores.",
+    calc_title: "Calculadora",
+    calc_open: "Abrir calculadora",
+    calc_minimize: "Minimizar calculadora",
+    calc_clear: "Borrar",
+    calc_backspace: "Borrar último dígito",
+    calc_drag: "Arrastra para mover",
   }
 };
 
@@ -1427,6 +1439,272 @@ function TripSummaryOverlay({ t, onDownload, onDelete, onDismiss }) {
   );
 }
 
+// --- Floating calculator ---
+// A tiny, dependency-free immediate-execution calculator (standard phone
+// behavior). The whole state lives in one object so the keyboard handler can
+// drive it through the same pure reducer the on-screen keys use.
+const CALC_INIT = { display: "0", acc: null, op: null, overwrite: false };
+const CALC_MAX_LEN = 14;
+
+function calcFormat(n) {
+  if (!isFinite(n)) return "Error";
+  // Trim floating-point noise (0.1 + 0.2) without lopping off real precision.
+  let s = String(parseFloat(n.toPrecision(12)));
+  if (s === "-0") s = "0";
+  return s;
+}
+
+function calcOperate(a, b, op) {
+  switch (op) {
+    case "+": return a + b;
+    case "-": return a - b;
+    case "*": return a * b;
+    case "/": return b === 0 ? NaN : a / b;
+    default:  return b;
+  }
+}
+
+// Pure state transition shared by button taps and keyboard input.
+function calcReduce(s, key) {
+  if (s.display === "Error" && key !== "C" && key !== "back") s = CALC_INIT;
+
+  if (key >= "0" && key <= "9") {
+    if (s.overwrite) return { ...s, display: key, overwrite: false };
+    if (s.display.replace("-", "").replace(".", "").length >= CALC_MAX_LEN) return s;
+    return { ...s, display: s.display === "0" ? key : s.display + key };
+  }
+  if (key === ".") {
+    if (s.overwrite) return { ...s, display: "0.", overwrite: false };
+    return s.display.includes(".") ? s : { ...s, display: s.display + "." };
+  }
+  if (key === "+" || key === "-" || key === "*" || key === "/") {
+    const cur = parseFloat(s.display);
+    if (s.op !== null && !s.overwrite) {
+      const r = calcOperate(s.acc, cur, s.op);
+      return { display: calcFormat(r), acc: r, op: key, overwrite: true };
+    }
+    return { ...s, acc: cur, op: key, overwrite: true };
+  }
+  if (key === "=") {
+    if (s.op === null) return { ...s, overwrite: true };
+    const r = calcOperate(s.acc, parseFloat(s.display), s.op);
+    return { display: calcFormat(r), acc: null, op: null, overwrite: true };
+  }
+  if (key === "%") {
+    return { ...s, display: calcFormat(parseFloat(s.display) / 100), overwrite: true };
+  }
+  if (key === "neg") {
+    if (s.display === "0" || s.display === "Error") return s;
+    return { ...s, display: s.display.startsWith("-") ? s.display.slice(1) : "-" + s.display };
+  }
+  if (key === "back") {
+    if (s.overwrite || s.display === "Error") return { ...s, display: "0", overwrite: false };
+    const d = s.display;
+    if (d.length <= 1 || (d.length === 2 && d.startsWith("-"))) return { ...s, display: "0" };
+    return { ...s, display: d.slice(0, -1) };
+  }
+  if (key === "C") return CALC_INIT;
+  return s;
+}
+
+const CALC_KEYMAP = {
+  "Enter": "=", "=": "=", "Backspace": "back", "Escape": "C",
+  "+": "+", "-": "-", "*": "*", "x": "*", "X": "*", "/": "/",
+  ".": ".", ",": ".", "%": "%",
+};
+
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+const CALC_MARGIN = 8; // keep at least this many px from every viewport edge
+
+function FloatingCalculator() {
+  const lang = React.useContext(LangContext);
+  const [open, setOpen] = useState(false);
+  const [calc, setCalc] = useState(CALC_INIT);
+  // Panel position in viewport px (top-left). null = default CSS anchor
+  // (bottom-right). Set the moment the user starts dragging, and kept across
+  // open/close so the calculator stays where they left it.
+  const [pos, setPos] = useState(null);
+  const [dragging, setDragging] = useState(false);
+  const panelRef = useRef(null);
+  const dragRef = useRef(null);
+  const fabRef = useRef(null);
+
+  const press = useCallback((key) => setCalc((s) => calcReduce(s, key)), []);
+
+  // Close and return focus to the launcher, so a keyboard user who opened the
+  // panel isn't stranded once it disappears. The calculator is deliberately
+  // non-modal (you keep using the converter while it floats), so it gets this
+  // lighter treatment rather than the focus trap the modal dialogs use.
+  const close = useCallback(() => {
+    setOpen(false);
+    if (fabRef.current) fabRef.current.focus();
+  }, []);
+
+  // Drag the panel by its header. Pointer capture keeps the gesture alive even
+  // if the cursor outruns the panel; both mouse and touch go through this path.
+  const startDrag = useCallback((e) => {
+    // Let the minimize button work as a button, not a drag handle.
+    if (e.target.closest(".calc-min")) return;
+    const panel = panelRef.current;
+    if (!panel) return;
+    const rect = panel.getBoundingClientRect();
+    dragRef.current = {
+      px: e.clientX, py: e.clientY,
+      baseX: rect.left, baseY: rect.top,
+      w: rect.width, h: rect.height,
+    };
+    setDragging(true);
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {}
+  }, []);
+
+  const onDrag = useCallback((e) => {
+    const d = dragRef.current;
+    if (!d) return;
+    const maxX = window.innerWidth - d.w - CALC_MARGIN;
+    const maxY = window.innerHeight - d.h - CALC_MARGIN;
+    setPos({
+      x: clamp(d.baseX + (e.clientX - d.px), CALC_MARGIN, Math.max(CALC_MARGIN, maxX)),
+      y: clamp(d.baseY + (e.clientY - d.py), CALC_MARGIN, Math.max(CALC_MARGIN, maxY)),
+    });
+  }, []);
+
+  const endDrag = useCallback((e) => {
+    if (!dragRef.current) return;
+    dragRef.current = null;
+    setDragging(false);
+    try { e.currentTarget.releasePointerCapture(e.pointerId); } catch (err) {}
+  }, []);
+
+  // Keep a moved panel inside the viewport when the window is resized.
+  useEffect(() => {
+    if (!open) return;
+    const onResize = () => {
+      const panel = panelRef.current;
+      if (!panel) return;
+      const w = panel.offsetWidth, h = panel.offsetHeight;
+      setPos((p) => p ? {
+        x: clamp(p.x, CALC_MARGIN, Math.max(CALC_MARGIN, window.innerWidth - w - CALC_MARGIN)),
+        y: clamp(p.y, CALC_MARGIN, Math.max(CALC_MARGIN, window.innerHeight - h - CALC_MARGIN)),
+      } : p);
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [open]);
+
+  // Keyboard drives the same reducer while the panel is open.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") { e.preventDefault(); close(); return; }
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      let key = null;
+      if (e.key >= "0" && e.key <= "9") key = e.key;
+      else if (CALC_KEYMAP[e.key]) key = CALC_KEYMAP[e.key];
+      if (key === null) return;
+      e.preventDefault();
+      press(key);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, press, close]);
+
+  // The keypad, row by row. `k` is the reducer key; `label` what's drawn.
+  const KEYS = [
+    { k: "C", label: "C", cls: "calc-key-fn" },
+    { k: "neg", label: "±", cls: "calc-key-fn" },
+    { k: "%", label: "%", cls: "calc-key-fn" },
+    { k: "/", label: "÷", cls: "calc-key-op" },
+    { k: "7", label: "7" }, { k: "8", label: "8" }, { k: "9", label: "9" },
+    { k: "*", label: "×", cls: "calc-key-op" },
+    { k: "4", label: "4" }, { k: "5", label: "5" }, { k: "6", label: "6" },
+    { k: "-", label: "−", cls: "calc-key-op" },
+    { k: "1", label: "1" }, { k: "2", label: "2" }, { k: "3", label: "3" },
+    { k: "+", label: "+", cls: "calc-key-op" },
+    { k: "0", label: "0", cls: "calc-key-wide" }, { k: ".", label: "." },
+    { k: "=", label: "=", cls: "calc-key-eq" },
+  ];
+
+  return (
+    <div className="calc-root">
+      {open && (
+        <div
+          className={"calc-panel" + (dragging ? " dragging" : "")}
+          ref={panelRef}
+          role="dialog"
+          aria-label={tr(lang, "calc_title")}
+          style={pos ? { left: pos.x, top: pos.y, right: "auto", bottom: "auto" } : undefined}
+        >
+          <div
+            className="calc-head"
+            onPointerDown={startDrag}
+            onPointerMove={onDrag}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            title={tr(lang, "calc_drag")}
+          >
+            <span className="calc-grip" aria-hidden="true"/>
+            <span className="calc-title">{tr(lang, "calc_title")}</span>
+            <button
+              className="calc-min"
+              onClick={close}
+              aria-label={tr(lang, "calc_minimize")}
+              title={tr(lang, "calc_minimize")}
+            >
+              <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+                <path d="M3 8h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </div>
+          <div className="calc-display mono" aria-live="polite">{calc.display}</div>
+          <div className="calc-keys">
+            {KEYS.map((key, i) => (
+              <button
+                key={i}
+                className={"calc-key " + (key.cls || "") + (calcActiveOp(calc, key.k) ? " active" : "")}
+                onClick={() => press(key.k)}
+                tabIndex={-1}
+              >
+                {key.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+      <button
+        ref={fabRef}
+        className={"calc-fab" + (open ? " open" : "")}
+        onClick={() => setOpen((v) => !v)}
+        aria-label={open ? tr(lang, "calc_minimize") : tr(lang, "calc_open")}
+        aria-expanded={open}
+        title={open ? tr(lang, "calc_minimize") : tr(lang, "calc_open")}
+      >
+        {open ? (
+          <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false">
+            <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+          </svg>
+        ) : (
+          <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false">
+            <rect x="3.5" y="2.5" width="13" height="15" rx="2.5" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+            <rect x="6" y="5" width="8" height="3" rx="1" fill="currentColor" opacity="0.85"/>
+            <circle cx="7" cy="11" r="0.9" fill="currentColor"/>
+            <circle cx="10" cy="11" r="0.9" fill="currentColor"/>
+            <circle cx="13" cy="11" r="0.9" fill="currentColor"/>
+            <circle cx="7" cy="14.2" r="0.9" fill="currentColor"/>
+            <circle cx="10" cy="14.2" r="0.9" fill="currentColor"/>
+            <circle cx="13" cy="14.2" r="0.9" fill="currentColor"/>
+          </svg>
+        )}
+      </button>
+    </div>
+  );
+}
+
+// True when the operator key `k` is currently "armed" (pending, awaiting the
+// next operand) — used to highlight the running operation.
+function calcActiveOp(calc, k) {
+  return calc.op && calc.overwrite && calc.op === k;
+}
+
 // --- Main App ---
 function App() {
   const [t, setTweakBase] = useTweaks(INITIAL_TWEAKS);
@@ -2006,6 +2284,8 @@ function App() {
           </div>
         </div>
       )}
+
+      <FloatingCalculator />
 
     </div>
     </LangContext.Provider>
