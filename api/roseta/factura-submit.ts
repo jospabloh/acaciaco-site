@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Resend } from "resend";
 import { appendRow, getValues, sanitizeCell, updateRow } from "./_sheets";
 import { getClientKey, isRateLimited } from "./_ratelimit";
-import { SOLICITUDES_RANGE } from "./_facturaRows";
+import { NOTIFY_EMAILS, SOLICITUDES_RANGE } from "./_facturaRows";
 
 const RFC_RE = /^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/i;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -10,8 +10,6 @@ const CP_RE = /^\d{5}$/;
 // Hard ceiling on the base64 payload we accept for a single attachment —
 // generous compared to the client's own (tighter) budget, just a backstop.
 const MAX_DATA_URL_LEN = 6 * 1024 * 1024;
-
-const NOTIFY_EMAILS = ["roseta.cafeteria@gmail.com", "roseta@acaciaco.com.mx"];
 
 interface FileField {
   name?: string;

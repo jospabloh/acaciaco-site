@@ -62,6 +62,14 @@
     return isFinite(n) && v !== '' ? '$' + n.toFixed(2) + ' MXN' : (v || '—');
   }
 
+  // What gets copied for a money field is not what gets displayed: Roseta
+  // pastes this straight into her stamping/accounting software, which wants
+  // a bare number, not "$123.45 MXN".
+  function plainAmount(v) {
+    var n = Number(v);
+    return isFinite(n) && v !== '' ? n.toFixed(2) : (v || '');
+  }
+
   function copyButton(value) {
     var btn = document.createElement('button');
     btn.type = 'button';
@@ -92,7 +100,9 @@
     return btn;
   }
 
-  function captureRow(label, value, isCode) {
+  // copyValue defaults to the displayed value, but a money field passes a
+  // plain ###.## in its place — see plainAmount above.
+  function captureRow(label, value, isCode, copyValue) {
     var wrap = document.createElement('div');
     wrap.className = 'ad-cap' + (isCode ? ' code' : '');
     var dt = document.createElement('dt');
@@ -101,7 +111,7 @@
     dd.textContent = value || '—';
     wrap.appendChild(dt);
     wrap.appendChild(dd);
-    if (value) wrap.appendChild(copyButton(value));
+    if (value) wrap.appendChild(copyButton(copyValue !== undefined ? copyValue : value));
     return wrap;
   }
 
@@ -203,10 +213,10 @@
       ['Fecha de consumo', s.fecha_consumo, false],
       ['Forma de pago', s.forma_pago, false],
       ['Movimiento', s.folio_ticket, true],
-      ['Subtotal', s.subtotal ? fmtMoney(s.subtotal) : '', true],
-      ['IVA', s.iva ? fmtMoney(s.iva) : '', true],
-      ['Total', fmtMoney(s.monto), true]
-    ].forEach(function (f) { capture.appendChild(captureRow(f[0], f[1], f[2])); });
+      ['Subtotal', s.subtotal ? fmtMoney(s.subtotal) : '', true, plainAmount(s.subtotal)],
+      ['IVA', s.iva ? fmtMoney(s.iva) : '', true, plainAmount(s.iva)],
+      ['Total', fmtMoney(s.monto), true, plainAmount(s.monto)]
+    ].forEach(function (f) { capture.appendChild(captureRow(f[0], f[1], f[2], f[3])); });
     body.appendChild(capture);
 
     if (notified) {

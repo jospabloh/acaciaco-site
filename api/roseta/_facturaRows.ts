@@ -58,6 +58,20 @@ export function fmtMoney(v: string): string {
   return v !== "" && Number.isFinite(n) ? `$${n.toFixed(2)} MXN` : v;
 }
 
+// Amounts that are meant to be pasted straight into Roseta's stamping or
+// accounting software, which expects a bare number — no "$", no "MXN".
+// Deliberately the inverse trade-off from fmtMoney: that one is for reading,
+// this one is for pasting into a field that would choke on currency symbols.
+export function plainAmount(v: string): string {
+  const n = Number(v);
+  return v !== "" && Number.isFinite(n) ? n.toFixed(2) : v;
+}
+
+// The internal address for every Roseta invoice-flow notification: new
+// requests (factura-submit.ts) and "ya se envió al cliente" confirmations
+// (factura-admin-send.ts) both mail here.
+export const NOTIFY_EMAILS = ["roseta.cafeteria@gmail.com", "roseta@acaciaco.com.mx"];
+
 export function todayISO(): string {
   return new Date().toISOString().slice(0, 10);
 }
