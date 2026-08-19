@@ -5,6 +5,8 @@ import {
   cell,
   fmtMoney,
   isWithinDays,
+  NOTIFY_EMAILS,
+  plainAmount,
   publicSolicitud,
   findRowNumber,
   resendEmailUrl,
@@ -31,6 +33,23 @@ test("cell devuelve cadena vacía para índices ausentes", () => {
 test("fmtMoney formatea números y deja pasar lo no numérico", () => {
   assert.equal(fmtMoney("348"), "$348.00 MXN");
   assert.equal(fmtMoney("no-es-numero"), "no-es-numero");
+});
+
+test("plainAmount da un número simple sin símbolo ni MXN, para copiar y pegar", () => {
+  assert.equal(plainAmount("348"), "348.00");
+  assert.equal(plainAmount("300.5"), "300.50");
+  assert.equal(plainAmount("no-es-numero"), "no-es-numero");
+  assert.equal(plainAmount(""), "");
+});
+
+test("plainAmount nunca incluye $ ni MXN", () => {
+  const out = plainAmount("1234.5");
+  assert.equal(out.includes("$"), false);
+  assert.equal(out.toUpperCase().includes("MXN"), false);
+});
+
+test("NOTIFY_EMAILS trae las dos direcciones internas de Roseta", () => {
+  assert.deepEqual(NOTIFY_EMAILS, ["roseta.cafeteria@gmail.com", "roseta@acaciaco.com.mx"]);
 });
 
 test("isWithinDays acepta una fecha dentro de la ventana", () => {

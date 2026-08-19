@@ -72,11 +72,28 @@ pre-fills the form. Spec and plan are in `docs/superpowers/`.
    a confirmation, and appends a row.
 2. **Deliver** — `/roseta/factura/admin`, password-gated. Roseta uploads the
    stamped PDF **and** XML; `factura-admin-send.ts` mails them to the customer,
-   marks the row `Facturada` and records the send.
+   marks the row `Facturada` and records the send, and — separately —
+   confirms the send to `NOTIFY_EMAILS` (the same `_facturaRows.ts` constant
+   the request step mails) so Roseta knows the loop closed without reopening
+   the panel. Best-effort: a failure to send this confirmation never turns
+   into a failed request or a "mark it by hand" warning, since the customer's
+   copy is the actual deliverable and already went out by the time it fires.
 3. **Verify** — the panel links to that message's delivery record in Resend, so
    a bounce is distinguishable from a successful send.
 4. **Track** — `/roseta/factura/estatus`. A folio returns that request with no
    time limit; an RFC returns every request from the last 30 days.
+
+Any amount meant to be copied — the admin panel's "Copiar" buttons and the
+"ya se envió" confirmation above — uses `plainAmount()` (`_facturaRows.ts`):
+`###.##`, no `$`, no `MXN`. That's the opposite tradeoff from `fmtMoney()`
+(used for on-screen/email display): Roseta pastes these straight into her
+stamping or bookkeeping software, which wants a bare number.
+
+**Future**: if a Roseta tenant ever onboards onto CtrlHQ, this flow's
+income-side data (the invoiced amounts, mirroring CtrlHQ's own Ingresos) is a
+plausible sync target over CtrlHQ's `acaciaControl` bridge — nothing here
+depends on that today, but a schema change to `Solicitudes`/`ClientesRFC`
+down the line should keep that eventual consumer in mind.
 
 ### Sheet layout (`Solicitudes` tab, range `A:U`)
 
