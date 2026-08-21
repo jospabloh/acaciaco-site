@@ -3,7 +3,7 @@ const { useState, useEffect, useCallback, useRef } = React;
 
 const STRINGS = {
   es: {
-    nav_more:"← Más herramientas", theme_label:"Cambiar tema", lang_label:"Idioma", eyebrow:"Herramienta gratis",
+    nav_more:"← Más herramientas", lang_label:"Idioma", eyebrow:"Herramienta gratis",
     nav_merge:"Unir", nav_compress:"Comprimir", nav_split:"Dividir", nav_p2j:"PDF a JPG", nav_j2p:"JPG a PDF",
     h1:"Dividir ", h1b:"PDF",
     hero_p:"Extrae un rango de páginas o separa cada página en archivos independientes. Sin subir tus documentos.",
@@ -19,7 +19,7 @@ const STRINGS = {
     foot_free:"© 2026 ACACIA · Herramienta gratis", foot_tools:"Herramientas", foot_privacy:"Privacidad", foot_contact:"Contacto", foot_crafted:"hecho con", foot_by:"por",
   },
   en: {
-    nav_more:"← More tools", theme_label:"Toggle theme", lang_label:"Language", eyebrow:"Free tool",
+    nav_more:"← More tools", lang_label:"Language", eyebrow:"Free tool",
     nav_merge:"Merge", nav_compress:"Compress", nav_split:"Split", nav_p2j:"PDF to JPG", nav_j2p:"JPG to PDF",
     h1:"Split ", h1b:"PDF",
     hero_p:"Extract a page range or split every page into separate files. Your documents are never uploaded.",
@@ -57,13 +57,11 @@ function PdfNav({t,current}){
 
 function App(){
   const [lang,setLang]=useState(detectLang);
-  const [theme,setTheme]=useState(()=>{try{return localStorage.getItem("acacia-theme")||"light";}catch(e){return "light";}});
   const t=makeT(lang);
   const [file,setFile]=useState(null); const [pages,setPages]=useState(null);
   const [range,setRange]=useState(""); const [each,setEach]=useState(false);
   const [over,setOver]=useState(false); const [busy,setBusy]=useState(false); const [err,setErr]=useState("");
   const inputRef=useRef(null);
-  useEffect(()=>{document.documentElement.setAttribute("data-theme",theme);try{localStorage.setItem("acacia-theme",theme);}catch(e){}},[theme]);
   useEffect(()=>{document.documentElement.setAttribute("lang",lang);try{localStorage.setItem("acacia-lang",lang);}catch(e){}},[lang]);
 
   const load=useCallback(async(f)=>{
@@ -102,10 +100,6 @@ function App(){
           <div className="topbar-actions">
             <a className="ghost-link" href="/freeware">{t("nav_more")}</a>
             <div className="lang-seg" role="group" aria-label={t("lang_label")}><button type="button" aria-pressed={lang==="es"} onClick={()=>setLang("es")}>ES</button><button type="button" aria-pressed={lang==="en"} onClick={()=>setLang("en")}>EN</button></div>
-            <button className="icon-btn" onClick={()=>setTheme(theme==="dark"?"light":"dark")} aria-label={t("theme_label")}>
-              <svg className="moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-              <svg className="sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-            </button>
           </div>
         </div>
         <header className="hero">

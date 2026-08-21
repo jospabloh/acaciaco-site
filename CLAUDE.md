@@ -158,3 +158,34 @@ Gmail address.
   `--radius-card`) rather than hard-coding colours. The site has a dark theme:
   any new colour needs a `[data-theme="dark"]` restatement or it will wash out.
 - **Comments and identifiers in English; every user-facing string in Spanish.**
+
+## Selector de tema: claro / oscuro / dispositivo (módulo 12, 2026-08-21)
+
+`scripts/theme-switcher.js` es ahora **el único dueño del tema en todo el
+sitio** — las 48 páginas lo cargan, incluidas las ~20 herramientas de
+`freeware/`. Guarda la preferencia (`light` | `dark` | `system`) bajo
+`acacia-theme`, resuelve `system` contra `prefers-color-scheme` en vivo, aplica
+`data-theme` y dibuja el control: un círculo pequeño en la esquina inferior
+derecha que crece de lado en una pista de tres ranuras al pulsarlo. Es el gemelo
+en vanilla del `ThemeSwitcher.jsx` que llevan las apps del portafolio; la fuente
+canónica de ambos está en `jospabloh/acacia-app-standard` → `shared/theme/`.
+
+**Nada más puede escribir `data-theme`.** Dos escritores se pelean por él, así
+que salieron: el botón `#theme-toggle` del nav (24 páginas), el `initTheme()` de
+`scripts/shared.js`, y el estado `theme` + el `useEffect` + el botón sol/luna
+propios de cada herramienta de `freeware/` (20 apps, más sus claves de
+traducción `theme_label`, que se quedaron sin consumidor).
+
+El script se inyecta a sí mismo el CSS, porque tiene que funcionar sobre dos
+sistemas de tokens distintos: el de `styles/base.css` (`--bg-card`, `--border`,
+`--text`, `--text-muted`, `--primary`) y el de las herramientas (`--card`,
+`--line`, `--ink`, `--ink-2`, `--accent`). Las cadenas `var(a, var(b, literal))`
+cubren los dos; si añades un tercer sistema de tokens, extiéndelas.
+
+El aviso de cookies vive en esa misma esquina y gana en `z-index`, así que el
+switcher se sube por encima mientras está visible (`MutationObserver` sobre su
+clase) y vuelve a su sitio al descartarlo.
+
+El script pre-montaje que ya traía cada página se actualizó para entender
+`system`: sigue escribiendo `data-theme` con el color **resuelto** (`light` /
+`dark`), que es lo que espera el CSS, y ahora además fija `color-scheme`.

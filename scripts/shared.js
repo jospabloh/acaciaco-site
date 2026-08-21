@@ -2,26 +2,16 @@
   'use strict';
 
   var STORAGE = {
-    theme: 'acacia-theme',
     currency: 'acacia-currency',
     cookies: 'acacia-cookies-consent',
     rate: 'acacia-fx-rate'
   };
 
-  /* ---------- Theme ---------- */
-  function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    try { localStorage.setItem(STORAGE.theme, theme); } catch (e) {}
-  }
-
-  function initTheme() {
-    var btn = document.getElementById('theme-toggle');
-    if (!btn) return;
-    btn.addEventListener('click', function () {
-      var current = document.documentElement.getAttribute('data-theme') || 'light';
-      applyTheme(current === 'light' ? 'dark' : 'light');
-    });
-  }
+  /* ---------- Theme ----------
+     Not here. scripts/theme-switcher.js, which every page loads, owns the
+     'acacia-theme' key ('light' | 'dark' | 'system'), applies data-theme, and
+     renders the corner switcher. Nothing in this file may write data-theme:
+     two writers would fight over it. */
 
   /* ---------- Currency ---------- */
   var fxRate = null;
@@ -294,7 +284,6 @@
   }
 
   ready(function () {
-    initTheme();
     initCurrency();
     initMenu();
     initStickyNav();

@@ -17,7 +17,15 @@
 <link rel="icon" type="image/svg+xml" href="/freeware/gastos-viaje/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script>(function(){try{var t=localStorage.getItem('acacia-theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<script>(function () {
+  try {
+    var p = localStorage.getItem('acacia-theme');
+    if (p !== 'light' && p !== 'dark') p = 'system';
+    var d = p === 'dark' || (p === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.setAttribute('data-theme', d ? 'dark' : 'light');
+    document.documentElement.style.colorScheme = d ? 'dark' : 'light';
+  } catch (e) {}
+})();</script>
 <script type="application/ld+json">
 [
   { "@context":"https://schema.org","@type":"SoftwareApplication","name":"Reporte de Gastos de Viaje","applicationCategory":"BusinessApplication","operatingSystem":"Web","url":"https://acaciaco.com.mx/freeware/gastos-viaje","offers":{"@type":"Offer","price":"0","priceCurrency":"MXN"},"provider":{"@type":"Organization","name":"ACACIA Consultoría","url":"https://acaciaco.com.mx"},"description":"Arma un reporte de gastos de viaje con comprobantes adjuntos, varias monedas, IVA y anticipo. Descarga el PDF con carátula, tabla y anexo de comprobantes. Funciona en el navegador, sin instalar y sin registro." },
@@ -194,5 +202,6 @@
   <script type="text/babel" src="/freeware/gastos-viaje/app.jsx"></script>
   <script src="/scripts/freeware-promo.js" defer></script>
   <script src="/scripts/analytics.js" defer></script>
+  <script defer src="/scripts/theme-switcher.js"></script>
 </body>
 </html>
