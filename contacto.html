@@ -197,8 +197,10 @@
         <script>
         (function () {
           var f = document.getElementById('lead-form'); if (!f) return;
+          var submitBtn = f.querySelector('button[type="submit"]');
           f.addEventListener('submit', function (e) {
             e.preventDefault();
+            if (submitBtn) submitBtn.disabled = true;
             var msg = document.getElementById('lead-msg');
             var data = Object.fromEntries(new FormData(f).entries());
             data.source = 'acaciaco.com.mx/contacto';
@@ -210,6 +212,8 @@
               msg.style.color = '#0a7'; msg.textContent = '¡Gracias! Te contactamos pronto.'; f.reset();
             }).catch(function () {
               msg.style.color = '#c33'; msg.textContent = 'No se pudo enviar — escríbenos a contacto@acaciaco.com.mx.';
+            }).finally(function () {
+              if (submitBtn) submitBtn.disabled = false;
             });
           });
         })();
