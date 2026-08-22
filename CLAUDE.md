@@ -136,6 +136,30 @@ autofill. Column indices live in one place: `COL` in `_facturaRows.ts`.
 - `ROSETA_ADMIN_PASSWORD` unset makes the panel endpoints **fail closed**, never
   open.
 
+## `freeware/plink-fx/` es la copia canónica de Plink FX (2026-08-22)
+
+Plink FX existe dos veces: aquí y en el repo `jospabloh/plink_fx`, que es su
+build PWA independiente. **La de aquí es la que la gente carga y la que manda.**
+
+Tres archivos tienen que quedar idénticos en los dos lados — `app.jsx`,
+`tweaks-panel.jsx` y el bloque `<style>` de `index.html`. El resto de
+`index.html` es distinto a propósito: aquí lleva el SEO en español, el JSON-LD,
+el artículo y la nav del sitio; allá es una PWA en inglés con su propio
+manifest.
+
+Se dejaron divergir durante meses y las dos perdieron cosas — el detalle está en
+el CLAUDE.md de `plink_fx`, incluido un `ReferenceError` de TDZ que vivía en la
+copia servida y que `@babel/standalone` escondía al compilar `const` a `var`.
+**Haz el cambio aquí primero**, cópialo al otro repo y corre su `npm run bundle`;
+`npm run check:mirror` allá compara contra lo que este sitio realmente sirve y
+falla si se separan.
+
+Los `.jsx` se sirven tal cual y los transpila `@babel/standalone` en el
+navegador, así que son archivos públicos: eso es justo lo que le permite al
+chequeo de espejo leerlos. jsPDF ya no viene de unpkg — está vendorizado en
+`assets/vendor/jspdf@2.5.2/` y se carga bajo demanda; la página declara dónde
+está en `<html data-jspdf="…">`.
+
 ## Environment
 
 See `.env.example`. All secrets are server-only — this site has no client-side
