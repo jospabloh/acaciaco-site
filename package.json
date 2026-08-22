@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "test": "node --test \"tests/**/*.test.ts\""
+    "test": "node --test \"tests/**/*.test.ts\"",
+    "test:smoke": "playwright test"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.0",
@@ -8,5 +9,8 @@
     "googleapis": "^171.1.0",
     "resend": "^6.18.1",
     "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
   }
 }
