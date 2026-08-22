@@ -9,7 +9,7 @@ const Store = window.GVStore
 
 const STRINGS = {
   es: {
-    nav_more: "← Más herramientas", theme_label: "Cambiar tema", lang_label: "Idioma",
+    nav_more: "← Más herramientas", lang_label: "Idioma",
     eyebrow: "Herramienta gratis",
     h1: "Reporte de ", h1b: "gastos de viaje",
     hero_p: "Captura cada gasto con su comprobante, resta el anticipo y descarga el PDF listo para entregar. Sin registro y sin subir nada.",
@@ -123,7 +123,7 @@ const STRINGS = {
     csv_from_advance: "Del anticipo",
   },
   en: {
-    nav_more: "← More tools", theme_label: "Toggle theme", lang_label: "Language",
+    nav_more: "← More tools", lang_label: "Language",
     eyebrow: "Free tool",
     h1: "Travel ", h1b: "expense report",
     hero_p: "Log every expense with its receipt, subtract the advance and download the PDF ready to hand in. No sign-up, nothing uploaded.",
@@ -683,12 +683,6 @@ function App() {
     Store.clearAll().then(() => { setReport(emptyReport()); setMessage(null) })
   }
 
-  const toggleTheme = () => {
-    const now = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark"
-    document.documentElement.setAttribute("data-theme", now)
-    try { localStorage.setItem("acacia-theme", now) } catch (e) {}
-  }
-
   const period = report.trip.dateFrom || report.trip.dateTo
     ? [report.trip.dateFrom, report.trip.dateTo].filter(Boolean).join(" – ")
     : t("doc_period")
@@ -704,9 +698,6 @@ function App() {
               <button aria-pressed={lang === "es"} onClick={() => setLang("es")}>ES</button>
               <button aria-pressed={lang === "en"} onClick={() => setLang("en")}>EN</button>
             </div>
-            <button className="icon-btn" onClick={toggleTheme} aria-label={t("theme_label")}>
-              <Icon name="moon" /><Icon name="sun" />
-            </button>
           </div>
         </div>
 

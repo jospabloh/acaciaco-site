@@ -14,7 +14,6 @@ const PRIMA_VACACIONAL_MIN = 25; // % — LFT art. 80
 const STRINGS = {
   es: {
     nav_more: "← Más herramientas",
-    theme_label: "Cambiar tema",
     lang_label: "Idioma",
     eyebrow: "Herramienta gratis",
     h1_a: "Calculadora de finiquito y liquidación ",
@@ -105,7 +104,6 @@ const STRINGS = {
   },
   en: {
     nav_more: "← More tools",
-    theme_label: "Toggle theme",
     lang_label: "Language",
     eyebrow: "Free tool",
     h1_a: "Severance & layoff pay calculator ",
@@ -600,15 +598,7 @@ function detectLang() {
 function App() {
   const [tab, setTab] = useState("finiquito");
   const [lang, setLang] = useState(detectLang);
-  const [theme, setTheme] = useState(() => {
-    try { return localStorage.getItem("acacia-theme") || "light"; } catch (e) { return "light"; }
-  });
   const t = makeT(lang);
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    try { localStorage.setItem("acacia-theme", theme); } catch (e) {}
-  }, [theme]);
 
   useEffect(() => {
     document.documentElement.setAttribute("lang", lang);
@@ -630,10 +620,6 @@ function App() {
                 <button type="button" aria-pressed={lang === "es"} onClick={() => setLang("es")}>ES</button>
                 <button type="button" aria-pressed={lang === "en"} onClick={() => setLang("en")}>EN</button>
               </div>
-              <button className="icon-btn" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} aria-label={t("theme_label")}>
-                <svg className="moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                <svg className="sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-              </button>
             </div>
           </div>
 

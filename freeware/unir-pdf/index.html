@@ -28,7 +28,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <script>
-  (function () { try { var t = localStorage.getItem('acacia-theme') || 'light'; document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+  (function () { try { var p = localStorage.getItem('acacia-theme'); if (p !== 'light' && p !== 'dark') p = 'system'; var d = p === 'dark' || (p === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches); document.documentElement.setAttribute('data-theme', d ? 'dark' : 'light'); document.documentElement.style.colorScheme = d ? 'dark' : 'light'; } catch (e) {} })();
 </script>
 
 <script type="application/ld+json">
@@ -223,5 +223,6 @@
 .acacia-related__all a{color:inherit;text-decoration:underline;text-underline-offset:3px}
 </style>
 
+  <script defer src="/scripts/theme-switcher.js"></script>
 </body>
 </html>

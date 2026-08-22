@@ -23,7 +23,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script>(function(){try{var t=localStorage.getItem('acacia-theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<script>(function () {
+  try {
+    var p = localStorage.getItem('acacia-theme');
+    if (p !== 'light' && p !== 'dark') p = 'system';
+    var d = p === 'dark' || (p === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.setAttribute('data-theme', d ? 'dark' : 'light');
+    document.documentElement.style.colorScheme = d ? 'dark' : 'light';
+  } catch (e) {}
+})();</script>
 <script type="application/ld+json">
 [
   { "@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Contador de Palabras y Caracteres", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "url": "https://acaciaco.com.mx/freeware/contador-palabras", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "MXN" }, "provider": { "@type": "Organization", "name": "ACACIA Consultoría", "url": "https://acaciaco.com.mx" }, "description": "Contador de palabras, caracteres, oraciones, párrafos y tiempo de lectura en tiempo real. Funciona en el navegador, sin instalar." },
@@ -114,5 +122,6 @@
 .acacia-related__all a{color:inherit;text-decoration:underline;text-underline-offset:3px}
 </style>
 
+  <script defer src="/scripts/theme-switcher.js"></script>
 </body>
 </html>

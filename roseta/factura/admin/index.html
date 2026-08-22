@@ -18,8 +18,11 @@
   <script>
     (function () {
       try {
-        var t = localStorage.getItem('acacia-theme') || 'light';
-        document.documentElement.setAttribute('data-theme', t);
+        var p = localStorage.getItem('acacia-theme');
+        if (p !== 'light' && p !== 'dark') p = 'system';
+        var d = p === 'dark' || (p === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.setAttribute('data-theme', d ? 'dark' : 'light');
+        document.documentElement.style.colorScheme = d ? 'dark' : 'light';
       } catch (e) {}
     })();
   </script>
@@ -183,5 +186,6 @@
   </main>
 
   <script src="/roseta/factura/admin/admin.js" defer></script>
+  <script defer src="/scripts/theme-switcher.js"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@ const { useState, useEffect, useMemo } = React;
 
 const STRINGS = {
   es: {
-    nav_more:"← Más herramientas", theme_label:"Cambiar tema", lang_label:"Idioma", eyebrow:"Herramienta gratis",
+    nav_more:"← Más herramientas", lang_label:"Idioma", eyebrow:"Herramienta gratis",
     h1:"Optimizador de ", h1b:"prompts IA",
     hero_p:"Convierte una idea en un prompt profesional para ChatGPT, Gemini o Claude. Rellena los campos y copia.",
     privacy_chip:"El prompt se arma en tu navegador. Nada se sube.",
@@ -29,7 +29,7 @@ const STRINGS = {
     L_role:"Actúa como", L_context:"Contexto", L_task:"Tarea", L_audience:"Público objetivo", L_format:"Formato de salida", L_tone:"Tono", L_length:"Extensión", L_constraints:"Restricciones", L_examples:"Ejemplos", L_lang:"Responde en", L_step:"Antes de responder, razona paso a paso y luego entrega la respuesta final.", L_ask:"Si te falta información para hacerlo bien, hazme primero las preguntas necesarias.",
   },
   en: {
-    nav_more:"← More tools", theme_label:"Toggle theme", lang_label:"Language", eyebrow:"Free tool",
+    nav_more:"← More tools", lang_label:"Language", eyebrow:"Free tool",
     h1:"AI prompt ", h1b:"optimizer",
     hero_p:"Turn an idea into a professional prompt for ChatGPT, Gemini or Claude. Fill the fields and copy.",
     privacy_chip:"The prompt is built in your browser. Nothing is uploaded.",
@@ -60,12 +60,10 @@ function detectLang(){try{var s=localStorage.getItem("acacia-lang");if(s==="es"|
 
 function App(){
   const [lang,setLang]=useState(detectLang);
-  const [theme,setTheme]=useState(()=>{try{return localStorage.getItem("acacia-theme")||"light";}catch(e){return "light";}});
   const t=makeT(lang);
   const [f,setF]=useState({role:"",task:"",context:"",audience:"",format:"free",tone:"t_pro",length:"l_medium",language:"",constraints:"",examples:""});
   const [step,setStep]=useState(true); const [ask,setAsk]=useState(false);
   const [copied,setCopied]=useState(false);
-  useEffect(()=>{document.documentElement.setAttribute("data-theme",theme);try{localStorage.setItem("acacia-theme",theme);}catch(e){}},[theme]);
   useEffect(()=>{document.documentElement.setAttribute("lang",lang);try{localStorage.setItem("acacia-lang",lang);}catch(e){}},[lang]);
   const set=(k,v)=>setF(p=>({...p,[k]:v}));
 
@@ -108,10 +106,6 @@ function App(){
           <div className="topbar-actions">
             <a className="ghost-link" href="/freeware">{t("nav_more")}</a>
             <div className="lang-seg" role="group" aria-label={t("lang_label")}><button type="button" aria-pressed={lang==="es"} onClick={()=>setLang("es")}>ES</button><button type="button" aria-pressed={lang==="en"} onClick={()=>setLang("en")}>EN</button></div>
-            <button className="icon-btn" onClick={()=>setTheme(theme==="dark"?"light":"dark")} aria-label={t("theme_label")}>
-              <svg className="moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-              <svg className="sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-            </button>
           </div>
         </div>
         <header className="hero">
