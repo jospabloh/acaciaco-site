@@ -10,3 +10,7 @@ node_modules/
 
 # macOS
 .DS_Store
+
+# Playwright smoke-test output (tests/smoke) — local run artefacts
+test-results/
+playwright-report/
