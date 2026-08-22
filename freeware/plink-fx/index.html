@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-jspdf="/assets/vendor/jspdf@2.5.2/jspdf.umd.min.js">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,6 +74,7 @@
     --mx: oklch(0.62 0.13 40);
     --cr: oklch(0.55 0.13 155);
     --shadow: 0 1px 0 oklch(0.88 0.012 70 / 0.7), 0 8px 24px -16px oklch(0.20 0.015 60 / 0.18);
+    --signal: oklch(0.72 0.16 70);   /* the single amber 'LIVE' tell */
     --radius: 14px;
   }
   .theme-ink {
@@ -85,6 +86,7 @@
     --line:     oklch(0.30 0.012 60);
     --line-2:   oklch(0.36 0.012 60);
     --card:     oklch(0.23 0.013 60);
+    --signal:   oklch(0.80 0.15 75);
     --shadow: 0 1px 0 oklch(0.30 0.012 60 / 0.7), 0 8px 24px -16px #000;
   }
   * { box-sizing: border-box; }
@@ -2530,6 +2532,51 @@
     .fx-theme-shell, .fx-theme-track, .fx-theme-thumb, .fx-theme-bubble, .fx-theme-slot { transition: none; }
   }
   @media print { .fx-theme { display: none; } }
+  /* Error-boundary fallback — a render fault shows this instead of a blank
+     page. See ErrorBoundary in app.jsx. */
+  .app-fallback {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; padding: 32px; text-align: center;
+    background: var(--paper); color: var(--ink);
+    font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  .app-fallback h1 {
+    margin: 0; font-size: 26px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.12em;
+  }
+  .app-fallback p { margin: 0; color: var(--ink-3); max-width: 32ch; }
+  .app-fallback button {
+    margin-top: 6px; padding: 9px 18px;
+    font-family: inherit; font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--paper); background: var(--ink);
+    border: none; border-radius: 8px; cursor: pointer;
+  }
+
+  /* The wordmark is an <h1> again — the page had none — and inherits the
+     .trip-mark type rather than setting its own. Slow amber sheen across it:
+     the board's one warm tell. */
+  .trip-wordmark {
+    margin: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    background: linear-gradient(110deg,
+      var(--ink) 30%, var(--signal) 50%, var(--ink) 70%);
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: wordmark-sheen 9s ease-in-out infinite;
+  }
+  @keyframes wordmark-sheen {
+    0%, 100% { background-position: 0% 0; }
+    50%      { background-position: 100% 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .trip-wordmark { animation: none; }
+  }
+
 </style>
 </head>
 <body>
@@ -2575,7 +2622,6 @@
   <!-- Vendored: @supabase/supabase-js only ships dist/umd/supabase.js (no .min),
        so the old unpkg URL 404'd and auth silently did nothing. -->
   <script src="/assets/vendor/supabase-js@2.46.1/supabase.js"></script>
-  <script src="https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
 
   <script type="text/babel" src="/freeware/plink-fx/tweaks-panel.jsx"></script>
   <script type="text/babel" src="/freeware/plink-fx/app.jsx"></script>

@@ -38,6 +38,8 @@ function freshTripDefaults() {
 }
 const INITIAL_TWEAKS = freshTripDefaults();
 
+const DEFAULT_TITLE = typeof document !== "undefined" ? document.title : "Plink FX";
+
 const MAX_CURRENCIES = 5;
 
 // Palette = oklch(L C h) — hue comes from CURRENCY_HUE, L/C from palette
@@ -821,11 +823,11 @@ function CostsTable({ baseCode, baseAmount, rates, others }) {
 // --- BudgetBar ---
 function BudgetBar({ budget, spent, baseAmount, baseCode, rates, otherCodes }) {
   const lang = React.useContext(LangContext);
-  const pct = Math.min(100, (spent / budget) * 100);
+  const pct = budget > 0 ? Math.min(100, (spent / budget) * 100) : 0;
   const remaining = budget - spent;
   const remainingInBase = remaining * (rates[baseCode] || 1);
   const baseInUSD = baseAmount / (rates[baseCode] || 1);
-  const afterPct = Math.min(100, ((spent + baseInUSD) / budget) * 100);
+  const afterPct = budget > 0 ? Math.min(100, ((spent + baseInUSD) / budget) * 100) : 0;
 
   return (
     <div className="budget">
@@ -1342,12 +1344,37 @@ function ExpiryNotice({ tripEndISO }) {
 }
 
 // --- PDF summary ---
-function downloadTripSummaryPDF({ lang, tripName, tripStart, tripEnd, baseCode, baseSymbol, budget, spent }) {
-  if (typeof window === "undefined" || !window.jspdf) {
+// jsPDF is ~358 KB — far too heavy to block first paint for a feature only a
+// fraction of visits use. Load it on demand the first time someone exports a
+// PDF, caching the in-flight promise so concurrent clicks share one download.
+// Each shell declares where its own vendored copy sits (<html data-jspdf="…">),
+// which is what lets this file stay byte-identical in both repos.
+let jspdfPromise = null;
+function ensureJsPDF() {
+  if (typeof window === "undefined") return Promise.reject(new Error("no window"));
+  if (window.jspdf) return Promise.resolve(window.jspdf);
+  if (!jspdfPromise) {
+    jspdfPromise = new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = document.documentElement.dataset.jspdf || "vendor/jspdf.umd.min.js";
+      s.async = true;
+      s.onload = () => window.jspdf ? resolve(window.jspdf) : reject(new Error("jspdf missing after load"));
+      s.onerror = () => { jspdfPromise = null; reject(new Error("failed to load jspdf")); };
+      document.head.appendChild(s);
+    });
+  }
+  return jspdfPromise;
+}
+
+async function downloadTripSummaryPDF({ lang, tripName, tripStart, tripEnd, baseCode, baseSymbol, budget, spent }) {
+  let jspdf;
+  try {
+    jspdf = await ensureJsPDF();
+  } catch (e) {
     alert("PDF library failed to load. Try refreshing the page.");
     return;
   }
-  const { jsPDF } = window.jspdf;
+  const { jsPDF } = jspdf;
   const doc = new jsPDF({ unit: "pt", format: "letter" });
   const start = parseISO(tripStart);
   const end = parseISO(tripEnd);
@@ -1402,16 +1429,58 @@ function downloadTripSummaryPDF({ lang, tripName, tripStart, tripEnd, baseCode, 
   doc.save(`plinkfx-${safe}-${stamp}.pdf`);
 }
 
+// Keyboard focus trap for modal dialogs (aria-modal="true"). While mounted it
+// keeps Tab / Shift+Tab cycling inside `ref`, closes on Escape, and restores
+// focus to whatever was focused before the dialog opened. WCAG 2.1 §2.1.2
+// (No Keyboard Trap requires an escape) and §2.4.3 (Focus Order).
+//
+// AuthModal carries its own copy of this, deliberately: it listens in the
+// capture phase and stops propagation so Escape closes the sign-in sheet
+// without also dismissing anything underneath it.
+function useFocusTrap(ref, onClose) {
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const prevFocus = document.activeElement;
+    const SEL = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const focusables = () => Array.from(node.querySelectorAll(SEL));
+    // Move focus into the dialog on open.
+    (focusables()[0] || node).focus();
+    const onKey = (e) => {
+      if (e.key === "Escape") { e.preventDefault(); closeRef.current && closeRef.current(); return; }
+      if (e.key !== "Tab") return;
+      const items = focusables();
+      if (items.length === 0) { e.preventDefault(); node.focus(); return; }
+      const first = items[0], last = items[items.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey && (active === first || !node.contains(active))) {
+        e.preventDefault(); last.focus();
+      } else if (!e.shiftKey && (active === last || !node.contains(active))) {
+        e.preventDefault(); first.focus();
+      }
+    };
+    node.addEventListener("keydown", onKey);
+    return () => {
+      node.removeEventListener("keydown", onKey);
+      if (prevFocus && typeof prevFocus.focus === "function") prevFocus.focus();
+    };
+  }, [ref]);
+}
+
 // --- Trip summary overlay (post-trip-end) ---
 function TripSummaryOverlay({ t, onDownload, onDelete, onDismiss }) {
   const lang = React.useContext(LangContext);
+  const trapRef = useRef(null);
+  useFocusTrap(trapRef, onDismiss);
   const start = parseISO(t.tripStart);
   const end = parseISO(t.tripEnd);
   const baseCode = (t.selectedCurrencies && t.selectedCurrencies[0]) || "USD";
   const baseSymbol = (CURRENCIES[baseCode] && CURRENCIES[baseCode].symbol) || "$";
   const fmtMoney = (n) => `${baseSymbol}${(n || 0).toLocaleString("en-US", { maximumFractionDigits: 2 })} ${baseCode}`;
   return (
-    <div className="summary-overlay" role="dialog" aria-modal="true">
+    <div className="summary-overlay" role="dialog" aria-modal="true" aria-label={tr(lang, "summary_eyebrow")} ref={trapRef} tabIndex={-1}>
       <div className="summary-card">
         <span className="summary-eyebrow">{tr(lang, "summary_eyebrow")}</span>
         <h2 className="trip-summary-title">{tr(lang, "summary_wrapped", { name: t.tripName || "Your trip" })}</h2>
@@ -1913,7 +1982,8 @@ function App() {
       cloudDebounceRef.current = setTimeout(() => {
         supabaseClient
           .from("user_tweaks")
-          .upsert({ user_id: user.id, tweaks: next, updated_at: new Date().toISOString() }, { onConflict: "user_id" });
+          .upsert({ user_id: user.id, tweaks: next, updated_at: new Date().toISOString() }, { onConflict: "user_id" })
+          .then(undefined, () => {});
       }, 600);
     }
   }, [user, setTweakBase]);
@@ -1921,6 +1991,28 @@ function App() {
   const signOut = useCallback(async () => {
     if (supabaseClient) await supabaseClient.auth.signOut();
   }, []);
+
+  const selected = t.selectedCurrencies || ["USD", "MXN", "CRC"];
+
+  // Detect home; user can override
+  const [detected] = useState(() => detectCurrency());
+  const [manualHome, setManualHome] = useState(null);
+  // Home must be one of the selected; if detected isn't, fall back to first selected
+  let homeCode = !t.autoRegion && manualHome ? manualHome : detected;
+  if (!selected.includes(homeCode)) homeCode = selected[0];
+
+  // --- Language follows home, always ---
+  // The language is whatever the home country's primary language is.
+  // Spanish-speaking primaries → Spanish; everything else → English.
+  // No user-facing pin, no prompt — just track the home.
+  const effectiveLang = localeForCurrency(homeCode);
+  const tt = useCallback((key, vars) => tr(effectiveLang, key, vars), [effectiveLang]);
+
+  // Keep <html lang> in sync so screen readers and search engines see the
+  // language the UI actually switched to (es for Spanish-speaking homes).
+  useEffect(() => {
+    if (typeof document !== "undefined") document.documentElement.lang = effectiveLang;
+  }, [effectiveLang]);
 
   // --- Post-trip summary + data deletion ---
   const [summaryDismissed, setSummaryDismissed] = useState(false);
@@ -1939,7 +2031,7 @@ function App() {
     if (!hasExpenseData) return;
     setTweak({ budget: 0, spent: 0, trackExpenses: "ask" });
     if (user && supabaseClient) {
-      supabaseClient.from("user_tweaks").delete().eq("user_id", user.id);
+      supabaseClient.from("user_tweaks").delete().eq("user_id", user.id).then(undefined, () => {});
     }
   }, [t.tripEnd, user, hasExpenseData]);
 
@@ -1987,27 +2079,22 @@ function App() {
     if (t.tripName) cookieSet(COOKIE_TRIP_NAME, t.tripName);
   }, [t.tripName, cookieConsent]);
 
+  // Keep the document title in sync with the trip so the browser tab / history
+  // reflects the current trip instead of a single static string. The untouched
+  // placeholder does not count as a name: the site's page carries a written
+  // Spanish title, and replacing it with "My Trip" the instant JS runs would
+  // trade it for a default nobody chose.
+  useEffect(() => {
+    const name = (t.tripName || "").trim();
+    const named = name && name !== TWEAK_DEFAULTS.tripName;
+    document.title = named ? `${name} · Plink FX` : DEFAULT_TITLE;
+  }, [t.tripName]);
+
   const acceptCookies = useCallback(() => {
     cookieSet(COOKIE_CONSENT, "1");
     setCookieConsent(true);
     if (t.tripName) cookieSet(COOKIE_TRIP_NAME, t.tripName);
   }, [t.tripName]);
-
-  const selected = t.selectedCurrencies || ["USD", "MXN", "CRC"];
-
-  // Detect home; user can override
-  const [detected] = useState(() => detectCurrency());
-  const [manualHome, setManualHome] = useState(null);
-  // Home must be one of the selected; if detected isn't, fall back to first selected
-  let homeCode = !t.autoRegion && manualHome ? manualHome : detected;
-  if (!selected.includes(homeCode)) homeCode = selected[0];
-
-  // --- Language follows home, always ---
-  // The language is whatever the home country's primary language is.
-  // Spanish-speaking primaries → Spanish; everything else → English.
-  // No user-facing pin, no prompt — just track the home.
-  const effectiveLang = localeForCurrency(homeCode);
-  const tt = useCallback((key, vars) => tr(effectiveLang, key, vars), [effectiveLang]);
 
   // Base = currency the user is typing in
   const [baseCode, setBaseCodeRaw] = useState(homeCode);
@@ -2120,7 +2207,7 @@ function App() {
   }, [fetchRates]);
 
   const onAmountChange = (val) => {
-    const clean = val.replace(/[^\d.]/g, "");
+    const clean = val.replace(/[^\d.]/g, "").replace(/(\..*)\./g, "$1");
     setRawInput(clean);
     const num = parseFloat(clean) || 0;
     setAmount(num);
@@ -2148,12 +2235,12 @@ function App() {
       <FxThemeSwitcher value={t.theme} onChange={v => setTweak("theme", v)} />
       <header className="trip-header">
         <div className="trip-mark">
-          <a href="/freeware" style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "12px", fontWeight: 600, color: "var(--ink-2)", textDecoration: "none", marginBottom: "4px", width: "fit-content" }}>{tt("nav_more")}</a>
+          <a href="https://acaciaco.com.mx/freeware" style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "12px", fontWeight: 600, color: "var(--ink-2)", textDecoration: "none", marginBottom: "4px", width: "fit-content" }}>{tt("nav_more")}</a>
           <div className="trip-credit">
             {tt("mark_credit")} <a href="https://acaciaco.com.mx/" target="_blank" rel="noopener noreferrer">ACACIA Consultoria</a>
             <span className="trip-free">{tt("mark_free")}</span>
           </div>
-          <span>Plink FX</span>
+          <h1 className="trip-wordmark">Plink FX</h1>
         </div>
         <div className="trip-info">
           <input
@@ -2189,7 +2276,7 @@ function App() {
             {rateStatus === "loading" && tt("rate_loading")}
             {rateStatus === "live" && <>{tt("rate_live")} · <span className="rate-ago">{timeAgo(rateUpdated)}</span></>}
             {rateStatus === "fallback" && tt("rate_offline")}
-            <svg viewBox="0 0 16 16" width="11" height="11" className="refresh-icon"><path d="M3 8a5 5 0 0 1 8.5-3.5L13 3v4H9l1.6-1.6A3.5 3.5 0 0 0 4.5 8H3zm10 0a5 5 0 0 1-8.5 3.5L3 13V9h4l-1.6 1.6A3.5 3.5 0 0 0 11.5 8H13z" fill="currentColor"/></svg>
+            <svg viewBox="0 0 16 16" width="11" height="11" className="refresh-icon" aria-hidden="true" focusable="false"><path d="M3 8a5 5 0 0 1 8.5-3.5L13 3v4H9l1.6-1.6A3.5 3.5 0 0 0 4.5 8H3zm10 0a5 5 0 0 1-8.5 3.5L3 13V9h4l-1.6 1.6A3.5 3.5 0 0 0 11.5 8H13z" fill="currentColor"/></svg>
           </button>
           <div className="trip-source">{provider && `via ${provider}`}</div>
         </div>
@@ -2214,12 +2301,13 @@ function App() {
       <div className="region-bar">
         <div className="region-bar-inner">
           <span className="region-label">{tt("im_in")}</span>
-          <div className="region-toggle">
+          <div className="region-toggle" role="group" aria-label={tt("im_in")}>
             {selected.map(c => (
               <button
                 key={c}
                 className={"region-btn" + (homeCode === c ? " active" : "")}
                 onClick={() => { setTweak("autoRegion", false); setManualHome(c); }}
+                aria-pressed={homeCode === c}
                 style={{ "--accent": `var(--c-${c})` }}
               >
                 <FlagMark code={c} size={20} />
@@ -2246,12 +2334,13 @@ function App() {
         <section className="amount-section">
           <div className="amount-label">
             <span>{tt("youre_spending")}</span>
-            <div className="dir-toggle" role="tablist" aria-label="Input currency">
+            <div className="dir-toggle" role="group" aria-label="Input currency">
               {selected.map(d => (
                 <button
                   key={d}
                   className={"dir-btn" + (baseCode === d ? " active" : "")}
                   onClick={() => setBaseCode(d)}
+                  aria-pressed={baseCode === d}
                   style={{ "--accent": `var(--c-${d})` }}
                 >{d}</button>
               ))}
@@ -2263,6 +2352,7 @@ function App() {
             <input
               className="amount-input mono"
               type="text"
+              aria-label={tt("youre_spending")}
               inputMode="decimal"
               pattern="[0-9]*"
               enterKeyHint="done"
@@ -2433,4 +2523,35 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+// Catch render-time errors so a single component fault shows a recoverable
+// message instead of a blank page.
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+  componentDidCatch(error, info) {
+    if (typeof console !== "undefined") console.error("Plink FX crashed:", error, info);
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="app-fallback" role="alert">
+          <h1>Something went wrong</h1>
+          <p>The converter hit an unexpected error. Reloading usually fixes it.</p>
+          <button onClick={() => window.location.reload()}>Reload</button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <ErrorBoundary>
+    <App />
+  </ErrorBoundary>
+);
