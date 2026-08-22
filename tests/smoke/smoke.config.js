@@ -13,6 +13,11 @@ export default {
   // A first-time visitor has to clear this before the corner is clickable.
   dismissOverlay: '#cookie-banner [data-cookies="all"]',
 
+  // Public routes the corner-collision check visits. The cookie banner shares
+  // this corner, and the freeware tools carry entirely different chrome from
+  // the marketing pages, so both shapes are worth a look.
+  routes: ['./', './servicios', './freeware/'],
+
   theme: {
     // `data-theme` on <html>, the token system styles/base.css uses.
     kind: 'attribute',
