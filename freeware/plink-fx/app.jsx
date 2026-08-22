@@ -1706,6 +1706,146 @@ function calcActiveOp(calc, k) {
 }
 
 // --- Main App ---
+/* ── Corner theme switcher ──────────────────────────────────────────────────
+   The board already had all three modes (Auto / Paper / Ink), but only inside
+   the Trip Tweaks panel — three clicks from a screen you are trying to read.
+   This is the portfolio's shared control: a small circle in a corner showing
+   the mode in force, which grows sideways into a three-slot track when
+   pressed. Bottom LEFT, because the calculator FAB owns bottom right.
+
+   `paper`/`ink` are this board's names for light/dark; the glyphs are the same
+   sun / moon / monitor every other ACACIA app uses. */
+const FX_THEME_MODES = [
+  { value: "paper", label: "Paper", hint: "Tema claro" },
+  { value: "ink", label: "Ink", hint: "Tema oscuro" },
+  { value: "auto", label: "Auto", hint: "Seguir al dispositivo" }
+];
+
+function FxThemeGlyph({ mode }) {
+  const props = {
+    viewBox: "0 0 16 16", fill: "none", stroke: "currentColor", strokeWidth: 1.5,
+    strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": "true", focusable: "false"
+  };
+  if (mode === "paper") {
+    return (
+      <svg {...props}>
+        <circle cx="8" cy="8" r="3.1" />
+        <path d="M8 1.3v1.4M8 13.3v1.4M14.7 8h-1.4M2.7 8H1.3M12.74 3.26l-.99.99M4.25 11.75l-.99.99M12.74 12.74l-.99-.99M4.25 4.25l-.99-.99" />
+      </svg>
+    );
+  }
+  if (mode === "ink") {
+    return <svg {...props}><path d="M13.6 9.62A5.9 5.9 0 0 1 6.38 2.4a5.9 5.9 0 1 0 7.22 7.22Z" /></svg>;
+  }
+  return (
+    <svg {...props}>
+      <rect x="1.6" y="2.6" width="12.8" height="8.6" rx="1.6" />
+      <path d="M6 14.4h4M8 11.2v3.2" />
+    </svg>
+  );
+}
+
+function FxThemeSwitcher({ value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef(null);
+  const bubbleRef = useRef(null);
+  const slotRefs = useRef([]);
+  const collapseTimer = useRef(null);
+
+  const index = Math.max(0, FX_THEME_MODES.findIndex(m => m.value === value));
+  const active = FX_THEME_MODES[index];
+
+  useEffect(() => () => clearTimeout(collapseTimer.current), []);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const onPointerDown = (e) => {
+      if (!rootRef.current || rootRef.current.contains(e.target)) return;
+      clearTimeout(collapseTimer.current);
+      setOpen(false);
+    };
+    const onKeyDown = (e) => {
+      if (e.key !== "Escape") return;
+      e.stopPropagation();
+      clearTimeout(collapseTimer.current);
+      setOpen(false);
+      if (bubbleRef.current) bubbleRef.current.focus();
+    };
+    document.addEventListener("pointerdown", onPointerDown, true);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown, true);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (open && slotRefs.current[index]) slotRefs.current[index].focus();
+  }, [open, index]);
+
+  // Picking with the pointer closes the track once the indicator has finished
+  // sliding. Picking with the keyboard (detail === 0) leaves it open, so focus
+  // does not vanish out from under the caret.
+  const pick = (event, next) => {
+    onChange(next);
+    clearTimeout(collapseTimer.current);
+    if (event.detail > 0) collapseTimer.current = setTimeout(() => setOpen(false), 1100);
+  };
+
+  const onKeyDown = (event) => {
+    const last = FX_THEME_MODES.length - 1;
+    let next = null;
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") next = index === last ? 0 : index + 1;
+    else if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = index === 0 ? last : index - 1;
+    else if (event.key === "Home") next = 0;
+    else if (event.key === "End") next = last;
+    if (next === null) return;
+    event.preventDefault();
+    clearTimeout(collapseTimer.current);
+    onChange(FX_THEME_MODES[next].value);
+    if (slotRefs.current[next]) slotRefs.current[next].focus();
+  };
+
+  return (
+    <div className="fx-theme" ref={rootRef} data-open={open ? "true" : "false"}>
+      <div className="fx-theme-shell">
+        <button
+          ref={bubbleRef}
+          type="button"
+          className="fx-theme-bubble"
+          onClick={() => setOpen(true)}
+          aria-expanded={open}
+          aria-label={"Tema: " + active.label + ". Abrir selector de tema"}
+          title={"Tema: " + active.label}
+          tabIndex={open ? -1 : 0}
+        >
+          <FxThemeGlyph mode={active.value} />
+        </button>
+        <div className="fx-theme-track" role="radiogroup" aria-label="Tema del tablero" aria-hidden={!open}>
+          <span className="fx-theme-thumb" aria-hidden="true" style={{ transform: "translateX(" + (index * 34) + "px)" }} />
+          {FX_THEME_MODES.map((option, i) => (
+            <button
+              key={option.value}
+              ref={node => { slotRefs.current[i] = node; }}
+              type="button"
+              className="fx-theme-slot"
+              role="radio"
+              aria-checked={option.value === active.value}
+              aria-label={option.hint}
+              title={option.label}
+              tabIndex={open && option.value === active.value ? 0 : -1}
+              onClick={(event) => pick(event, option.value)}
+              onKeyDown={onKeyDown}
+            >
+              <FxThemeGlyph mode={option.value} />
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [t, setTweakBase] = useTweaks(INITIAL_TWEAKS);
   const { user, ready: authReady } = useSupabaseAuth();
@@ -2004,7 +2144,8 @@ function App() {
 
   return (
     <LangContext.Provider value={effectiveLang}>
-    <div className={"app theme-" + t.theme} style={cssVars}>
+    <div className={"app theme-" + effectiveTheme} style={cssVars}>
+      <FxThemeSwitcher value={t.theme} onChange={v => setTweak("theme", v)} />
       <header className="trip-header">
         <div className="trip-mark">
           <a href="/freeware" style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "12px", fontWeight: 600, color: "var(--ink-2)", textDecoration: "none", marginBottom: "4px", width: "fit-content" }}>{tt("nav_more")}</a>

@@ -2437,6 +2437,99 @@
     .calc-panel { width: calc(100vw - 32px); right: 16px; }
     .calc-fab { right: 16px; bottom: 16px; }
   }
+  /* ── Theme switcher ─────────────────────────
+     The portfolio's shared control (see src/components/ThemeSwitcher.jsx in any
+     ACACIA app, and scripts/theme-switcher.js on acaciaco.com.mx): a small
+     circle showing the mode in force that grows sideways into a three-slot
+     track when pressed. Same shape and behaviour, this board's own tokens.
+
+     Bottom LEFT here, not bottom right: the calculator FAB owns that corner.
+
+     The indicator is ink at low opacity rather than an accent — on this board
+     the per-currency hues carry all the colour, and a fourth accent competing
+     with them in the corner would break that. */
+  .fx-theme {
+    position: fixed;
+    z-index: 150;
+    left: calc(22px + env(safe-area-inset-left, 0px));
+    bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+  }
+  .fx-theme-shell {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    background: var(--card);
+    box-shadow: 0 1px 0 oklch(1 0 0 / 0.25) inset, 0 10px 28px -14px oklch(0.20 0.03 260 / 0.45);
+    overflow: hidden;
+    opacity: 0.72;
+    transition: width 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s ease, border-color 0.2s ease;
+  }
+  .fx-theme-shell:hover,
+  .fx-theme:focus-within .fx-theme-shell { opacity: 1; }
+  .fx-theme[data-open="true"] .fx-theme-shell { width: 108px; opacity: 1; }
+  .fx-theme-bubble {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    padding: 0;
+    background: none;
+    border-radius: 999px;
+    color: var(--ink-3);
+    cursor: pointer;
+    transition: opacity 0.2s ease, color 0.2s ease;
+  }
+  .fx-theme-bubble:hover { color: var(--ink); }
+  .fx-theme[data-open="true"] .fx-theme-bubble { opacity: 0; pointer-events: none; }
+  .fx-theme-track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .fx-theme[data-open="true"] .fx-theme-track { opacity: 1; pointer-events: auto; transition-delay: 0.07s; }
+  .fx-theme-thumb {
+    position: absolute;
+    left: 3px;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background: oklch(from var(--ink) l c h / 0.10);
+    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .fx-theme-slot {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    padding: 0;
+    background: none;
+    border-radius: 999px;
+    color: var(--ink-3);
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  .fx-theme-slot:hover { color: var(--ink); }
+  .fx-theme-slot[aria-checked="true"] { color: var(--ink); }
+  .fx-theme-slot:focus-visible,
+  .fx-theme-bubble:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
+  .fx-theme svg { width: 16px; height: 16px; display: block; }
+  @media (prefers-reduced-motion: reduce) {
+    .fx-theme-shell, .fx-theme-track, .fx-theme-thumb, .fx-theme-bubble, .fx-theme-slot { transition: none; }
+  }
+  @media print { .fx-theme { display: none; } }
 </style>
 </head>
 <body>
@@ -2511,6 +2604,5 @@
 .acacia-related__all a{color:inherit;text-decoration:underline;text-underline-offset:3px}
 </style>
 
-  <script defer src="/scripts/theme-switcher.js"></script>
 </body>
 </html>
