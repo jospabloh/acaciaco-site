@@ -240,3 +240,13 @@ dispararla a mano justo después de un deploy, y un cron diario como red.
 
     npm run test:smoke                      # contra producción
     SMOKE_URL=https://… npm run test:smoke  # contra un preview
+
+Desde el 2026-08-22 la suite añade una quinta afirmación, del **módulo 12**: el
+selector no tapa nada y nada lo tapa, en móvil (390), tablet (834) y escritorio
+(1440), plegado y desplegado. Un control anclado por encima de todo en una
+esquina es justo lo que acaba sentado sobre una barra inferior o un botón
+flotante, y entonces la app pierde una función al ancho que nadie abrió. La
+comprobación distingue las dos direcciones — algo pintado encima del selector, y
+el selector respondiendo por un control que hay debajo — y nombra el control
+afectado. Se coloca con `--theme-switcher-bottom/right`; si otra cosa ya es dueña
+de esa esquina, se mueve el selector, no el control.
