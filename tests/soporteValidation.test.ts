@@ -1,6 +1,8 @@
 // tests/soporteValidation.test.ts
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { validateSoporteSubmission, KNOWN_APPS } from "../api/_soporteValidation.ts";
 
 test("accepts a valid soporte submission for a known app", () => {
@@ -57,4 +59,22 @@ test("rejects a real app with neither soporte nor mejora as type", () => {
 
 test("KNOWN_APPS has the 9 portfolio apps, matching the sales lead form's dropdown text", () => {
   assert.deepEqual(KNOWN_APPS, ["Puntos+", "FlowFin", "StockFlow", "Rumbo", "LIUMA", "CateqHub", "RADAR", "CtrlHQ", "KitchOps"]);
+});
+
+// This is the real gate behind the "these must stay in sync" comments in
+// soporte.html and api/_soporteValidation.ts — a mismatch here means the
+// dropdown offers an app the backend will reject, or vice versa.
+test("soporte.html's #sop-app dropdown options match KNOWN_APPS + the __idea__ sentinel", () => {
+  const soporteHtmlPath = fileURLToPath(new URL("../soporte.html", import.meta.url));
+  const html = readFileSync(soporteHtmlPath, "utf8");
+
+  const selectMatch = /<select id="sop-app"[^>]*>([\s\S]*?)<\/select>/.exec(html);
+  assert.ok(selectMatch, "soporte.html must contain a #sop-app <select> block");
+
+  const optionValues = [...selectMatch[1].matchAll(/<option value="([^"]*)"/g)]
+    .map((m) => m[1])
+    .filter((v) => v !== ""); // the disabled "Elige una app…" placeholder
+
+  const expected = [...KNOWN_APPS, "__idea__"];
+  assert.deepEqual(optionValues.slice().sort(), expected.slice().sort());
 });
