@@ -112,6 +112,10 @@
         <div class="reveal" style="max-width:640px;margin:0 auto;">
           <form id="soporte-form" style="display:grid;gap:.9rem;">
             <label for="sop-app">App</label>
+            <!-- These 9 <option value> strings must stay identical to KNOWN_APPS
+                 in api/_soporteValidation.ts (plus the "__idea__" sentinel below,
+                 which is not in KNOWN_APPS). tests/soporteValidation.test.ts
+                 reads this file and fails the build if they diverge. -->
             <select id="sop-app" name="app_interest" required style="width:100%;padding:.8rem 1rem;border:1px solid var(--border);border-radius:.7rem;font:inherit;background:var(--bg-card);color:var(--text);">
               <option value="" disabled selected>Elige una app…</option>
               <option value="Puntos+">Puntos+</option>
@@ -177,6 +181,7 @@
             msg.textContent = 'Enviando…';
             var data = Object.fromEntries(new FormData(form).entries());
             if (appSelect.value === '__idea__') data.type = 'idea';
+            var FALLBACK_MSG = 'No se pudo enviar — escríbenos a contacto@acaciaco.com.mx.';
             fetch('/api/soporte-apps', {
               method: 'POST',
               headers: { 'content-type': 'application/json' },
@@ -184,14 +189,23 @@
             }).then(function (r) {
               return r.json().then(function (respBody) { return { ok: r.ok, body: respBody }; });
             }).then(function (result) {
-              if (!result.ok || !result.body.ok) throw new Error((result.body && result.body.error) || 'Error');
+              if (!result.ok || !result.body.ok) {
+                // This message came from the server's own JSON body, not from a
+                // thrown exception — safe to show verbatim. A network failure or
+                // a non-JSON response never reaches this branch; it goes straight
+                // to .catch() below, which never shows a raw error message.
+                var serverError = (result.body && result.body.error) || FALLBACK_MSG;
+                var err = new Error(serverError);
+                err.fromServer = true;
+                throw err;
+              }
               msg.style.color = '#0a7';
               msg.textContent = '¡Gracias! Te contactamos en menos de 24 horas hábiles.';
               form.reset();
               syncTypeVisibility();
             }).catch(function (err) {
               msg.style.color = '#c33';
-              msg.textContent = err.message && err.message !== 'Error' ? err.message : 'No se pudo enviar — escríbenos a contacto@acaciaco.com.mx.';
+              msg.textContent = (err && err.fromServer && err.message) ? err.message : FALLBACK_MSG;
             }).finally(function () {
               submitBtn.disabled = false;
             });

@@ -250,3 +250,44 @@ comprobación distingue las dos direcciones — algo pintado encima del selector
 el selector respondiendo por un control que hay debajo — y nombra el control
 afectado. Se coloca con `--theme-switcher-bottom/right`; si otra cosa ya es dueña
 de esa esquina, se mueve el selector, no el control.
+
+## Soporte a Apps
+
+Lives in `soporte.html` (public form) + `api/soporte-apps.ts` (handler) +
+`api/_soporteValidation.ts` (pure validation, no imports — same "importable by
+`node --test`" reasoning as `api/roseta/_adminAuth.ts`). One form covers three
+intents for any of the 9 portfolio apps: soporte (something's broken), mejora
+(a suggestion), or — via the `__idea__` sentinel — a pitch for an app that
+doesn't exist yet. A honeypot field (`website`) and a per-IP rate limit
+(`_ratelimit.ts`, 5/hour) gate the handler before validation runs.
+
+**Env vars**: `MISSION_CONTROL_INGEST_URL` (defaults to
+`https://control.acaciaco.com.mx/api/ingest/lead`), `INGEST_LEAD_SECRET` (sent
+as `x-lead-secret`), `SOPORTE_RESEND_FROM_EMAIL` (defaults to
+`ACACIA <soporte@acaciaco.com.mx>`), `SUPPORT_APPS_NOTIFY_EMAIL` (comma-separated
+internal recipients, defaults to `soporte@acaciaco.com.mx,h.josepablo@gmail.com`).
+
+**Write-then-email, not mail-first — the opposite of Roseta's rule above, and
+on purpose.** Roseta's invoice flow mails first because the email *is* the
+deliverable — a Sheet row with no email sent would be a customer who thinks
+they're getting an invoice and never does. Soporte a Apps is the other shape:
+the thing that must not go missing is the lead landing in Mission Control,
+where each app's own team actually triages it — the two emails are just
+notifications *about* that lead, to ACACIA internally and a confirmation to
+the visitor. So the handler writes to Mission Control's ingest endpoint
+first (`POST /api/ingest/lead`, requiring the real contract's `201` — not any
+2xx — with an 8s timeout so a hang there can't run the function to the
+platform's max duration) and only sends either email once that succeeds; a
+failed ingest returns `502` and neither email fires, because there would be
+nothing for either message to confirm. The two Resend calls afterward are
+best-effort and self-catching (never throw, never fail the response) and run
+concurrently via `Promise.allSettled` rather than sequentially.
+
+**The 9 `<option value>`s in `soporte.html`'s `#sop-app` select must stay
+identical to `KNOWN_APPS` in `api/_soporteValidation.ts`.** Both files carry a
+comment pointing at the other, but the comments alone are a promise, not a
+guarantee — `tests/soporteValidation.test.ts` reads `soporte.html` off disk,
+extracts the `<option value="...">` values, and asserts that set equals
+`[...KNOWN_APPS, "__idea__"]`. Add or rename an app in one place and forget
+the other, and `npm test` fails instead of shipping a dropdown option the
+backend silently rejects (or a `KNOWN_APPS` entry nothing can ever select).

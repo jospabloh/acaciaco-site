@@ -2,11 +2,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Resend } from "resend";
 import { getClientKey, isRateLimited } from "./_ratelimit";
-import { validateSoporteSubmission } from "./_soporteValidation";
-
-function required(v: unknown): v is string {
-  return typeof v === "string" && v.trim().length > 0;
-}
+import { required, validateSoporteSubmission } from "./_soporteValidation";
 
 function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] as string));
@@ -22,6 +18,13 @@ interface SubmissionData {
   message: string;
 }
 
+// Both helpers below are self-catching and never throw: each is best-effort
+// and must never turn into a failed response for the visitor — the
+// submission is already saved in Mission Control by the time either runs
+// (see the handler's ordering comment). Sent concurrently via
+// Promise.allSettled, so this consistency is also what lets the caller treat
+// both the same way instead of special-casing one.
+
 async function sendInternalAlert(resend: Resend, from: string, data: SubmissionData): Promise<void> {
   const to = (process.env.SUPPORT_APPS_NOTIFY_EMAIL || "soporte@acaciaco.com.mx,h.josepablo@gmail.com")
     .split(",").map((s) => s.trim()).filter(Boolean);
@@ -31,12 +34,16 @@ async function sendInternalAlert(resend: Resend, from: string, data: SubmissionD
     `<p><strong>Nombre:</strong> ${escapeHtml(data.name)}</p>` +
     `<p><strong>Correo:</strong> ${escapeHtml(data.email)}</p>` +
     `<p><strong>Mensaje:</strong></p><p>${escapeHtml(data.message).replace(/\n/g, "<br/>")}</p>`;
-  const result = await resend.emails.send({
-    from, to, replyTo: data.email,
-    subject: `${TYPE_LABEL[data.type] ?? data.type}${data.appInterest ? " · " + data.appInterest : ""} — acaciaco.com.mx/soporte`,
-    html,
-  });
-  if (result.error) console.error("Resend error (internal alert)", result.error);
+  try {
+    const result = await resend.emails.send({
+      from, to, replyTo: data.email,
+      subject: `${TYPE_LABEL[data.type] ?? data.type}${data.appInterest ? " · " + data.appInterest : ""} — acaciaco.com.mx/soporte`,
+      html,
+    });
+    if (result.error) console.error("Resend error (internal alert)", result.error);
+  } catch (err) {
+    console.error("Internal alert email failed", err);
+  }
 }
 
 async function sendConfirmationEmail(resend: Resend, from: string, data: SubmissionData): Promise<void> {
@@ -107,8 +114,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           type: data.type,
           message: data.message,
         }),
+        // A hang here must not run this function to the platform's max
+        // duration — 8s is generous for a same-portfolio ingest call.
+        signal: AbortSignal.timeout(8000),
       });
-      ingestOk = ingestRes.ok;
+      // The real contract (api/ingest/lead.js on Mission Control) is a 201,
+      // not "any 2xx" — res.ok alone is looser than what write-then-email
+      // ordering actually depends on.
+      ingestOk = ingestRes.status === 201;
       if (!ingestOk) console.error("Mission Control ingest failed", ingestRes.status, await ingestRes.text());
     } catch (err) {
       console.error("Mission Control ingest request failed", err);
@@ -124,18 +137,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (apiKey) {
       const resend = new Resend(apiKey);
       const from = process.env.SOPORTE_RESEND_FROM_EMAIL || "ACACIA <soporte@acaciaco.com.mx>";
-      try {
-        await sendInternalAlert(resend, from, data);
-      } catch (err) {
-        console.error("Internal alert email failed", err);
-      }
-      await sendConfirmationEmail(resend, from, data);
+      // Concurrent, not sequential — halves the visitor's wait. Both helpers
+      // are self-catching (see the comment above them), so allSettled here is
+      // just belt-and-suspenders: neither promise should ever reject, but
+      // this guarantees one email's outcome can never block or hide the
+      // other's.
+      await Promise.allSettled([
+        sendInternalAlert(resend, from, data),
+        sendConfirmationEmail(resend, from, data),
+      ]);
     } else {
       console.error("RESEND_API_KEY not configured — Soporte a Apps submission saved but no email sent");
     }
 
     return res.status(200).json({ ok: true });
-  } catch (err: any) {
+  } catch (err) {
     console.error(err);
     return res.status(500).json({ ok: false, error: "Ocurrió un error inesperado. Intenta de nuevo." });
   }
