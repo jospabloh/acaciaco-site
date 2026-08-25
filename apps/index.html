@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Apps | ACACIA | Tecnología, consultoría y soluciones digitales</title>
-  <meta name="description" content="Catálogo de apps de ACACIA: StockFlow, FlowFin, Rumbo, LIUMA, Puntos+ y CateqHub." />
+  <meta name="description" content="Catálogo de apps de ACACIA: StockFlow, FlowFin, CateqHub, Rumbo, RADAR, LIUMA, Puntos+, CtrlHQ y KitchOps." />
   <link rel="canonical" href="https://acaciaco.com.mx/apps" />
   <meta name="robots" content="index, follow" />
 
@@ -103,9 +103,26 @@
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> En producción</span>
           <h2 id="ap-prod-h2">Productos listos para operar.</h2>
         </div>
-        <div class="pricing-grid pricing-grid-3">
+        <!-- Order is the static fallback (free apps first); scripts/apps-grid.js
+             re-sorts each [data-apps-group] by real visits once
+             /api/apps-visits resolves — nothing here is ever hidden. -->
+        <div class="pricing-grid pricing-grid-3" data-apps-group="live">
 
-          <div class="reveal pricing-card" id="stockflow">
+          <div class="reveal pricing-card" id="cateqhub" data-app="cateqhub" data-status="live" data-free="true">
+            <div class="pricing-badge">Producción</div>
+            <h3>CateqHub</h3>
+            <p class="pricing-desc">Asistencia de catecismo con tarjeta QR por niño, grupos por catequista y reportes automáticos para parroquias.</p>
+            <ul class="pricing-features">
+              <li>Tarjeta QR y escaneo de asistencia</li>
+              <li>Grupos, catequistas y reportes</li>
+              <li>Gratis hasta 50 niños activos</li>
+            </ul>
+            <a class="btn btn-primary" href="/apps/cateqhub">Ver producto</a>
+            <a class="btn btn-ghost" href="/pricing#cateqhub">Ver planes</a>
+            <a class="btn btn-ghost" href="/trial#cateqhub">Probar 30 días</a>
+          </div>
+
+          <div class="reveal pricing-card" id="stockflow" data-app="stockflow" data-status="live" data-free="false">
             <div class="pricing-badge">Producción</div>
             <h3>StockFlow</h3>
             <p class="pricing-desc">Inventario, cotizaciones y trazabilidad operativa para equipos comerciales.</p>
@@ -120,7 +137,7 @@
             <a class="btn btn-ghost" href="/trial#stockflow">Probar 30 días</a>
           </div>
 
-          <div class="reveal pricing-card" id="flowfin">
+          <div class="reveal pricing-card" id="flowfin" data-app="flowfin" data-status="live" data-free="false">
             <div class="pricing-badge">Producción</div>
             <h3>FlowFin</h3>
             <p class="pricing-desc">App con IA para finanzas personales, de pareja y familiares.</p>
@@ -134,84 +151,72 @@
             <a class="btn btn-ghost" href="/trial#flowfin">Probar 30 días</a>
           </div>
 
-          <div class="reveal pricing-card" id="rumbo">
-            <div class="pricing-badge">Producción</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEMO -->
+    <section class="section" id="apps-demo" aria-labelledby="ap-demo-h2" style="background: var(--bg-subtle);">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Demo</span>
+          <h2 id="ap-demo-h2">Productos en demo, con acceso por invitación.</h2>
+        </div>
+        <div class="pricing-grid pricing-grid-2" data-apps-group="demo">
+
+          <div class="reveal pricing-card" id="puntos-plus" data-app="puntos-plus" data-status="demo" data-free="true">
+            <div class="pricing-badge">Demo</div>
+            <h3>Puntos+</h3>
+            <p class="pricing-desc">Programa de fidelización de clientes con puntos, recompensas y analítica de comportamiento. Empieza gratis. Demo con acceso por invitación y aprobación para marcas seleccionadas.</p>
+            <a class="btn btn-primary" href="/apps/puntos-plus">Solicitar demo</a>
+          </div>
+
+          <div class="reveal pricing-card" id="liuma" data-app="liuma" data-status="demo" data-free="false">
+            <div class="pricing-badge">Demo</div>
+            <h3>LIUMA</h3>
+            <p class="pricing-desc">Comunicación y gestión escolar: conecta escuela con familias, asistencia, avisos y bitácora. Demo con acceso por invitación y aprobación para instituciones seleccionadas.</p>
+            <a class="btn btn-primary" href="/apps/liuma">Solicitar demo</a>
+          </div>
+
+          <div class="reveal pricing-card" id="rumbo" data-app="rumbo" data-status="demo" data-free="false">
+            <div class="pricing-badge">Demo</div>
             <h3>Rumbo</h3>
             <p class="pricing-desc">Gestión de flotillas: vehículos, conductores, mantenimiento, combustible y costo por km.</p>
-            <ul class="pricing-features">
-              <li>Vehículos y conductores</li>
-              <li>Mantenimiento y combustible</li>
-              <li>Costo por kilómetro</li>
-            </ul>
-            <a class="btn btn-primary" href="/apps/rumbo">Ver producto</a>
-            <a class="btn btn-ghost" href="/apps/rumbo#planes">Ver planes</a>
+            <a class="btn btn-primary" href="/apps/rumbo">Ver demo</a>
           </div>
 
-          <div class="reveal pricing-card" id="cateqhub">
-            <div class="pricing-badge">Producción</div>
-            <h3>CateqHub</h3>
-            <p class="pricing-desc">Asistencia de catecismo con tarjeta QR por niño, grupos por catequista y reportes automáticos para parroquias.</p>
-            <ul class="pricing-features">
-              <li>Tarjeta QR y escaneo de asistencia</li>
-              <li>Grupos, catequistas y reportes</li>
-              <li>Gratis hasta 50 niños activos</li>
-            </ul>
-            <a class="btn btn-primary" href="/apps/cateqhub">Ver producto</a>
-            <a class="btn btn-ghost" href="/pricing#cateqhub">Ver planes</a>
-            <a class="btn btn-ghost" href="/trial#cateqhub">Probar 30 días</a>
-          </div>
-
-          <div class="reveal pricing-card" id="radar">
-            <div class="pricing-badge">Producción</div>
+          <div class="reveal pricing-card" id="radar" data-app="radar" data-status="demo" data-free="false">
+            <div class="pricing-badge">Demo</div>
             <h3>RADAR</h3>
             <p class="pricing-desc">Control de asistencia por WhatsApp, aprobaciones, turnos y analítica de productividad para tu equipo.</p>
-            <ul class="pricing-features">
-              <li>Registro de asistencia por WhatsApp</li>
-              <li>Aprobaciones y turnos</li>
-              <li>Analítica de productividad</li>
-            </ul>
-            <a class="btn btn-primary" href="/apps/radar">Ver producto</a>
-            <a class="btn btn-ghost" href="/apps/radar#planes">Ver planes</a>
-          </div>
-
-          <div class="reveal pricing-card" id="kitchops">
-            <div class="pricing-badge">Producción</div>
-            <h3>KitchOps</h3>
-            <p class="pricing-desc">Gastos, cortes de plataformas de delivery, inventario y alertas para restaurantes independientes, capturados desde WhatsApp.</p>
-            <ul class="pricing-features">
-              <li>Gastos desde la foto de un ticket</li>
-              <li>Cortes de Rappi, Uber Eats y Didi conciliados</li>
-              <li>Inventario y alertas de insumo bajo</li>
-            </ul>
-            <a class="btn btn-primary" href="/apps/kitchops">Ver producto</a>
-            <a class="btn btn-ghost" href="/apps/kitchops#planes">Ver planes</a>
+            <a class="btn btn-primary" href="/apps/radar">Ver demo</a>
           </div>
 
         </div>
       </div>
     </section>
 
-    <!-- PREVIEW -->
-    <section class="section" id="apps-preview" aria-labelledby="ap-prev-h2" style="background: var(--bg-subtle);">
+    <!-- IN DEVELOPMENT -->
+    <section class="section" id="apps-dev" aria-labelledby="ap-dev-h2">
       <div class="container">
         <div class="section-head reveal">
-          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Preview</span>
-          <h2 id="ap-prev-h2">Productos en preview privado.</h2>
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> En desarrollo</span>
+          <h2 id="ap-dev-h2">Productos en desarrollo — sin alta pública todavía.</h2>
         </div>
-        <div class="pricing-grid pricing-grid-2">
+        <div class="pricing-grid pricing-grid-2" data-apps-group="dev">
 
-          <div class="reveal pricing-card">
-            <div class="pricing-badge">Preview</div>
-            <h3>LIUMA</h3>
-            <p class="pricing-desc">Preview privado con acceso por invitación y aprobación para instituciones seleccionadas.</p>
-            <a class="btn btn-primary" href="/apps/liuma">Solicitar preview</a>
+          <div class="reveal pricing-card" id="ctrlhq" data-app="ctrlhq" data-status="dev" data-free="false">
+            <div class="pricing-badge">En desarrollo</div>
+            <h3>CtrlHQ</h3>
+            <p class="pricing-desc">Ingresos, egresos, nómina y consumos de equipo por negocio, con roles separados para administrador y personal.</p>
+            <a class="btn btn-primary" href="/apps/ctrlhq">Conocer más</a>
           </div>
 
-          <div class="reveal pricing-card">
-            <div class="pricing-badge">Preview</div>
-            <h3>Puntos+</h3>
-            <p class="pricing-desc">Preview privado con acceso por invitación y aprobación para evaluar Puntos+ en marcas seleccionadas.</p>
-            <a class="btn btn-primary" href="/apps/puntos-plus">Solicitar preview</a>
+          <div class="reveal pricing-card" id="kitchops" data-app="kitchops" data-status="dev" data-free="false">
+            <div class="pricing-badge">En desarrollo</div>
+            <h3>KitchOps</h3>
+            <p class="pricing-desc">Gastos, cortes de plataformas de delivery, inventario y alertas para restaurantes independientes, capturados desde WhatsApp.</p>
+            <a class="btn btn-primary" href="/apps/kitchops">Conocer más</a>
           </div>
 
         </div>
@@ -282,6 +287,7 @@
 
   <script src="/scripts/shared.js"></script>
   <script src="/scripts/analytics.js" defer></script>
+  <script src="/scripts/apps-grid.js" defer></script>
   <script defer src="/scripts/theme-switcher.js"></script>
 </body>
 </html>

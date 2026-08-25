@@ -391,10 +391,15 @@
         <div class="section-head reveal">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Apps</span>
           <h2 id="apps-h2">Software diseñado para hacer crecer tu operación.</h2>
-          <p>Ocho productos listos para usar o en preview, con soporte y acompañamiento incluido.</p>
+          <p>Nueve productos, cada uno en su etapa — disponibles, en demo o en desarrollo — con soporte y acompañamiento incluido.</p>
         </div>
+        <!-- Order below is the static fallback (free/live first) that
+             scripts/apps-grid.js re-derives from data-free/data-status, then
+             refines with real visit counts once /api/apps-visits resolves —
+             see that file. Nothing here is ever hidden, only reordered and
+             resized (app-card--hero vs. app-card--compact). -->
         <div class="apps-grid">
-          <a href="/apps/stockflow" class="app-card reveal">
+          <a href="/apps/stockflow" class="app-card reveal" data-app="stockflow" data-status="live" data-free="false">
             <div class="head">
               <div class="logo">
                 <img src="/assets/stockflow-logo.png" alt="StockFlow" width="40" height="40" />
@@ -405,7 +410,7 @@
             <p>Control de inventario y operación comercial con visibilidad en tiempo real.</p>
             <span class="more">Conocer más →</span>
           </a>
-          <a href="/apps/flowfin" class="app-card reveal">
+          <a href="/apps/flowfin" class="app-card reveal" data-app="flowfin" data-status="live" data-free="false">
             <div class="head">
               <div class="logo">
                 <img src="/assets/flowfin-logo.png" alt="FlowFin" width="40" height="40" />
@@ -416,40 +421,7 @@
             <p>Claridad financiera personal y familiar con asistente de IA, escaneo de recibos, presupuestos, reportes y metas. Solo o hasta 10 miembros.</p>
             <span class="more">Conocer más →</span>
           </a>
-          <a href="/apps/puntos-plus" class="app-card reveal">
-            <div class="head">
-              <div class="logo">
-                <img src="/assets/puntosplus-logo.png" alt="Puntos+" width="40" height="40" />
-              </div>
-              <span class="badge preview">Preview</span>
-            </div>
-            <h3>Puntos+</h3>
-            <p>Programa de fidelización de clientes con puntos, recompensas y analítica de comportamiento.</p>
-            <span class="more">Ver preview →</span>
-          </a>
-          <a href="/apps/liuma" class="app-card reveal">
-            <div class="head">
-              <div class="logo">
-                <img src="/assets/liuma-logo.png" alt="LIUMA" width="40" height="40" />
-              </div>
-              <span class="badge preview">Preview</span>
-            </div>
-            <h3>LIUMA</h3>
-            <p>Comunicación y gestión escolar: conecta escuela con familias, asistencia, avisos y bitácora.</p>
-            <span class="more">Ver preview →</span>
-          </a>
-          <a href="/apps/rumbo" class="app-card reveal">
-            <div class="head">
-              <div class="logo">
-                <img src="/assets/rumbo_logo.png" alt="Rumbo" width="40" height="40" />
-              </div>
-              <span class="badge available">Disponible</span>
-            </div>
-            <h3>Rumbo</h3>
-            <p>Gestión de flotillas: vehículos, conductores, mantenimiento, combustible y costo por kilómetro.</p>
-            <span class="more">Conocer más →</span>
-          </a>
-          <a href="/apps/cateqhub" class="app-card reveal">
+          <a href="/apps/cateqhub" class="app-card reveal" data-app="cateqhub" data-status="live" data-free="true">
             <div class="head">
               <div class="logo">
                 <img src="/assets/cateqhub-logo.png" alt="CateqHub" width="40" height="40" />
@@ -457,10 +429,43 @@
               <span class="badge available">Disponible</span>
             </div>
             <h3>CateqHub</h3>
-            <p>Asistencia de catecismo con tarjeta QR por niño, grupos por catequista y reportes automáticos para parroquias.</p>
+            <p>Asistencia de catecismo con tarjeta QR por niño, grupos por catequista y reportes automáticos para parroquias. Gratis hasta 50 niños.</p>
             <span class="more">Conocer más →</span>
           </a>
-          <a href="/apps/radar" class="app-card reveal">
+          <a href="/apps/puntos-plus" class="app-card reveal" data-app="puntos-plus" data-status="demo" data-free="true">
+            <div class="head">
+              <div class="logo">
+                <img src="/assets/puntosplus-logo.png" alt="Puntos+" width="40" height="40" />
+              </div>
+              <span class="badge demo">Demo</span>
+            </div>
+            <h3>Puntos+</h3>
+            <p>Programa de fidelización de clientes con puntos, recompensas y analítica de comportamiento. Empieza gratis.</p>
+            <span class="more">Ver demo →</span>
+          </a>
+          <a href="/apps/liuma" class="app-card reveal" data-app="liuma" data-status="demo" data-free="false">
+            <div class="head">
+              <div class="logo">
+                <img src="/assets/liuma-logo.png" alt="LIUMA" width="40" height="40" />
+              </div>
+              <span class="badge demo">Demo</span>
+            </div>
+            <h3>LIUMA</h3>
+            <p>Comunicación y gestión escolar: conecta escuela con familias, asistencia, avisos y bitácora.</p>
+            <span class="more">Ver demo →</span>
+          </a>
+          <a href="/apps/rumbo" class="app-card reveal" data-app="rumbo" data-status="demo" data-free="false">
+            <div class="head">
+              <div class="logo">
+                <img src="/assets/rumbo_logo.png" alt="Rumbo" width="40" height="40" />
+              </div>
+              <span class="badge demo">Demo</span>
+            </div>
+            <h3>Rumbo</h3>
+            <p>Gestión de flotillas: vehículos, conductores, mantenimiento, combustible y costo por kilómetro.</p>
+            <span class="more">Ver demo →</span>
+          </a>
+          <a href="/apps/radar" class="app-card reveal" data-app="radar" data-status="demo" data-free="false">
             <div class="head">
               <div class="logo" style="color:#2563eb">
                 <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -472,29 +477,29 @@
                   <circle cx="33" cy="16" r="2" fill="currentColor"/>
                 </svg>
               </div>
-              <span class="badge available">Disponible</span>
+              <span class="badge demo">Demo</span>
             </div>
             <h3>RADAR</h3>
             <p>Control de asistencia por WhatsApp, aprobaciones, turnos y analítica de productividad para tu equipo.</p>
-            <span class="more">Conocer más →</span>
+            <span class="more">Ver demo →</span>
           </a>
-          <a href="/apps/ctrlhq" class="app-card reveal">
+          <a href="/apps/ctrlhq" class="app-card reveal" data-app="ctrlhq" data-status="dev" data-free="false">
             <div class="head">
               <div class="logo">
                 <img src="/assets/ctrlhq-logo.png" alt="CtrlHQ" width="40" height="40" />
               </div>
-              <span class="badge available">Disponible</span>
+              <span class="badge dev">En desarrollo</span>
             </div>
             <h3>CtrlHQ</h3>
             <p>Ingresos, egresos, nómina y consumos de equipo por negocio, con roles separados para administrador y personal.</p>
             <span class="more">Conocer más →</span>
           </a>
-          <a href="/apps/kitchops" class="app-card reveal">
+          <a href="/apps/kitchops" class="app-card reveal" data-app="kitchops" data-status="dev" data-free="false">
             <div class="head">
               <div class="logo">
                 <img src="/assets/kitchops-logo.png" alt="KitchOps" width="40" height="40" />
               </div>
-              <span class="badge available">Disponible</span>
+              <span class="badge dev">En desarrollo</span>
             </div>
             <h3>KitchOps</h3>
             <p>Gastos, cortes de Rappi y Uber Eats, inventario y alertas para restaurantes — capturado desde WhatsApp por tu equipo.</p>
@@ -944,6 +949,7 @@
   <script src="/scripts/shared.js"></script>
   <script src="/scripts/analytics.js" defer></script>
   <script src="/scripts/home-tools-region.js" defer></script>
+  <script src="/scripts/apps-grid.js" defer></script>
   <script defer src="/scripts/theme-switcher.js"></script>
 </body>
 </html>
