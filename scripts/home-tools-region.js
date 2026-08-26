@@ -14,9 +14,24 @@
   var tz = "";
   try { tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || ""; } catch (e) {}
   var langMX = (navigator.language || "").toLowerCase() === "es-mx";
-  // Solo intervenimos cuando podemos afirmar que NO es México.
-  if (!tz) return;                       // desconocido → dejamos el set por defecto (MX)
-  if (langMX || MX_TZ.indexOf(tz) > -1) return; // es México → set por defecto
+  // Solo afirmamos "no es México" cuando la zona horaria lo dice con certeza;
+  // sin zona horaria conocida, tratamos al visitante como México (el set por
+  // defecto) — misma condición que antes, sólo nombrada.
+  var isNonMX = !!tz && !langMX && MX_TZ.indexOf(tz) === -1;
+
+  var MX_ONLY_SUBSTITUTES = {
+    "calculadora-finiquito": "generador-contrasenas",
+    "sueldo-neto": "extraer-texto-imagen"
+  };
+  // Expuesto para scripts/apps-grid.js's intercambio de #gratis por visitas
+  // reales (ver el comentario en ese archivo): necesita saber qué slugs no
+  // aplican fuera de México (finiquito/ISR son LFT/SAT), para que un rebuild
+  // posterior por visitas nunca los reintroduzca a quien ya se determinó que
+  // no es de México. Siempre queda definido; vacío si es México o desconocido.
+  window.ACACIA_NON_MX_VISITOR = isNonMX;
+  window.ACACIA_MX_ONLY_SUBSTITUTES = isNonMX ? MX_ONLY_SUBSTITUTES : {};
+
+  if (!isNonMX) return; // es México o desconocido → dejamos el set por defecto
 
   function card(slug, alt, title, desc) {
     return '<a href="/freeware/' + slug + '" class="app-card">' +
