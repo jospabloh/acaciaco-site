@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rumbo · Gestión de flotillas y conductores — ACACIA</title>
-  <meta name="description" content="Administra vehículos, conductores, mantenimiento, combustible, multas y costos por km en un solo lugar. Prueba Rumbo gratis 30 días. Software de flotillas para empresas en cualquier parte del mundo." />
+  <meta name="description" content="Administra vehículos, conductores, mantenimiento, combustible, multas y costos por km en un solo lugar. Rumbo está en demo — solicita acceso. Software de flotillas para empresas en cualquier parte del mundo." />
   <link rel="canonical" href="https://acaciaco.com.mx/apps/rumbo" />
   <meta name="theme-color" content="#3E6B5A" />
 
@@ -12,13 +12,13 @@
   <meta property="og:locale" content="es_MX" />
   <meta property="og:url" content="https://acaciaco.com.mx/apps/rumbo" />
   <meta property="og:title" content="Rumbo · Gestión de flotillas y conductores — ACACIA" />
-  <meta property="og:description" content="Administra vehículos, conductores, mantenimiento, combustible y costos por km. Prueba Rumbo gratis 30 días." />
+  <meta property="og:description" content="Administra vehículos, conductores, mantenimiento, combustible y costos por km. Rumbo está en demo — solicita acceso." />
   <meta property="og:image" content="https://acaciaco.com.mx/assets/rumbo_logo.png" />
   <meta property="og:site_name" content="ACACIA Consultoría" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Rumbo · Gestión de flotillas y conductores — ACACIA" />
-  <meta name="twitter:description" content="Administra vehículos, conductores, mantenimiento, combustible y costos por km. Prueba Rumbo gratis 30 días." />
+  <meta name="twitter:description" content="Administra vehículos, conductores, mantenimiento, combustible y costos por km. Rumbo está en demo — solicita acceso." />
   <meta name="twitter:image" content="https://acaciaco.com.mx/assets/rumbo_logo.png" />
 
   <link rel="icon" type="image/png" href="/assets/rumbo_logo.png" />
@@ -53,11 +53,8 @@
       "offers": {
         "@type": "AggregateOffer",
         "priceCurrency": "MXN",
-        "lowPrice": "599",
-        "highPrice": "1699",
-        "offerCount": "2",
-        "availability": "https://schema.org/InStock",
-        "description": "Planes desde $599 MXN al mes. Prueba gratuita de 30 días."
+        "availability": "https://schema.org/PreOrder",
+        "description": "Cotización según el tamaño de tu flotilla. Acceso por invitación — demo privada."
       },
       "provider": {
         "@type": "Organization",
@@ -220,15 +217,23 @@
         <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Planes Rumbo</span>
           <h2 id="rb-price-h2">Empieza gratis. Crece con tu flotilla.</h2>
-          <p class="section-sub">Todos los planes incluyen 30 días de prueba gratuita y branding con tu logo y colores.</p>
+          <p class="section-sub">Rumbo está en demo — cotizamos según el tamaño de tu flotilla. Escríbenos y te respondemos el mismo día.</p>
         </div>
+        <!-- INTERNAL REFERENCE — not published while Rumbo is in Demo status.
+             Restore these numbers AND the Mercado Pago checkout links below
+             (preapproval_plan_id 3b0cb274f6e74eb4bae02d4cd6279921 for Starter,
+             a1e4fc2b0bc645d1ba4b47f250169582 for Pro) when Rumbo goes live —
+             the tiers/features/limits are already thought through, only the
+             price and the "Cotización" framing are hidden for now:
+               Rumbo Starter $599 MXN/mes · Rumbo Pro $1,699 MXN/mes ·
+               Rumbo Flotilla: cotización (unchanged, already was). -->
         <div class="pricing-grid">
 
-          <!-- Prueba -->
+          <!-- Demo -->
           <div class="reveal pricing-card">
-            <h3>Prueba</h3>
-            <div class="pricing-price">Gratis <span class="pricing-unit">/ 30 días</span></div>
-            <p class="pricing-desc">Para probar Rumbo sin riesgo y conocer todos los módulos.</p>
+            <h3>Demo</h3>
+            <div class="pricing-price"><span>Gratis</span></div>
+            <p class="pricing-desc">Para conocer Rumbo sin riesgo y ver todos los módulos.</p>
             <ul class="pricing-features">
               <li>Hasta 5 vehículos</li>
               <li>Hasta 5 conductores</li>
@@ -236,14 +241,14 @@
               <li>Todos los roles y permisos</li>
               <li>Branding (logo y colores)</li>
             </ul>
-            <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20Rumbo%20gratis%2030%20d%C3%ADas" target="_blank" rel="noopener" class="btn-mp">Probar 30 días →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20conocer%20la%20demo%20de%20Rumbo" target="_blank" rel="noopener" class="btn-mp">Solicitar acceso a la demo →</a>
             <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20Rumbo" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
           </div>
 
           <!-- Starter -->
           <div class="reveal pricing-card">
             <h3>Rumbo Starter</h3>
-            <div class="pricing-price"><span data-price="599">$599 MXN</span> <span class="pricing-unit">/ mes</span></div>
+            <div class="pricing-price"><span>Cotización</span></div>
             <p class="pricing-desc">Para dueños de flotillas pequeñas que quieren ordenar su operación.</p>
             <ul class="pricing-features">
               <li>Hasta 15 vehículos</li>
@@ -254,7 +259,7 @@
               <li>Roles básicos</li>
               <li>Soporte por correo</li>
             </ul>
-            <a href="https://www.mercadopago.com.mx/subscriptions/checkout?preapproval_plan_id=3b0cb274f6e74eb4bae02d4cd6279921" target="_blank" rel="noopener" class="btn-mp">Suscribirse →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20el%20plan%20Rumbo%20Starter" target="_blank" rel="noopener" class="btn-mp">Solicitar →</a>
             <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20Rumbo%20Starter" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
           </div>
 
@@ -262,7 +267,7 @@
           <div class="reveal pricing-card featured">
             <div class="pricing-badge">Más popular</div>
             <h3>Rumbo Pro</h3>
-            <div class="pricing-price"><span data-price="1699">$1,699 MXN</span> <span class="pricing-unit">/ mes</span></div>
+            <div class="pricing-price"><span>Cotización</span></div>
             <p class="pricing-desc">Para flotillas en crecimiento que necesitan más control y análisis.</p>
             <ul class="pricing-features">
               <li>Hasta 50 vehículos</li>
@@ -275,14 +280,14 @@
               <li>Permisos granulares por rol</li>
               <li>Soporte prioritario</li>
             </ul>
-            <a href="https://www.mercadopago.com.mx/subscriptions/checkout?preapproval_plan_id=a1e4fc2b0bc645d1ba4b47f250169582" target="_blank" rel="noopener" class="btn-mp">Suscribirse →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20el%20plan%20Rumbo%20Pro" target="_blank" rel="noopener" class="btn-mp">Solicitar →</a>
             <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20Rumbo%20Pro" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
           </div>
 
           <!-- Flotilla / Enterprise -->
           <div class="reveal pricing-card">
             <h3>Rumbo Flotilla</h3>
-            <div class="pricing-price">A cotizar <span class="pricing-unit">/ anual</span></div>
+            <div class="pricing-price"><span>Cotización</span></div>
             <p class="pricing-desc">Para operaciones grandes que requieren todo sin límites.</p>
             <ul class="pricing-features">
               <li>Vehículos ilimitados</li>
@@ -297,7 +302,7 @@
           </div>
 
         </div>
-        <p class="pricing-note">* Precios sugeridos en MXN, sin permanencia. ¿Necesitas algo a la medida? <a href="https://wa.me/524498958291?text=Hola,%20necesito%20un%20plan%20personalizado%20para%20Rumbo" target="_blank" rel="noopener">Cuéntanos por WhatsApp</a></p>
+        <p class="pricing-note">¿Necesitas algo a la medida? <a href="https://wa.me/524498958291?text=Hola,%20necesito%20un%20plan%20personalizado%20para%20Rumbo" target="_blank" rel="noopener">Cuéntanos por WhatsApp</a></p>
       </div>
     </section>
 
