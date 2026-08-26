@@ -1138,6 +1138,19 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .mock-head .pill { background: var(--primary); color: #fff; border-color: transparent; font-weight: 600; }
 
+/* Real product screenshot inside a .mock browser-chrome frame — same tilted
+   card/shadow/dots treatment as the hand-built mocks below, but the content
+   under the .mock-head bar is an actual screenshot of the running app
+   instead of markup standing in for one. Bleeds past .mock's own padding so
+   the image reaches the card's rounded corners like a real window. */
+.mock-shot {
+  margin: 0 -1rem -1rem;
+  border-radius: 0 0 calc(var(--radius-card) - 1px) calc(var(--radius-card) - 1px);
+  overflow: hidden;
+  line-height: 0;
+}
+.mock-shot img { display: block; width: 100%; height: auto; }
+
 /* StockFlow inventory table */
 .mock-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
 .mock-table th,
@@ -1786,6 +1799,20 @@ details.faq-item[open] { border-color: var(--primary); }
 @media (max-width: 720px) {
   .pricing-grid-2 { grid-template-columns: 1fr; max-width: 480px; }
 }
+
+/* Real product screenshot as a pricing card's header strip — the portfolio
+   pricing page compares apps side by side, so each card gets a cropped peek
+   of the actual running app instead of the fuller browser-chrome treatment
+   used on product-page heroes (.mock-shot). Bleeds past the card's own
+   padding to reach its rounded top corners. */
+.pricing-shot {
+  margin: -2rem -2rem 1.25rem;
+  aspect-ratio: 16 / 8;
+  overflow: hidden;
+  background: var(--bg-subtle);
+  border-bottom: 1px solid var(--border);
+}
+.pricing-shot img { width: 100%; height: 100%; object-fit: cover; object-position: top left; display: block; }
 
 .pricing-card {
   background: var(--bg-card);

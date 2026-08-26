@@ -54,8 +54,11 @@
       "offers": {
         "@type": "AggregateOffer",
         "priceCurrency": "MXN",
+        "lowPrice": "999",
+        "highPrice": "2999",
+        "offerCount": "3",
         "availability": "https://schema.org/PreOrder",
-        "description": "Cotización según el tamaño de tu institución. Acceso por invitación — demo privada."
+        "description": "Planes desde $999 MXN al mes. Acceso por invitación — demo privada."
       },
       "provider": { "@type": "Organization", "name": "ACACIA Consultoría", "url": "https://acaciaco.com.mx" },
       "description": "Plataforma de comunicación y gestión escolar que conecta a la escuela con las familias: avisos, bitácora diaria, asistencia, pagos y emergencias. Disponible por invitación para instituciones seleccionadas."
@@ -138,25 +141,8 @@
                 <div class="dots"><span></span><span></span><span></span></div>
                 <span class="title">LIUMA · Panel institucional</span>
               </div>
-              <div class="stat-row">
-                <div class="stat-card"><div class="lbl">Familias conectadas</div><div class="val">312</div></div>
-                <div class="stat-card"><div class="lbl">Avisos leídos</div><div class="val">96%</div></div>
-                <div class="stat-card"><div class="lbl">Asistencia hoy</div><div class="val">98%</div></div>
-              </div>
-              <div class="cat-row">
-                <span class="lbl">Avisos</span>
-                <span class="bar"><span style="width:92%"></span></span>
-                <span class="amt">Entregados</span>
-              </div>
-              <div class="cat-row">
-                <span class="lbl">Bitácora diaria</span>
-                <span class="bar c2"><span style="width:80%"></span></span>
-                <span class="amt">Enviada a familias</span>
-              </div>
-              <div class="cat-row">
-                <span class="lbl">Pagos del mes</span>
-                <span class="bar c3"><span style="width:74%"></span></span>
-                <span class="amt">Al corriente</span>
+              <div class="mock-shot">
+                <img src="/assets/liuma-hero.jpg" width="1600" height="1000" alt="Panel de inicio de LIUMA con aprobaciones, asistencia y avisos de la escuela" loading="eager" />
               </div>
             </div>
           </div>
@@ -245,20 +231,14 @@
         <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Planes LIUMA</span>
           <h2 id="lm-price-h2">Un plan para cada etapa de tu escuela.</h2>
-          <p class="section-sub">LIUMA está en demo — cotizamos según el tamaño de tu institución. Escríbenos y te respondemos el mismo día.</p>
+          <p class="section-sub">LIUMA está en demo — el acceso es por invitación y aprobación. Los precios de abajo son reales; te confirmamos el tuyo el mismo día.</p>
         </div>
-        <!-- INTERNAL REFERENCE — not published while LIUMA is in Demo status.
-             Restore these numbers when LIUMA goes live; tiers/features/limits
-             are already thought through, only the price is hidden for now:
-               LIUMA Start $999 MXN/mes · LIUMA Growth $1,999 MXN/mes ·
-               LIUMA Plus $2,999 MXN/mes · activación inicial $7,990 MXN
-               (única vez, cuando aplica). -->
         <div class="pricing-grid pricing-grid-3">
 
           <!-- Start -->
           <div class="reveal pricing-card">
             <h3>LIUMA Start</h3>
-            <div class="pricing-price"><span>Cotización</span></div>
+            <div class="pricing-price"><span data-price="999">$999 MXN</span> <span class="pricing-unit">/ mes</span></div>
             <p class="pricing-desc">Para instituciones pequeñas o pilotos controlados.</p>
             <ul class="pricing-features">
               <li>Base de comunicación escolar</li>
@@ -274,7 +254,7 @@
           <div class="reveal pricing-card featured">
             <div class="pricing-badge">Más popular</div>
             <h3>LIUMA Growth</h3>
-            <div class="pricing-price"><span>Cotización</span></div>
+            <div class="pricing-price"><span data-price="1999">$1,999 MXN</span> <span class="pricing-unit">/ mes</span></div>
             <p class="pricing-desc">Para escuelas que requieren más adopción y cobertura.</p>
             <ul class="pricing-features">
               <li>Incluye todo lo de Start</li>
@@ -289,7 +269,7 @@
           <!-- Plus -->
           <div class="reveal pricing-card">
             <h3>LIUMA Plus</h3>
-            <div class="pricing-price"><span>Cotización</span></div>
+            <div class="pricing-price"><span data-price="2999">$2,999 MXN</span> <span class="pricing-unit">/ mes</span></div>
             <p class="pricing-desc">Para operación más robusta y necesidades extendidas.</p>
             <ul class="pricing-features">
               <li>Incluye todo lo de Growth</li>
@@ -302,6 +282,7 @@
           </div>
 
         </div>
+        <p class="pricing-note">Activación inicial (única vez, cuando aplica): <span data-price="7990">$7,990 MXN</span> — migración de datos, alta de usuarios y capacitación.</p>
         <p class="pricing-note">Más de 2,000 alumnos o necesidades a la medida — <a href="https://wa.me/524498958291?text=Hola,%20necesito%20un%20plan%20LIUMA%20a%20la%20medida" target="_blank" rel="noopener">contáctanos para un plan a medida</a>.</p>
       </div>
     </section>
