@@ -61,8 +61,11 @@
       "offers": {
         "@type": "AggregateOffer",
         "priceCurrency": "MXN",
+        "lowPrice": "499",
+        "highPrice": "999",
+        "offerCount": "2",
         "availability": "https://schema.org/PreOrder",
-        "description": "Cotización según el tamaño de tu equipo. Acceso por invitación — demo privada."
+        "description": "Planes desde $499 MXN al mes. Acceso por invitación — demo privada."
       },
       "provider": { "@type": "Organization", "name": "ACACIA Consultoría", "url": "https://acaciaco.com.mx" },
       "description": "Control de asistencia y RR.HH.: registro por WhatsApp, aprobaciones, vacaciones y permisos, turnos y analítica de productividad."
@@ -152,25 +155,8 @@
                 <div class="dots"><span></span><span></span><span></span></div>
                 <span class="title">RADAR · Panel de asistencia</span>
               </div>
-              <div class="stat-row">
-                <div class="stat-card"><div class="lbl">Presentes hoy</div><div class="val">94%</div></div>
-                <div class="stat-card"><div class="lbl">Por aprobar</div><div class="val">3</div></div>
-                <div class="stat-card"><div class="lbl">Puntualidad</div><div class="val">97%</div></div>
-              </div>
-              <div class="cat-row">
-                <span class="lbl">Check-in WhatsApp</span>
-                <span class="bar"><span style="width:94%"></span></span>
-                <span class="amt">Al corriente</span>
-              </div>
-              <div class="cat-row">
-                <span class="lbl">Vacaciones y permisos</span>
-                <span class="bar c2"><span style="width:60%"></span></span>
-                <span class="amt">3 pendientes</span>
-              </div>
-              <div class="cat-row">
-                <span class="lbl">Turnos cubiertos</span>
-                <span class="bar c3"><span style="width:88%"></span></span>
-                <span class="amt">Esta semana</span>
+              <div class="mock-shot">
+                <img src="/assets/radar-hero.jpg" width="1600" height="1000" alt="Dashboard de RADAR con empleados presentes, tardanzas y extensiones pendientes" loading="eager" />
               </div>
             </div>
           </div>
@@ -227,19 +213,14 @@
         <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Planes RADAR</span>
           <h2 id="rd-price-h2">Un plan según el tamaño de tu equipo.</h2>
-          <p class="section-sub">RADAR está en demo — cotizamos según el tamaño de tu equipo. Escríbenos y te respondemos el mismo día.</p>
+          <p class="section-sub">RADAR está en demo — el acceso es por invitación. Los precios de abajo son reales; te confirmamos el tuyo el mismo día.</p>
         </div>
-        <!-- INTERNAL REFERENCE — not published while RADAR is in Demo status.
-             Restore these numbers when RADAR goes live; tiers/features/limits
-             are already thought through, only the price is hidden for now:
-               RADAR Starter $499 MXN/mes · RADAR Pro $999 MXN/mes ·
-               RADAR Enterprise: personalizado (unchanged, already was). -->
         <div class="pricing-grid pricing-grid-3">
 
           <!-- Starter -->
           <div class="reveal pricing-card">
             <h3>RADAR Starter</h3>
-            <div class="pricing-price"><span>Cotización</span></div>
+            <div class="pricing-price"><span data-price="499">$499 MXN</span> <span class="pricing-unit">/ mes</span></div>
             <p class="pricing-desc">Para equipos pequeños que quieren dejar la hoja de cálculo.</p>
             <ul class="pricing-features">
               <li>Registro de asistencia</li>
@@ -255,7 +236,7 @@
           <div class="reveal pricing-card featured">
             <div class="pricing-badge">Más popular</div>
             <h3>RADAR Pro</h3>
-            <div class="pricing-price"><span>Cotización</span></div>
+            <div class="pricing-price"><span data-price="999">$999 MXN</span> <span class="pricing-unit">/ mes</span></div>
             <p class="pricing-desc">Para equipos que ya necesitan aprobaciones y visibilidad real.</p>
             <ul class="pricing-features">
               <li>Todo en Starter</li>

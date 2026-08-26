@@ -54,8 +54,11 @@
       "offers": {
         "@type": "AggregateOffer",
         "priceCurrency": "MXN",
+        "lowPrice": "0",
+        "highPrice": "2490",
+        "offerCount": "4",
         "availability": "https://schema.org/PreOrder",
-        "description": "Empieza gratis; planes de pago se cotizan según tu operación. Acceso por invitación — demo privada."
+        "description": "Empieza gratis; planes desde $899 MXN al mes. Acceso por invitación — demo privada."
       },
       "provider": { "@type": "Organization", "name": "ACACIA Consultoría", "url": "https://acaciaco.com.mx" },
       "description": "Solución de fidelización de clientes para marcas seleccionadas. Puntos, recompensas y datos de comportamiento en una sola plataforma."
@@ -138,18 +141,8 @@
                 <div class="dots"><span></span><span></span><span></span></div>
                 <span class="title">Puntos+ · Panel de marca</span>
               </div>
-              <div class="stat-row">
-                <div class="stat-card"><div class="lbl">Clientes activos</div><div class="val">1,240</div></div>
-                <div class="stat-card"><div class="lbl">Puntos canjeados</div><div class="val">48,500</div></div>
-                <div class="stat-card"><div class="lbl">Retención</div><div class="val">+18%</div></div>
-              </div>
-              <div class="mini-bars" aria-hidden="true">
-                <div class="bar" style="height:42%"></div>
-                <div class="bar" style="height:58%"></div>
-                <div class="bar" style="height:50%"></div>
-                <div class="bar" style="height:75%"></div>
-                <div class="bar" style="height:64%"></div>
-                <div class="bar" style="height:88%"></div>
+              <div class="mock-shot">
+                <img src="/assets/puntos-hero.jpg" width="1600" height="1000" alt="Panel de administración de Puntos+ con distribución de clientes por nivel de lealtad" loading="eager" />
               </div>
             </div>
           </div>
@@ -238,14 +231,9 @@
         <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Planes Puntos+</span>
           <h2 id="pp-price-h2">Lealtad que crece con tu negocio.</h2>
-          <p class="section-sub">Empieza gratis. Puntos+ está en demo — los planes de pago se cotizan según tu operación.</p>
+          <p class="section-sub">Empieza gratis. Puntos+ está en demo — el acceso es por invitación y aprobación. Los precios de abajo son reales.</p>
         </div>
-        <!-- INTERNAL REFERENCE — not published while Puntos+ is in Demo status.
-             Restore these numbers when Puntos+ goes live; tiers/features/limits
-             are already thought through, only the price is hidden for now:
-               Starter: gratis (unchanged, already was) · Growth $899 MXN/mes ·
-               Pro $2,490 MXN/mes. -->
-        <div class="pricing-grid pricing-grid-3">
+        <div class="pricing-grid">
 
           <!-- Starter -->
           <div class="reveal pricing-card">
@@ -267,7 +255,7 @@
           <div class="reveal pricing-card featured">
             <div class="pricing-badge">Más popular</div>
             <h3>Growth</h3>
-            <div class="pricing-price"><span>Cotización</span></div>
+            <div class="pricing-price"><span data-price="899">$899 MXN</span> <span class="pricing-unit">/ mes</span></div>
             <p class="pricing-desc">Varios locales y campañas que mueven la aguja.</p>
             <ul class="pricing-features">
               <li>Todo lo de Starter, y además:</li>
@@ -284,7 +272,7 @@
           <!-- Pro -->
           <div class="reveal pricing-card">
             <h3>Pro</h3>
-            <div class="pricing-price"><span>Cotización</span></div>
+            <div class="pricing-price"><span data-price="2490">$2,490 MXN</span> <span class="pricing-unit">/ mes</span></div>
             <p class="pricing-desc">Cadenas que operan la lealtad como ventaja competitiva.</p>
             <ul class="pricing-features">
               <li>Todo lo de Growth, y además:</li>
@@ -298,8 +286,22 @@
             <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20Puntos%2B%20Pro" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
           </div>
 
+          <!-- Enterprise -->
+          <div class="reveal pricing-card">
+            <h3>Enterprise</h3>
+            <div class="pricing-price"><span>Cotización</span></div>
+            <p class="pricing-desc">Cadenas grandes con necesidades a la medida.</p>
+            <ul class="pricing-features">
+              <li>Todo lo de Pro, y además:</li>
+              <li>Tiendas, usuarios y clientes ilimitados</li>
+              <li>Acuerdos de servicio (SLA)</li>
+              <li>Integraciones a la medida</li>
+            </ul>
+            <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20Puntos%2B%20Enterprise" target="_blank" rel="noopener" class="btn-mp">Solicitar cotización →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20Puntos%2B%20Enterprise" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
+          </div>
+
         </div>
-        <p class="pricing-note">¿Cadena grande o necesidades a la medida? <strong>Enterprise</strong> — todo ilimitado y acuerdos de servicio. <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20Puntos%2B%20Enterprise" target="_blank" rel="noopener">Contáctanos</a></p>
       </div>
     </section>
 
