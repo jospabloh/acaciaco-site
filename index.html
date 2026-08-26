@@ -517,8 +517,12 @@
           <h2 id="free-h2">Herramientas gratis, sin cuenta y sin instalar.</h2>
           <p>Pequeñas apps web que hacemos por gusto y compartimos libres. Viven en nuestro dominio, así que siempre las encuentras aquí.</p>
         </div>
-        <div class="apps-grid">
-          <a href="/freeware/comprimir-pdf" class="app-card reveal">
+        <!-- Static markup is the pre-data fallback: apps-grid.js's
+             rankGratisTeaser() swaps these 6 for the actual top-visited
+             freeware tools once /api/apps-visits resolves, and leaves this
+             exact set untouched if it fails or takes too long. -->
+        <div class="apps-grid" data-apps-group="gratis">
+          <a href="/freeware/comprimir-pdf" class="app-card reveal" data-app="comprimir-pdf">
             <div class="head">
               <div class="logo"><img src="/freeware/comprimir-pdf/favicon.svg" alt="Comprimir PDF" width="40" height="40" /></div>
               <span class="badge available">Gratis</span>
@@ -527,7 +531,7 @@
             <p>Reduce el peso de tus PDF para enviarlos por correo sin perder calidad. Sin registro, en tu navegador.</p>
             <span class="more">Abrir gratis →</span>
           </a>
-          <a href="/freeware/comprimir-imagenes" class="app-card reveal">
+          <a href="/freeware/comprimir-imagenes" class="app-card reveal" data-app="comprimir-imagenes">
             <div class="head">
               <div class="logo"><img src="/freeware/comprimir-imagenes/favicon.svg" alt="Comprimir imágenes" width="40" height="40" /></div>
               <span class="badge available">Gratis</span>
@@ -536,7 +540,7 @@
             <p>Reduce el peso y cambia el formato de tus imágenes (JPG, PNG, WebP) sin perder calidad.</p>
             <span class="more">Abrir gratis →</span>
           </a>
-          <a href="/freeware/unir-pdf" class="app-card reveal">
+          <a href="/freeware/unir-pdf" class="app-card reveal" data-app="unir-pdf">
             <div class="head">
               <div class="logo"><img src="/freeware/unir-pdf/favicon.svg" alt="Unir PDF" width="40" height="40" /></div>
               <span class="badge available">Gratis</span>
@@ -545,7 +549,7 @@
             <p>Combina, ordena y junta varios PDF en uno solo, directo en tu navegador y sin subir tus documentos.</p>
             <span class="more">Abrir gratis →</span>
           </a>
-          <a href="/freeware/generador-qr" class="app-card reveal">
+          <a href="/freeware/generador-qr" class="app-card reveal" data-app="generador-qr">
             <div class="head">
               <div class="logo"><img src="/freeware/generador-qr/favicon.svg" alt="Generador de QR" width="40" height="40" /></div>
               <span class="badge available">Gratis</span>
@@ -554,7 +558,7 @@
             <p>Crea códigos QR y de barras con tu logo al centro. Para URL, Wi-Fi, contacto y más. PNG, SVG o PDF.</p>
             <span class="more">Abrir gratis →</span>
           </a>
-          <a href="/freeware/calculadora-finiquito" class="app-card reveal">
+          <a href="/freeware/calculadora-finiquito" class="app-card reveal" data-app="calculadora-finiquito">
             <div class="head">
               <div class="logo"><img src="/freeware/calculadora-finiquito/favicon.svg" alt="Calculadora de finiquito" width="40" height="40" /></div>
               <span class="badge available">Gratis</span>
@@ -563,7 +567,7 @@
             <p>Finiquito, liquidación por despido, aguinaldo y vacaciones 2026 conforme a la LFT. En tu navegador.</p>
             <span class="more">Abrir gratis →</span>
           </a>
-          <a href="/freeware/sueldo-neto" class="app-card reveal">
+          <a href="/freeware/sueldo-neto" class="app-card reveal" data-app="sueldo-neto">
             <div class="head">
               <div class="logo"><img src="/freeware/sueldo-neto/favicon.svg" alt="Calculadora de sueldo neto" width="40" height="40" /></div>
               <span class="badge available">Gratis</span>
