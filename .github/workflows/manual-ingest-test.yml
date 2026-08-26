@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: POST to /api/soporte-apps
         run: |
-          curl -sS -i -X POST https://acaciaco.com.mx/api/soporte-apps \
+          curl -sS -i -X POST https://www.acaciaco.com.mx/api/soporte-apps \
             -H "content-type: application/json" \
             -d '{
               "name": "Prueba INGEST_LEAD_SECRET",
