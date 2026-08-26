@@ -1,15 +1,22 @@
-/* ACACIA · Apps grid ranking + interaction.
+/* ACACIA · Card grid ranking + interaction.
  *
- * Ranks app cards by the two signals asked for: free apps and real visit
- * counts (Mission Control's public /api/apps-visits, backed by the
- * analytics.js pixel every apps/*.html page already fires on load). Nothing
- * is ever hidden — every card stays visible, only reordered and resized:
+ * Ranks cards by the signals asked for: free apps, live status, and real
+ * visit counts (Mission Control's public /api/apps-visits, backed by the
+ * analytics.js pixel every apps/*.html and freeware/*.html page already
+ * fires on load). Nothing is ever hidden — every card stays visible, only
+ * reordered and resized:
  *   - homepage (#apps .apps-grid): a free-or-live app gets the larger "hero"
  *     card, everything else gets a smaller "compact" one; within each tier,
  *     real visit counts (once they exist) decide the order.
- *   - apps/index.html's status groups (data-apps-group): reorder-only, same
- *     visits signal, no resizing — that page is a spec sheet, not a
- *     discovery grid, so tiering there would fight its own layout.
+ *   - apps/index.html's status groups (data-apps-group="live"/"demo"/"dev"):
+ *     reorder-only, same visits signal, no resizing — that page is a spec
+ *     sheet, not a discovery grid, so tiering there would fight its own
+ *     layout.
+ *   - freeware/index.html's catalog (data-apps-group="freeware"): every tool
+ *     is equally free and equally live, so there's no free/status tiebreak
+ *     to lean on — the top 5 by real visits get the hero card, the rest
+ *     compact. Falls back to the page's own declared order (a stable sort
+ *     of an all-zero score changes nothing) until real numbers arrive.
  * Runs the same ranking twice: once immediately from each card's own
  * data-free/data-status (a real, sensible order with zero network wait —
  * see each page's own markup, which is already written in that order), then
@@ -32,13 +39,16 @@
     catch (e) { return true; }
   }
 
+  // Returns the whole parsed { visits, freeware } payload (or null) — each
+  // caller picks the slice it needs, so one fetch feeds every grid on the
+  // page instead of each grid re-requesting the same response.
   function fetchVisits() {
     if (!window.fetch) return Promise.resolve(null);
     var controller = window.AbortController ? new AbortController() : null;
     var timer = controller ? setTimeout(function () { controller.abort(); }, FETCH_TIMEOUT_MS) : null;
     return fetch(VISITS_URL, { cache: 'no-store', signal: controller ? controller.signal : undefined })
       .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (data) { return (data && data.ok && data.visits) ? data.visits : null; })
+      .then(function (data) { return (data && data.ok) ? data : null; })
       .catch(function () { return null; })
       .then(function (v) { if (timer) clearTimeout(timer); return v; });
   }
@@ -142,15 +152,51 @@
     });
   }
 
-  /* ---------- Catalog page (apps/index.html): reorder only ---------- */
+  /* ---------- apps/index.html's status groups: reorder only ---------- */
   function rankCatalogGroups(visits) {
-    var groups = document.querySelectorAll('[data-apps-group]');
+    var groups = document.querySelectorAll('[data-apps-group="live"], [data-apps-group="demo"], [data-apps-group="dev"]');
     groups.forEach(function (group) {
       var items = Array.prototype.slice.call(group.querySelectorAll('[data-app]'))
         .map(function (el) { return scoreOf(el, visits); });
       items.sort(function (a, b) { return b.score - a.score; });
       reorder(group, items);
     });
+  }
+
+  /* ---------- freeware/index.html: hero/compact by visits alone ---------- */
+  var FREEWARE_HERO_COUNT = 5;
+
+  function rankFreeware(freewareVisits) {
+    var grid = document.querySelector('[data-apps-group="freeware"]');
+    if (!grid) return null;
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.app-card[data-app]'));
+    if (!cards.length) return null;
+
+    // scoreOf's free/status terms are moot here (no card carries those
+    // attributes, so both default to falsy/zero) — score reduces to plain
+    // visits30, which is exactly the ranking this catalog needs.
+    var scored = cards.map(function (el) { return scoreOf(el, freewareVisits); });
+    scored.sort(function (a, b) { return b.score - a.score; });
+    reorder(grid, scored);
+    clearPopularTag(cards);
+
+    scored.forEach(function (s, i) {
+      var hero = i < FREEWARE_HERO_COUNT;
+      s.el.classList.toggle('app-card--hero', hero);
+      s.el.classList.toggle('app-card--compact', !hero);
+      s.el.style.setProperty('--max-grow', hero ? (i === 0 ? '0.09' : '0.06') : '0.035');
+    });
+
+    var top = scored[0];
+    if (top && top.visits30 > 0) {
+      top.el.classList.add('is-top');
+      var tag = document.createElement('span');
+      tag.className = 'app-card__popular-tag';
+      tag.textContent = 'La más usada';
+      top.el.appendChild(tag);
+    }
+
+    return { grid: grid, cards: cards };
   }
 
   function ready(fn) {
@@ -164,10 +210,16 @@
     if (grid && cards) initMagnify(grid, cards);
     rankCatalogGroups(null);
 
-    fetchVisits().then(function (visits) {
-      if (!visits) return;
-      rankHomepage(visits);
-      rankCatalogGroups(visits);
+    var fw = rankFreeware(null);
+    if (fw) initMagnify(fw.grid, fw.cards);
+
+    fetchVisits().then(function (data) {
+      if (!data) return;
+      if (data.visits) {
+        rankHomepage(data.visits);
+        rankCatalogGroups(data.visits);
+      }
+      if (data.freeware) rankFreeware(data.freeware);
     });
   });
 })();
