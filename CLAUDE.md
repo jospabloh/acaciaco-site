@@ -184,6 +184,42 @@ a bug, and any terminal screen needs a human channel on it.** Roseta's
 facturación WhatsApp (449 895 8291) always works; the form is the convenience,
 not the only door.
 
+#### …and the clave has to be recovered SERVER-side (2026-09-09, same day)
+
+The fix above shipped with `resolveRegimenClave()` in `factura.js` only — and a
+second customer hit the identical dead end hours later, because their browser
+was still running a **cached copy of the old `factura.js`** against the already
+fixed server. The tell, if it happens again: the error text is the new one
+(`Revisa este dato: Régimen fiscal.`) but the régimen still reads
+`· Descripción` with no clave and no `#rf-fallback` panel appears — new server,
+old client.
+
+So the resolution moved to `_facturaValidation.ts`, and there are now three
+nets, in the order they catch:
+
+1. **`factura-extract.ts` fills the clave in before the response leaves the
+   server** (`withClaves()`), and drops any régimen it cannot tie to a real
+   catalog clave. This is the one that matters: the form builds its
+   `<option value>` out of that response, so **even a stale cached client gets
+   a working dropdown** — verified in Chromium by running the pre-fix
+   `factura.js` against the new response.
+2. **`factura-submit.ts` re-resolves** from `regimen_descripcion` (the label the
+   form displayed, now sent alongside the value), so a blank clave that still
+   arrives is recovered rather than rejected.
+3. **`factura.js` keeps its own copy** for the dropdown UX. It is now the
+   least important of the three, and the only one that can go stale.
+
+`REGIMEN_CATALOG` carries clave **and** label, because the matching compares a
+CSF's wording against those labels — a test asserts both against the `<option>`s
+in `index.html`, so a reworded option can't silently stop resolving its own
+régimen. Matching is exact-then-significant-words and accepts **only a unique
+match**; `"Ingresos"` alone resolves to nothing on purpose.
+
+**The general rule, and it is the more important half of this whole episode: a
+fix that only exists in `roseta/factura/*.js` is a fix a cached browser can
+opt out of.** Anything that decides whether a customer's request is acceptable
+belongs under `api/`, where the next deploy is the only version there is.
+
 ## `freeware/plink-fx/` es la copia canónica de Plink FX (2026-08-22)
 
 Plink FX existe dos veces: aquí y en el repo `jospabloh/plink_fx`, que es su

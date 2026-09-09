@@ -713,6 +713,9 @@
           rfc: rfc,
           razon_social: form.razon_social.value.trim(),
           regimen_fiscal: form.regimen_fiscal.value,
+          // The label too, so factura-submit can recover the clave from it if
+          // the value is blank — see resolveRegimenClave in _facturaValidation.
+          regimen_descripcion: selectedLabel(regimenSelect),
           uso_cfdi: form.uso_cfdi.value,
           codigo_postal: form.codigo_postal.value.trim(),
           email: form.email.value.trim(),

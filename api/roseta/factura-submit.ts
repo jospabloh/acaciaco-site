@@ -3,7 +3,7 @@ import { Resend } from "resend";
 import { appendRow, getValues, sanitizeCell, updateRow } from "./_sheets";
 import { getClientKey, isRateLimited } from "./_ratelimit";
 import { NOTIFY_EMAILS, SOLICITUDES_RANGE } from "./_facturaRows";
-import { invalidFields, invalidFieldsMessage } from "./_facturaValidation";
+import { invalidFields, invalidFieldsMessage, resolveRegimenClave } from "./_facturaValidation";
 
 // Hard ceiling on the base64 payload we accept for a single attachment —
 // generous compared to the client's own (tighter) budget, just a backstop.
@@ -102,7 +102,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const rfc = String(body.rfc || "").trim().toUpperCase();
     const razonSocial = String(body.razon_social || "").trim();
-    const regimenFiscal = String(body.regimen_fiscal || "").trim();
+    // Second net under factura-extract's: if the clave is missing or isn't a
+    // catalog one, recover it from the label the form displayed. Rejecting a
+    // régimen we can name from its own description would be pedantry at the
+    // customer's expense.
+    const regimenFiscal =
+      resolveRegimenClave(body.regimen_fiscal, body.regimen_descripcion) ||
+      String(body.regimen_fiscal || "").trim();
     const usoCfdi = String(body.uso_cfdi || "").trim();
     const codigoPostal = String(body.codigo_postal || "").trim();
     const email = String(body.email || "").trim();

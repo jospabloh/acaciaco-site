@@ -3,6 +3,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { getClientKey, isRateLimited } from "./_ratelimit";
+import { resolveRegimenClave } from "./_facturaValidation";
 
 // Reads a customer-uploaded CSF or ticket photo with Claude vision and
 // returns whatever it can confidently make out, so the invoice form can
@@ -22,6 +23,32 @@ const PRIMARY_MODEL = "claude-haiku-4-5";
 const FALLBACK_MODEL = "claude-sonnet-5";
 
 const FORMAS_PAGO = ["Efectivo", "Tarjeta de débito", "Tarjeta de crédito", "Transferencia"] as const;
+
+interface RegimenRow {
+  clave: string;
+  descripcion: string;
+  vigente: boolean;
+}
+
+// Fills in each régimen's clave from its description when the CSF didn't
+// print one, and DROPS any row we can't tie to a real catalog clave. Dropping
+// matters as much as filling: an entry with no clave becomes an
+// <option value=""> on the form, which the customer can select but can never
+// submit — that is the exact dead end this whole flow had to be fixed for.
+// If nothing survives, the form keeps its own full catalog to pick from.
+function withClaves(regimenes: RegimenRow[] | null | undefined): RegimenRow[] {
+  if (!Array.isArray(regimenes)) return [];
+  const resolved: RegimenRow[] = [];
+  for (const r of regimenes) {
+    const clave = resolveRegimenClave(r?.clave, r?.descripcion);
+    if (!clave) {
+      console.warn("factura-extract: unresolvable régimen on a CSF", JSON.stringify(r?.descripcion || ""));
+      continue;
+    }
+    resolved.push({ clave, descripcion: r.descripcion, vigente: r.vigente });
+  }
+  return resolved;
+}
 
 const CsfSchema = z.object({
   es_csf: z
@@ -152,7 +179,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (!data || !data.es_csf) {
         return res.status(200).json({ ok: false, error: "no_match" });
       }
-      return res.status(200).json({ ok: true, kind, data });
+      // A persona moral's CSF prints the régimen description without its
+      // clave, so Claude returns `clave: ""`. Fill it in HERE, before the
+      // response leaves the server: the form builds its <option value> out of
+      // this, so an empty clave becomes an option nothing can submit — and
+      // doing it server-side fixes browsers still running a cached factura.js,
+      // which a client-only fix cannot reach.
+      return res.status(200).json({ ok: true, kind, data: { ...data, regimenes: withClaves(data.regimenes) } });
     }
 
     const ticketParams = {
