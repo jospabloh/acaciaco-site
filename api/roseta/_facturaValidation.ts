@@ -13,17 +13,91 @@ export const RFC_RE = /^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/i;
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const CP_RE = /^\d{5}$/;
 
-// These two must stay identical to the <option value>s in
-// roseta/factura/index.html — tests/facturaValidation.test.ts reads that file
-// off disk and fails if they drift, the same guarantee _soporteValidation.ts
-// has over soporte.html's app dropdown. Without them the empty clave above
-// reaches the Sheet as a blank régimen instead of being caught by name.
-export const REGIMEN_CLAVES = [
-  "601", "603", "605", "606", "608", "611", "612",
-  "614", "616", "621", "622", "625", "626",
+// The régimen catalog, clave + the label the form shows. Must stay identical
+// to the <option>s in roseta/factura/index.html — tests/facturaValidation.test.ts
+// reads that file off disk and fails if they drift, the same guarantee
+// _soporteValidation.ts has over soporte.html's app dropdown.
+export const REGIMEN_CATALOG = [
+  { clave: "601", label: "General de Ley Personas Morales" },
+  { clave: "603", label: "Personas Morales con Fines no Lucrativos" },
+  { clave: "605", label: "Sueldos y Salarios" },
+  { clave: "606", label: "Arrendamiento" },
+  { clave: "608", label: "Demás ingresos" },
+  { clave: "611", label: "Ingresos por Dividendos (socios y accionistas)" },
+  { clave: "612", label: "Personas Físicas con Actividades Empresariales y Profesionales" },
+  { clave: "614", label: "Ingresos por intereses" },
+  { clave: "616", label: "Sin obligaciones fiscales" },
+  { clave: "621", label: "Incorporación Fiscal" },
+  { clave: "622", label: "Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras" },
+  { clave: "625", label: "Actividades Empresariales por Plataformas Tecnológicas" },
+  { clave: "626", label: "Régimen Simplificado de Confianza (RESICO)" },
 ];
 
+export const REGIMEN_CLAVES = REGIMEN_CATALOG.map((r) => r.clave);
+
 export const USO_CLAVES = ["G01", "G03", "I08", "P01", "S01", "CP01"];
+
+// --- Recovering a clave the CSF didn't print ------------------------------
+//
+// A CSF for a persona moral prints the régimen's description but usually NOT
+// its clave, so Claude reports `clave: ""` — it can only read what's there.
+// This resolves the clave from the description instead.
+//
+// It lives here, on the server, ON PURPOSE. The first version of this fix put
+// the same logic in factura.js only, and a browser holding a cached copy of
+// that file bypassed it completely — the customer got the old dead end while
+// the deployed server was already fixed. Anything that decides whether a
+// request is acceptable has to survive a stale client.
+
+// "de", "por", "y"… appear in half the catalog and carry no signal.
+const REGIMEN_STOPWORDS = new Set([
+  "de", "del", "la", "las", "los", "el", "y", "e", "a", "al",
+  "con", "por", "en", "no", "traves",
+]);
+
+export function normalizeRegimen(s: unknown): string {
+  return String(s == null ? "" : s)
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // strip accents
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/^\s*\d{3}\s/, "")        // a "601 · …" option label
+    .replace(/^\s*regimen (de )?/, "") // CSFs prefix "Régimen …"
+    .trim();
+}
+
+function significantWords(key: string): string[] {
+  return key.split(" ").filter((w) => w && !REGIMEN_STOPWORDS.has(w));
+}
+
+function covers(haystack: string[], needles: string[]): boolean {
+  return needles.length > 0 && needles.every((w) => haystack.indexOf(w) !== -1);
+}
+
+// Returns a catalog clave, or null. Never a best guess: a description that
+// matches two entries resolves to nothing, so the customer picks by hand
+// rather than having a wrong régimen chosen for them.
+export function resolveRegimenClave(clave: unknown, descripcion: unknown): string | null {
+  const given = String(clave == null ? "" : clave).trim();
+  if (REGIMEN_CLAVES.indexOf(given) !== -1) return given;
+
+  const key = normalizeRegimen(descripcion);
+  if (!key) return null;
+
+  const exact = REGIMEN_CATALOG.filter((c) => normalizeRegimen(c.label) === key);
+  if (exact.length === 1) return exact[0].clave;
+
+  // The catalog's wording is abbreviated relative to the SAT's, and not always
+  // as a prefix — 625 reads "Actividades Empresariales por Plataformas
+  // Tecnológicas" here and "…Actividades Empresariales con ingresos a través de
+  // Plataformas Tecnológicas" on a CSF, so neither string contains the other.
+  // Compare the significant words instead.
+  const words = significantWords(key);
+  const loose = REGIMEN_CATALOG.filter((c) => {
+    const cw = significantWords(normalizeRegimen(c.label));
+    return covers(words, cw) || covers(cw, words);
+  });
+  return loose.length === 1 ? loose[0].clave : null;
+}
 
 export const FIELD_LABELS: Record<string, string> = {
   rfc: "RFC",
