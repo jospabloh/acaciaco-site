@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getValues } from "./_sheets";
 import { requireAdmin } from "./_adminGuard";
 import { COL, cell, resendEmailUrl, SOLICITUDES_RANGE } from "./_facturaRows";
+import { regimenDisplay, resolveRegimenClave } from "./_facturaValidation";
 
 // Unlike the public status lookup, this one is authenticated and returns the
 // full fiscal record — Roseta needs it to key the invoice into her stamping
@@ -12,7 +13,14 @@ function adminSolicitud(row: string[]) {
     fecha_solicitud: cell(row, COL.FECHA_SOLICITUD),
     rfc: cell(row, COL.RFC),
     razon_social: cell(row, COL.RAZON_SOCIAL),
-    regimen_fiscal: cell(row, COL.REGIMEN),
+    // Two shapes on purpose, the same split as fmtMoney/plainAmount: the
+    // panel SHOWS "601 · General de Ley Personas Morales" so Roseta can check
+    // it against a CSF, and its "Copiar" button yields the bare "601", which
+    // is what her stamping software wants. Rows written before the Sheet
+    // stored the name carry a bare clave, so resolving here makes old and new
+    // requests read the same.
+    regimen_fiscal: regimenDisplay(cell(row, COL.REGIMEN)),
+    regimen_clave: resolveRegimenClave(cell(row, COL.REGIMEN), cell(row, COL.REGIMEN)) || cell(row, COL.REGIMEN),
     uso_cfdi: cell(row, COL.USO_CFDI),
     codigo_postal: cell(row, COL.CODIGO_POSTAL),
     email: cell(row, COL.EMAIL),

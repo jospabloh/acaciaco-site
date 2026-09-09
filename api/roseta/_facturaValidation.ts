@@ -99,6 +99,24 @@ export function resolveRegimenClave(clave: unknown, descripcion: unknown): strin
   return loose.length === 1 ? loose[0].clave : null;
 }
 
+// "601 · General de Ley Personas Morales" — what a human reading the request
+// needs, since a bare "601" means nothing while you're checking a customer's
+// data against their CSF. Accepts a bare clave OR an already-formatted label,
+// so it is idempotent and also fixes up rows written before this existed.
+//
+// Display only. The clave alone is what gets STORED in the ClientesRFC tab,
+// because factura-lookup feeds that value straight into the form's
+// <select>.value — a label there would silently break the autofill.
+export function regimenDisplay(value: unknown): string {
+  const raw = String(value == null ? "" : value).trim();
+  if (!raw) return "";
+  const clave = resolveRegimenClave(raw, raw);
+  const entry = clave ? REGIMEN_CATALOG.find((c) => c.clave === clave) : undefined;
+  // An unrecognised value is shown as-is rather than blanked: losing what the
+  // customer actually sent would be worse than showing something odd.
+  return entry ? `${entry.clave} · ${entry.label}` : raw;
+}
+
 export const FIELD_LABELS: Record<string, string> = {
   rfc: "RFC",
   razon_social: "Razón social",

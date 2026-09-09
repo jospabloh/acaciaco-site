@@ -8,6 +8,7 @@ import {
   USO_CLAVES,
   invalidFields,
   invalidFieldsMessage,
+  regimenDisplay,
   resolveRegimenClave,
 } from "../api/roseta/_facturaValidation.ts";
 
@@ -218,4 +219,43 @@ test("a submitted régimen recovered from its label is not reported invalid", ()
   const req = validRequest();
   req.regimen_fiscal = recovered!;
   assert.deepEqual(invalidFields(req), []);
+});
+
+// --- showing the clave AND the name ----------------------------------------
+
+test("regimenDisplay turns a bare clave into clave + name", () => {
+  // "601" alone tells whoever is checking the request against a CSF nothing.
+  assert.equal(regimenDisplay("601"), "601 · General de Ley Personas Morales");
+  assert.equal(regimenDisplay("626"), "626 · Régimen Simplificado de Confianza (RESICO)");
+});
+
+test("regimenDisplay is idempotent", () => {
+  // The Sheet now stores the formatted string and the panel formats again on
+  // read, so running it twice must not produce "601 · 601 · …".
+  const once = regimenDisplay("601");
+  assert.equal(regimenDisplay(once), once);
+});
+
+test("regimenDisplay covers every catalog entry", () => {
+  for (const { clave, label } of REGIMEN_CATALOG) {
+    assert.equal(regimenDisplay(clave), `${clave} · ${label}`);
+  }
+});
+
+test("regimenDisplay shows an unrecognised value rather than blanking it", () => {
+  // Whatever the customer actually sent is more useful than an empty cell.
+  assert.equal(regimenDisplay("no está en el catálogo"), "no está en el catálogo");
+  assert.equal(regimenDisplay(""), "");
+  assert.equal(regimenDisplay(null), "");
+});
+
+test("the formatted régimen still resolves back to its bare clave", () => {
+  // factura-admin-list derives the panel's copy value this way, and the
+  // ClientesRFC tab must keep the bare clave — factura-lookup feeds it
+  // straight into <select id="regimen">.value, so a label there would match
+  // no <option> and the autofill would silently select nothing.
+  for (const { clave } of REGIMEN_CATALOG) {
+    const shown = regimenDisplay(clave);
+    assert.equal(resolveRegimenClave(shown, shown), clave);
+  }
 });

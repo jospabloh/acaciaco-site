@@ -111,6 +111,17 @@ down the line should keep that eventual consumer in mind.
 | J | Sucursal | U | ID de Resend |
 | K | Fecha de consumo | | |
 
+**Column E holds the clave AND the name** (`601 · General de Ley Personas
+Morales`), because a bare `601` tells whoever is checking a request against a
+CSF nothing. `regimenDisplay()` in `_facturaValidation.ts` formats it, and it
+is idempotent, so the admin panel re-formats on read and legacy rows holding a
+bare clave display the same as new ones. **The `ClientesRFC` tab keeps the bare
+clave**, deliberately: `factura-lookup` returns that column and the form
+assigns it to `<select id="regimen">.value`, so a label there would match no
+`<option>` and the autofill would silently select nothing. Same split as
+`fmtMoney`/`plainAmount` — the panel *shows* clave + name and its "Copiar"
+button *yields* the bare clave, which is what the stamping software wants.
+
 **O and P are edited by hand in the Sheet — nothing may shift them.** New columns
 append strictly after the last one, and `factura-submit.ts` must write the full
 `A:U` range (empty trailing cells) so Sheets does not have to infer table bounds.

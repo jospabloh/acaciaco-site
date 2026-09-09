@@ -205,7 +205,11 @@
     [
       ['RFC', s.rfc, true],
       ['Razón social', s.razon_social, false],
-      ['Régimen fiscal', s.regimen_fiscal, true],
+      // Shows clave + name, copies the bare clave (see factura-admin-list).
+      // Not marked as code: `.ad-cap.code dd` is monospaced with letter
+      // spacing, which suits "601" but turns a 40-character Spanish name into
+      // a wrapped wall. The clave still leads the line.
+      ['Régimen fiscal', s.regimen_fiscal, false, s.regimen_clave],
       ['Uso de CFDI', s.uso_cfdi, true],
       ['Código postal', s.codigo_postal, true],
       ['Correo', s.email, false],
