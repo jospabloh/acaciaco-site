@@ -3,10 +3,8 @@ import { Resend } from "resend";
 import { appendRow, getValues, sanitizeCell, updateRow } from "./_sheets";
 import { getClientKey, isRateLimited } from "./_ratelimit";
 import { NOTIFY_EMAILS, SOLICITUDES_RANGE } from "./_facturaRows";
+import { invalidFields, invalidFieldsMessage } from "./_facturaValidation";
 
-const RFC_RE = /^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/i;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const CP_RE = /^\d{5}$/;
 // Hard ceiling on the base64 payload we accept for a single attachment —
 // generous compared to the client's own (tighter) budget, just a backstop.
 const MAX_DATA_URL_LEN = 6 * 1024 * 1024;
@@ -116,20 +114,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const folioTicket = String(body.folio_ticket || "").trim();
     const sinMovimiento = body.sin_movimiento === true;
 
-    if (
-      !RFC_RE.test(rfc) ||
-      !required(razonSocial) ||
-      !required(regimenFiscal) ||
-      !required(usoCfdi) ||
-      !CP_RE.test(codigoPostal) ||
-      !EMAIL_RE.test(email) ||
-      !required(sucursal) ||
-      !required(fechaConsumo) ||
-      !required(formaPago) ||
-      !(Number(monto) > 0) ||
-      (!required(folioTicket) && !sinMovimiento)
-    ) {
-      return res.status(400).json({ ok: false, error: "Revisa los datos del formulario, algo no es válido." });
+    // `fields` travels back so the client can mark the offending input and
+    // send the customer straight to it, instead of dead-ending on the review
+    // screen with a message that names nothing.
+    const bad = invalidFields({
+      rfc,
+      razon_social: razonSocial,
+      regimen_fiscal: regimenFiscal,
+      uso_cfdi: usoCfdi,
+      codigo_postal: codigoPostal,
+      email,
+      sucursal,
+      fecha_consumo: fechaConsumo,
+      monto,
+      forma_pago: formaPago,
+      folio_ticket: folioTicket,
+      sin_movimiento: sinMovimiento,
+    });
+    if (bad.length) {
+      return res.status(400).json({ ok: false, error: invalidFieldsMessage(bad), fields: bad });
     }
 
     // Without a ticket photo there's no "Movimiento" number to uniquely

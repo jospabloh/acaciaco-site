@@ -46,6 +46,7 @@
   var regimenSelect = document.getElementById('regimen');
   var usocfdiSelect = document.getElementById('usocfdi');
   var regimenHint = document.getElementById('regimen-hint');
+  var REGIMEN_HINT_DEFAULT = regimenHint.textContent;
   var cpInput = document.getElementById('cp');
   var matchBox = document.getElementById('rfc-match');
   var matchData = document.getElementById('rfc-match-data');
@@ -194,14 +195,89 @@
   }
   regimenSelect.addEventListener('change', function () { renderUsoOptions(regimenSelect.value); });
 
+  // The static <option> list in index.html is the régimen catalog — snapshot it
+  // before anything rewrites the select, so a CSF read can be matched back
+  // against it instead of hardcoding a second copy of the same table here.
+  var REGIMEN_CATALOG = (function () {
+    var entries = [];
+    Array.prototype.forEach.call(regimenSelect.options, function (o) {
+      if (!o.value) return;
+      entries.push({ clave: o.value, key: normalizeRegimen(o.textContent.replace(/^\s*\d{3}\s*·\s*/, '')) });
+    });
+    return entries;
+  })();
+
+  function normalizeRegimen(s) {
+    return String(s == null ? '' : s)
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // strip accents
+      .replace(/[^a-z0-9]+/g, ' ')
+      .replace(/^\s*regimen (de )?/, '')                 // CSFs prefix "Régimen …"
+      .trim();
+  }
+
+  // A CSF for a persona moral prints the régimen's description but not always
+  // its clave, and Claude reports what it sees — so `clave` can come back
+  // empty. An <option value=""> built from that passes checkValidity() (only
+  // the FIRST empty option counts as the placeholder, by spec), so the form
+  // let the customer through and factura-submit rejected the blank régimen
+  // with nothing to point at. Recover the clave from the description instead.
+  function resolveRegimenClave(r) {
+    var clave = String((r && r.clave) || '').trim();
+    if (/^\d{3}$/.test(clave) && REGIMEN_CATALOG.some(function (c) { return c.clave === clave; })) return clave;
+    var key = normalizeRegimen(r && r.descripcion);
+    if (!key) return null;
+    var exact = REGIMEN_CATALOG.filter(function (c) { return c.key === key; });
+    if (exact.length === 1) return exact[0].clave;
+    // The catalog's wording is abbreviated relative to the SAT's, and not
+    // always as a prefix — 625 reads "Actividades Empresariales por
+    // Plataformas Tecnológicas" here and "…Actividades Empresariales con
+    // ingresos a través de Plataformas Tecnológicas" on a CSF, so neither
+    // string contains the other. Compare the significant words instead, and
+    // only accept when exactly one entry matches — never a best guess
+    // between two.
+    var words = significantWords(key);
+    var loose = REGIMEN_CATALOG.filter(function (c) {
+      var cw = significantWords(c.key);
+      return covers(words, cw) || covers(cw, words);
+    });
+    return loose.length === 1 ? loose[0].clave : null;
+  }
+
+  // "de", "por", "y"… appear in half the catalog and carry no signal.
+  var REGIMEN_STOPWORDS = { de: 1, del: 1, la: 1, las: 1, los: 1, el: 1, y: 1, e: 1, a: 1, al: 1, con: 1, por: 1, en: 1, no: 1, traves: 1 };
+
+  function significantWords(key) {
+    return key.split(' ').filter(function (w) { return w && !REGIMEN_STOPWORDS[w]; });
+  }
+
+  function covers(haystack, needles) {
+    return needles.length > 0 && needles.every(function (w) { return haystack.indexOf(w) !== -1; });
+  }
+
   function renderRegimenFromCsf(regimenes) {
     if (!regimenes || !regimenes.length) return;
     var vigentes = regimenes.filter(function (r) { return r.vigente; });
-    var list = vigentes.length ? vigentes : regimenes;
+    var source = vigentes.length ? vigentes : regimenes;
+    var list = source
+      .map(function (r) {
+        var clave = resolveRegimenClave(r);
+        return clave ? { clave: clave, descripcion: r.descripcion || '' } : null;
+      })
+      .filter(Boolean);
+
+    // Nothing we could tie to a real clave — leave the full catalog in place
+    // and let them pick. An unresolvable régimen must never become an option.
+    if (!list.length) {
+      regimenHint.textContent = 'No pudimos identificar tu régimen en la CSF — selecciónalo de la lista.';
+      regimenHint.classList.add('show', 'warn');
+      return;
+    }
+
     var current = regimenSelect.value;
     regimenSelect.innerHTML = '<option value="">Selecciona…</option>' +
       list.map(function (r) {
-        var label = escapeHtml(r.clave) + ' · ' + escapeHtml(r.descripcion || '');
+        var label = escapeHtml(r.clave) + ' · ' + escapeHtml(r.descripcion);
         return '<option value="' + escapeHtml(r.clave) + '">' + label + '</option>';
       }).join('');
     if (list.some(function (r) { return r.clave === current; })) {
@@ -209,6 +285,8 @@
     } else if (list.length === 1) {
       regimenSelect.value = list[0].clave;
     }
+    regimenHint.textContent = REGIMEN_HINT_DEFAULT;
+    regimenHint.classList.remove('warn');
     regimenHint.classList.add('show');
     renderUsoOptions(regimenSelect.value);
   }
@@ -393,6 +471,152 @@
     dl.appendChild(dt); dl.appendChild(dd);
   }
 
+  // Payload key → the input the customer actually sees, so a field named by
+  // factura-submit's `fields` can be marked and focused rather than described.
+  var FIELD_TO_ID = {
+    rfc: 'rfc',
+    razon_social: 'razon',
+    regimen_fiscal: 'regimen',
+    uso_cfdi: 'usocfdi',
+    codigo_postal: 'cp',
+    email: 'email',
+    sucursal: 'sucursal',
+    fecha_consumo: 'fecha',
+    monto: 'monto',
+    forma_pago: 'forma_pago',
+    folio_ticket: 'folio_ticket'
+  };
+  // Mirrors FIELD_LABELS in api/roseta/_facturaValidation.ts.
+  var FIELD_TO_LABEL = {
+    rfc: 'RFC',
+    razon_social: 'Razón social',
+    regimen_fiscal: 'Régimen fiscal',
+    uso_cfdi: 'Uso de CFDI',
+    codigo_postal: 'Código postal',
+    email: 'Correo',
+    sucursal: 'Sucursal',
+    fecha_consumo: 'Fecha de consumo',
+    monto: 'Monto',
+    forma_pago: 'Forma de pago',
+    folio_ticket: 'Movimiento'
+  };
+
+  var fallbackEl = document.getElementById('rf-fallback');
+  var fallbackTitleEl = document.getElementById('rf-fallback-title');
+  var fallbackBodyEl = document.getElementById('rf-fallback-body');
+  var fallbackFixBtn = document.getElementById('rf-fallback-fix');
+  var fallbackRetryBtn = document.getElementById('rf-fallback-retry');
+  var fallbackWaLink = document.getElementById('rf-fallback-wa');
+  var fallbackMailLink = document.getElementById('rf-fallback-mail');
+  var fallbackFocusKey = null;
+
+  function clearInvalidMarks() {
+    Array.prototype.forEach.call(form.querySelectorAll('.rf-invalid'), function (el) {
+      el.classList.remove('rf-invalid');
+    });
+  }
+
+  function markInvalid(fields) {
+    clearInvalidMarks();
+    fields.forEach(function (key) {
+      var el = document.getElementById(FIELD_TO_ID[key]);
+      if (el) el.classList.add('rf-invalid');
+    });
+  }
+
+  function focusField(key) {
+    var el = document.getElementById(FIELD_TO_ID[key]);
+    if (!el) return;
+    if (el.scrollIntoView) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); }
+  }
+
+  // An empty <option> only counts as a placeholder — and so only trips
+  // `required` — when it's the FIRST one in the select. renderRegimenFromCsf
+  // and renderUsoOptions rebuild their lists, so a blank value can end up
+  // selected further down and sail past checkValidity(). This is that check.
+  function emptyRequiredSelects() {
+    var bad = [];
+    Array.prototype.forEach.call(form.querySelectorAll('select[required]'), function (sel) {
+      if (!sel.value && FIELD_TO_LABEL[sel.name]) bad.push(sel.name);
+    });
+    return bad;
+  }
+
+  // Everything Roseta would have received in the request, so the customer can
+  // hand it over on WhatsApp or by mail without retyping a single field. This
+  // is the customer's own data going to Roseta's own facturación channel —
+  // the same destination the form itself writes to.
+  function requestSummary() {
+    var lines = [
+      'RFC: ' + rfcInput.value.trim().toUpperCase(),
+      'Razón social: ' + form.razon_social.value.trim(),
+      'Régimen fiscal: ' + (selectedLabel(regimenSelect) || '(sin seleccionar)'),
+      'Uso de CFDI: ' + (selectedLabel(usocfdiSelect) || '(sin seleccionar)'),
+      'Código postal: ' + form.codigo_postal.value.trim(),
+      'Correo: ' + form.email.value.trim(),
+      'Teléfono: ' + (form.telefono.value.trim() || '(no proporcionado)'),
+      'Sucursal: ' + (form.sucursal.value || '(sin seleccionar)'),
+      'Fecha de consumo: ' + form.fecha_consumo.value,
+      'Monto: $' + form.monto.value + ' MXN',
+      'Forma de pago: ' + (form.forma_pago.value || '(sin seleccionar)'),
+      'Movimiento: ' + (form.folio_ticket.value.trim() || 'no cuenta con él')
+    ];
+    return lines.join('\n');
+  }
+
+  function updateFallbackLinks() {
+    var intro = 'Hola, intenté solicitar mi factura en el sitio y no pude enviarla. Estos son mis datos:';
+    var body = intro + '\n\n' + requestSummary() + '\n\nAdjunto mi CSF y mi ticket.';
+    fallbackWaLink.href = 'https://wa.me/524498958291?text=' + encodeURIComponent(body);
+    fallbackMailLink.href =
+      'mailto:roseta.cafeteria@gmail.com?subject=' +
+      encodeURIComponent('Solicitud de factura (no pude enviarla en el sitio)') +
+      '&body=' + encodeURIComponent(body);
+  }
+
+  // The screen that must never be a dead end: whatever went wrong, the
+  // customer leaves here with a way to finish — fix the named field, retry, or
+  // hand the whole request to facturación on a channel that doesn't validate.
+  function showFallback(kind, message, fields) {
+    var named = (fields || []).filter(function (k) { return FIELD_TO_LABEL[k]; });
+    fallbackFocusKey = named[0] || null;
+
+    if (named.length) {
+      markInvalid(named);
+      fallbackTitleEl.textContent = named.length === 1
+        ? 'Falta corregir un dato'
+        : 'Faltan corregir algunos datos';
+      fallbackBodyEl.textContent = message + ' Te llevamos directo al campo, ya marcado en el formulario.';
+    } else {
+      fallbackTitleEl.textContent = 'No pudimos enviar tu solicitud';
+      fallbackBodyEl.textContent = message + ' Puedes intentarlo otra vez o mandarnos tus datos directamente — ya los tenemos listos, no hace falta que los escribas de nuevo.';
+    }
+
+    fallbackFixBtn.hidden = !named.length;
+    fallbackRetryBtn.hidden = named.length > 0;
+    updateFallbackLinks();
+    fallbackEl.hidden = false;
+    if (fallbackEl.scrollIntoView) fallbackEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  function hideFallback() {
+    fallbackEl.hidden = true;
+    fallbackFocusKey = null;
+  }
+
+  fallbackFixBtn.addEventListener('click', function () {
+    var key = fallbackFocusKey;
+    hideFallback();
+    showForm();
+    if (key) focusField(key);
+  });
+
+  fallbackRetryBtn.addEventListener('click', function () {
+    hideFallback();
+    submitSolicitud();
+  });
+
   function renderReview() {
     reviewFiscalEl.innerHTML = '';
     addRow(reviewFiscalEl, 'RFC', rfcInput.value.trim().toUpperCase());
@@ -425,11 +649,14 @@
     form.classList.add('hide');
     reviewEl.classList.add('show');
     reviewStatusEl.textContent = '';
+    reviewStatusEl.className = '';
+    hideFallback();
   }
 
   function showForm() {
     reviewEl.classList.remove('show');
     form.classList.remove('hide');
+    hideFallback();
   }
 
   reviewEditBtn.addEventListener('click', showForm);
@@ -453,11 +680,24 @@
       form.reportValidity();
       return;
     }
+    var blank = emptyRequiredSelects();
+    if (blank.length) {
+      markInvalid(blank);
+      setStatus('Selecciona ' + FIELD_TO_LABEL[blank[0]].toLowerCase() + ' — la opción actual no es válida.', 'error');
+      focusField(blank[0]);
+      return;
+    }
 
+    clearInvalidMarks();
     showReview();
   });
 
   reviewConfirmBtn.addEventListener('click', function () {
+    hideFallback();
+    submitSolicitud();
+  });
+
+  function submitSolicitud() {
     var rfc = rfcInput.value.trim().toUpperCase();
     var csfFile = document.getElementById('csf').files[0];
     var ticketFile = document.getElementById('ticket_file').files[0] || null;
@@ -493,12 +733,18 @@
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify(payload)
         }).then(function (r) {
-          return r.json().then(function (json) { return { ok: r.ok, json: json, ticketDropped: prepared.ticketDropped }; });
+          return r.json().catch(function () { return null; }).then(function (json) {
+            return { ok: r.ok, json: json, ticketDropped: prepared.ticketDropped };
+          });
         });
       })
       .then(function (res) {
         if (!res.ok || !res.json || !res.json.ok) {
-          throw new Error((res.json && res.json.error) || 'No se pudo enviar tu solicitud.');
+          var err = new Error((res.json && res.json.error) || 'No se pudo enviar tu solicitud.');
+          // factura-submit names the offending fields; carry them through so
+          // the fallback can mark and focus one instead of just saying "algo".
+          err.fields = (res.json && res.json.fields) || [];
+          throw err;
         }
         reviewEl.classList.remove('show');
         successEl.classList.add('show');
@@ -519,11 +765,13 @@
         if (window.acaciaTrack) window.acaciaTrack('roseta_factura_submit', { sucursal: sucursalForTracking });
       })
       .catch(function (err) {
+        var message = (err && err.message) || 'No se pudo enviar tu solicitud.';
         reviewStatusEl.className = 'error';
-        reviewStatusEl.textContent = (err && err.message) || 'No se pudo enviar tu solicitud. Escríbenos a roseta.cafeteria@gmail.com.';
+        reviewStatusEl.textContent = message;
+        showFallback('error', message, (err && err.fields) || []);
       })
       .finally(function () {
         reviewConfirmBtn.disabled = false;
       });
-  });
+  }
 })();
