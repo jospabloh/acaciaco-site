@@ -199,16 +199,35 @@
       <div class="container">
         <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Planes CateqHub</span>
-          <h2 id="ch-price-h2">Empieza gratis. Crece con tu parroquia.</h2>
-          <p class="section-sub">Toda parroquia nueva arranca con 30 días de prueba Premium gratis, sin tarjeta.</p>
+          <h2 id="ch-price-h2">Empiezas en Premium. El día 31 decides.</h2>
+          <p class="section-sub">No se elige plan al dar de alta la parroquia: toda parroquia nueva arranca con 30 días de Premium completo, sin tarjeta.</p>
         </div>
+
+        <!-- Paso 1: lo único que se puede elegir al arrancar -->
+        <div class="plan-lead">
+          <div class="reveal pricing-card featured" id="cateqhub-prueba">
+            <div class="pricing-badge">Días 1 – 30</div>
+            <h3>Prueba Premium</h3>
+            <div class="pricing-price">$0 <span class="pricing-unit">sin tarjeta</span></div>
+            <p class="pricing-desc">Toda la app durante 30 días, sin tope de niños: asistencia por QR, tutores, mensajería, tareas y pulseras. No hay nada que cancelar — si no activas Premium, la parroquia cae sola al plan que le toque.</p>
+            <a href="https://wa.me/524498958291?text=Hola,%20quiero%20dar%20de%20alta%20mi%20parroquia%20en%20CateqHub" target="_blank" rel="noopener" class="btn-mp">Dar de alta mi parroquia →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20CateqHub" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
+          </div>
+        </div>
+
+        <!-- Paso 2: la bifurcación real. La decide el número de niños activos, no un botón. -->
+        <div class="plan-fork reveal" role="presentation">
+          <span class="plan-fork-label">Al día 31</span>
+        </div>
+
         <div class="pricing-grid pricing-grid-2">
 
-          <!-- Gratis -->
-          <div class="reveal pricing-card" id="cateqhub-gratis">
+          <!-- Desenlace A: ≤ 50 niños -->
+          <div class="reveal pricing-card plan-outcome" id="cateqhub-gratis">
+            <div class="plan-threshold">50 niños activos o menos</div>
             <h3>Plan Gratis</h3>
             <div class="pricing-price">$0 <span class="pricing-unit">/ siempre</span></div>
-            <p class="pricing-desc">Para parroquias que solo necesitan control de asistencia. Sin fecha de expiración.</p>
+            <p class="pricing-desc">La parroquia pasa aquí sola, sin trámite y sin perder datos. Conserva el núcleo completo, para siempre.</p>
             <ul class="pricing-features">
               <li>Hasta 50 niños activos</li>
               <li>Tarjeta QR y escaneo de asistencia</li>
@@ -216,16 +235,15 @@
               <li>Reportes de asistencia por fecha y grupo</li>
               <li>Tabulador de faltas por niño</li>
             </ul>
-            <a href="https://wa.me/524498958291?text=Hola,%20quiero%20empezar%20con%20el%20plan%20Gratis%20de%20CateqHub" target="_blank" rel="noopener" class="btn-mp">Empezar gratis →</a>
-            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20CateqHub" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
+            <p class="pricing-desc" style="margin-bottom:0;">Tutores, mensajería, tareas y pulseras quedan fuera. Se recuperan al activar Premium, cuando quieras.</p>
           </div>
 
-          <!-- Premium -->
+          <!-- Desenlace B: 51+ niños -->
           <div class="reveal pricing-card featured" id="cateqhub-premium">
-            <div class="pricing-badge">30 días de prueba</div>
-            <h3>Planes Premium</h3>
+            <div class="plan-threshold">51 niños activos o más</div>
+            <h3>Premium</h3>
             <div class="pricing-price">Desde <span data-price="500">$500 MXN</span> <span class="pricing-unit">/ mes</span></div>
-            <p class="pricing-desc">Todo lo de Gratis, más tutores, mensajería, tareas y pulseras. Precio según niños activos.</p>
+            <p class="pricing-desc">Todo lo de Gratis, más tutores, mensajería, tareas y pulseras. Precio según niños activos — por eso la tabla empieza en 51.</p>
             <ul class="pricing-features">
               <li>Tutores y autorización de recogida</li>
               <li>Mensajería a tutores por correo</li>

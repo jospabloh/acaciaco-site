@@ -1919,6 +1919,58 @@ details.faq-item[open] { border-color: var(--primary); }
 }
 .wa-link:hover { color: var(--primary); }
 
+/* Plan flow — la oferta no son dos productos en paralelo sino una secuencia
+   con una bifurcación: 30 días de Premium, y al día 31 el número de niños
+   activos decide a dónde cae la parroquia. Esa bifurcación es la rama real de
+   licenseLifecycle, así que se dibuja en vez de insinuarse con dos tarjetas
+   hermanas que sugerían una elección que no existe. */
+.plan-lead { max-width: 800px; margin-inline: auto; }
+
+.plan-fork {
+  max-width: 800px;
+  margin: 2rem auto 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-muted);
+}
+.plan-fork::before,
+.plan-fork::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.plan-fork-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 4px 14px;
+  white-space: nowrap;
+}
+
+/* El umbral es el titular real de cada desenlace: lo que decide a cuál cae la
+   parroquia es el número de niños activos, no un botón. */
+.plan-threshold {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.25rem;
+}
+
+/* El desenlace gratuito no compite en altura con la tabla de precios de
+   Premium: no son dos ofertas comparables, así que estirarlo sólo abre un
+   hueco muerto bajo la lista (.pricing-features lleva flex:1 para alinear los
+   CTA, y esta tarjeta no tiene CTA). */
+.plan-outcome { align-self: start; }
+
 .pricing-note {
   text-align: center;
   font-size: 0.85rem;
