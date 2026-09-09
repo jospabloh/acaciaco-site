@@ -136,6 +136,54 @@ autofill. Column indices live in one place: `COL` in `_facturaRows.ts`.
 - `ROSETA_ADMIN_PASSWORD` unset makes the panel endpoints **fail closed**, never
   open.
 
+### The review step must never dead-end (2026-09-09)
+
+A real customer (a persona moral) filled the form correctly, reached "Revisa tu
+solicitud", pressed *Confirmar y enviar* and got `Revisa los datos del
+formulario, algo no es válido.` — with **no field marked, no way back, and no
+way to reach anyone**. Three separate things had to be wrong at once, and each
+one is worth keeping in mind:
+
+1. **A CSF for a persona moral prints the régimen's description but not always
+   its clave.** Claude reports what it sees, so `clave` came back empty and
+   `renderRegimenFromCsf()` built an `<option value="">` from it.
+2. **An empty `<option>` only trips `required` when it is the FIRST one.** By
+   spec, only the *placeholder label option* counts as missing — an empty
+   option further down passes `form.checkValidity()`. So the form advanced,
+   the payload carried `regimen_fiscal: ""`, and only the server caught it.
+   Verified in Chromium, not inferred: `checkValidity()` returns `true`.
+3. **The error named nothing.** One boolean `if` over eleven fields collapsed
+   into one string, and the client had nowhere to put it but a `<p>`.
+
+The fixes, in the order they matter:
+
+- `resolveRegimenClave()` recovers the clave from the description by matching
+  against **the static `<option>` list in `index.html`** — that list is the
+  catalog, there is no second copy. Matching is exact-then-significant-words
+  (the SAT's wording is longer than the catalog's, and for 625 neither string
+  contains the other), and it accepts **only a unique match** — never a best
+  guess. An entry that can't be resolved is dropped, and if none resolve the
+  full catalog stays and the hint turns amber.
+- `api/roseta/_facturaValidation.ts` (import-free, so `node --test` loads it)
+  returns **which** fields are invalid; `factura-submit.ts` sends them back as
+  `fields`. `REGIMEN_CLAVES`/`USO_CLAVES` are enforced there, and
+  `tests/facturaValidation.test.ts` reads `index.html` off disk and fails if
+  the dropdowns drift from them — the same guarantee `_soporteValidation.ts`
+  has over `soporte.html`.
+- `emptyRequiredSelects()` closes the spec hole client-side for every
+  `select[required]`, since `renderUsoOptions()` rebuilds its list too.
+- `#rf-fallback` is the escape hatch. A named field gets *Corregir el dato*
+  (returns to the form, scrolls, focuses, marks it `.rf-invalid`); anything
+  else gets *Intentar de nuevo*. **Both always offer WhatsApp and correo, with
+  the whole request prefilled** so the customer never retypes it. Note
+  `base.css` sets `.btn{display:inline-flex}`, which outranks the browser's
+  `[hidden]` rule — hence `.rf-fallback-actions .btn[hidden]{display:none}`.
+
+**The rule this leaves behind: a validation error that can't name its field is
+a bug, and any terminal screen needs a human channel on it.** Roseta's
+facturación WhatsApp (449 895 8291) always works; the form is the convenience,
+not the only door.
+
 ## `freeware/plink-fx/` es la copia canónica de Plink FX (2026-08-22)
 
 Plink FX existe dos veces: aquí y en el repo `jospabloh/plink_fx`, que es su

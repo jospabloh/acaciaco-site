@@ -93,6 +93,11 @@
 
     .rf-regimen-hint{font-size:.78rem;color:#0a7;font-weight:600;display:none;margin-top:.3rem;}
     .rf-regimen-hint.show{display:block;}
+    .rf-regimen-hint.warn{color:#8A5A00;}
+
+    /* Marks the exact input factura-submit rejected, so the customer isn't
+       hunting for it across two fieldsets. */
+    .rf-field input.rf-invalid, .rf-field select.rf-invalid{border-color:#c33;box-shadow:0 0 0 3px rgba(204,51,51,.15);}
 
     .rf-check{display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--text-muted);margin-top:.6rem;cursor:pointer;}
     .rf-check input[type=checkbox]{width:auto;padding:0;border:1px solid var(--border);accent-color:var(--primary);box-shadow:none;}
@@ -115,6 +120,17 @@
     .rf-review-data.section-break{margin-top:.4rem;padding-top:1rem;border-top:1px solid var(--border);}
     .rf-review-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.6rem;}
     .rf-review-actions .btn{flex:1;justify-content:center;}
+
+    /* The escape hatch: whatever the failure, this panel always leaves at
+       least one way to finish the request. */
+    .rf-fallback{margin-top:1.2rem;padding:1.1rem 1.2rem;border:1px solid var(--border);border-left:3px solid #c33;border-radius:.9rem;background:var(--bg-subtle);}
+    .rf-fallback .rf-fallback-title{margin:0 0 .4rem;font-weight:700;font-size:.95rem;}
+    .rf-fallback .rf-fallback-body{margin:0 0 1rem;font-size:.88rem;color:var(--text-muted);}
+    .rf-fallback-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:.8rem;}
+    /* base.css sets .btn{display:inline-flex}, which outranks the browser's
+       own [hidden] rule — without this the toggled buttons stay visible. */
+    .rf-fallback-actions .btn[hidden]{display:none;}
+    .rf-fallback .rf-hint{margin:0;}
 
     .rf-success{display:none;text-align:center;padding:1rem 0;}
     .rf-success.show{display:block;}
@@ -345,6 +361,18 @@
               <button type="button" class="btn btn-primary" id="rf-review-confirm">Confirmar y enviar</button>
             </div>
             <p id="rf-review-status" role="status" aria-live="polite"></p>
+
+            <div class="rf-fallback" id="rf-fallback" role="alert" hidden>
+              <p class="rf-fallback-title" id="rf-fallback-title"></p>
+              <p class="rf-fallback-body" id="rf-fallback-body"></p>
+              <div class="rf-fallback-actions">
+                <button type="button" class="btn btn-primary btn-sm" id="rf-fallback-fix" hidden>Corregir el dato</button>
+                <button type="button" class="btn btn-primary btn-sm" id="rf-fallback-retry" hidden>Intentar de nuevo</button>
+                <a class="btn btn-ghost btn-sm" id="rf-fallback-wa" href="https://wa.me/524498958291" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+                <a class="btn btn-ghost btn-sm" id="rf-fallback-mail" href="mailto:roseta.cafeteria@gmail.com">Enviar por correo</a>
+              </div>
+              <p class="rf-hint">WhatsApp y correo ya llevan tus datos escritos — solo adjunta tu CSF y tu ticket y envía. También puedes llamarnos al 449 895 8291.</p>
+            </div>
           </div>
 
           <div class="rf-success" id="rf-success">
