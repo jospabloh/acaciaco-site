@@ -3,7 +3,7 @@ import { Resend } from "resend";
 import { appendRow, getValues, sanitizeCell, updateRow } from "./_sheets";
 import { getClientKey, isRateLimited } from "./_ratelimit";
 import { NOTIFY_EMAILS, SOLICITUDES_RANGE } from "./_facturaRows";
-import { invalidFields, invalidFieldsMessage, resolveRegimenClave } from "./_facturaValidation";
+import { invalidFields, invalidFieldsMessage, regimenDisplay, resolveRegimenClave } from "./_facturaValidation";
 
 // Hard ceiling on the base64 payload we accept for a single attachment —
 // generous compared to the client's own (tighter) budget, just a backstop.
@@ -228,7 +228,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ["Fecha de solicitud", fechaSolicitud],
       ["RFC", rfc],
       ["Razón social / Nombre", razonSocial],
-      ["Régimen fiscal", regimenFiscal],
+      ["Régimen fiscal", regimenDisplay(regimenFiscal)],
       ["Uso de CFDI", usoCfdi],
       ["Código postal fiscal", codigoPostal],
       ["Correo del cliente", email],
@@ -289,7 +289,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         fechaSolicitud,
         rfc,
         sanitizeCell(razonSocial),
-        regimenFiscal,
+        // Clave AND name — this column is read by a person (in the Sheet and
+        // in the panel), never parsed back. The ClientesRFC write below is the
+        // opposite case and keeps the bare clave.
+        regimenDisplay(regimenFiscal),
         usoCfdi,
         codigoPostal,
         email,
@@ -316,6 +319,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const clientRow = [
         rfc,
         sanitizeCell(razonSocial),
+        // Bare clave, deliberately: factura-lookup returns this column and the
+        // form assigns it to <select id="regimen">.value. A label here would
+        // match no <option> and the autofill would silently pick nothing.
         regimenFiscal,
         usoCfdi,
         codigoPostal,
