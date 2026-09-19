@@ -147,6 +147,25 @@ autofill. Column indices live in one place: `COL` in `_facturaRows.ts`.
 - `ROSETA_ADMIN_PASSWORD` unset makes the panel endpoints **fail closed**, never
   open.
 
+### Indicador de días hábiles en el panel (2026-09-19)
+
+The admin list (`/roseta/factura/admin`) shows Roseta how many business days
+have elapsed toward the "recíbela en un máximo de 3 días hábiles" promise
+quoted across the public pages — the number turns amber the day before that
+limit and red once a request hits or passes it, so a stale request is visible
+without opening every row.
+
+`businessDaysElapsed()` and `FACTURA_SLA_BUSINESS_DAYS` live in
+`_facturaRows.ts` (import-free, so `node --test` loads it) and count Mon–Fri
+only — no Mexican holiday calendar, the same simplification the "3 días
+hábiles" copy itself has always made. `factura-admin-list.ts` computes the
+count server-side, from `fecha_solicitud` to `fecha_facturacion` once a row is
+`Facturada`, or to today while it's still `Pendiente` — so a delivered row
+keeps showing how long it actually took instead of creeping forward after the
+fact. `admin.js` only turns that number into a color; the `3` it compares
+against there is a display threshold, not a validation rule, so — unlike the
+régimen/uso claves — it doesn't need server-side re-checking.
+
 ### The review step must never dead-end (2026-09-09)
 
 A real customer (a persona moral) filled the form correctly, reached "Revisa tu

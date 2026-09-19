@@ -1,8 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+  businessDaysElapsed,
   COL,
   cell,
+  FACTURA_SLA_BUSINESS_DAYS,
   fmtMoney,
   isWithinDays,
   NOTIFY_EMAILS,
@@ -71,6 +73,38 @@ test("isWithinDays muestra filas con fecha vacía o malformada", () => {
 
 test("isWithinDays muestra fechas futuras en vez de esconderlas", () => {
   assert.equal(isWithinDays("2026-09-01", 30, "2026-08-05"), true);
+});
+
+test("businessDaysElapsed no cuenta el día de la solicitud", () => {
+  assert.equal(businessDaysElapsed("2026-08-03", "2026-08-03"), 0); // lunes a lunes, mismo día
+});
+
+test("businessDaysElapsed cuenta días hábiles consecutivos", () => {
+  assert.equal(businessDaysElapsed("2026-08-03", "2026-08-04"), 1); // lunes a martes
+  assert.equal(businessDaysElapsed("2026-08-03", "2026-08-07"), 4); // lunes a viernes
+});
+
+test("businessDaysElapsed salta el fin de semana", () => {
+  assert.equal(businessDaysElapsed("2026-08-07", "2026-08-10"), 1); // viernes a lunes: sólo el lunes cuenta
+});
+
+test("businessDaysElapsed también salta el fin de semana si la solicitud llegó en sábado", () => {
+  assert.equal(businessDaysElapsed("2026-08-01", "2026-08-03"), 1); // sábado a lunes: domingo no cuenta
+});
+
+test("businessDaysElapsed da 0 si `to` es anterior o igual a `from`", () => {
+  assert.equal(businessDaysElapsed("2026-08-05", "2026-08-01"), 0);
+  assert.equal(businessDaysElapsed("2026-08-05", "2026-08-05"), 0);
+});
+
+test("businessDaysElapsed da 0 con fechas vacías o malformadas, en vez de lanzar", () => {
+  assert.equal(businessDaysElapsed("", "2026-08-05"), 0);
+  assert.equal(businessDaysElapsed("2026-08-01", ""), 0);
+  assert.equal(businessDaysElapsed("no-es-fecha", "2026-08-05"), 0);
+});
+
+test("FACTURA_SLA_BUSINESS_DAYS es 3, la promesa que se hace en toda la página pública", () => {
+  assert.equal(FACTURA_SLA_BUSINESS_DAYS, 3);
 });
 
 test("publicSolicitud expone sólo los campos públicos", () => {

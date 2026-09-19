@@ -88,6 +88,30 @@ export function isWithinDays(fecha: string, days: number, today: string): boolea
   return elapsed <= days * 86_400_000;
 }
 
+// The promise quoted as copy across the site ("recíbela en un máximo de 3
+// días hábiles") — this is the only place that number exists as a value
+// rather than Spanish text, so the admin panel's elapsed-days indicator has
+// one threshold to compare against.
+export const FACTURA_SLA_BUSINESS_DAYS = 3;
+
+// Counts Mon–Fri calendar days strictly after `fromISO` up to and including
+// `toISO` — the request date itself is day zero, not day one. No Mexican
+// holiday calendar: the same simplification the "3 días hábiles" promise
+// this backs has always made. A missing/malformed date, or a `to` on or
+// before `from`, reads as 0 rather than throwing — same "show it anyway"
+// choice as isWithinDays above.
+export function businessDaysElapsed(fromISO: string, toISO: string): number {
+  const from = Date.parse(`${String(fromISO || "").trim()}T00:00:00Z`);
+  const to = Date.parse(`${String(toISO || "").trim()}T00:00:00Z`);
+  if (!Number.isFinite(from) || !Number.isFinite(to) || to <= from) return 0;
+  let count = 0;
+  for (let t = from + 86_400_000; t <= to; t += 86_400_000) {
+    const day = new Date(t).getUTCDay(); // 0 = Sun, 6 = Sat
+    if (day !== 0 && day !== 6) count++;
+  }
+  return count;
+}
+
 // Deliberately narrow: email, razón social, código postal and teléfono are
 // NOT included. An individual's RFC is derivable from their name and date of
 // birth, so the public lookup must stay poor in personal data.
