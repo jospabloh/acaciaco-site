@@ -28,6 +28,8 @@ function adminSolicitud(row: string[], today: string) {
     email: cell(row, COL.EMAIL),
     telefono: cell(row, COL.TELEFONO),
     sucursal: cell(row, COL.SUCURSAL),
+    // Just fiscal data for the invoice itself — the SLA clock below runs off
+    // fecha_solicitud, not this.
     fecha_consumo: cell(row, COL.FECHA_CONSUMO),
     monto: cell(row, COL.MONTO),
     subtotal: cell(row, COL.SUBTOTAL),
@@ -41,10 +43,12 @@ function adminSolicitud(row: string[], today: string) {
     // Built here rather than in the browser so the dashboard path lives in
     // one place. Empty for requests sent before this column existed.
     resend_url: cell(row, COL.RESEND_ID) ? resendEmailUrl(cell(row, COL.RESEND_ID)) : "",
-    // Days elapsed toward the "3 días hábiles" promise: counted up to today
-    // while the row is pending, frozen at fecha_facturacion once it's
-    // Facturada — a delivered row keeps showing how long it actually took
-    // instead of creeping forward after the fact.
+    // Days elapsed toward the "3 días hábiles" promise: counted from
+    // fecha_solicitud — the request is what starts the clock, fecha_consumo
+    // is only fiscal data for the invoice itself — up to today while the row
+    // is pending, frozen at fecha_facturacion once it's Facturada so a
+    // delivered row keeps showing how long it actually took instead of
+    // creeping forward after the fact.
     dias_habiles_transcurridos: businessDaysElapsed(fechaSolicitud, fechaFacturacion || today),
   };
 }

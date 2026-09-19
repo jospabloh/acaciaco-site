@@ -94,20 +94,61 @@ export function isWithinDays(fecha: string, days: number, today: string): boolea
 // one threshold to compare against.
 export const FACTURA_SLA_BUSINESS_DAYS = 3;
 
+// The Nth `weekday` of `monthIndex0` (0 = January) in `year`, as an ISO date.
+// Backs the two floating federal holidays below, which are defined by
+// weekday-of-month, not a fixed day.
+function nthWeekdayOfMonth(year: number, monthIndex0: number, weekday: number, n: number): string {
+  let seen = 0;
+  const d = new Date(Date.UTC(year, monthIndex0, 1));
+  while (true) {
+    if (d.getUTCDay() === weekday) {
+      seen++;
+      if (seen === n) return d.toISOString().slice(0, 10);
+    }
+    d.setUTCDate(d.getUTCDate() + 1);
+  }
+}
+
+// The mandatory nationwide holidays under LFT Art. 74 — the calendar SAT and
+// every Mexican payroll/invoicing system treats as non-hábil. Computed per
+// year rather than hardcoded so this never goes stale. Deliberately excludes
+// "transmisión del Poder Ejecutivo Federal" (Oct 1, once every six years,
+// next in 2030): it's a federal-government handover, not a day a café closes.
+function mexicanHolidays(year: number): Set<string> {
+  return new Set([
+    `${year}-01-01`, // Año Nuevo
+    nthWeekdayOfMonth(year, 1, 1, 1), // primer lunes de febrero — Día de la Constitución
+    nthWeekdayOfMonth(year, 2, 1, 3), // tercer lunes de marzo — natalicio de Benito Juárez
+    `${year}-05-01`, // Día del Trabajo
+    `${year}-09-16`, // Día de la Independencia
+    nthWeekdayOfMonth(year, 10, 1, 3), // tercer lunes de noviembre — Revolución Mexicana
+    `${year}-12-25`, // Navidad
+  ]);
+}
+
 // Counts Mon–Fri calendar days strictly after `fromISO` up to and including
-// `toISO` — the request date itself is day zero, not day one. No Mexican
-// holiday calendar: the same simplification the "3 días hábiles" promise
-// this backs has always made. A missing/malformed date, or a `to` on or
-// before `from`, reads as 0 rather than throwing — same "show it anyway"
-// choice as isWithinDays above.
+// `toISO`, skipping the federal holidays above — the request date itself is
+// day zero, not day one. A missing/malformed date, or a `to` on or before
+// `from`, reads as 0 rather than throwing — same "show it anyway" choice as
+// isWithinDays above.
 export function businessDaysElapsed(fromISO: string, toISO: string): number {
   const from = Date.parse(`${String(fromISO || "").trim()}T00:00:00Z`);
   const to = Date.parse(`${String(toISO || "").trim()}T00:00:00Z`);
   if (!Number.isFinite(from) || !Number.isFinite(to) || to <= from) return 0;
   let count = 0;
+  let holidays: Set<string> | null = null;
+  let holidaysYear = NaN;
   for (let t = from + 86_400_000; t <= to; t += 86_400_000) {
-    const day = new Date(t).getUTCDay(); // 0 = Sun, 6 = Sat
-    if (day !== 0 && day !== 6) count++;
+    const date = new Date(t);
+    const day = date.getUTCDay(); // 0 = Sun, 6 = Sat
+    if (day === 0 || day === 6) continue;
+    const year = date.getUTCFullYear();
+    if (year !== holidaysYear) {
+      holidays = mexicanHolidays(year);
+      holidaysYear = year;
+    }
+    if (holidays!.has(date.toISOString().slice(0, 10))) continue;
+    count++;
   }
   return count;
 }
