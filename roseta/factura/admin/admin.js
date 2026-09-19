@@ -150,6 +150,30 @@
     return label;
   }
 
+  // Días hábiles transcurridos hacia la promesa de "3 días hábiles" que se
+  // le hace al cliente en toda la página pública. El servidor ya hizo la
+  // cuenta (factura-admin-list / businessDaysElapsed en _facturaRows.ts);
+  // aquí sólo se decide el color, así que el 3 sólo controla el aviso
+  // visual, nunca si una solicitud se acepta o no.
+  var SLA_DIAS_HABILES = 3;
+
+  function diasHabilesNode(s, facturada) {
+    var n = Number(s.dias_habiles_transcurridos);
+    if (!isFinite(n)) return null;
+    var span = document.createElement('span');
+    span.className = 'ad-days';
+    if (facturada) {
+      span.textContent = n === 0
+        ? 'Entregada el mismo día hábil'
+        : 'Entregada en ' + n + (n === 1 ? ' día hábil' : ' días hábiles');
+      return span;
+    }
+    span.textContent = n + (n === 1 ? ' día hábil transcurrido' : ' días hábiles transcurridos');
+    if (n >= SLA_DIAS_HABILES) span.classList.add('ad-days-late');
+    else if (n === SLA_DIAS_HABILES - 1) span.classList.add('ad-days-warn');
+    return span;
+  }
+
   function itemNode(s) {
     var facturada = s.estatus === 'Facturada';
     var notified = !!s.notificado_el;
@@ -174,6 +198,8 @@
     left.appendChild(folio);
     left.appendChild(document.createElement('br'));
     left.appendChild(who);
+    var days = diasHabilesNode(s, facturada);
+    if (days) left.appendChild(days);
 
     var right = document.createElement('span');
     right.className = 'ad-right';

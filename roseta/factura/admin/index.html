@@ -83,6 +83,13 @@
     .ad-head:focus-visible{outline:2px solid var(--primary);outline-offset:-2px;}
     .ad-folio{font-family:'Space Grotesk',monospace;font-weight:700;letter-spacing:.03em;font-size:.92rem;}
     .ad-who{font-size:.85rem;color:var(--text-muted);margin-top:.15rem;}
+    /* Días hábiles transcurridos hacia la promesa de "3 días hábiles" — ok
+       mientras hay margen, ámbar el día antes del límite, rojo en cuanto se
+       alcanza o pasa. Una solicitud ya facturada usa el mismo elemento pero
+       nunca lleva color de alarma: ya se resolvió. */
+    .ad-days{display:block;font-size:.78rem;color:var(--text-muted);margin-top:.2rem;}
+    .ad-days.ad-days-warn{color:var(--warn-fg);font-weight:600;}
+    .ad-days.ad-days-late{color:var(--err-fg);font-weight:700;}
     .ad-right{display:flex;align-items:center;gap:.7rem;justify-self:end;}
     .ad-amount{font-family:'Space Grotesk',monospace;font-weight:600;font-size:.9rem;white-space:nowrap;}
     .ad-badge{display:inline-flex;padding:.25rem .75rem;border-radius:var(--radius-pill);font-size:.72rem;font-weight:700;white-space:nowrap;}
