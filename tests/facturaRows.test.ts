@@ -75,7 +75,7 @@ test("isWithinDays muestra fechas futuras en vez de esconderlas", () => {
   assert.equal(isWithinDays("2026-09-01", 30, "2026-08-05"), true);
 });
 
-test("businessDaysElapsed no cuenta el día de la solicitud", () => {
+test("businessDaysElapsed no cuenta el primer día del rango (from)", () => {
   assert.equal(businessDaysElapsed("2026-08-03", "2026-08-03"), 0); // lunes a lunes, mismo día
 });
 
@@ -88,8 +88,28 @@ test("businessDaysElapsed salta el fin de semana", () => {
   assert.equal(businessDaysElapsed("2026-08-07", "2026-08-10"), 1); // viernes a lunes: sólo el lunes cuenta
 });
 
-test("businessDaysElapsed también salta el fin de semana si la solicitud llegó en sábado", () => {
+test("businessDaysElapsed también salta el fin de semana si arranca en sábado", () => {
   assert.equal(businessDaysElapsed("2026-08-01", "2026-08-03"), 1); // sábado a lunes: domingo no cuenta
+});
+
+test("businessDaysElapsed salta un feriado de fecha fija (Año Nuevo)", () => {
+  assert.equal(businessDaysElapsed("2025-12-31", "2026-01-02"), 1); // sin saltar sería 2 (jue + vie)
+});
+
+test("businessDaysElapsed salta un feriado flotante (primer lunes de febrero)", () => {
+  assert.equal(businessDaysElapsed("2026-01-30", "2026-02-03"), 1); // el lunes 2026-02-02 es feriado
+});
+
+test("businessDaysElapsed salta el Día del Trabajo aunque caiga justo después del fin de semana", () => {
+  assert.equal(businessDaysElapsed("2026-04-30", "2026-05-04"), 1); // vie 5-01 feriado, sáb/dom fin de semana
+});
+
+test("businessDaysElapsed salta el Día de la Independencia", () => {
+  assert.equal(businessDaysElapsed("2026-09-15", "2026-09-17"), 1); // mié 9-16 feriado
+});
+
+test("businessDaysElapsed salta Navidad", () => {
+  assert.equal(businessDaysElapsed("2026-12-24", "2026-12-28"), 1); // vie 12-25 feriado, sáb/dom fin de semana
 });
 
 test("businessDaysElapsed da 0 si `to` es anterior o igual a `from`", () => {

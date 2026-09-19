@@ -156,15 +156,23 @@ limit and red once a request hits or passes it, so a stale request is visible
 without opening every row.
 
 `businessDaysElapsed()` and `FACTURA_SLA_BUSINESS_DAYS` live in
-`_facturaRows.ts` (import-free, so `node --test` loads it) and count Mon–Fri
-only — no Mexican holiday calendar, the same simplification the "3 días
-hábiles" copy itself has always made. `factura-admin-list.ts` computes the
-count server-side, from `fecha_solicitud` to `fecha_facturacion` once a row is
-`Facturada`, or to today while it's still `Pendiente` — so a delivered row
-keeps showing how long it actually took instead of creeping forward after the
-fact. `admin.js` only turns that number into a color; the `3` it compares
-against there is a display threshold, not a validation rule, so — unlike the
-régimen/uso claves — it doesn't need server-side re-checking.
+`_facturaRows.ts` (import-free, so `node --test` loads it) and count Mon–Fri,
+skipping the nationwide LFT Art. 74 holidays (`mexicanHolidays()`, computed
+per year — the two floating ones are "Nth Monday of the month", not a fixed
+date — rather than hardcoded so the list never goes stale). `factura-submit.ts`
+still speaks of "3 días hábiles" in copy only; this is the one place the
+number and the calendar behind it exist as values.
+
+**The clock starts at `fecha_consumo`, not `fecha_solicitud`.** A customer
+can request the invoice for a visit days after it happened, and the promise
+is about the visit, not the paperwork — Roseta's own words: "a partir de
+[el día del consumo] es que cuentan los días." So `factura-admin-list.ts`
+computes the count server-side from `fecha_consumo` to `fecha_facturacion`
+once a row is `Facturada`, or to today while it's still `Pendiente` — a
+delivered row keeps showing how long it actually took instead of creeping
+forward after the fact. `admin.js` only turns that number into a color; the
+`3` it compares against there is a display threshold, not a validation rule,
+so — unlike the régimen/uso claves — it doesn't need server-side re-checking.
 
 ### The review step must never dead-end (2026-09-09)
 

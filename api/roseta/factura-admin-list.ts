@@ -8,11 +8,11 @@ import { regimenDisplay, resolveRegimenClave } from "./_facturaValidation";
 // full fiscal record — Roseta needs it to key the invoice into her stamping
 // software without switching windows.
 function adminSolicitud(row: string[], today: string) {
-  const fechaSolicitud = cell(row, COL.FECHA_SOLICITUD);
+  const fechaConsumo = cell(row, COL.FECHA_CONSUMO);
   const fechaFacturacion = cell(row, COL.FECHA_FACTURACION);
   return {
     folio: cell(row, COL.FOLIO),
-    fecha_solicitud: fechaSolicitud,
+    fecha_solicitud: cell(row, COL.FECHA_SOLICITUD),
     rfc: cell(row, COL.RFC),
     razon_social: cell(row, COL.RAZON_SOCIAL),
     // Two shapes on purpose, the same split as fmtMoney/plainAmount: the
@@ -28,7 +28,7 @@ function adminSolicitud(row: string[], today: string) {
     email: cell(row, COL.EMAIL),
     telefono: cell(row, COL.TELEFONO),
     sucursal: cell(row, COL.SUCURSAL),
-    fecha_consumo: cell(row, COL.FECHA_CONSUMO),
+    fecha_consumo: fechaConsumo,
     monto: cell(row, COL.MONTO),
     subtotal: cell(row, COL.SUBTOTAL),
     iva: cell(row, COL.IVA),
@@ -41,11 +41,12 @@ function adminSolicitud(row: string[], today: string) {
     // Built here rather than in the browser so the dashboard path lives in
     // one place. Empty for requests sent before this column existed.
     resend_url: cell(row, COL.RESEND_ID) ? resendEmailUrl(cell(row, COL.RESEND_ID)) : "",
-    // Days elapsed toward the "3 días hábiles" promise: counted up to today
-    // while the row is pending, frozen at fecha_facturacion once it's
-    // Facturada — a delivered row keeps showing how long it actually took
-    // instead of creeping forward after the fact.
-    dias_habiles_transcurridos: businessDaysElapsed(fechaSolicitud, fechaFacturacion || today),
+    // Days elapsed toward the "3 días hábiles" promise, counted from the
+    // consumption date — not the (later) date the customer actually filed
+    // the request — up to today while the row is pending, frozen at
+    // fecha_facturacion once it's Facturada so a delivered row keeps showing
+    // how long it actually took instead of creeping forward after the fact.
+    dias_habiles_transcurridos: businessDaysElapsed(fechaConsumo, fechaFacturacion || today),
   };
 }
 
