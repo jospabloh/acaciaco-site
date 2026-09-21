@@ -150,28 +150,59 @@
     return label;
   }
 
-  // Días hábiles transcurridos hacia la promesa de "3 días hábiles" que se
-  // le hace al cliente en toda la página pública. El servidor ya hizo la
-  // cuenta (factura-admin-list / businessDaysElapsed en _facturaRows.ts);
-  // aquí sólo se decide el color, así que el 3 sólo controla el aviso
-  // visual, nunca si una solicitud se acepta o no.
-  var SLA_DIAS_HABILES = 3;
+  // Heat bar toward the 33-hour ("3 días hábiles" × 11 business hours/day)
+  // promise. The server already did the hour math (businessHoursElapsed in
+  // _facturaRows.ts, counted from the request's actual timestamp so a
+  // request filed late in the day isn't credited with hours it never had)
+  // and sends horas_habiles_transcurridas + horas_habiles_meta; this only
+  // turns that into a bar and a caption.
+  //
+  // The fill's width is elapsed/meta as normal, but its background-size is
+  // stretched so the exposed slice of the green→amber→red gradient lines up
+  // with where elapsed/meta actually sits on the full 0–100% scale — a bar
+  // at 20% shows green, not a full rainbow squeezed into a fifth of the
+  // width. That's what makes it read as "heating up" while it fills, per
+  // Roseta's ask, rather than just widening in one flat color.
+  function slaHeatBarNode(s, facturada) {
+    var elapsed = Number(s.horas_habiles_transcurridas);
+    var meta = Number(s.horas_habiles_meta);
+    if (!isFinite(elapsed) || !isFinite(meta) || meta <= 0) return null;
 
-  function diasHabilesNode(s, facturada) {
-    var n = Number(s.dias_habiles_transcurridos);
-    if (!isFinite(n)) return null;
-    var span = document.createElement('span');
-    span.className = 'ad-days';
+    var pct = (elapsed / meta) * 100;
+    var clamped = Math.max(0, Math.min(100, pct));
+    var late = pct > 100;
+    var horas = Math.round(elapsed);
+    var metaHoras = Math.round(meta);
+
+    var wrap = document.createElement('div');
+    wrap.className = 'ad-heat' + (facturada ? ' ad-heat-done' : '') + (late ? ' ad-heat-late' : '');
+
+    var track = document.createElement('div');
+    track.className = 'ad-heat-track';
+    var fill = document.createElement('div');
+    fill.className = 'ad-heat-fill';
+    fill.style.width = clamped + '%';
+    // Undoes the gradient's own re-stretch to the fill's (narrower) box: at
+    // 20% width, a background-size of 500% makes the gradient act as if it
+    // were painted across the full-width track all along.
+    fill.style.backgroundSize = (clamped > 0 ? (10000 / clamped) : 100) + '% 100%';
+    track.appendChild(fill);
+    wrap.appendChild(track);
+
+    var caption = document.createElement('span');
+    caption.className = 'ad-heat-caption';
     if (facturada) {
-      span.textContent = n === 0
-        ? 'Entregada el mismo día hábil'
-        : 'Entregada en ' + n + (n === 1 ? ' día hábil' : ' días hábiles');
-      return span;
+      caption.textContent = horas === 0
+        ? 'Entregada dentro de la misma hora'
+        : 'Entregada en ' + horas + (horas === 1 ? ' hora hábil' : ' horas hábiles');
+    } else if (late) {
+      caption.textContent = horas + 'h de ' + metaHoras + 'h hábiles · ' + (horas - metaHoras) + 'h tarde';
+    } else {
+      caption.textContent = horas + 'h de ' + metaHoras + 'h hábiles';
     }
-    span.textContent = n + (n === 1 ? ' día hábil transcurrido' : ' días hábiles transcurridos');
-    if (n >= SLA_DIAS_HABILES) span.classList.add('ad-days-late');
-    else if (n === SLA_DIAS_HABILES - 1) span.classList.add('ad-days-warn');
-    return span;
+    wrap.appendChild(caption);
+
+    return wrap;
   }
 
   function itemNode(s) {
@@ -198,8 +229,8 @@
     left.appendChild(folio);
     left.appendChild(document.createElement('br'));
     left.appendChild(who);
-    var days = diasHabilesNode(s, facturada);
-    if (days) left.appendChild(days);
+    var heat = slaHeatBarNode(s, facturada);
+    if (heat) left.appendChild(heat);
 
     var right = document.createElement('span');
     right.className = 'ad-right';

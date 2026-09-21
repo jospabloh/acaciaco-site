@@ -211,7 +211,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const iva = Math.round((montoNum - subtotal) * 100) / 100;
 
     const folio = makeFolio();
-    const fechaSolicitud = new Date().toISOString().slice(0, 10);
+    const now = new Date();
+    const fechaSolicitud = now.toISOString().slice(0, 10);
+    const horaSolicitud = now.toISOString();
 
     // 1) Send the email — this is the actual deliverable the client is
     // waiting on, so a failure here is a real failure of the request.
@@ -279,11 +281,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // never shift. Subtotal/IVA are appended strictly after them (Q, R),
       // and the delivery bookkeeping after those (S, T).
       //
-      // The range spans the full table (A:U) even though the last three
-      // cells are empty: appending a shorter range than the table occupies
-      // leaves Sheets to guess the table bounds. Empty S/T/U is exactly right
-      // for a new request — it has not been mailed to the customer yet, and
-      // factura-admin-send.ts fills them in when it is.
+      // The range spans the full table (A:V) even though S/T/U are empty:
+      // appending a shorter range than the table occupies leaves Sheets to
+      // guess the table bounds. Empty S/T/U is exactly right for a new
+      // request — it has not been mailed to the customer yet, and
+      // factura-admin-send.ts fills them in when it is. V (Hora de
+      // solicitud) is the one cell that IS filled here — it's the timestamp
+      // the admin panel's heat bar counts business hours from.
       await appendRow(SOLICITUDES_RANGE, [
         folio,
         fechaSolicitud,
@@ -309,6 +313,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         "", // S · Notificado el — filled in when the CFDI is mailed
         "", // T · Archivos enviados
         "", // U · ID de Resend
+        horaSolicitud, // V · Hora de solicitud
       ]);
     } catch (err) {
       console.error("Sheets append (Solicitudes) failed", err);

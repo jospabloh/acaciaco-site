@@ -1,10 +1,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  businessDaysElapsed,
+  businessHoursElapsed,
   COL,
   cell,
+  fallbackFacturacionTimestamp,
+  fallbackSolicitudTimestamp,
+  FACTURA_BUSINESS_HOURS_PER_DAY,
   FACTURA_SLA_BUSINESS_DAYS,
+  FACTURA_SLA_BUSINESS_HOURS,
   fmtMoney,
   isWithinDays,
   NOTIFY_EMAILS,
@@ -15,13 +19,14 @@ import {
   SOLICITUDES_RANGE,
 } from "../api/roseta/_facturaRows.ts";
 
-// A row shaped exactly like factura-submit.ts writes it, extended to U.
+// A row shaped exactly like factura-submit.ts writes it, extended to V.
 function row(over: Record<string, string> = {}): string[] {
   const r = [
     "RF-20260801-AB12", "2026-08-01", "XAXX010101000", "Juan Pérez",
     "612", "G03", "20000", "juan@ejemplo.com", "4490000000", "UAA",
     "2026-07-31", "348.00", "Efectivo", "MOV-991",
     "Pendiente", "", "300.00", "48.00", "", "", "",
+    "2026-08-01T15:30:00.000Z",
   ];
   for (const [k, v] of Object.entries(over)) r[COL[k as keyof typeof COL]] = v;
   return r;
@@ -75,56 +80,70 @@ test("isWithinDays muestra fechas futuras en vez de esconderlas", () => {
   assert.equal(isWithinDays("2026-09-01", 30, "2026-08-05"), true);
 });
 
-test("businessDaysElapsed no cuenta el primer día del rango (from)", () => {
-  assert.equal(businessDaysElapsed("2026-08-03", "2026-08-03"), 0); // lunes a lunes, mismo día
+// Business hours are Mon–Fri 7:00–18:00 Mexico City time (fixed UTC-6, no
+// DST since 2022), so local HH:00 is UTC (HH+6):00 on the same calendar day.
+
+test("businessHoursElapsed da 0 para el mismo instante", () => {
+  assert.equal(businessHoursElapsed("2026-08-03T13:00:00.000Z", "2026-08-03T13:00:00.000Z"), 0);
 });
 
-test("businessDaysElapsed cuenta días hábiles consecutivos", () => {
-  assert.equal(businessDaysElapsed("2026-08-03", "2026-08-04"), 1); // lunes a martes
-  assert.equal(businessDaysElapsed("2026-08-03", "2026-08-07"), 4); // lunes a viernes
+test("businessHoursElapsed cuenta horas parciales dentro de un mismo día", () => {
+  // lunes 7:00 a 10:00 local → 3 horas
+  assert.equal(businessHoursElapsed("2026-08-03T13:00:00.000Z", "2026-08-03T16:00:00.000Z"), 3);
 });
 
-test("businessDaysElapsed salta el fin de semana", () => {
-  assert.equal(businessDaysElapsed("2026-08-07", "2026-08-10"), 1); // viernes a lunes: sólo el lunes cuenta
+test("businessHoursElapsed no acredita un día completo a una solicitud tardía", () => {
+  // lunes 17:00 (1 hora antes del cierre) a martes 8:00 local → 1h lunes + 1h martes = 2
+  assert.equal(businessHoursElapsed("2026-08-03T23:00:00.000Z", "2026-08-04T14:00:00.000Z"), 2);
 });
 
-test("businessDaysElapsed también salta el fin de semana si arranca en sábado", () => {
-  assert.equal(businessDaysElapsed("2026-08-01", "2026-08-03"), 1); // sábado a lunes: domingo no cuenta
+test("businessHoursElapsed salta el fin de semana", () => {
+  // viernes 17:00 a lunes 8:00 local → 1h viernes + 1h lunes = 2 (sáb/dom no cuentan)
+  assert.equal(businessHoursElapsed("2026-08-07T23:00:00.000Z", "2026-08-10T14:00:00.000Z"), 2);
 });
 
-test("businessDaysElapsed salta un feriado de fecha fija (Año Nuevo)", () => {
-  assert.equal(businessDaysElapsed("2025-12-31", "2026-01-02"), 1); // sin saltar sería 2 (jue + vie)
+test("businessHoursElapsed suma varios días hábiles completos", () => {
+  // lunes 7:00 a viernes 7:00 local → 4 días × 11h = 44
+  assert.equal(businessHoursElapsed("2026-08-03T13:00:00.000Z", "2026-08-07T13:00:00.000Z"), 44);
 });
 
-test("businessDaysElapsed salta un feriado flotante (primer lunes de febrero)", () => {
-  assert.equal(businessDaysElapsed("2026-01-30", "2026-02-03"), 1); // el lunes 2026-02-02 es feriado
+test("businessHoursElapsed salta un feriado (Navidad) igual que el fin de semana", () => {
+  // jueves 24 17:00 a lunes 28 8:00 local → 1h jue + 0 (vie 25 feriado, sáb/dom) + 1h lun = 2
+  assert.equal(businessHoursElapsed("2026-12-24T23:00:00.000Z", "2026-12-28T14:00:00.000Z"), 2);
 });
 
-test("businessDaysElapsed salta el Día del Trabajo aunque caiga justo después del fin de semana", () => {
-  assert.equal(businessDaysElapsed("2026-04-30", "2026-05-04"), 1); // vie 5-01 feriado, sáb/dom fin de semana
+test("businessHoursElapsed da 0 si `to` es anterior o igual a `from`", () => {
+  assert.equal(businessHoursElapsed("2026-08-05T13:00:00.000Z", "2026-08-01T13:00:00.000Z"), 0);
+  assert.equal(businessHoursElapsed("2026-08-05T13:00:00.000Z", "2026-08-05T13:00:00.000Z"), 0);
 });
 
-test("businessDaysElapsed salta el Día de la Independencia", () => {
-  assert.equal(businessDaysElapsed("2026-09-15", "2026-09-17"), 1); // mié 9-16 feriado
-});
-
-test("businessDaysElapsed salta Navidad", () => {
-  assert.equal(businessDaysElapsed("2026-12-24", "2026-12-28"), 1); // vie 12-25 feriado, sáb/dom fin de semana
-});
-
-test("businessDaysElapsed da 0 si `to` es anterior o igual a `from`", () => {
-  assert.equal(businessDaysElapsed("2026-08-05", "2026-08-01"), 0);
-  assert.equal(businessDaysElapsed("2026-08-05", "2026-08-05"), 0);
-});
-
-test("businessDaysElapsed da 0 con fechas vacías o malformadas, en vez de lanzar", () => {
-  assert.equal(businessDaysElapsed("", "2026-08-05"), 0);
-  assert.equal(businessDaysElapsed("2026-08-01", ""), 0);
-  assert.equal(businessDaysElapsed("no-es-fecha", "2026-08-05"), 0);
+test("businessHoursElapsed da 0 con fechas vacías o malformadas, en vez de lanzar", () => {
+  assert.equal(businessHoursElapsed("", "2026-08-05T13:00:00.000Z"), 0);
+  assert.equal(businessHoursElapsed("2026-08-01T13:00:00.000Z", ""), 0);
+  assert.equal(businessHoursElapsed("no-es-fecha", "2026-08-05T13:00:00.000Z"), 0);
 });
 
 test("FACTURA_SLA_BUSINESS_DAYS es 3, la promesa que se hace en toda la página pública", () => {
   assert.equal(FACTURA_SLA_BUSINESS_DAYS, 3);
+});
+
+test("FACTURA_SLA_BUSINESS_HOURS son 3 días × 11 horas hábiles (7:00–18:00) = 33", () => {
+  assert.equal(FACTURA_BUSINESS_HOURS_PER_DAY, 11);
+  assert.equal(FACTURA_SLA_BUSINESS_HOURS, 33);
+});
+
+test("fallbackSolicitudTimestamp asume la apertura (7:00 local) del día de la fecha", () => {
+  assert.equal(fallbackSolicitudTimestamp("2026-09-19"), "2026-09-19T13:00:00.000Z");
+});
+
+test("fallbackFacturacionTimestamp asume el cierre (18:00 local) del día de la fecha", () => {
+  assert.equal(fallbackFacturacionTimestamp("2026-09-19"), "2026-09-20T00:00:00.000Z");
+});
+
+test("los fallback de timestamp dan cadena vacía con una fecha vacía o malformada", () => {
+  assert.equal(fallbackSolicitudTimestamp(""), "");
+  assert.equal(fallbackSolicitudTimestamp("no-es-fecha"), "");
+  assert.equal(fallbackFacturacionTimestamp(""), "");
 });
 
 test("publicSolicitud expone sólo los campos públicos", () => {
@@ -168,8 +187,8 @@ test("findRowNumber devuelve -1 si el folio no existe", () => {
   assert.equal(findRowNumber([["Folio"], row()], "RF-NOPE"), -1);
 });
 
-test("el rango cubre hasta la columna U", () => {
-  assert.equal(SOLICITUDES_RANGE, "Solicitudes!A:U");
+test("el rango cubre hasta la columna V", () => {
+  assert.equal(SOLICITUDES_RANGE, "Solicitudes!A:V");
 });
 
 test("resendEmailUrl arma la URL del dashboard", () => {

@@ -95,7 +95,7 @@ plausible sync target over CtrlHQ's `acaciaControl` bridge — nothing here
 depends on that today, but a schema change to `Solicitudes`/`ClientesRFC`
 down the line should keep that eventual consumer in mind.
 
-### Sheet layout (`Solicitudes` tab, range `A:U`)
+### Sheet layout (`Solicitudes` tab, range `A:V`)
 
 | Col | Field | Col | Field |
 |---|---|---|---|
@@ -109,7 +109,13 @@ down the line should keep that eventual consumer in mind.
 | H | Correo | S | Notificado el |
 | I | Teléfono | T | Archivos enviados |
 | J | Sucursal | U | ID de Resend |
-| K | Fecha de consumo | | |
+| K | Fecha de consumo | V | Hora de solicitud |
+
+**V holds the full timestamp of the request** (`fechaSolicitud` is only ever
+a bare date, B stays that way for Roseta reading the Sheet) — added for the
+admin panel's business-*hours* heat bar, see below. Rows written before V
+existed read as empty; the admin panel falls back to assuming they landed at
+opening.
 
 **Column E holds the clave AND the name** (`601 · General de Ley Personas
 Morales`), because a bare `601` tells whoever is checking a request against a
@@ -124,7 +130,8 @@ button *yields* the bare clave, which is what the stamping software wants.
 
 **O and P are edited by hand in the Sheet — nothing may shift them.** New columns
 append strictly after the last one, and `factura-submit.ts` must write the full
-`A:U` range (empty trailing cells) so Sheets does not have to infer table bounds.
+`A:V` range (empty trailing cells where nothing is known yet) so Sheets does not
+have to infer table bounds.
 A second tab, `ClientesRFC` (`A:H`), remembers each RFC's fiscal data for
 autofill. Column indices live in one place: `COL` in `_facturaRows.ts`.
 
@@ -147,34 +154,65 @@ autofill. Column indices live in one place: `COL` in `_facturaRows.ts`.
 - `ROSETA_ADMIN_PASSWORD` unset makes the panel endpoints **fail closed**, never
   open.
 
-### Indicador de días hábiles en el panel (2026-09-19)
+### Heat bar en el panel: horas hábiles, no días (2026-09-19 → 2026-09-21)
 
-The admin list (`/roseta/factura/admin`) shows Roseta how many business days
-have elapsed toward the "recíbela en un máximo de 3 días hábiles" promise
-quoted across the public pages — the number turns amber the day before that
-limit and red once a request hits or passes it, so a stale request is visible
-without opening every row.
+The admin list (`/roseta/factura/admin`) shows Roseta a heat bar per request:
+a track that fills — and heats up from green through amber to red — as the
+request approaches the "recíbela en un máximo de 3 días hábiles" promise
+quoted across the public pages, so a stale request is visible without opening
+every row. It shipped first as whole-day counting (2026-09-19), then Roseta
+pointed out the real unfairness in that: **a request filed at 5pm got credited
+with a whole business day it never had.** The fix was to switch the unit from
+days to hours — a request that lands late in the day now only earns the few
+hours actually left before closing, which is what "cuentes las hrs para sumar
+3 días hábiles" asks for, and it needed no separate cutoff rule: correct hour
+math already produces that behavior on its own.
 
-`businessDaysElapsed()` and `FACTURA_SLA_BUSINESS_DAYS` live in
-`_facturaRows.ts` (import-free, so `node --test` loads it) and count Mon–Fri,
-skipping the nationwide LFT Art. 74 holidays (`mexicanHolidays()`, computed
-per year — the two floating ones are "Nth Monday of the month", not a fixed
-date — rather than hardcoded so the list never goes stale). `factura-submit.ts`
-still speaks of "3 días hábiles" in copy only; this is the one place the
-number and the calendar behind it exist as values.
+**Business hours are Mon–Fri 7:00–18:00, Aguascalientes local time (Zona
+Centro, a fixed UTC-6 year-round — Mexico dropped national daylight saving in
+2022, so there's no DST table to maintain).** 11 hours/day × 3 días hábiles =
+`FACTURA_SLA_BUSINESS_HOURS` = 33, the bar's 100%. `businessHoursElapsed()` in
+`_facturaRows.ts` (import-free, so `node --test` loads it) sums the overlap
+between `[from, to)` and each business day's open window, skipping weekends
+and the same nationwide LFT Art. 74 holidays as before (`mexicanHolidays()`,
+computed per year rather than hardcoded so the list never goes stale — the
+two floating ones are "Nth Monday of the month"). A request outside business
+hours contributes nothing until the window next opens; that's the whole fix,
+with no special-casing.
 
 **The clock starts at `fecha_solicitud`, not `fecha_consumo`.** The promise is
 about the request, not the visit — `fecha_consumo` is only fiscal data that
 goes on the invoice itself, per Roseta directly. (An earlier version of this
 feature briefly had this backwards; if `fecha_consumo` ever shows up near
-`businessDaysElapsed()` again, that's the bug to check for.) So
+`businessHoursElapsed()` again, that's the bug to check for.)
+
+**Getting hour precision needed an actual timestamp, and the Sheet only ever
+stored a date.** Column B (`Fecha de solicitud`) stays a bare date — Roseta
+still scans it in the Sheet — so `factura-submit.ts` now also writes column
+**V**, `Hora de solicitud`, the full instant (`COL.HORA_SOLICITUD`,
+`SOLICITUDES_RANGE` extended to `A:V`). A row written before V existed falls
+back to `fallbackSolicitudTimestamp()` — assume it landed right at opening.
+`Fecha de facturación` (P) has the opposite problem permanently: Roseta always
+hand-types it as a bare date, so there's no real delivery minute to recover —
+`fallbackFacturacionTimestamp()` assumes the full business day was used, the
+same "give the benefit of the doubt" bias as the solicitud fallback.
 `factura-admin-list.ts` computes the count server-side from `fecha_solicitud`
-to `fecha_facturacion` once a row is `Facturada`, or to today while it's
-still `Pendiente` — a delivered row keeps showing how long it actually took
-instead of creeping forward after the fact. `admin.js` only turns that
-number into a color; the `3` it compares against there is a display
-threshold, not a validation rule, so — unlike the régimen/uso claves — it
-doesn't need server-side re-checking.
+(or its fallback) to `fecha_facturacion` (or ITS fallback) once a row is
+`Facturada`, or to `nowISO()` while it's still `Pendiente` — a delivered row
+keeps showing how long it actually took instead of creeping forward after the
+fact.
+
+**The bar's "heating up" look is a background-size trick, not a growing
+rainbow.** The green→amber→red gradient is declared once on `.ad-heat-fill`;
+each row sets that element's `width` to `elapsed/meta` as usual, but also
+stretches `background-size` by the inverse fraction, which cancels out the
+gradient's default re-stretch-to-fit-the-box behavior. Without it, a bar at
+20% width would show the *entire* gradient smeared into that narrow strip
+(green-to-red rainbow); with it, that same 20% only exposes the gradient's own
+first-fifth (still green) — the same slice a 100%-wide bar would show at that
+position. `admin.js` owns all of this display math; the 33-hour meta itself
+comes from the server (`horas_habiles_meta`) so the threshold isn't
+duplicated as a magic number client-side.
 
 ### The review step must never dead-end (2026-09-09)
 

@@ -1,15 +1,31 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getValues } from "./_sheets";
 import { requireAdmin } from "./_adminGuard";
-import { businessDaysElapsed, COL, cell, resendEmailUrl, SOLICITUDES_RANGE, todayISO } from "./_facturaRows";
+import {
+  businessHoursElapsed,
+  COL,
+  cell,
+  fallbackFacturacionTimestamp,
+  fallbackSolicitudTimestamp,
+  FACTURA_SLA_BUSINESS_HOURS,
+  nowISO,
+  resendEmailUrl,
+  SOLICITUDES_RANGE,
+} from "./_facturaRows";
 import { regimenDisplay, resolveRegimenClave } from "./_facturaValidation";
 
 // Unlike the public status lookup, this one is authenticated and returns the
 // full fiscal record — Roseta needs it to key the invoice into her stamping
 // software without switching windows.
-function adminSolicitud(row: string[], today: string) {
+function adminSolicitud(row: string[], now: string) {
   const fechaSolicitud = cell(row, COL.FECHA_SOLICITUD);
   const fechaFacturacion = cell(row, COL.FECHA_FACTURACION);
+  // HORA_SOLICITUD is empty on rows written before that column existed —
+  // fall back to assuming the request landed right at opening.
+  const horaSolicitud = cell(row, COL.HORA_SOLICITUD) || fallbackSolicitudTimestamp(fechaSolicitud);
+  // Fecha de facturación is hand-typed as a bare date, never a timestamp —
+  // assume the full business day was used.
+  const horaFacturacion = fechaFacturacion ? fallbackFacturacionTimestamp(fechaFacturacion) : "";
   return {
     folio: cell(row, COL.FOLIO),
     fecha_solicitud: fechaSolicitud,
@@ -43,13 +59,14 @@ function adminSolicitud(row: string[], today: string) {
     // Built here rather than in the browser so the dashboard path lives in
     // one place. Empty for requests sent before this column existed.
     resend_url: cell(row, COL.RESEND_ID) ? resendEmailUrl(cell(row, COL.RESEND_ID)) : "",
-    // Days elapsed toward the "3 días hábiles" promise: counted from
-    // fecha_solicitud — the request is what starts the clock, fecha_consumo
-    // is only fiscal data for the invoice itself — up to today while the row
-    // is pending, frozen at fecha_facturacion once it's Facturada so a
-    // delivered row keeps showing how long it actually took instead of
-    // creeping forward after the fact.
-    dias_habiles_transcurridos: businessDaysElapsed(fechaSolicitud, fechaFacturacion || today),
+    // Business hours elapsed toward the 33-hour ("3 días hábiles") promise:
+    // counted from the request's actual timestamp — not just its date, so a
+    // 5pm request doesn't get credited with a whole business day it never
+    // used — up to now while the row is pending, frozen at fecha_facturacion
+    // once it's Facturada so a delivered row keeps showing how long it
+    // actually took instead of creeping forward after the fact.
+    horas_habiles_transcurridas: businessHoursElapsed(horaSolicitud, horaFacturacion || now),
+    horas_habiles_meta: FACTURA_SLA_BUSINESS_HOURS,
   };
 }
 
@@ -68,7 +85,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const rows = await getValues(SOLICITUDES_RANGE);
     const filtro = String(req.query.filtro || "pendientes");
     const all = rows.slice(1).filter((row) => cell(row, COL.FOLIO));
-    const today = todayISO();
+    const now = nowISO();
 
     const solicitudes = all
       .filter((row) => {
@@ -77,7 +94,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (filtro === "todas") return true;
         return estatus !== "facturada";
       })
-      .map((row) => adminSolicitud(row, today))
+      .map((row) => adminSolicitud(row, now))
       .reverse(); // rows are appended chronologically; newest first
 
     return res.status(200).json({ ok: true, solicitudes });

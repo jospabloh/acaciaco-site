@@ -26,9 +26,16 @@ export const COL = {
   NOTIFICADO_EL: 18,
   ARCHIVOS: 19,
   RESEND_ID: 20,
+  // Appended after U, so it never shifts the hand-edited O/P. Column B
+  // (Fecha de solicitud) stays a plain date for Roseta to scan in the
+  // Sheet; this one carries the full instant so the admin panel's heat bar
+  // can count business HOURS, not just whole days. Empty on rows written
+  // before this column existed — fallbackSolicitudTimestamp() below covers
+  // those.
+  HORA_SOLICITUD: 21,
 } as const;
 
-export const SOLICITUDES_RANGE = "Solicitudes!A:U";
+export const SOLICITUDES_RANGE = "Solicitudes!A:V";
 
 // Resend's dashboard URL for a single email. Kept here so the panel and any
 // future consumer agree on it, and so there is one place to fix if Resend
@@ -76,6 +83,12 @@ export function todayISO(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+// Unlike todayISO(), keeps the time — businessHoursElapsed() needs the
+// actual instant, not just the calendar day, to size a partial day.
+export function nowISO(): string {
+  return new Date().toISOString();
+}
+
 // A row whose date is missing, malformed or in the future is shown rather
 // than hidden — it is the customer's own request, and a data anomaly is a
 // worse reason to hide it than to display it.
@@ -90,9 +103,49 @@ export function isWithinDays(fecha: string, days: number, today: string): boolea
 
 // The promise quoted as copy across the site ("recíbela en un máximo de 3
 // días hábiles") — this is the only place that number exists as a value
-// rather than Spanish text, so the admin panel's elapsed-days indicator has
-// one threshold to compare against.
+// rather than Spanish text, so the admin panel's heat bar has one threshold
+// to compare against.
 export const FACTURA_SLA_BUSINESS_DAYS = 3;
+
+// Roseta Café's business hours (Aguascalientes, "Zona Centro" — a fixed
+// UTC-6 year-round since Mexico dropped daylight saving nationally in 2022,
+// so no DST table is needed here). A whole-day count treats a request filed
+// at 5pm the same as one filed at 8am, which isn't fair to whoever files
+// early — so the SLA clock runs in business HOURS, not days.
+const MX_UTC_OFFSET_MS = 6 * 60 * 60 * 1000;
+const BUSINESS_OPEN_HOUR = 7;
+const BUSINESS_CLOSE_HOUR = 18;
+export const FACTURA_BUSINESS_HOURS_PER_DAY = BUSINESS_CLOSE_HOUR - BUSINESS_OPEN_HOUR; // 11
+export const FACTURA_SLA_BUSINESS_HOURS = FACTURA_SLA_BUSINESS_DAYS * FACTURA_BUSINESS_HOURS_PER_DAY; // 33
+
+// An ISO instant for `hour:00` Mexico City time on `dateISO`, as UTC — e.g.
+// mxLocalTimeIso("2026-09-19", 7) is 2026-09-19T13:00:00.000Z. Used to
+// synthesize a timestamp for data that only ever recorded a date: a legacy
+// row with no HORA_SOLICITUD (fallbackSolicitudTimestamp), and P (Fecha de
+// facturación), which Roseta always hand-types as a bare date
+// (fallbackFacturacionTimestamp). Empty/malformed input reads as "" rather
+// than a garbage date, matching the other guards in this file.
+function mxLocalTimeIso(dateISO: string, hour: number): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(dateISO || "").trim());
+  if (!m) return "";
+  const [, y, mo, d] = m;
+  return new Date(Date.UTC(Number(y), Number(mo) - 1, Number(d), hour) + MX_UTC_OFFSET_MS).toISOString();
+}
+
+// A legacy request row has only a date (Fecha de solicitud) — falls back to
+// the start of business hours that day, the least-wrong single guess when
+// the real minute was never recorded.
+export function fallbackSolicitudTimestamp(fechaSolicitudISO: string): string {
+  return mxLocalTimeIso(fechaSolicitudISO, BUSINESS_OPEN_HOUR);
+}
+
+// Fecha de facturación is hand-typed by Roseta as a bare date, so the exact
+// delivery minute never existed to begin with — falls back to the end of
+// business hours that day, the same "assume the full day was used" bias as
+// the open-hour fallback above.
+export function fallbackFacturacionTimestamp(fechaFacturacionISO: string): string {
+  return mxLocalTimeIso(fechaFacturacionISO, BUSINESS_CLOSE_HOUR);
+}
 
 // The Nth `weekday` of `monthIndex0` (0 = January) in `year`, as an ISO date.
 // Backs the two floating federal holidays below, which are defined by
@@ -126,31 +179,54 @@ function mexicanHolidays(year: number): Set<string> {
   ]);
 }
 
-// Counts Mon–Fri calendar days strictly after `fromISO` up to and including
-// `toISO`, skipping the federal holidays above — the request date itself is
-// day zero, not day one. A missing/malformed date, or a `to` on or before
-// `from`, reads as 0 rather than throwing — same "show it anyway" choice as
-// isWithinDays above.
-export function businessDaysElapsed(fromISO: string, toISO: string): number {
-  const from = Date.parse(`${String(fromISO || "").trim()}T00:00:00Z`);
-  const to = Date.parse(`${String(toISO || "").trim()}T00:00:00Z`);
-  if (!Number.isFinite(from) || !Number.isFinite(to) || to <= from) return 0;
-  let count = 0;
+// Sums the business hours (Mon–Fri, BUSINESS_OPEN_HOUR–BUSINESS_CLOSE_HOUR
+// Mexico City time, federal holidays excluded) that fall between `fromISO`
+// and `toISO`, as a fractional number of hours. Walks one calendar day at a
+// time — from and to are shifted into "fake UTC" by subtracting the fixed MX
+// offset, so getUTCDay()/getUTCHours() read Mexico City's wall clock without
+// a timezone library — and adds the overlap between each day's business
+// window and the [from, to) span. A request outside business hours (say,
+// filed at 9pm) contributes nothing until the window next opens, which is
+// exactly what makes this fair to an early filer without any special-casing:
+// the hours just aren't there to count. A missing/malformed timestamp, or a
+// `to` on or before `from`, reads as 0 rather than throwing — same "show it
+// anyway" choice as isWithinDays above.
+export function businessHoursElapsed(fromISO: string, toISO: string): number {
+  const fromUtc = Date.parse(String(fromISO || "").trim());
+  const toUtc = Date.parse(String(toISO || "").trim());
+  if (!Number.isFinite(fromUtc) || !Number.isFinite(toUtc) || toUtc <= fromUtc) return 0;
+
+  const from = fromUtc - MX_UTC_OFFSET_MS;
+  const to = toUtc - MX_UTC_OFFSET_MS;
+
+  let totalMs = 0;
   let holidays: Set<string> | null = null;
   let holidaysYear = NaN;
-  for (let t = from + 86_400_000; t <= to; t += 86_400_000) {
-    const date = new Date(t);
-    const day = date.getUTCDay(); // 0 = Sun, 6 = Sat
-    if (day === 0 || day === 6) continue;
-    const year = date.getUTCFullYear();
-    if (year !== holidaysYear) {
-      holidays = mexicanHolidays(year);
-      holidaysYear = year;
+  let cursor = from;
+  while (cursor < to) {
+    const date = new Date(cursor);
+    const dayStart = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+    const dayEnd = dayStart + 86_400_000;
+    const segmentEnd = Math.min(to, dayEnd);
+
+    const weekday = date.getUTCDay(); // 0 = Sun, 6 = Sat, in MX local time
+    if (weekday !== 0 && weekday !== 6) {
+      const year = date.getUTCFullYear();
+      if (year !== holidaysYear) {
+        holidays = mexicanHolidays(year);
+        holidaysYear = year;
+      }
+      if (!holidays!.has(new Date(dayStart).toISOString().slice(0, 10))) {
+        const openMs = dayStart + BUSINESS_OPEN_HOUR * 3_600_000;
+        const closeMs = dayStart + BUSINESS_CLOSE_HOUR * 3_600_000;
+        const segStart = Math.max(cursor, openMs);
+        const segStop = Math.min(segmentEnd, closeMs);
+        if (segStop > segStart) totalMs += segStop - segStart;
+      }
     }
-    if (holidays!.has(date.toISOString().slice(0, 10))) continue;
-    count++;
+    cursor = segmentEnd;
   }
-  return count;
+  return totalMs / 3_600_000;
 }
 
 // Deliberately narrow: email, razón social, código postal and teléfono are
