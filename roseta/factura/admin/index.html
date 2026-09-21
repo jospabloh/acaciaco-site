@@ -83,13 +83,20 @@
     .ad-head:focus-visible{outline:2px solid var(--primary);outline-offset:-2px;}
     .ad-folio{font-family:'Space Grotesk',monospace;font-weight:700;letter-spacing:.03em;font-size:.92rem;}
     .ad-who{font-size:.85rem;color:var(--text-muted);margin-top:.15rem;}
-    /* Días hábiles transcurridos hacia la promesa de "3 días hábiles" — ok
-       mientras hay margen, ámbar el día antes del límite, rojo en cuanto se
-       alcanza o pasa. Una solicitud ya facturada usa el mismo elemento pero
-       nunca lleva color de alarma: ya se resolvió. */
-    .ad-days{display:block;font-size:.78rem;color:var(--text-muted);margin-top:.2rem;}
-    .ad-days.ad-days-warn{color:var(--warn-fg);font-weight:600;}
-    .ad-days.ad-days-late{color:var(--err-fg);font-weight:700;}
+    /* Heat bar toward the 33-hour ("3 días hábiles") promise. The gradient
+       is painted green→amber→red across the FULL 0–meta scale, and each
+       row's fill only stretches that gradient's background-size so the
+       exposed slice lines up with the true elapsed/meta position — that's
+       what makes the bar look like it heats up as a row ages, instead of
+       just widening in one flat color. Capped visually at 100%; an overdue
+       row (elapsed > meta) shows fully red and says so in the caption. */
+    .ad-heat{display:block;max-width:220px;margin-top:.35rem;}
+    .ad-heat-track{height:6px;border-radius:3px;background:var(--bg-subtle);overflow:hidden;}
+    .ad-heat-fill{height:100%;border-radius:3px;background-repeat:no-repeat;
+      background-image:linear-gradient(90deg, var(--done-rule) 0%, var(--pend-rule) 55%, var(--err-fg) 100%);}
+    .ad-heat-caption{display:block;font-size:.74rem;color:var(--text-muted);margin-top:.2rem;}
+    .ad-heat.ad-heat-late .ad-heat-caption{color:var(--err-fg);font-weight:700;}
+    .ad-heat.ad-heat-done .ad-heat-track{opacity:.7;}
     .ad-right{display:flex;align-items:center;gap:.7rem;justify-self:end;}
     .ad-amount{font-family:'Space Grotesk',monospace;font-weight:600;font-size:.9rem;white-space:nowrap;}
     .ad-badge{display:inline-flex;padding:.25rem .75rem;border-radius:var(--radius-pill);font-size:.72rem;font-weight:700;white-space:nowrap;}
