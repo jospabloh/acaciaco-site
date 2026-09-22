@@ -246,6 +246,22 @@ drops the `+52`, this is the one deliberate exception). `Otra` gets a
 generic "contact the branch where you bought it" instead of a guessed
 number, on purpose: `OTHER_BRANCH_CONTACTS` has no entry for it.
 
+**The redirect email's own facts table shipped wrong on day one — caught
+against a real Plaza Universidad ticket, same day.** It listed this
+system's own `RF-…` folio as the request's reference. That folio means
+nothing to the other branch: it's an id this online system assigned, and
+their point-of-sale never heard of it. What Plaza Universidad's own staff
+actually recognize is the ticket's own internal folio (`COL.FOLIO_TICKET` —
+printed on the paper receipt, e.g. `26838`) and the fecha de consumo. So
+`redirectHtml()`'s table now leads with **Sucursal / Folio del ticket / Fecha
+de consumo / Monto**, and the contact paragraph explicitly tells the customer
+to hand over the ticket's folio and date — and explicitly calls out the
+`RF-…` folio by name as the wrong thing to give them, since a customer
+skimming the email would otherwise read "folio" in the opening line and
+assume that's what to quote. A request with no ticket folio (the "no lo
+tengo" checkbox on the form) shows "No indicado — lleva tu ticket físico"
+instead of a blank cell.
+
 **Sending it writes `Estatus = ESTATUS_SUCURSAL_INCORRECTA` ("Sucursal
 incorrecta")** — a third terminal value alongside `Facturada`, added the same
 way: a plain string in the same O column, nothing shifted. Fecha de

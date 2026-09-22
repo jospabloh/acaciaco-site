@@ -23,24 +23,39 @@ function escapeHtml(s: string): string {
 // known one gets its direct number, an unrecognized one (the "Otra" option,
 // or a future branch OTHER_BRANCH_CONTACTS hasn't caught up to yet) gets a
 // generic pointer instead of a guessed number.
+//
+// This request's own RF-… folio is meaningless to the OTHER branch: it's an
+// id this online system assigned, and that branch's own point-of-sale never
+// heard of it. What THEY recognize is the ticket's own internal folio
+// (COL.FOLIO_TICKET — printed on the receipt) plus the fecha de consumo, so
+// those are what the contact paragraph tells the customer to hand over, and
+// the RF-… folio is called out by name as the wrong thing to give them.
 function redirectHtml(row: string[], folio: string): string {
   const razonSocial = cell(row, COL.RAZON_SOCIAL);
   const sucursal = cell(row, COL.SUCURSAL);
+  const folioTicket = cell(row, COL.FOLIO_TICKET);
   const contacto = OTHER_BRANCH_CONTACTS[sucursal];
+  // "Roseta Otra" reads as a branch name, which it isn't — the "Otra"
+  // option means "some branch we don't have named" (see OTHER_BRANCH_CONTACTS'
+  // own comment), so it gets its own phrasing instead of the Roseta-prefix
+  // pattern that fits the two named branches.
+  const sucursalLabel = sucursal === "Otra" ? "otra sucursal de Roseta Café" : `Roseta ${sucursal}`;
   const facts: [string, string][] = [
-    ["Folio", folio],
     ["Sucursal", sucursal],
+    ["Folio del ticket", folioTicket || "No indicado — lleva tu ticket físico"],
     ["Fecha de consumo", cell(row, COL.FECHA_CONSUMO)],
+    ["Monto", `$${cell(row, COL.MONTO)} MXN`],
   ];
+  const handOver = `dales el <strong>folio de tu ticket</strong> y la <strong>fecha de consumo</strong> de arriba — el folio de esta solicitud (${escapeHtml(folio)}) es de este sistema en línea y no lo van a reconocer`;
   return (
     `<h2>Tu ticket es de otra sucursal</h2>` +
-    `<p>Hola ${escapeHtml(razonSocial)}, tu solicitud de factura (folio <strong>${escapeHtml(folio)}</strong>) corresponde a un consumo en <strong>Roseta ${escapeHtml(sucursal)}</strong>. Este sistema en línea sólo procesa las facturas de <strong>Roseta ${escapeHtml(FICO_3C_SUCURSAL)}</strong>.</p>` +
+    `<p>Hola ${escapeHtml(razonSocial)}, tu solicitud de factura (folio <strong>${escapeHtml(folio)}</strong>) corresponde a un consumo en <strong>${escapeHtml(sucursalLabel)}</strong>. Este sistema en línea sólo procesa las facturas de <strong>Roseta ${escapeHtml(FICO_3C_SUCURSAL)}</strong>.</p>` +
     `<table cellpadding="6" cellspacing="0" border="0">` +
     facts.map(([k, v]) => `<tr><td><strong>${escapeHtml(k)}</strong></td><td>${escapeHtml(v)}</td></tr>`).join("") +
     `</table>` +
     (contacto
-      ? `<p style="margin-top:16px;">Para facturar tu consumo en ${escapeHtml(sucursal)}, contáctalos directamente al <strong>${escapeHtml(contacto)}</strong>.</p>`
-      : `<p style="margin-top:16px;">Para facturar tu consumo, contacta directamente a la sucursal de Roseta Café donde hiciste tu compra.</p>`) +
+      ? `<p style="margin-top:16px;">Para facturar tu consumo en ${escapeHtml(sucursal)}, contáctalos directamente al <strong>${escapeHtml(contacto)}</strong> y ${handOver}.</p>`
+      : `<p style="margin-top:16px;">Para facturar tu consumo, contacta directamente a la sucursal de Roseta Café donde hiciste tu compra y ${handOver}.</p>`) +
     `<p>¿Dudas? Responde a este correo o escríbenos por WhatsApp al 449 895 8291.</p>` +
     `<p style="margin-top:16px;color:#888;font-size:12px;">Roseta Café · Sitio operado por ACACIA</p>`
   );
