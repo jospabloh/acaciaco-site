@@ -93,6 +93,40 @@
     setSinMovimiento(sinMovimientoCheckbox.checked);
   });
 
+  // Mirrors FICO_3C_SUCURSAL / OTHER_BRANCH_CONTACTS in api/roseta/_facturaRows.ts
+  // — that copy is the one that matters, since factura-admin-redirect.ts
+  // sends the real email from it. This one only controls the on-page
+  // heads-up before the customer even submits; the select's own option
+  // text already says "no disponible en este sistema" for the other
+  // branches, so this hint is where the actual phone number lives.
+  var sucursalSelect = document.getElementById('sucursal');
+  var sucursalHint = document.getElementById('sucursal-hint');
+  var FICO_3C_SUCURSAL = 'Fico 3C (Tres Centurias)';
+  var OTHER_BRANCH_CONTACTS = {
+    'Plaza Universidad': '+52 449 386 2108',
+    'UAA': '+52 449 305 3349'
+  };
+  function renderSucursalHint() {
+    var value = sucursalSelect.value;
+    if (!value || value === FICO_3C_SUCURSAL) {
+      sucursalHint.classList.remove('show');
+      sucursalHint.textContent = '';
+      return;
+    }
+    var contacto = OTHER_BRANCH_CONTACTS[value];
+    sucursalHint.textContent = 'Este sistema sólo procesa facturas de Fico 3C (Tres Centurias). ' + (
+      contacto
+        ? 'Para tu consumo en ' + value + ', contáctalos directamente al ' + contacto + '.'
+        : 'Contacta directamente a la sucursal donde hiciste tu consumo.'
+    );
+    sucursalHint.classList.add('show');
+  }
+  sucursalSelect.addEventListener('change', renderSucursalHint);
+  // Covers the case where a previous request's data is autofilled by RFC
+  // match, which sets sucursalSelect.value programmatically (no 'change'
+  // event fires for that).
+  renderSucursalHint();
+
   function setStatus(msg, kind) {
     statusEl.textContent = msg || '';
     statusEl.className = kind || '';

@@ -37,6 +37,30 @@ export const COL = {
 
 export const SOLICITUDES_RANGE = "Solicitudes!A:V";
 
+// The only branch this online system actually invoices — every other Roseta
+// Café location gets redirected to its own contact instead of a made-up
+// invoice (see factura-admin-redirect.ts). Must match the sucursal
+// `<option value>` in index.html's #sucursal select exactly; a test in
+// facturaRows.test.ts reads that file off disk and fails if they drift,
+// the same guarantee _soporteValidation.ts has over soporte.html.
+export const FICO_3C_SUCURSAL = "Fico 3C (Tres Centurias)";
+
+// Direct contact for the invoice at each OTHER named branch. "Otra" is
+// deliberately absent: we don't know which branch that actually is, so the
+// redirect email falls back to "contact the branch where you bought it"
+// instead of guessing a wrong number.
+export const OTHER_BRANCH_CONTACTS: Record<string, string> = {
+  "Plaza Universidad": "+52 449 386 2108",
+  "UAA": "+52 449 305 3349",
+};
+
+// Written to Estatus (O) by factura-admin-redirect.ts once the customer has
+// been told their ticket is from another branch — a terminal state like
+// Facturada, so it drops out of the admin panel's default "Pendientes" view
+// (still visible under "Todas"). Never automatic: Roseta reads the request
+// and clicks to send it, same as the invoice flow.
+export const ESTATUS_SUCURSAL_INCORRECTA = "Sucursal incorrecta";
+
 // Resend's dashboard URL for a single email. Kept here so the panel and any
 // future consumer agree on it, and so there is one place to fix if Resend
 // ever changes the path.

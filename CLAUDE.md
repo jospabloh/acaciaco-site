@@ -214,6 +214,69 @@ position. `admin.js` owns all of this display math; the 33-hour meta itself
 comes from the server (`horas_habiles_meta`) so the threshold isn't
 duplicated as a magic number client-side.
 
+### Sólo Fico 3C — las otras sucursales se redirigen, nunca se facturan (2026-09-22)
+
+Roseta Café has more than one branch, but this online system only ever
+invoices **Fico 3C (Tres Centurias)**. The `#sucursal` select on the public
+form (`roseta/factura/index.html`) has always listed the other branches too
+(`Plaza Universidad`, `UAA`, `Otra`), so nothing stopped a customer from
+picking one and ending up with a request this system was never going to
+fulfill.
+
+**Two layers, matching the "give the customer a channel, don't dead-end
+them" rule from the régimen story below.** The select's own option text now
+says "— no disponible en este sistema" for anything but Fico 3C, so the
+heads-up is visible before the customer even picks one; and once picked,
+`factura.js`'s `renderSucursalHint()` shows the actual phone number to call
+instead — `#sucursal-hint`, styled like `.rf-regimen-hint`. Neither one
+blocks submission: the select stays exactly as permissive as before, because
+the second half of this feature is for customers who submit anyway.
+
+**That second half lives in the admin panel, not the public form** — Roseta's
+own correction, after an early version of this put it in the wrong place.
+`api/roseta/factura-admin-redirect.ts` is a new admin-only endpoint,
+structurally a sibling of `factura-admin-send.ts`: same `requireAdmin` gate,
+same "recipient always comes from the Sheet row, never the request body"
+rule, same re-read-before-write folio check, same retry-once-then-warn
+bookkeeping shape. What it sends is never an invoice — just a short redirect
+naming the real branch and, for the two known ones, its direct number
+(`OTHER_BRANCH_CONTACTS` in `_facturaRows.ts`, now required in **international
+format**, `+52 449 …`, at Roseta's request — everywhere else on the site
+drops the `+52`, this is the one deliberate exception). `Otra` gets a
+generic "contact the branch where you bought it" instead of a guessed
+number, on purpose: `OTHER_BRANCH_CONTACTS` has no entry for it.
+
+**Sending it writes `Estatus = ESTATUS_SUCURSAL_INCORRECTA` ("Sucursal
+incorrecta")** — a third terminal value alongside `Facturada`, added the same
+way: a plain string in the same O column, nothing shifted. Fecha de
+facturación (P) stays empty on purpose — nothing was invoiced, so there's no
+delivery date to record. The admin panel treats it as resolved the same way
+it treats `Facturada`: excluded from the default "Pendientes" filter, and —
+Roseta's second correction, catching what the first draft missed — given its
+**own filter tab, "Otra sucursal"**, rather than only being reachable through
+"Todas". Moving a redirected row out of Pendientes without somewhere it's
+still easy to find would have made it disappear, not resolve.
+
+**The backlog of requests filed before this shipped needed no migration.**
+`sucursal` was already stored on every row, so the redirect button's
+visibility (`s.sucursal !== FICO_3C_SUCURSAL`) and a small "Otra sucursal"
+flag badge next to the amount — Roseta's third question, "and what about the
+ones already sitting in Pendientes?" — both key off data that was there all
+along. An old row just starts showing the flag and the button the moment
+this code deploys; nothing writes to the Sheet until she actually clicks
+"Enviar aviso de sucursal" on it, at whatever pace she gets through them.
+
+`admin.js` also drops the heat bar for a `Sucursal incorrecta` row — "hours
+toward delivery" stops meaning anything once there's no invoice coming — and
+reuses the same `notified` flag (both flows write column S) but branches the
+note's wording on `estatus`, since "Enviada al cliente" and "Se avisó al
+cliente" are describing two different things that happen to share a column.
+
+`tests/facturaRows.test.ts` reads `index.html` off disk and asserts the
+`#sucursal` option values, `FICO_3C_SUCURSAL`, and `OTHER_BRANCH_CONTACTS`'
+keys haven't drifted apart — the same guarantee `facturaValidation.test.ts`
+holds over the régimen/uso dropdowns.
+
 ### The review step must never dead-end (2026-09-09)
 
 A real customer (a persona moral) filled the form correctly, reached "Revisa tu

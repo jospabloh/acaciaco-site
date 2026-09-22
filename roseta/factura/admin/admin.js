@@ -9,6 +9,13 @@
   var HEADER = 'x-roseta-admin';
   var MAX_COMBINED_BYTES = 1.4 * 1024 * 1024; // raw; base64 inflates by ~4/3
 
+  // Mirrors FICO_3C_SUCURSAL / ESTATUS_SUCURSAL_INCORRECTA in
+  // api/roseta/_facturaRows.ts — that copy is canonical (factura-admin-list.ts
+  // and factura-admin-redirect.ts both read from it); this one only decides
+  // what to show, never what actually gets sent or written to the Sheet.
+  var FICO_3C_SUCURSAL = 'Fico 3C (Tres Centurias)';
+  var ESTATUS_SUCURSAL_INCORRECTA = 'Sucursal incorrecta';
+
   var gateWrap = document.getElementById('ad-gate-wrap');
   var gateForm = document.getElementById('ad-gate-form');
   var passInput = document.getElementById('ad-pass');
@@ -207,10 +214,17 @@
 
   function itemNode(s) {
     var facturada = s.estatus === 'Facturada';
+    var wrongBranch = s.estatus === ESTATUS_SUCURSAL_INCORRECTA;
+    // Still worth flagging even though nothing has been sent yet — this is
+    // what surfaces the backlog of requests filed before this feature
+    // existed: they're already sitting in Pendientes, unmarked, and this is
+    // the only thing that makes them stand out in that list instead of
+    // requiring Roseta to open every row and read the sucursal by hand.
+    var needsRedirect = !facturada && !wrongBranch && s.sucursal && s.sucursal !== FICO_3C_SUCURSAL;
     var notified = !!s.notificado_el;
 
     var item = document.createElement('article');
-    item.className = 'ad-item' + (facturada ? ' facturada' : '');
+    item.className = 'ad-item' + (facturada ? ' facturada' : '') + (wrongBranch ? ' otra-sucursal' : '');
     if (s.folio === openFolio) item.classList.add('open');
 
     // Header ------------------------------------------------------------
@@ -229,7 +243,9 @@
     left.appendChild(folio);
     left.appendChild(document.createElement('br'));
     left.appendChild(who);
-    var heat = slaHeatBarNode(s, facturada);
+    // No heat bar once redirected — there's no invoice coming, so "hours
+    // toward delivery" no longer means anything for this row.
+    var heat = wrongBranch ? null : slaHeatBarNode(s, facturada);
     if (heat) left.appendChild(heat);
 
     var right = document.createElement('span');
@@ -237,9 +253,15 @@
     var amount = document.createElement('span');
     amount.className = 'ad-amount';
     amount.textContent = fmtMoney(s.monto);
+    if (needsRedirect) {
+      var flag = document.createElement('span');
+      flag.className = 'ad-badge ad-badge-flag';
+      flag.textContent = 'Otra sucursal';
+      right.appendChild(flag);
+    }
     var badge = document.createElement('span');
-    badge.className = 'ad-badge ' + (facturada ? 'facturada' : 'pendiente');
-    badge.textContent = facturada ? 'Facturada' : 'Pendiente';
+    badge.className = 'ad-badge ' + (facturada ? 'facturada' : wrongBranch ? 'otra-sucursal' : 'pendiente');
+    badge.textContent = facturada ? 'Facturada' : wrongBranch ? ESTATUS_SUCURSAL_INCORRECTA : 'Pendiente';
     right.appendChild(amount);
     right.appendChild(badge);
 
@@ -283,8 +305,8 @@
     if (notified) {
       var note = document.createElement('p');
       note.className = 'ad-sent-note';
-      note.textContent = 'Enviada al cliente el ' + s.notificado_el.slice(0, 10) +
-        (s.archivos ? ' · ' + s.archivos : '');
+      note.textContent = (wrongBranch ? 'Se avisó al cliente el ' : 'Enviada al cliente el ') +
+        s.notificado_el.slice(0, 10) + (s.archivos ? ' · ' + s.archivos : '');
       // The Sheet records that we sent it. Whether it actually landed — or
       // bounced, or is sitting in spam — only Resend knows, so link straight
       // to that message's delivery record. Missing on requests sent before
@@ -300,6 +322,73 @@
         note.appendChild(link);
       }
       body.appendChild(note);
+    }
+
+    // Sucursal redirect ---------------------------------------------------
+    // Only for requests that aren't Fico 3C — this system doesn't invoice
+    // any other branch, so this is where that gets resolved instead of a
+    // PDF/XML. Shown whether the row is brand-new or was filed before this
+    // existed: sucursal is the only thing that decides it, not estatus.
+    if (s.sucursal && s.sucursal !== FICO_3C_SUCURSAL) {
+      var redirectBox = document.createElement('div');
+      redirectBox.className = 'ad-redirect';
+      var rh4 = document.createElement('h4');
+      rh4.textContent = wrongBranch ? 'Aviso de sucursal ya enviado' : 'Esta solicitud no es de Fico 3C';
+      var rwhy = document.createElement('p');
+      rwhy.className = 'ad-why';
+      rwhy.textContent = 'Este sistema sólo factura consumos de Fico 3C (Tres Centurias). Avísale al cliente y dale el contacto correcto de ' + s.sucursal + '.';
+      redirectBox.appendChild(rh4);
+      redirectBox.appendChild(rwhy);
+
+      var redirectBtn = document.createElement('button');
+      redirectBtn.type = 'button';
+      redirectBtn.className = 'btn btn-ghost ad-redirect-send';
+      redirectBtn.textContent = wrongBranch ? 'Reenviar aviso' : 'Enviar aviso de sucursal';
+      redirectBox.appendChild(redirectBtn);
+
+      var redirectMsg = document.createElement('p');
+      redirectMsg.className = 'ad-item-msg';
+      redirectMsg.setAttribute('role', 'status');
+      redirectMsg.setAttribute('aria-live', 'polite');
+      redirectBox.appendChild(redirectMsg);
+
+      redirectBtn.addEventListener('click', function () {
+        if (wrongBranch && !window.confirm(
+          'Ya se le avisó a este cliente el ' + s.notificado_el.slice(0, 10) +
+          '. ¿Enviarlo otra vez?')) return;
+
+        redirectBtn.disabled = true;
+        redirectMsg.className = 'ad-item-msg';
+        redirectMsg.textContent = 'Enviando…';
+
+        api('/api/roseta/factura-admin-redirect', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ folio: s.folio })
+        }).then(function (res) {
+          if (!res.ok || !res.json.ok) {
+            redirectMsg.className = 'ad-item-msg error';
+            redirectMsg.textContent = res.json.error || 'No se pudo enviar. Intenta de nuevo.';
+            redirectBtn.disabled = false;
+            return;
+          }
+          if (res.json.warning) {
+            redirectMsg.className = 'ad-item-msg warn';
+            redirectMsg.textContent = res.json.warning;
+            return;
+          }
+          redirectMsg.className = 'ad-item-msg ok';
+          redirectMsg.textContent = 'Aviso enviado a ' + res.json.email + '.';
+          setTimeout(load, 900);
+        }).catch(function (err) {
+          if (err && err.message === 'unauthorized') return;
+          redirectMsg.className = 'ad-item-msg error';
+          redirectMsg.textContent = 'No se pudo enviar. Revisa tu conexión e intenta de nuevo.';
+          redirectBtn.disabled = false;
+        });
+      });
+
+      body.appendChild(redirectBox);
     }
 
     // Upload ------------------------------------------------------------
