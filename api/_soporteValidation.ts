@@ -4,13 +4,13 @@
 // api/roseta/_adminAuth.ts: the request-shaped code that needs _ratelimit
 // lives in the handler, not here.
 
-// Must stay identical to the 9 <option value> strings in the #sop-app select
+// Must stay identical to the 10 <option value> strings in the #sop-app select
 // in soporte.html (that select also carries a "__idea__" sentinel not listed
 // here — see validateSoporteSubmission below). Checked by
 // tests/soporteValidation.test.ts, which reads soporte.html from disk.
 export const KNOWN_APPS = [
   "Puntos+", "FlowFin", "StockFlow", "Rumbo", "LIUMA",
-  "CateqHub", "RADAR", "CtrlHQ", "KitchOps",
+  "CateqHub", "RADAR", "CtrlHQ", "KitchOps", "ArtisKids",
 ] as const;
 
 export type SoporteType = "soporte" | "mejora" | "idea";
