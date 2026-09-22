@@ -2,10 +2,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
+  ARCHIVOS_AVISO_SUCURSAL,
   businessHoursElapsed,
   COL,
   cell,
-  ESTATUS_SUCURSAL_INCORRECTA,
   fallbackFacturacionTimestamp,
   fallbackSolicitudTimestamp,
   FACTURA_BUSINESS_HOURS_PER_DAY,
@@ -21,6 +21,7 @@ import {
   findRowNumber,
   resendEmailUrl,
   SOLICITUDES_RANGE,
+  sucursalRedirectEstatus,
 } from "../api/roseta/_facturaRows.ts";
 
 // A row shaped exactly like factura-submit.ts writes it, extended to V.
@@ -228,8 +229,17 @@ test("OTHER_BRANCH_CONTACTS no incluye Fico 3C ni Otra", () => {
   assert.equal("Otra" in OTHER_BRANCH_CONTACTS, false);
 });
 
-test("ESTATUS_SUCURSAL_INCORRECTA es el estatus terminal que usa el redirect", () => {
-  assert.equal(ESTATUS_SUCURSAL_INCORRECTA, "Sucursal incorrecta");
+test("sucursalRedirectEstatus nombra la sucursal, no un genérico 'incorrecta'", () => {
+  assert.equal(sucursalRedirectEstatus("Plaza Universidad"), "Roseta Plaza Universidad");
+  assert.equal(sucursalRedirectEstatus("UAA"), "Roseta UAA");
+});
+
+test("sucursalRedirectEstatus no inventa un nombre de sucursal para 'Otra'", () => {
+  assert.equal(sucursalRedirectEstatus("Otra"), "Otra sucursal");
+});
+
+test("ARCHIVOS_AVISO_SUCURSAL es el marcador que distingue un redirect de una factura real", () => {
+  assert.equal(ARCHIVOS_AVISO_SUCURSAL, "Aviso de sucursal");
 });
 
 // Same guarantee tests/facturaValidation.test.ts gives the régimen/uso

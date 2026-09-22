@@ -54,12 +54,21 @@ export const OTHER_BRANCH_CONTACTS: Record<string, string> = {
   "UAA": "+52 449 305 3349",
 };
 
-// Written to Estatus (O) by factura-admin-redirect.ts once the customer has
-// been told their ticket is from another branch — a terminal state like
-// Facturada, so it drops out of the admin panel's default "Pendientes" view
-// (still visible under "Todas"). Never automatic: Roseta reads the request
-// and clicks to send it, same as the invoice flow.
-export const ESTATUS_SUCURSAL_INCORRECTA = "Sucursal incorrecta";
+// What actually goes in Estatus (O) once factura-admin-redirect.ts sends the
+// customer their branch's contact — the branch itself, e.g. "Roseta Plaza
+// Universidad", not a generic "this was wrong" label. Roseta's own
+// correction: a status has to say where the customer was sent, the same way
+// "Facturada" says what happened, not just that something did.
+export function sucursalRedirectEstatus(sucursal: string): string {
+  return sucursal === "Otra" ? "Otra sucursal" : `Roseta ${sucursal}`;
+}
+
+// Written to Archivos enviados (T) by factura-admin-redirect.ts — never
+// "Facturada"'s real PDF/XML filenames, so this string alone tells
+// factura-admin-list.ts and admin.js a row was redirected rather than
+// invoiced, regardless of what Estatus actually says. Detection lives here,
+// not on Estatus, precisely because Estatus's wording now varies per branch.
+export const ARCHIVOS_AVISO_SUCURSAL = "Aviso de sucursal";
 
 // Resend's dashboard URL for a single email. Kept here so the panel and any
 // future consumer agree on it, and so there is one place to fix if Resend

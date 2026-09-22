@@ -2,10 +2,10 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getValues } from "./_sheets";
 import { requireAdmin } from "./_adminGuard";
 import {
+  ARCHIVOS_AVISO_SUCURSAL,
   businessHoursElapsed,
   COL,
   cell,
-  ESTATUS_SUCURSAL_INCORRECTA,
   fallbackFacturacionTimestamp,
   fallbackSolicitudTimestamp,
   FACTURA_SLA_BUSINESS_HOURS,
@@ -91,13 +91,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const solicitudes = all
       .filter((row) => {
         const estatus = (cell(row, COL.ESTATUS) || "Pendiente").toLowerCase();
+        // Estatus's wording now varies per branch ("Roseta Plaza
+        // Universidad", "Roseta UAA", …), so it can't be string-matched to
+        // detect a redirect — Archivos enviados (T) can, since
+        // factura-admin-send.ts always writes real PDF/XML filenames there
+        // and only factura-admin-redirect.ts ever writes this marker.
+        const redirected = cell(row, COL.ARCHIVOS) === ARCHIVOS_AVISO_SUCURSAL;
         if (filtro === "facturadas") return estatus === "facturada";
-        if (filtro === "otra_sucursal") return estatus === ESTATUS_SUCURSAL_INCORRECTA.toLowerCase();
+        if (filtro === "otra_sucursal") return redirected;
         if (filtro === "todas") return true;
         // "Pendientes" excludes both terminal states — a request already
         // redirected to its real branch is exactly as done as one already
         // invoiced, and clutter-free is the whole point of this filter.
-        return estatus !== "facturada" && estatus !== ESTATUS_SUCURSAL_INCORRECTA.toLowerCase();
+        return estatus !== "facturada" && !redirected;
       })
       .map((row) => adminSolicitud(row, now))
       .reverse(); // rows are appended chronologically; newest first

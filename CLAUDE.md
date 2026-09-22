@@ -262,14 +262,28 @@ assume that's what to quote. A request with no ticket folio (the "no lo
 tengo" checkbox on the form) shows "No indicado — lleva tu ticket físico"
 instead of a blank cell.
 
-**Sending it writes `Estatus = ESTATUS_SUCURSAL_INCORRECTA` ("Sucursal
-incorrecta")** — a third terminal value alongside `Facturada`, added the same
-way: a plain string in the same O column, nothing shifted. Fecha de
-facturación (P) stays empty on purpose — nothing was invoiced, so there's no
-delivery date to record. The admin panel treats it as resolved the same way
-it treats `Facturada`: excluded from the default "Pendientes" filter, and —
-Roseta's second correction, catching what the first draft missed — given its
-**own filter tab, "Otra sucursal"**, rather than only being reachable through
+**Sending it writes `Estatus = sucursalRedirectEstatus(sucursal)`** — e.g.
+"Roseta Plaza Universidad", not a generic "Sucursal incorrecta". That generic
+label was the first version's own mistake, caught by Roseta the same day: a
+status has to say where the customer was sent, the same way "Facturada" says
+what happened rather than just that something did. Fecha de facturación (P)
+stays empty on purpose — nothing was invoiced, so there's no delivery date to
+record.
+
+**Estatus's wording now varies per branch, so nothing downstream can
+string-match it to detect a redirect — detection moved to Archivos enviados
+(T) instead.** `factura-admin-redirect.ts` writes the fixed marker
+`ARCHIVOS_AVISO_SUCURSAL` ("Aviso de sucursal") there; `factura-admin-send.ts`
+only ever writes real PDF/XML filenames to that column, so the marker alone
+tells `factura-admin-list.ts` and `admin.js` a row was redirected, regardless
+of what Estatus actually says. `admin.js`'s badge then just **displays**
+`s.estatus` as-is when a row is redirected — it doesn't recompute the label,
+`sucursalRedirectEstatus()` in `_facturaRows.ts` is the one place that exists.
+
+The admin panel treats a redirected row as resolved the same way it treats
+`Facturada`: excluded from the default "Pendientes" filter, and — Roseta's
+second correction, catching what the first draft missed — given its **own
+filter tab, "Otra sucursal"**, rather than only being reachable through
 "Todas". Moving a redirected row out of Pendientes without somewhere it's
 still easy to find would have made it disappear, not resolve.
 
@@ -282,11 +296,12 @@ along. An old row just starts showing the flag and the button the moment
 this code deploys; nothing writes to the Sheet until she actually clicks
 "Enviar aviso de sucursal" on it, at whatever pace she gets through them.
 
-`admin.js` also drops the heat bar for a `Sucursal incorrecta` row — "hours
-toward delivery" stops meaning anything once there's no invoice coming — and
-reuses the same `notified` flag (both flows write column S) but branches the
-note's wording on `estatus`, since "Enviada al cliente" and "Se avisó al
-cliente" are describing two different things that happen to share a column.
+`admin.js` also drops the heat bar for a redirected row — "hours toward
+delivery" stops meaning anything once there's no invoice coming — and reuses
+the same `notified` flag (both flows write column S) but branches the note's
+wording on `wrongBranch` (the Archivos marker, not `estatus`), since "Enviada
+al cliente" and "Se avisó al cliente" are describing two different things
+that happen to share a column.
 
 `tests/facturaRows.test.ts` reads `index.html` off disk and asserts the
 `#sucursal` option values, `FICO_3C_SUCURSAL`, and `OTHER_BRANCH_CONTACTS`'

@@ -9,12 +9,15 @@
   var HEADER = 'x-roseta-admin';
   var MAX_COMBINED_BYTES = 1.4 * 1024 * 1024; // raw; base64 inflates by ~4/3
 
-  // Mirrors FICO_3C_SUCURSAL / ESTATUS_SUCURSAL_INCORRECTA in
+  // Mirrors FICO_3C_SUCURSAL / ARCHIVOS_AVISO_SUCURSAL in
   // api/roseta/_facturaRows.ts — that copy is canonical (factura-admin-list.ts
   // and factura-admin-redirect.ts both read from it); this one only decides
   // what to show, never what actually gets sent or written to the Sheet.
+  // Note there's no local copy of sucursalRedirectEstatus(): once a row is
+  // redirected, s.estatus already IS the label to show ("Roseta Plaza
+  // Universidad") — admin.js displays it, it doesn't recompute it.
   var FICO_3C_SUCURSAL = 'Fico 3C (Tres Centurias)';
-  var ESTATUS_SUCURSAL_INCORRECTA = 'Sucursal incorrecta';
+  var ARCHIVOS_AVISO_SUCURSAL = 'Aviso de sucursal';
 
   var gateWrap = document.getElementById('ad-gate-wrap');
   var gateForm = document.getElementById('ad-gate-form');
@@ -214,7 +217,12 @@
 
   function itemNode(s) {
     var facturada = s.estatus === 'Facturada';
-    var wrongBranch = s.estatus === ESTATUS_SUCURSAL_INCORRECTA;
+    // Estatus can't be string-matched for this anymore — it's the branch
+    // name now ("Roseta Plaza Universidad"), which varies per row. Archivos
+    // enviados is the marker: factura-admin-send.ts always writes real
+    // PDF/XML filenames there, so this exact string only ever means one
+    // thing.
+    var wrongBranch = s.archivos === ARCHIVOS_AVISO_SUCURSAL;
     // Still worth flagging even though nothing has been sent yet — this is
     // what surfaces the backlog of requests filed before this feature
     // existed: they're already sitting in Pendientes, unmarked, and this is
@@ -261,7 +269,10 @@
     }
     var badge = document.createElement('span');
     badge.className = 'ad-badge ' + (facturada ? 'facturada' : wrongBranch ? 'otra-sucursal' : 'pendiente');
-    badge.textContent = facturada ? 'Facturada' : wrongBranch ? ESTATUS_SUCURSAL_INCORRECTA : 'Pendiente';
+    // wrongBranch shows the Sheet's own Estatus text directly — it already
+    // IS the branch the customer was sent to ("Roseta Plaza Universidad"),
+    // not a value this file recomputes.
+    badge.textContent = facturada ? 'Facturada' : wrongBranch ? s.estatus : 'Pendiente';
     right.appendChild(amount);
     right.appendChild(badge);
 
@@ -333,7 +344,7 @@
       var redirectBox = document.createElement('div');
       redirectBox.className = 'ad-redirect';
       var rh4 = document.createElement('h4');
-      rh4.textContent = wrongBranch ? 'Aviso de sucursal ya enviado' : 'Esta solicitud no es de Fico 3C';
+      rh4.textContent = wrongBranch ? 'Aviso enviado a ' + s.estatus : 'Esta solicitud no es de Fico 3C';
       var rwhy = document.createElement('p');
       rwhy.className = 'ad-why';
       rwhy.textContent = 'Este sistema sólo factura consumos de Fico 3C (Tres Centurias). Avísale al cliente y dale el contacto correcto de ' + s.sucursal + '.';

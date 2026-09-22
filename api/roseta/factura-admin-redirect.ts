@@ -3,13 +3,14 @@ import { Resend } from "resend";
 import { getValues, updateRow } from "./_sheets";
 import { requireAdmin } from "./_adminGuard";
 import {
+  ARCHIVOS_AVISO_SUCURSAL,
   COL,
   cell,
-  ESTATUS_SUCURSAL_INCORRECTA,
   FICO_3C_SUCURSAL,
   findRowNumber,
   OTHER_BRANCH_CONTACTS,
   SOLICITUDES_RANGE,
+  sucursalRedirectEstatus,
 } from "./_facturaRows";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -128,9 +129,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const freshRow = findRowNumber(fresh, folio);
       if (freshRow < 0) throw new Error(`folio ${folio} disappeared from the sheet`);
       // P stays empty on purpose: nothing was invoiced, so there is no
-      // fecha de facturación to record.
-      await updateRow(`Solicitudes!O${freshRow}:P${freshRow}`, [ESTATUS_SUCURSAL_INCORRECTA, ""]);
-      await updateRow(`Solicitudes!S${freshRow}:U${freshRow}`, [notificadoEl, "Aviso de sucursal", resendId]);
+      // fecha de facturación to record. Estatus is the branch itself
+      // ("Roseta Plaza Universidad"), not a generic "wrong" label.
+      await updateRow(`Solicitudes!O${freshRow}:P${freshRow}`, [sucursalRedirectEstatus(sucursal), ""]);
+      await updateRow(`Solicitudes!S${freshRow}:U${freshRow}`, [notificadoEl, ARCHIVOS_AVISO_SUCURSAL, resendId]);
     }
 
     try {
@@ -147,7 +149,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           ok: true,
           email,
           sucursal,
-          warning: `El correo salió correctamente a ${email}, pero no pude marcar ${folio} como "${ESTATUS_SUCURSAL_INCORRECTA}" — márcalo a mano en el Sheet.`,
+          warning: `El correo salió correctamente a ${email}, pero no pude marcar ${folio} como "${sucursalRedirectEstatus(sucursal)}" — márcalo a mano en el Sheet.`,
         });
       }
     }
