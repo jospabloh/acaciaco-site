@@ -1,0 +1,165 @@
+/* ArtisKids product page — page-scoped design, loaded only by
+   apps/artiskids.html after base.css. Everything here is scoped under
+   .ak-page (set on <main>) so it can't leak into the shared nav/footer or
+   any other app page. Palette is sampled directly from the real logo
+   (resources/artiskids_logo.png in jospabloh/artiskids): a "crayon box" of
+   five flat colours on a warm paper ground, instead of the portfolio's
+   default blue --primary. Contrast against both white button-text and each
+   theme's background was checked by hand (WCAG AA) before picking these
+   exact hex values — see the repo's CLAUDE.md for the numbers. */
+
+.ak-page {
+  --primary: #b05619; /* terracotta, darkened from the logo's raw orange (#d9712a) so white button text clears 4.5:1 in both themes */
+  --glow: rgba(176, 86, 25, 0.22);
+
+  --ak-magenta: #ad2566;
+  --ak-magenta-bg: rgba(173, 37, 102, 0.12);
+  --ak-green: #268a63;
+  --ak-green-bg: rgba(38, 138, 99, 0.12);
+  --ak-blue: #1878a0;
+  --ak-blue-bg: rgba(24, 120, 160, 0.12);
+  --ak-primary-bg: rgba(176, 86, 25, 0.12);
+
+  --ak-yellow: #e2b93a; /* decorative only (tape/paper) — never used as text */
+  --ak-paper: #fff7ea;
+  --ak-paper-border: rgba(20, 15, 5, 0.12);
+}
+
+[data-theme="dark"] .ak-page {
+  /* Text-on-background needs a brighter orange than the button fill does —
+     the button's white-on-terracotta contrast doesn't depend on theme, but
+     terracotta-as-text against a near-black page does. Only the two spots
+     that put --primary directly on the page background (the h1 accent word,
+     the pricing badge label) opt into this via the var() fallback below. */
+  --ak-accent-text: #e0985c;
+  --glow: rgba(224, 152, 92, 0.25);
+
+  --ak-magenta: #e57aad;
+  --ak-magenta-bg: rgba(229, 122, 173, 0.16);
+  --ak-green: #4bbd8e;
+  --ak-green-bg: rgba(75, 189, 142, 0.16);
+  --ak-blue: #4fb2df;
+  --ak-blue-bg: rgba(79, 178, 223, 0.16);
+  --ak-primary-bg: rgba(224, 152, 92, 0.16);
+
+  --ak-yellow: #e0c357;
+  --ak-paper: #1a130a;
+  --ak-paper-border: rgba(255, 245, 230, 0.12);
+}
+
+/* Buttons/eyebrow-dot/pricing-card top border already read var(--primary)
+   in base.css, so they pick up the terracotta automatically. .btn-primary's
+   gradient top stop is hardcoded blue in base.css though, so it needs its
+   own override to read orange throughout instead of blue-fading-to-orange. */
+.ak-page .btn-primary {
+  background: linear-gradient(180deg, #d9712a, var(--primary));
+}
+
+.ak-page .hero h1 .accent,
+.ak-page .pricing-badge {
+  color: var(--ak-accent-text, var(--primary));
+}
+.ak-page .pricing-badge {
+  background: var(--ak-primary-bg);
+  border-color: rgba(176, 86, 25, 0.3);
+}
+[data-theme="dark"] .ak-page .pricing-badge {
+  border-color: rgba(224, 152, 92, 0.35);
+}
+
+/* Crayon-cycle the feature icons: each .features-grid restarts the cycle,
+   so "Cómo funciona" (3 cards) and "Funcionalidades" (6 cards) both read as
+   pulled from the same box of four colours instead of one repeated blue.
+   The FAQ section reuses .feature too but has no .icon child, so these
+   rules simply don't match there. */
+.ak-page .feature:nth-of-type(4n + 1) .icon { background: var(--ak-primary-bg); color: var(--primary); }
+.ak-page .feature:nth-of-type(4n + 2) .icon { background: var(--ak-magenta-bg); color: var(--ak-magenta); }
+.ak-page .feature:nth-of-type(4n + 3) .icon { background: var(--ak-green-bg); color: var(--ak-green); }
+.ak-page .feature:nth-of-type(4n) .icon     { background: var(--ak-blue-bg); color: var(--ak-blue); }
+
+/* ---------- Signature hero visual: the corkboard ----------
+   Replaces the generic ".mock" browser-chrome/screenshot treatment (which
+   implies a real screenshot lives inside it — this app has none yet, and
+   CLAUDE.md is explicit that a fake one must never stand in for it). A
+   corkboard of pinned drawings shows the actual product loop — a family's
+   drawings get put up and reacted to — without pretending to be app UI. */
+.ak-board {
+  position: relative;
+  max-width: 480px;
+  width: 100%;
+  margin-inline: auto;
+  padding: 2.25rem 1.75rem;
+  background: var(--ak-paper);
+  border: 1px solid var(--ak-paper-border);
+  border-radius: var(--radius-card);
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.25);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem 1.25rem;
+}
+
+.ak-pin {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 0.85rem 0.6rem;
+  box-shadow: 0 10px 18px -12px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s var(--ease-out);
+}
+.ak-pin:nth-child(1) { transform: rotate(-4deg); }
+.ak-pin:nth-child(2) { transform: rotate(3deg); margin-top: 1.25rem; }
+.ak-pin:nth-child(3) { transform: rotate(2.5deg); margin-top: -0.75rem; }
+.ak-pin:nth-child(4) { transform: rotate(-3deg); }
+.ak-board:hover .ak-pin { transform: rotate(0deg) translateY(-2px); }
+
+.ak-tape {
+  position: absolute;
+  top: -0.6rem;
+  left: 50%;
+  width: 2.6rem;
+  height: 1rem;
+  transform: translateX(-50%) rotate(-2deg);
+  background: var(--ak-yellow);
+  opacity: 0.55;
+  border-radius: 2px;
+}
+
+.ak-pin svg { display: block; width: 100%; height: auto; }
+
+.ak-caption {
+  display: block;
+  margin-top: 0.5rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.01em;
+}
+
+.ak-heart {
+  position: absolute;
+  bottom: -0.5rem;
+  right: -0.4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--primary);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 4px 10px -4px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 720px) {
+  .ak-board { max-width: 360px; padding: 1.5rem 1.25rem; gap: 1.1rem 1rem; }
+  .ak-pin:nth-child(2) { margin-top: 0.9rem; }
+  .ak-pin:nth-child(3) { margin-top: -0.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ak-pin, .ak-board:hover .ak-pin { transition: none; }
+  .ak-board:hover .ak-pin { transform: none; }
+}

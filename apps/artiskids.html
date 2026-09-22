@@ -46,6 +46,7 @@
   </script>
 
   <link rel="stylesheet" href="/styles/base.css" />
+  <link rel="stylesheet" href="/styles/artiskids.css" />
 
   <script type="application/ld+json">
   [
@@ -144,7 +145,7 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="ak-page">
 
     <!-- HERO -->
     <section class="hero section product-hero" aria-labelledby="ak-h1">
@@ -168,20 +169,37 @@
             </div>
           </div>
 
-          <div class="hero-visual reveal" aria-hidden="true">
-            <div class="mock">
-              <div class="mock-head">
-                <div class="dots"><span></span><span></span><span></span></div>
-                <span class="title">ArtisKids · Cápsula familiar</span>
+          <!-- Signature visual: a corkboard of pinned drawings, standing in
+               for a product screenshot that doesn't exist yet. This is
+               deliberately NOT styled as app UI (no browser chrome, no
+               screenshot) — it illustrates the product's actual loop (a
+               family's drawings get put up and reacted to) without ever
+               claiming to be real screenshots. See styles/artiskids.css. -->
+          <div class="hero-visual reveal" data-reveal="scale" aria-hidden="true">
+            <div class="ak-board">
+              <div class="ak-pin">
+                <span class="ak-tape"></span>
+                <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="17" fill="#d9712a"/><g stroke="#d9712a" stroke-width="6" stroke-linecap="round"><line x1="50" y1="18" x2="50" y2="6"/><line x1="50" y1="82" x2="50" y2="94"/><line x1="18" y1="50" x2="6" y2="50"/><line x1="82" y1="50" x2="94" y2="50"/><line x1="27" y1="27" x2="19" y2="19"/><line x1="73" y1="73" x2="81" y2="81"/><line x1="27" y1="73" x2="19" y2="81"/><line x1="73" y1="27" x2="81" y2="19"/></g></svg>
+                <span class="ak-caption">Sofía · hoy</span>
+                <span class="ak-heart">♥ 3</span>
               </div>
-              <!-- No real screenshot exists yet — a light illustrative mock
-                   (four "drawings" as colour blocks) instead of a fake
-                   photo, so it never claims to be product UI. -->
-              <div class="mock-shot" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:20px;background:var(--bg-subtle);">
-                <div style="aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,#fbbf24,#f472b6);"></div>
-                <div style="aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,#60a5fa,#34d399);"></div>
-                <div style="aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,#f472b6,#a78bfa);"></div>
-                <div style="aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,#34d399,#fbbf24);"></div>
+              <div class="ak-pin">
+                <span class="ak-tape"></span>
+                <svg viewBox="0 0 100 100" fill="none" stroke="#1887b4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 48 L50 14 L90 48"/><rect x="22" y="48" width="56" height="38" rx="2"/><rect x="44" y="64" width="13" height="22"/><circle cx="66" cy="60" r="5"/></svg>
+                <span class="ak-caption">Mateo · ayer</span>
+                <span class="ak-heart">♥ 5</span>
+              </div>
+              <div class="ak-pin">
+                <span class="ak-tape"></span>
+                <svg viewBox="0 0 100 100" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M50 92 L50 46" stroke="#39ad7c" stroke-width="6"/><path d="M50 70 Q32 66 28 52" stroke="#39ad7c" stroke-width="5"/><path d="M50 78 Q68 74 72 60" stroke="#39ad7c" stroke-width="5"/><g fill="#ba296e"><circle cx="50" cy="24" r="11"/><circle cx="32" cy="36" r="11"/><circle cx="68" cy="36" r="11"/><circle cx="36" cy="54" r="11"/><circle cx="64" cy="54" r="11"/></g><circle cx="50" cy="40" r="10" fill="#fbde44"/></svg>
+                <span class="ak-caption">Sofía · la semana pasada</span>
+                <span class="ak-heart">♥ 8</span>
+              </div>
+              <div class="ak-pin">
+                <span class="ak-tape"></span>
+                <svg viewBox="0 0 100 70" fill="none" stroke-linecap="round"><path d="M8 62 A42 42 0 0 1 92 62" stroke="#d9712a" stroke-width="6"/><path d="M18 62 A32 32 0 0 1 82 62" stroke="#1887b4" stroke-width="6"/><path d="M28 62 A22 22 0 0 1 72 62" stroke="#39ad7c" stroke-width="6"/></svg>
+                <span class="ak-caption">Mateo · hoy</span>
+                <span class="ak-heart">♥ 2</span>
               </div>
             </div>
           </div>

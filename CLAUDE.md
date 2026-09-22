@@ -559,3 +559,58 @@ same `<img>` pattern every other app's page and card already use. No wide
 lockup/screenshot exists, so `og:image`/`twitter:image` still fall back to the
 portfolio-wide `acacia-og.png` rather than stretching the square into a
 1200×630 card.
+
+## ArtisKids marketing page: a distinct identity, not the shared template (2026-09-22)
+
+Every product page shares the portfolio's nav, footer, type system (Space
+Grotesk + DM Sans) and `--primary` blue — that's the studio's brand, fixed on
+purpose, not a per-app choice. But `apps/artiskids.html` had been using the
+*same generic hero-mock-plus-blue-CTA layout* as every other app, right down
+to reusing `.mock`'s browser-chrome dots for a product with no screenshot.
+Nothing about it said "children's drawings" instead of "SaaS dashboard."
+
+`styles/artiskids.css` (new, linked only from this one page after
+`base.css`) scopes a page-specific identity under `.ak-page` (the class on
+`<main>`), without touching `base.css` or any other app's page:
+
+- **Palette sampled directly from the real logo** — a terracotta `--primary`
+  (`#b05619`, darkened from the logo's raw orange `#d9712a` so white button
+  text still clears WCAG AA 4.5:1 in both themes) plus a four-colour "crayon
+  box" (magenta/green/blue/orange) cycled onto the feature-card icons via
+  `:nth-of-type(4n±k)` — each `.features-grid` restarts the cycle, so the
+  3-card "Cómo funciona" grid and the 6-card "Funcionalidades" grid both read
+  as pulled from the same box instead of one repeated blue. Contrast was
+  checked by hand for both text-on-background and white-on-button uses in
+  both themes before picking the hex values (the numbers are in the
+  stylesheet's own comments) — dark mode needed a *second*, brighter orange
+  (`--ak-accent-text`) for the two places the colour sits directly on page
+  background as text (the h1 accent word, the pricing badge), since the
+  darker terracotta that works for white-on-button contrast doesn't clear
+  AA against a near-black page.
+- **Signature element: a corkboard of pinned drawings**, replacing the old
+  `.mock` browser-chrome hero visual. Four small hand-drawn-style SVGs (sun,
+  house, flower, rainbow — thick rounded strokes, flat crayon colours, no
+  screenshot pretense) sit taped and tilted on a warm paper background, each
+  with a reaction-heart chip and a family caption ("Sofía · hoy"). This is
+  deliberately NOT styled as app UI — CLAUDE.md's own rule from the previous
+  pass is that a fake screenshot must never stand in for a real one, and a
+  browser-chrome mock implies a screenshot exists. The corkboard shows the
+  product's actual loop (a family's drawings get put up and reacted to)
+  honestly, as an illustration.
+- `.btn-mp` (Mercado Pago's own brand blue `#009EE3`, used for every app's
+  pricing-card CTA regardless of that button's actual label text) was
+  deliberately left alone — it's a portfolio-wide convention marking "this is
+  the purchase-path button," not a stray blue that leaked past the new
+  orange scope.
+
+Verified: `npm test` (111/111, unchanged), HTML parse + JSON-LD validity on
+the touched page, and Playwright screenshots (Chromium, light + dark +
+mobile-390 + desktop-1400) against a local static server — the only way to
+actually see rendered output in this sandbox, since `test:smoke` needs a
+live deploy this proxy can't reach. One screenshot-methodology trap worth
+recording: a naive full-page capture showed large blank bands where the
+`.reveal` (scroll-triggered fade-in) sections should be — not a real bug,
+just the IntersectionObserver never firing during a scripted `scrollTo` with
+short waits. Forcing `.reveal { opacity: 1 !important }` before capture
+confirmed the content was always there; a real visitor scrolling normally
+never sees this.
