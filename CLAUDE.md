@@ -547,3 +547,15 @@ extracts the `<option value="...">` values, and asserts that set equals
 `[...KNOWN_APPS, "__idea__"]`. Add or rename an app in one place and forget
 the other, and `npm test` fails instead of shipping a dropdown option the
 backend silently rejects (or a `KNOWN_APPS` entry nothing can ever select).
+
+## ArtisKids logo landed (2026-09-22)
+
+`assets/artiskids-logo.jpg` (origami-crane mark, 1024×1024, JPEG despite the
+source file at `jospabloh/artiskids`'s `resources/artiskids_logo.png` having a
+`.png` name — copied with the extension matching its real content). Replaces
+the inline-SVG placeholder that stood in for it in `apps/artiskids.html`'s
+`product-mark` and the homepage `#apps` grid's `.app-card` — both now use the
+same `<img>` pattern every other app's page and card already use. No wide
+lockup/screenshot exists, so `og:image`/`twitter:image` still fall back to the
+portfolio-wide `acacia-og.png` rather than stretching the square into a
+1200×630 card.
