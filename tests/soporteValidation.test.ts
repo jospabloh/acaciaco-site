@@ -57,8 +57,8 @@ test("rejects a real app with neither soporte nor mejora as type", () => {
   assert.equal(r.ok, false);
 });
 
-test("KNOWN_APPS has the 9 portfolio apps, matching the sales lead form's dropdown text", () => {
-  assert.deepEqual(KNOWN_APPS, ["Puntos+", "FlowFin", "StockFlow", "Rumbo", "LIUMA", "CateqHub", "RADAR", "CtrlHQ", "KitchOps"]);
+test("KNOWN_APPS has the 10 portfolio apps, matching the sales lead form's dropdown text", () => {
+  assert.deepEqual(KNOWN_APPS, ["Puntos+", "FlowFin", "StockFlow", "Rumbo", "LIUMA", "CateqHub", "RADAR", "CtrlHQ", "KitchOps", "ArtisKids"]);
 });
 
 // This is the real gate behind the "these must stay in sync" comments in

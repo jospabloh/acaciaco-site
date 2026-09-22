@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ArtisKids · La cápsula del tiempo de los dibujos de tus hijos — ACACIA</title>
+  <meta name="description" content="Sube, guarda y comenta en familia cada dibujo de tus hijos — para siempre. Cada familia tiene su propia cápsula privada, con roles y permisos para papás, mamás y familiares. Prueba ArtisKids gratis 30 días." />
+  <link rel="canonical" href="https://acaciaco.com.mx/apps/artiskids" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_MX" />
+  <meta property="og:url" content="https://acaciaco.com.mx/apps/artiskids" />
+  <meta property="og:title" content="ArtisKids · La cápsula del tiempo de los dibujos de tus hijos — ACACIA" />
+  <meta property="og:description" content="Sube, guarda y comenta en familia cada dibujo de tus hijos — para siempre. Cada familia tiene su propia cápsula privada." />
+  <!-- No ArtisKids-specific lockup/screenshot exists yet (its own CLAUDE.md
+       names this as an open gap, same as the favicon Phase 1 left off rather
+       than point at a placeholder) — the portfolio-wide OG image stands in
+       until real brand assets exist, rather than a link that would 404. -->
+  <meta property="og:image" content="https://acaciaco.com.mx/assets/acacia-og.png" />
+  <meta property="og:site_name" content="ACACIA Consultoría" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="ArtisKids · La cápsula del tiempo de los dibujos de tus hijos — ACACIA" />
+  <meta name="twitter:description" content="Sube, guarda y comenta en familia cada dibujo de tus hijos — para siempre." />
+  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/acacia-og.png" />
+
+  <link rel="icon" href="/assets/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192.png" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <script>
+    (function () {
+      try {
+        var p = localStorage.getItem('acacia-theme');
+        if (p !== 'light' && p !== 'dark') p = 'system';
+        var d = p === 'dark' || (p === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.setAttribute('data-theme', d ? 'dark' : 'light');
+        document.documentElement.style.colorScheme = d ? 'dark' : 'light';
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/styles/base.css" />
+
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "ArtisKids",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "MXN",
+        "price": "0",
+        "availability": "https://schema.org/PreOrder",
+        "description": "Prueba gratis 30 días. Plan de pago por Mercado Pago, precio por confirmar — ArtisKids está en desarrollo."
+      },
+      "provider": {
+        "@type": "Organization",
+        "name": "ACACIA Consultoría",
+        "url": "https://acaciaco.com.mx"
+      },
+      "description": "Cápsula del tiempo familiar para los dibujos de los niños: subir, comentar y reaccionar en familia, con roles y permisos por miembro."
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://acaciaco.com.mx/" },
+        { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://acaciaco.com.mx/#apps" },
+        { "@type": "ListItem", "position": 3, "name": "ArtisKids", "item": "https://acaciaco.com.mx/apps/artiskids" }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Los niños tienen su propia cuenta?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Solo los adultos de la familia inician sesión — suben y gestionan los dibujos en nombre de sus hijos. Es una decisión de diseño, no una limitación." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Otra familia puede ver nuestros dibujos?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Cada familia tiene su propia cápsula, separada de las demás. Nada se comparte entre familias." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo se une el resto de la familia?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Quien crea la familia comparte un código de invitación por WhatsApp. Cualquier adulto con el código se une como miembro." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Puedo sacar mis dibujos si dejo de usarlo?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Sí. Desde Cuenta exportas los datos y las imágenes de tu familia cuando quieras, sin pedirlo por soporte." }
+        }
+      ]
+    }
+  ]
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+  <!-- NAV -->
+  <header class="site-nav" role="banner">
+    <div class="nav-inner">
+      <a href="/" class="brand" aria-label="ACACIA inicio">
+        <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+        ACACIA
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links" role="list">
+          <li><a href="/#como-trabajamos">Soluciones</a></li>
+          <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="/#apps">Apps</a></li>
+          <li><a href="/servicios">Servicios</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-tools">
+        <div class="currency-toggle" role="group" aria-label="Moneda">
+          <button data-currency="MXN" aria-pressed="true" class="active">MXN</button>
+          <button data-currency="USD" aria-pressed="false">USD</button>
+        </div>
+
+        <a href="/contacto" class="btn btn-primary btn-sm nav-cta">Iniciar</a>
+
+        <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- HERO -->
+    <section class="hero section product-hero" aria-labelledby="ak-h1">
+      <div class="hero-grain" aria-hidden="true"></div>
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-copy reveal">
+            <div class="product-mark">
+              <!-- No ArtisKids-specific logo file exists yet — see the OG
+                   image comment in <head>. Inline icon, same pattern RADAR's
+                   card uses on the homepage, rather than a placeholder image. -->
+              <svg width="56" height="56" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="color:#f59e0b">
+                <rect x="7" y="6" width="34" height="30" rx="4" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+                <path d="M7 30 L17 20 L24 27 L32 18 L41 27 V32 A4 4 0 0 1 37 36 H11 A4 4 0 0 1 7 32 Z" fill="currentColor" opacity="0.35"/>
+                <circle cx="17" cy="14" r="3.2" fill="currentColor"/>
+                <path d="M14 44 L24 40 L34 44" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              </svg>
+              <span class="name">ArtisKids</span>
+            </div>
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> En desarrollo</span>
+            <h1 id="ak-h1">Los dibujos de tus hijos, <span class="accent">guardados para siempre</span> — no perdidos en un chat.</h1>
+            <p class="lead">Cada dibujo que hace tu hijo o hija termina en un cajón, se dobla, o se pierde en las fotos del celular. ArtisKids es la cápsula del tiempo de tu familia: sube la foto, y todos — papás, mamás, abuelos — la comentan y la disfrutan, sin que se pierda nunca.</p>
+            <div class="hero-ctas">
+              <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20ArtisKids%20%E2%80%94%20av%C3%ADsenme%20cuando%20est%C3%A9%20disponible" class="btn btn-primary" rel="noopener noreferrer" target="_blank">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.522 5.851L0 24l6.335-1.501A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.002-1.366l-.36-.214-3.757.89.936-3.657-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
+                Avísenme cuando esté listo
+              </a>
+              <a href="#planes" class="btn btn-ghost">Ver detalles →</a>
+            </div>
+          </div>
+
+          <div class="hero-visual reveal" aria-hidden="true">
+            <div class="mock">
+              <div class="mock-head">
+                <div class="dots"><span></span><span></span><span></span></div>
+                <span class="title">ArtisKids · Cápsula familiar</span>
+              </div>
+              <!-- No real screenshot exists yet — a light illustrative mock
+                   (four "drawings" as colour blocks) instead of a fake
+                   photo, so it never claims to be product UI. -->
+              <div class="mock-shot" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:20px;background:var(--bg-subtle);">
+                <div style="aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,#fbbf24,#f472b6);"></div>
+                <div style="aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,#60a5fa,#34d399);"></div>
+                <div style="aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,#f472b6,#a78bfa);"></div>
+                <div style="aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,#34d399,#fbbf24);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAMILY -->
+    <section class="section" id="familia" aria-labelledby="ak-fam-h2" style="background: var(--bg-subtle);">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Cómo funciona</span>
+          <h2 id="ak-fam-h2">Una cápsula por familia — no una app compartida con desconocidos.</h2>
+          <p>Cada familia crea su propia cápsula privada. Nada se cruza con la de otra familia: es tuya, la comparten quienes tú invites y nadie más.</p>
+        </div>
+        <div class="features-grid">
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
+            <h3>Sube la foto del dibujo</h3>
+            <p>Desde el celular o la compu, en el momento — antes de que se doble, se manche o se pierda entre los cuadernos.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+            <h3>La familia comenta y reacciona</h3>
+            <p>Abuelos, tíos, papás — cada quien deja su comentario o su reacción, sin necesidad de un grupo de WhatsApp que se llena de todo lo demás.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></span>
+            <h3>Solo tu familia lo ve</h3>
+            <p>Te unes con un código de invitación que comparte quien creó la cápsula, por WhatsApp. Nadie más entra sin ese código.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section" id="features" aria-labelledby="ak-feat-h2">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Funcionalidades</span>
+          <h2 id="ak-feat-h2">Una línea de tiempo de todo lo que han dibujado.</h2>
+          <p>Organizada, buscable, y ahí el día que la quieras volver a ver.</p>
+        </div>
+        <div class="features-grid">
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+            <h3>Línea de tiempo</h3>
+            <p>Cada dibujo con su fecha, su creador y un "un día como hoy" que recuerda lo que dibujaron en esta misma fecha, años atrás.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+            <h3>Comentarios y reacciones</h3>
+            <p>La familia deja su cariño en cada dibujo — sin cuenta propia para los niños, ellos no necesitan iniciar sesión para que su arte se guarde.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+            <h3>Catálogo de hijos y familia</h3>
+            <p>Da de alta a cada hijo, padre y familiar una vez — después solo eliges de la lista al subir o comentar un dibujo.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg></span>
+            <h3>Administrador y miembros</h3>
+            <p>Quien crea la familia gestiona a los miembros y el plan; cualquier miembro sube dibujos, comenta y reacciona.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="13" y2="13"/></svg></span>
+            <h3>Soporte para tu familia</h3>
+            <p>¿Algo no funciona o tienes una idea? Escríbenos desde la app o por WhatsApp — te respondemos directo.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
+            <h3>Tus datos, siempre tuyos</h3>
+            <p>Exporta los datos y las imágenes de tu familia cuando quieras, sin pedirlo por soporte.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="section" id="planes" aria-labelledby="ak-price-h2" style="background: var(--bg-subtle);">
+      <div class="container">
+        <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Plan ArtisKids</span>
+          <h2 id="ak-price-h2">Empieza gratis 30 días. Sin tarjeta.</h2>
+          <p class="section-sub">ArtisKids está en desarrollo — el precio del plan de pago todavía no está definido. Al terminar la prueba, se activa un plan mensual por Mercado Pago; escríbenos y te avisamos en cuanto esté listo.</p>
+        </div>
+        <div class="pricing-grid" style="max-width:420px; margin-inline:auto;">
+          <div class="reveal pricing-card featured">
+            <div class="pricing-badge">Prueba gratis</div>
+            <h3>ArtisKids</h3>
+            <div class="pricing-price"><span>30 días</span> <span class="pricing-unit">gratis, sin tarjeta</span></div>
+            <p class="pricing-desc">Cápsula completa para una familia: dibujos, comentarios, reacciones y catálogo, sin límite durante la prueba.</p>
+            <ul class="pricing-features">
+              <li>Una familia, miembros sin límite</li>
+              <li>Dibujos, comentarios y reacciones</li>
+              <li>Catálogo de hijos y familiares</li>
+              <li>Soporte por WhatsApp y correo</li>
+              <li>Exportación de tus datos</li>
+              <li>Después: plan mensual por Mercado Pago (precio por confirmar)</li>
+            </ul>
+            <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20ArtisKids" target="_blank" rel="noopener" class="btn-mp">Avísenme cuando esté listo →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20ArtisKids" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq" aria-labelledby="ak-faq-h2">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Preguntas</span>
+          <h2 id="ak-faq-h2">Lo que nos preguntan antes de empezar.</h2>
+        </div>
+        <div class="features-grid">
+          <article class="feature reveal">
+            <h3>¿Los niños tienen su propia cuenta?</h3>
+            <p>No. Solo los adultos de la familia inician sesión — suben y gestionan los dibujos en nombre de sus hijos. Es una decisión de diseño, no una limitación.</p>
+          </article>
+          <article class="feature reveal">
+            <h3>¿Otra familia puede ver nuestros dibujos?</h3>
+            <p>No. Cada familia tiene su propia cápsula, separada de las demás. Nada se comparte entre familias.</p>
+          </article>
+          <article class="feature reveal">
+            <h3>¿Cómo se une el resto de la familia?</h3>
+            <p>Quien crea la familia comparte un código de invitación por WhatsApp. Cualquier adulto con el código se une como miembro.</p>
+          </article>
+          <article class="feature reveal">
+            <h3>¿Puedo sacar mis dibujos si dejo de usarlo?</h3>
+            <p>Sí. Desde Cuenta exportas los datos y las imágenes de tu familia cuando quieras, sin pedirlo por soporte.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACCESS REQUEST -->
+    <section class="section" id="solicitar" aria-labelledby="ak-req-h2">
+      <div class="container">
+        <div class="request-card reveal">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Empezar</span>
+          <h2 id="ak-req-h2">Sé de los primeros en probar ArtisKids</h2>
+          <p class="body">Te avisamos por WhatsApp en cuanto esté lista para el público, y te ayudamos a crear la cápsula de tu familia desde el primer día.</p>
+          <ul class="request-list">
+            <li>Aviso directo cuando esté disponible</li>
+            <li>Ayuda para crear la cápsula de tu familia</li>
+            <li>30 días de prueba gratis, sin tarjeta</li>
+            <li>Soporte directo con el equipo de ACACIA</li>
+          </ul>
+          <a href="https://wa.me/524498958291?text=Hola,%20quiero%20ser%20de%20los%20primeros%20en%20probar%20ArtisKids" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Avísenme por WhatsApp →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA STRIP -->
+    <section class="cta-section section" id="contacto" aria-labelledby="ak-cta-h2">
+      <div class="container">
+        <div class="reveal">
+          <h2 id="ak-cta-h2">¿Listo para no perder otro dibujo?</h2>
+          <p>Te acompañamos a crear la cápsula de tu familia desde el primer día.</p>
+          <div class="btns">
+            <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20ArtisKids%20gratis" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Hablar por WhatsApp</a>
+            <a href="mailto:contacto@acaciaco.com.mx" class="btn btn-ghost">Escribir por correo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-grid">
+      <div class="col-brand">
+        <a href="/" class="brand" aria-label="ACACIA inicio">
+          <img src="/assets/acacia-logo.jpg" alt="ACACIA" width="32" height="32" />
+          ACACIA
+        </a>
+        <p>Tecnología, consultoría y soluciones digitales para operaciones que buscan claridad y crecimiento.</p>
+      </div>
+      <div>
+        <h4>Apps</h4>
+        <ul>
+          <li><a href="/apps/stockflow">StockFlow</a></li>
+          <li><a href="/apps/flowfin">FlowFin</a></li>
+          <li><a href="/apps/puntos-plus">Puntos+</a></li>
+          <li><a href="/apps/liuma">LIUMA</a></li>
+          <li><a href="/apps/rumbo">Rumbo</a></li>
+          <li><a href="/apps/cateqhub">CateqHub</a></li>
+          <li><a href="/apps/radar">RADAR</a></li>
+          <li><a href="/apps/ctrlhq">CtrlHQ</a></li>
+          <li><a href="/apps/kitchops">KitchOps</a></li>
+          <li><a href="/apps/artiskids">ArtisKids</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="/servicios">Consultoría</a></li>
+          <li><a href="/servicios">Implementación</a></li>
+          <li><a href="/servicios">Desarrollo</a></li>
+          <li><a href="/servicios">Precios</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>ACACIA</h4>
+        <ul>
+          <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
+          <li><a href="/soporte">Soporte</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+          <li><a href="/trabaja-con-nosotros">Trabaja con nosotros</a></li>
+          <li><a href="/legal/privacidad">Privacidad</a></li>
+          <li><a href="/legal/terminos">Términos</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 ACACIA · Todos los derechos reservados</span>
+      <a href="mailto:contacto@acaciaco.com.mx">contacto@acaciaco.com.mx</a>
+    </div>
+  </footer>
+
+  <!-- COOKIE BANNER -->
+  <div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Aviso de cookies" aria-live="polite">
+    <h4>Cookies y privacidad</h4>
+    <p>Usamos cookies para mejorar tu experiencia. Consulta nuestra <a href="/legal/privacidad">política de privacidad</a>.</p>
+    <div class="actions">
+      <button class="btn btn-primary btn-sm" data-cookies="all">Aceptar</button>
+      <button class="btn btn-ghost btn-sm" data-cookies="essential">Solo esenciales</button>
+    </div>
+  </div>
+
+  <script src="/scripts/shared.js"></script>
+  <script src="/scripts/analytics.js" defer></script>
+  <script defer src="/scripts/theme-switcher.js"></script>
+</body>
+</html>

@@ -112,7 +112,7 @@
         <div class="reveal" style="max-width:640px;margin:0 auto;">
           <form id="soporte-form" style="display:grid;gap:.9rem;">
             <label for="sop-app">App</label>
-            <!-- These 9 <option value> strings must stay identical to KNOWN_APPS
+            <!-- These 10 <option value> strings must stay identical to KNOWN_APPS
                  in api/_soporteValidation.ts (plus the "__idea__" sentinel below,
                  which is not in KNOWN_APPS). tests/soporteValidation.test.ts
                  reads this file and fails the build if they diverge. -->
@@ -127,6 +127,7 @@
               <option value="RADAR">RADAR</option>
               <option value="CtrlHQ">CtrlHQ</option>
               <option value="KitchOps">KitchOps</option>
+              <option value="ArtisKids">ArtisKids</option>
               <option value="__idea__">Otra idea / app nueva</option>
             </select>
 
@@ -239,6 +240,7 @@
           <li><a href="/apps/radar">RADAR</a></li>
           <li><a href="/apps/ctrlhq">CtrlHQ</a></li>
           <li><a href="/apps/kitchops">KitchOps</a></li>
+          <li><a href="/apps/artiskids">ArtisKids</a></li>
         </ul>
       </div>
       <div>
