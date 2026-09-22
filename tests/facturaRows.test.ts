@@ -1,17 +1,21 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import {
   businessHoursElapsed,
   COL,
   cell,
+  ESTATUS_SUCURSAL_INCORRECTA,
   fallbackFacturacionTimestamp,
   fallbackSolicitudTimestamp,
   FACTURA_BUSINESS_HOURS_PER_DAY,
   FACTURA_SLA_BUSINESS_DAYS,
   FACTURA_SLA_BUSINESS_HOURS,
+  FICO_3C_SUCURSAL,
   fmtMoney,
   isWithinDays,
   NOTIFY_EMAILS,
+  OTHER_BRANCH_CONTACTS,
   plainAmount,
   publicSolicitud,
   findRowNumber,
@@ -206,4 +210,41 @@ test("publicSolicitud no expone el ID de Resend", () => {
   const blob = JSON.stringify(publicSolicitud(r));
   assert.equal(blob.includes("re_secreto_123"), false);
   assert.equal("resend_url" in publicSolicitud(r), false);
+});
+
+test("FICO_3C_SUCURSAL es la única sucursal que este sistema factura", () => {
+  assert.equal(FICO_3C_SUCURSAL, "Fico 3C (Tres Centurias)");
+});
+
+test("OTHER_BRANCH_CONTACTS trae los dos contactos en formato internacional", () => {
+  assert.deepEqual(OTHER_BRANCH_CONTACTS, {
+    "Plaza Universidad": "+52 449 386 2108",
+    UAA: "+52 449 305 3349",
+  });
+});
+
+test("OTHER_BRANCH_CONTACTS no incluye Fico 3C ni Otra", () => {
+  assert.equal(FICO_3C_SUCURSAL in OTHER_BRANCH_CONTACTS, false);
+  assert.equal("Otra" in OTHER_BRANCH_CONTACTS, false);
+});
+
+test("ESTATUS_SUCURSAL_INCORRECTA es el estatus terminal que usa el redirect", () => {
+  assert.equal(ESTATUS_SUCURSAL_INCORRECTA, "Sucursal incorrecta");
+});
+
+// Same guarantee tests/facturaValidation.test.ts gives the régimen/uso
+// dropdowns: an option the redirect can't resolve to a real contact — or a
+// contact whose branch name doesn't match any option — can't silently drift
+// apart from what the customer actually sees.
+test("las sucursales del select y OTHER_BRANCH_CONTACTS no se separaron", () => {
+  const html = readFileSync(new URL("../roseta/factura/index.html", import.meta.url), "utf8");
+  const select = /<select[^>]*id="sucursal"[^>]*>([\s\S]*?)<\/select>/.exec(html);
+  assert.ok(select, `no <select id="sucursal"> in roseta/factura/index.html`);
+  const options = [...select[1].matchAll(/<option value="([^"]*)"/g)].map((m) => m[1]).filter(Boolean);
+
+  assert.deepEqual(options.sort(), ["Fico 3C (Tres Centurias)", "Otra", "Plaza Universidad", "UAA"]);
+  assert.ok(options.includes(FICO_3C_SUCURSAL));
+  for (const sucursal of Object.keys(OTHER_BRANCH_CONTACTS)) {
+    assert.ok(options.includes(sucursal), `OTHER_BRANCH_CONTACTS tiene "${sucursal}", que no es una opción del select`);
+  }
 });

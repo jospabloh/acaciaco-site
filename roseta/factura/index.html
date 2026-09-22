@@ -96,6 +96,13 @@
     .rf-regimen-hint.warn{color:#8A5A00;}
     .rf-hint.warn{color:#8A5A00;}
 
+    /* Shown when Sucursal isn't Fico 3C — this system only invoices that
+       branch, so the select's own option text already says "no disponible
+       en este sistema"; this hint is where the actual phone number to call
+       instead lives, once a branch is picked. */
+    .rf-sucursal-hint{font-size:.78rem;color:#8A5A00;font-weight:600;display:none;margin-top:.4rem;}
+    .rf-sucursal-hint.show{display:block;}
+
     /* Marks the exact input factura-submit rejected, so the customer isn't
        hunting for it across two fieldsets. */
     .rf-field input.rf-invalid, .rf-field select.rf-invalid{border-color:#c33;box-shadow:0 0 0 3px rgba(204,51,51,.15);}
@@ -116,7 +123,8 @@
        so the review step's error/warning text stays readable in dark mode. */
     [data-theme="dark"] .rf-extract-status.warn,
     [data-theme="dark"] .rf-regimen-hint.warn,
-    [data-theme="dark"] .rf-hint.warn{color:#E0A526;}
+    [data-theme="dark"] .rf-hint.warn,
+    [data-theme="dark"] .rf-sucursal-hint{color:#E0A526;}
     [data-theme="dark"] #rf-status.error,
     [data-theme="dark"] #rf-review-status.error{color:#F27272;}
 
@@ -314,11 +322,12 @@
                   <label for="sucursal">Sucursal <span class="req">*</span></label>
                   <select id="sucursal" name="sucursal" required>
                     <option value="">Selecciona…</option>
-                    <option>Fico 3C (Tres Centurias)</option>
-                    <option>Plaza Universidad</option>
-                    <option>UAA</option>
-                    <option>Otra</option>
+                    <option value="Fico 3C (Tres Centurias)">Fico 3C (Tres Centurias)</option>
+                    <option value="Plaza Universidad">Plaza Universidad — no disponible en este sistema</option>
+                    <option value="UAA">UAA — no disponible en este sistema</option>
+                    <option value="Otra">Otra sucursal — no disponible en este sistema</option>
                   </select>
+                  <span class="rf-sucursal-hint" id="sucursal-hint"></span>
                 </div>
                 <div class="rf-field">
                   <label for="fecha">Fecha de consumo <span class="req">*</span></label>

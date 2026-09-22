@@ -76,6 +76,7 @@
     /* Worklist */
     .ad-item{border:1px solid var(--border);border-left:3px solid var(--pend-rule);border-radius:.9rem;margin-bottom:.8rem;overflow:hidden;}
     .ad-item.facturada{border-left-color:var(--done-rule);}
+    .ad-item.otra-sucursal{border-left-color:var(--border);}
     .ad-item:last-child{margin-bottom:0;}
     .ad-head{width:100%;display:grid;grid-template-columns:1fr auto;gap:.4rem 1rem;align-items:center;
       padding:.95rem 1.1rem;background:transparent;border:0;font:inherit;text-align:left;cursor:pointer;color:var(--text);}
@@ -102,6 +103,11 @@
     .ad-badge{display:inline-flex;padding:.25rem .75rem;border-radius:var(--radius-pill);font-size:.72rem;font-weight:700;white-space:nowrap;}
     .ad-badge.pendiente{background:var(--pend-bg);color:var(--pend-fg);}
     .ad-badge.facturada{background:var(--done-bg);color:var(--done-fg);}
+    .ad-badge.otra-sucursal{background:var(--bg-subtle);color:var(--text-muted);}
+    /* Outlined, not filled — a second pill next to "Pendiente" that used
+       the same solid amber would just look like a duplicate badge. This is
+       a note about the row, not another status. */
+    .ad-badge-flag{background:transparent;border:1px solid var(--border);color:var(--text-muted);}
 
     .ad-body{display:none;padding:0 1.1rem 1.2rem;border-top:1px dashed var(--border);}
     .ad-item.open .ad-body{display:block;}
@@ -131,6 +137,12 @@
     .ad-upload{margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--border);}
     .ad-upload h4{margin:0 0 .2rem;font-size:.95rem;}
     .ad-upload p.ad-why{font-size:.8rem;color:var(--text-muted);margin:0 0 .9rem;}
+
+    /* Same rhythm as .ad-upload — they sit stacked, redirect above upload,
+       when a request needs both options considered. */
+    .ad-redirect{margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--border);}
+    .ad-redirect h4{margin:0 0 .2rem;font-size:.95rem;}
+    .ad-redirect p.ad-why{font-size:.8rem;color:var(--text-muted);margin:0 0 .9rem;}
     .ad-drops{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
     @media(max-width:560px){.ad-drops{grid-template-columns:1fr;}}
     .ad-drop{position:relative;border:1.5px dashed var(--border);border-radius:.8rem;padding:1rem .9rem;text-align:center;cursor:pointer;transition:border-color .15s ease,background .15s ease;}
@@ -185,6 +197,7 @@
             <div class="ad-filters" role="group" aria-label="Filtrar solicitudes">
               <button class="ad-filter" type="button" data-filtro="pendientes" aria-pressed="true">Pendientes</button>
               <button class="ad-filter" type="button" data-filtro="facturadas" aria-pressed="false">Facturadas</button>
+              <button class="ad-filter" type="button" data-filtro="otra_sucursal" aria-pressed="false">Otra sucursal</button>
               <button class="ad-filter" type="button" data-filtro="todas" aria-pressed="false">Todas</button>
             </div>
           </div>

@@ -5,6 +5,7 @@ import {
   businessHoursElapsed,
   COL,
   cell,
+  ESTATUS_SUCURSAL_INCORRECTA,
   fallbackFacturacionTimestamp,
   fallbackSolicitudTimestamp,
   FACTURA_SLA_BUSINESS_HOURS,
@@ -91,8 +92,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       .filter((row) => {
         const estatus = (cell(row, COL.ESTATUS) || "Pendiente").toLowerCase();
         if (filtro === "facturadas") return estatus === "facturada";
+        if (filtro === "otra_sucursal") return estatus === ESTATUS_SUCURSAL_INCORRECTA.toLowerCase();
         if (filtro === "todas") return true;
-        return estatus !== "facturada";
+        // "Pendientes" excludes both terminal states — a request already
+        // redirected to its real branch is exactly as done as one already
+        // invoiced, and clutter-free is the whole point of this filter.
+        return estatus !== "facturada" && estatus !== ESTATUS_SUCURSAL_INCORRECTA.toLowerCase();
       })
       .map((row) => adminSolicitud(row, now))
       .reverse(); // rows are appended chronologically; newest first
