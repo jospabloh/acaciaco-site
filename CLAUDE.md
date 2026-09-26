@@ -392,29 +392,27 @@ fix that only exists in `roseta/factura/*.js` is a fix a cached browser can
 opt out of.** Anything that decides whether a customer's request is acceptable
 belongs under `api/`, where the next deploy is the only version there is.
 
-## `freeware/plink-fx/` es la copia canónica de Plink FX (2026-08-22)
+## `freeware/plink-fx/` es la única copia de Plink FX (2026-09-26)
 
-Plink FX existe dos veces: aquí y en el repo `jospabloh/plink_fx`, que es su
-build PWA independiente. **La de aquí es la que la gente carga y la que manda.**
-
-Tres archivos tienen que quedar idénticos en los dos lados — `app.jsx`,
-`tweaks-panel.jsx` y el bloque `<style>` de `index.html`. El resto de
-`index.html` es distinto a propósito: aquí lleva el SEO en español, el JSON-LD,
-el artículo y la nav del sitio; allá es una PWA en inglés con su propio
-manifest.
-
-Se dejaron divergir durante meses y las dos perdieron cosas — el detalle está en
-el CLAUDE.md de `plink_fx`, incluido un `ReferenceError` de TDZ que vivía en la
-copia servida y que `@babel/standalone` escondía al compilar `const` a `var`.
-**Haz el cambio aquí primero**, cópialo al otro repo y corre su `npm run bundle`;
-`npm run check:mirror` allá compara contra lo que este sitio realmente sirve y
-falla si se separan.
+Antes existía un espejo en el repo `jospabloh/plink_fx` (build PWA aparte) que
+había que mantener idéntico a mano. **Ese repo ya no existe**: lo que vive aquí
+es la única copia, sin nada que sincronizar. Si ves en el historial instrucciones
+de "cópialo al otro repo" o `check:mirror`, ya no aplican.
 
 Los `.jsx` se sirven tal cual y los transpila `@babel/standalone` en el
-navegador, así que son archivos públicos: eso es justo lo que le permite al
-chequeo de espejo leerlos. jsPDF ya no viene de unpkg — está vendorizado en
-`assets/vendor/jspdf@2.5.2/` y se carga bajo demanda; la página declara dónde
-está en `<html data-jspdf="…">`.
+navegador. Ojo con eso: compila `const` a `var`, así que un `ReferenceError` de
+TDZ puede quedar escondido en local y explotar en otro motor — declara antes de
+usar. jsPDF está vendorizado en `assets/vendor/jspdf@2.5.2/` y se carga bajo
+demanda; la página declara dónde está en `<html data-jspdf="…">`.
+
+**Las tablas bajo las tarjetas (2026-09-26)** reemplazaron "Qué compra,
+localmente" (tacos, hoteles, canopy — sólo existía para USD/MXN/CRC y no ayudaba
+a decidir nada). "Cuánto recibes realmente" aplica a cada moneda los costos
+típicos de `CHANNELS` en `app.jsx` (interbancario 0 %, app 0.6 %, tarjeta 3 %,
+banco 5 %, aeropuerto 10 %): son rangos publicados aproximados, **no
+cotizaciones**, y la copy lo dice; si se cambian, que siga diciéndolo. "Tabla
+rápida de precios" usa `priceSteps()`, escalado para que el paso menor sea
+~1 USD en la moneda destino. Las dos se prenden/apagan con el tweak `showCosts`.
 
 ## Environment
 
