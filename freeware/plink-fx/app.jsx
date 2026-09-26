@@ -106,30 +106,22 @@ const CURRENCIES = {
   NGN: { code: "NGN", country: "NG", name: "Nigeria",        symbol: "₦",   decimals: 0, region: "Mid East & Africa" }
 };
 
-// Real-world cost anchors (only for currencies we have ground-truth pricing on)
-const COSTS = {
-  USD: [
-    { label: "Drip coffee",        price: 4.50,  icon: "C" },
-    { label: "Subway / bus ride",  price: 2.90,  icon: "T" },
-    { label: "Casual lunch",       price: 18,    icon: "L" },
-    { label: "Movie ticket",       price: 16,    icon: "M" },
-    { label: "Midrange hotel",     price: 180,   icon: "H" }
-  ],
-  MXN: [
-    { label: "Street taco",        price: 25,    icon: "T" },
-    { label: "Coffee, cafecito",   price: 55,    icon: "C" },
-    { label: "Uber, short ride",   price: 95,    icon: "U" },
-    { label: "Sit-down dinner",    price: 380,   icon: "D" },
-    { label: "Boutique hotel",     price: 2400,  icon: "H" }
-  ],
-  CRC: [
-    { label: "Casado lunch",       price: 4500,  icon: "L" },
-    { label: "Café con leche",     price: 1800,  icon: "C" },
-    { label: "Taxi, 10 min",       price: 3200,  icon: "T" },
-    { label: "Zipline tour",       price: 38000, icon: "Z" },
-    { label: "Eco-lodge night",    price: 72000, icon: "H" }
-  ]
-};
+// Typical cost of each way to change money, as a % lost against the mid-market
+// rate. Rough published ranges, not quotes — the UI labels them as estimates.
+const CHANNELS = [
+  { key: "ch_midmarket", pct: 0,   icon: "=" },
+  { key: "ch_app",       pct: 0.6, icon: "A" },
+  { key: "ch_card",      pct: 3,   icon: "T" },
+  { key: "ch_bank",      pct: 5,   icon: "B" },
+  { key: "ch_airport",   pct: 10,  icon: "✈" }
+];
+
+// Round price points in a currency, scaled so ~1 USD is the smallest step.
+function priceSteps(code, rates) {
+  const perUSD = rates[code] / rates.USD;
+  const unit = Math.pow(10, Math.round(Math.log10(perUSD)));
+  return [1, 5, 10, 20, 50, 100].map(m => m * unit);
+}
 
 // Fallback rates if API fails (relative to USD, mid-2026 approximate)
 const FALLBACK_RATES = {
@@ -224,9 +216,18 @@ const STRINGS = {
     done: "Done",
     prev_month: "Previous month",
     next_month: "Next month",
-    costs_heading: "What it buys, locally",
-    costs_desc: "Your {base} compared to common purchases at each destination. Anchors shown for USD, MXN, and CRC.",
-    in_country_buys: "In {country}, {amount} buys",
+    costs_heading: "What you actually get",
+    costs_desc: "What your {base} turns into depending on where you change it. Nobody gives you the mid-market rate; it's the reference. Typical costs, not quotes.",
+    ref_tag: "reference",
+    you_lose: "you lose",
+    ch_midmarket: "Mid-market rate",
+    ch_app: "App (Wise, Revolut…)",
+    ch_card: "Card with foreign fee",
+    ch_bank: "Bank / exchange house",
+    ch_airport: "Airport kiosk",
+    prices_heading: "Quick price table",
+    prices_desc: "Round prices you'll see at each destination, already in {base}.",
+    prices_in: "Prices in {country}",
     add_another_currency: "Add another currency above to see conversions.",
     auth_signin_title: "Sign in",
     auth_signup_title: "Create account",
@@ -336,9 +337,18 @@ const STRINGS = {
     done: "Listo",
     prev_month: "Mes anterior",
     next_month: "Mes siguiente",
-    costs_heading: "Qué compra, localmente",
-    costs_desc: "Tu {base} comparado con compras comunes en cada destino. Ejemplos para USD, MXN y CRC.",
-    in_country_buys: "En {country}, {amount} compra",
+    costs_heading: "Cuánto recibes realmente",
+    costs_desc: "Lo que te llega por tu {base} según dónde lo cambies. Nadie te da el interbancario; es la referencia. Costos típicos, no cotizaciones.",
+    ref_tag: "referencia",
+    you_lose: "pierdes",
+    ch_midmarket: "Tipo interbancario",
+    ch_app: "App (Wise, Revolut…)",
+    ch_card: "Tarjeta con comisión extranjera",
+    ch_bank: "Banco / casa de cambio",
+    ch_airport: "Aeropuerto",
+    prices_heading: "Tabla rápida de precios",
+    prices_desc: "Precios redondos que verás en cada destino, ya convertidos a {base}.",
+    prices_in: "Precios en {country}",
     add_another_currency: "Añade otra moneda arriba para ver conversiones.",
     auth_signin_title: "Iniciar sesión",
     auth_signup_title: "Crear cuenta",
@@ -421,30 +431,6 @@ const MONTH_SHORT_I18N = {
 const WEEKDAYS_I18N = {
   en: ["Su","Mo","Tu","We","Th","Fr","Sa"],
   es: ["Do","Lu","Ma","Mi","Ju","Vi","Sá"],
-};
-
-// Translated COSTS labels (data is otherwise identical to COSTS)
-const COSTS_LABEL_I18N = {
-  en: {
-    "Drip coffee": "Drip coffee", "Subway / bus ride": "Subway / bus ride",
-    "Casual lunch": "Casual lunch", "Movie ticket": "Movie ticket",
-    "Midrange hotel": "Midrange hotel", "Street taco": "Street taco",
-    "Coffee, cafecito": "Coffee, cafecito", "Uber, short ride": "Uber, short ride",
-    "Sit-down dinner": "Sit-down dinner", "Boutique hotel": "Boutique hotel",
-    "Casado lunch": "Casado lunch", "Café con leche": "Café con leche",
-    "Taxi, 10 min": "Taxi, 10 min", "Zipline tour": "Zipline tour",
-    "Eco-lodge night": "Eco-lodge night",
-  },
-  es: {
-    "Drip coffee": "Café filtrado", "Subway / bus ride": "Metro / autobús",
-    "Casual lunch": "Almuerzo casual", "Movie ticket": "Boleto de cine",
-    "Midrange hotel": "Hotel medio", "Street taco": "Taco de la calle",
-    "Coffee, cafecito": "Café, cafecito", "Uber, short ride": "Uber, viaje corto",
-    "Sit-down dinner": "Cena sentada", "Boutique hotel": "Hotel boutique",
-    "Casado lunch": "Casado", "Café con leche": "Café con leche",
-    "Taxi, 10 min": "Taxi, 10 min", "Zipline tour": "Tour de canopy",
-    "Eco-lodge night": "Eco-lodge, noche",
-  }
 };
 
 // --- Helpers ---
@@ -779,39 +765,68 @@ function QuickAmounts({ onPick, baseCode, current }) {
 }
 
 // --- Costs ---
-function CostsRow({ cost, baseAmount, rate, code }) {
-  const lang = React.useContext(LangContext);
-  const local = baseAmount * rate;
-  const qty = local / cost.price;
-  const label = (COSTS_LABEL_I18N[lang] && COSTS_LABEL_I18N[lang][cost.label]) || cost.label;
-  return (
-    <div className="cost-row">
-      <span className="cost-icon">{cost.icon}</span>
-      <span className="cost-label">{label}</span>
-      <span className="cost-price mono">{CURRENCIES[code].symbol}{fmt(cost.price, code)}</span>
-      <span className="cost-qty">×<span className="mono">{qty < 10 ? qty.toFixed(1) : Math.floor(qty)}</span></span>
-    </div>
-  );
-}
+const WORST_PCT = Math.max(...CHANNELS.map(ch => ch.pct));
 
 function CostsTable({ baseCode, baseAmount, rates, others }) {
   const lang = React.useContext(LangContext);
-  const withCosts = others.filter(code => COSTS[code]);
-  if (withCosts.length === 0) return null;
+  if (others.length === 0) return null;
+  const b = CURRENCIES[baseCode];
   return (
-    <div className={"costs-grid count-" + withCosts.length}>
-      {withCosts.map(code => {
-        const rate = rates[code] / rates[baseCode];
-        const local = baseAmount * rate;
+    <div className={"costs-grid count-" + others.length}>
+      {others.map(code => {
+        const local = baseAmount * rates[code] / rates[baseCode];
         const c = CURRENCIES[code];
         return (
           <div key={code} className="costs-col" style={{ "--accent": `var(--c-${code})` }}>
             <div className="costs-head">
-              <span className="costs-title">{tr(lang, "in_country_buys", { country: c.name, amount: `${CURRENCIES[baseCode].symbol}${fmt(baseAmount, baseCode)}` })}</span>
-              <span className="costs-sub mono">{c.symbol}{fmt(local, code)} {code}</span>
+              <span className="costs-title">{c.name}</span>
+              <span className="costs-sub mono">{baseCode} → {code}</span>
             </div>
-            {COSTS[code].map(cost => (
-              <CostsRow key={cost.label} cost={cost} baseAmount={baseAmount} rate={rate} code={code} />
+            {CHANNELS.map(ch => (
+              <div key={ch.key} className={"fee-row" + (ch.pct ? "" : " is-ref")}>
+                <span className="fee-label">
+                  {tr(lang, ch.key)}
+                  {!ch.pct && <span className="fee-tag">{tr(lang, "ref_tag")}</span>}
+                </span>
+                <span className="fee-got mono">{c.symbol}{fmt(local * (1 - ch.pct / 100), code)}</span>
+                {ch.pct > 0 && <>
+                  <span className="fee-bar" aria-hidden="true">
+                    <span style={{ "--loss": `${(ch.pct / WORST_PCT) * 100}%` }} />
+                  </span>
+                  <span className="fee-lost mono">
+                    −{ch.pct}% · {tr(lang, "you_lose")} <strong>{b.symbol}{fmt(baseAmount * ch.pct / 100, baseCode)}</strong>
+                  </span>
+                </>}
+              </div>
+            ))}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function PriceTable({ baseCode, rates, others }) {
+  const lang = React.useContext(LangContext);
+  if (others.length === 0) return null;
+  const b = CURRENCIES[baseCode];
+  return (
+    <div className={"costs-grid count-" + others.length}>
+      {others.map(code => {
+        const c = CURRENCIES[code];
+        const toBase = rates[baseCode] / rates[code];
+        return (
+          <div key={code} className="costs-col" style={{ "--accent": `var(--c-${code})` }}>
+            <div className="costs-head">
+              <span className="costs-title">{tr(lang, "prices_in", { country: c.name })}</span>
+              <span className="costs-sub mono">{code} → {baseCode}</span>
+            </div>
+            {priceSteps(code, rates).map(p => (
+              <div key={p} className="px-row mono">
+                <span className="px-local">{c.symbol}{p.toLocaleString("en-US")}</span>
+                <span className="px-lead" aria-hidden="true" />
+                <span className="px-home">{b.symbol}{fmt(p * toBase, baseCode)}</span>
+              </div>
             ))}
           </div>
         );
@@ -2422,13 +2437,23 @@ function App() {
           )
         )}
 
-        {t.showCosts && others.some(c => COSTS[c]) && (
+        {t.showCosts && others.length > 0 && (
           <section className="costs-section">
             <div className="section-head">
               <h2>{tt("costs_heading")}</h2>
               <p>{tt("costs_desc", { base: baseCode })}</p>
             </div>
             <CostsTable baseCode={baseCode} baseAmount={amount} rates={rates} others={others} />
+          </section>
+        )}
+
+        {t.showCosts && others.length > 0 && (
+          <section className="costs-section">
+            <div className="section-head">
+              <h2>{tt("prices_heading")}</h2>
+              <p>{tt("prices_desc", { base: baseCode })}</p>
+            </div>
+            <PriceTable baseCode={baseCode} rates={rates} others={others} />
           </section>
         )}
 
@@ -2463,7 +2488,7 @@ function App() {
           <TweakNumber label="Total budget (USD)" value={t.budget} step={50} onChange={v => setTweak("budget", v)} />
           <TweakNumber label="Spent so far (USD)" value={t.spent} step={10} onChange={v => setTweak("spent", v)} />
           <TweakToggle label="Show budget bar" value={t.showBudget} onChange={v => setTweak("showBudget", v)} />
-          <TweakToggle label="Show local cost table" value={t.showCosts} onChange={v => setTweak("showCosts", v)} />
+          <TweakToggle label="Show fee & price tables" value={t.showCosts} onChange={v => setTweak("showCosts", v)} />
         </TweakSection>
         <TweakSection title="Look">
           <TweakRadio label="Theme" value={t.theme} options={[{value:"auto",label:"Auto"},{value:"paper",label:"Paper"},{value:"ink",label:"Ink"}]} onChange={v => setTweak("theme", v)} />
