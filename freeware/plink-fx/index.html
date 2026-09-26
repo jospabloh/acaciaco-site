@@ -1215,36 +1215,51 @@
     font-size: 12px;
     color: var(--ink-3);
   }
-  .cost-row {
+  /* "Cuánto recibes": the loss bar is scaled to the worst channel, so it
+     ranks channels against each other; the stated amounts carry the truth. */
+  .fee-row {
     display: grid;
-    grid-template-columns: 28px 1fr auto auto;
-    gap: 10px;
-    align-items: center;
-    padding: 10px 0;
-    font-size: 13px;
+    grid-template-columns: 1fr auto;
+    gap: 6px 12px;
+    padding: 12px 0;
     border-bottom: 1px dashed var(--line);
   }
-  .cost-row:last-child { border-bottom: none; }
-  .cost-icon {
-    width: 24px; height: 24px;
-    border-radius: 50%;
-    background: oklch(from var(--accent) l c h / 0.12);
-    color: var(--accent);
-    display: inline-flex; align-items: center; justify-content: center;
-    font-family: "Space Grotesk", serif;
-    font-size: 12px;
-    font-weight: 400;
+  .fee-row:last-child { border-bottom: none; }
+  .fee-label { font-size: 13px; color: var(--ink); align-self: baseline; }
+  .fee-tag {
+    margin-left: 8px;
+    font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--ink-3);
   }
-  .cost-label { color: var(--ink); }
-  .cost-price { color: var(--ink-3); font-size: 12px; }
-  .cost-qty {
-    color: var(--ink-2);
-    font-weight: 500;
-    font-size: 13px;
-    min-width: 50px;
-    text-align: right;
+  .fee-got { font-size: 17px; color: var(--ink); text-align: right; align-self: baseline; }
+  .fee-row.is-ref .fee-got { color: var(--ink-3); }
+  .fee-bar {
+    height: 4px; border-radius: 2px;
+    background: var(--paper-2);
+    overflow: hidden; align-self: center;
   }
-  .cost-qty .mono { font-size: 14px; color: var(--ink); }
+  .fee-bar > span {
+    display: block; height: 100%;
+    width: var(--loss);
+    background: var(--signal);
+    border-radius: 2px;
+  }
+  .fee-lost { font-size: 11px; color: var(--ink-3); text-align: right; white-space: nowrap; }
+  .fee-lost strong { font-weight: 500; color: var(--ink-2); }
+
+  /* "Tabla rápida": a menu ledger, dotted leader between local and home price. */
+  .px-row {
+    display: flex; align-items: baseline; gap: 8px;
+    padding: 7px 0;
+    font-size: 14px;
+  }
+  .px-local { color: var(--ink-2); }
+  .px-lead {
+    flex: 1;
+    border-bottom: 1px dotted var(--line-2);
+    transform: translateY(-4px);
+  }
+  .px-home { color: var(--ink); font-weight: 500; }
 
   /* Footer */
   .foot {
@@ -1986,7 +2001,7 @@
     .section-head h2 { font-size: 22px; }
     .section-head p  { font-size: 12px; }
     .costs-col { padding: 16px; border-radius: 16px; }
-    .cost-row  { padding: 9px 0; gap: 8px; }
+    .fee-row   { padding: 10px 0; }
 
     /* ── Trip summary overlay ───────────────── */
     .summary-card { padding: 24px 20px 20px; border-radius: 22px 22px 0 0; }

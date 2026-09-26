@@ -217,8 +217,9 @@ const STRINGS = {
     prev_month: "Previous month",
     next_month: "Next month",
     costs_heading: "What you actually get",
-    costs_desc: "Your {base} depending on where you change it. Typical costs, not quotes — check your bank or card.",
-    you_get_in: "{amount} in {country}",
+    costs_desc: "What your {base} turns into depending on where you change it. Nobody gives you the mid-market rate; it's the reference. Typical costs, not quotes.",
+    ref_tag: "reference",
+    you_lose: "you lose",
     ch_midmarket: "Mid-market rate",
     ch_app: "App (Wise, Revolut…)",
     ch_card: "Card with foreign fee",
@@ -337,8 +338,9 @@ const STRINGS = {
     prev_month: "Mes anterior",
     next_month: "Mes siguiente",
     costs_heading: "Cuánto recibes realmente",
-    costs_desc: "Tu {base} según dónde lo cambies. Costos típicos, no cotizaciones — confirma con tu banco o tarjeta.",
-    you_get_in: "{amount} en {country}",
+    costs_desc: "Lo que te llega por tu {base} según dónde lo cambies. Nadie te da el interbancario; es la referencia. Costos típicos, no cotizaciones.",
+    ref_tag: "referencia",
+    you_lose: "pierdes",
     ch_midmarket: "Tipo interbancario",
     ch_app: "App (Wise, Revolut…)",
     ch_card: "Tarjeta con comisión extranjera",
@@ -763,22 +765,12 @@ function QuickAmounts({ onPick, baseCode, current }) {
 }
 
 // --- Costs ---
-// Both tables reuse the .costs-* / .cost-row styles; the icon | label | price | qty
-// columns become icon | label | detail | value.
-function CostsRow({ icon, label, detail, value }) {
-  return (
-    <div className="cost-row">
-      <span className="cost-icon">{icon}</span>
-      <span className="cost-label">{label}</span>
-      <span className="cost-price mono">{detail}</span>
-      <span className="cost-qty"><span className="mono">{value}</span></span>
-    </div>
-  );
-}
+const WORST_PCT = Math.max(...CHANNELS.map(ch => ch.pct));
 
 function CostsTable({ baseCode, baseAmount, rates, others }) {
   const lang = React.useContext(LangContext);
   if (others.length === 0) return null;
+  const b = CURRENCIES[baseCode];
   return (
     <div className={"costs-grid count-" + others.length}>
       {others.map(code => {
@@ -787,16 +779,25 @@ function CostsTable({ baseCode, baseAmount, rates, others }) {
         return (
           <div key={code} className="costs-col" style={{ "--accent": `var(--c-${code})` }}>
             <div className="costs-head">
-              <span className="costs-title">{tr(lang, "you_get_in", { amount: `${CURRENCIES[baseCode].symbol}${fmt(baseAmount, baseCode)}`, country: c.name })}</span>
+              <span className="costs-title">{c.name}</span>
+              <span className="costs-sub mono">{baseCode} → {code}</span>
             </div>
             {CHANNELS.map(ch => (
-              <CostsRow
-                key={ch.key}
-                icon={ch.icon}
-                label={tr(lang, ch.key)}
-                detail={ch.pct ? `−${ch.pct}%` : ""}
-                value={`${c.symbol}${fmt(local * (1 - ch.pct / 100), code)}`}
-              />
+              <div key={ch.key} className={"fee-row" + (ch.pct ? "" : " is-ref")}>
+                <span className="fee-label">
+                  {tr(lang, ch.key)}
+                  {!ch.pct && <span className="fee-tag">{tr(lang, "ref_tag")}</span>}
+                </span>
+                <span className="fee-got mono">{c.symbol}{fmt(local * (1 - ch.pct / 100), code)}</span>
+                {ch.pct > 0 && <>
+                  <span className="fee-bar" aria-hidden="true">
+                    <span style={{ "--loss": `${(ch.pct / WORST_PCT) * 100}%` }} />
+                  </span>
+                  <span className="fee-lost mono">
+                    −{ch.pct}% · {tr(lang, "you_lose")} <strong>{b.symbol}{fmt(baseAmount * ch.pct / 100, baseCode)}</strong>
+                  </span>
+                </>}
+              </div>
             ))}
           </div>
         );
@@ -821,13 +822,11 @@ function PriceTable({ baseCode, rates, others }) {
               <span className="costs-sub mono">{code} → {baseCode}</span>
             </div>
             {priceSteps(code, rates).map(p => (
-              <CostsRow
-                key={p}
-                icon="≈"
-                label={`${c.symbol}${p.toLocaleString("en-US")}`}
-                detail=""
-                value={`${b.symbol}${fmt(p * toBase, baseCode)}`}
-              />
+              <div key={p} className="px-row mono">
+                <span className="px-local">{c.symbol}{p.toLocaleString("en-US")}</span>
+                <span className="px-lead" aria-hidden="true" />
+                <span className="px-home">{b.symbol}{fmt(p * toBase, baseCode)}</span>
+              </div>
             ))}
           </div>
         );
