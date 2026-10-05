@@ -1027,7 +1027,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1040px) {
   .site-nav { padding: 0.75rem var(--section-px); padding-top: calc(0.75rem + env(safe-area-inset-top, 0px)); }
   .nav-inner { gap: 0.75rem; }
   .brand img { width: 28px; height: 28px; }
