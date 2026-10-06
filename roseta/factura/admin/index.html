@@ -56,6 +56,7 @@
     .ad-gate{max-width:420px;margin:0 auto;}
     .ad-gate label{display:block;font-size:.85rem;font-weight:600;color:var(--text-muted);margin-bottom:.4rem;}
     .ad-gate .ad-gate-row{display:flex;gap:.7rem;}
+    .ad-gate .ad-gate-row input{min-width:0;}
     .ad-gate input{flex:1;padding:.8rem 1rem;border:1px solid var(--border);border-radius:.7rem;font:inherit;background:var(--bg);color:var(--text);}
     .ad-gate input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--glow);}
 
@@ -100,6 +101,9 @@
     .ad-heat.ad-heat-done .ad-heat-track{opacity:.7;}
     .ad-right{display:flex;align-items:center;gap:.7rem;justify-self:end;}
     .ad-amount{font-family:'Space Grotesk',monospace;font-weight:600;font-size:.9rem;white-space:nowrap;}
+    /* Phones and small tablets: the badges + amount (~330px) no longer fit beside the
+       name, so they drop to their own wrapping row instead of being clipped. */
+    @media(max-width:640px){.ad-head{grid-template-columns:minmax(0,1fr);}.ad-right{justify-self:start;flex-wrap:wrap;}}
     .ad-badge{display:inline-flex;padding:.25rem .75rem;border-radius:var(--radius-pill);font-size:.72rem;font-weight:700;white-space:nowrap;}
     .ad-badge.pendiente{background:var(--pend-bg);color:var(--pend-fg);}
     .ad-badge.facturada{background:var(--done-bg);color:var(--done-fg);}
