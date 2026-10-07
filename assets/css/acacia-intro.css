@@ -9,6 +9,8 @@
     linear-gradient(170deg, #FFE5D4 0%, #FFF4E6 45%, #FCE3CF 100%);
   animation: introFadeOut 0.9s ease-in-out 9.1s forwards;
 }
+/* .acacia-intro sets display:flex, which outranks the UA [hidden] rule. */
+.acacia-intro[hidden] { display: none; }
 @keyframes introFadeOut { to { opacity: 0; visibility: hidden; } }
 
 .acacia-intro .sun {

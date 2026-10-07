@@ -15,6 +15,11 @@
 
   try { sessionStorage.setItem('acacia_intro_shown', '1'); } catch (e) {}
 
+  // The overlay ships with the `hidden` attribute in the HTML so it can never
+  // cover the page outside the date window (or if this script fails to load);
+  // it is only revealed here, once we have decided to play it.
+  intro.removeAttribute('hidden');
+
   setTimeout(function () { intro.remove(); }, 10000);
 
   intro.addEventListener('click', function () {
