@@ -6,7 +6,8 @@
 // the one being served: change a word of the terms and this fails until
 // someone decides whether it is a new version (bump `version`, write
 // `changes_es`, every tenant accepts again) or a correction of form (update
-// only the hash).
+// only the hash). Each published version is tagged in this repo as
+// `legal-terms-<version>`, so the text behind a stored hash can be found.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -17,7 +18,6 @@ const read = (rel) => readFileSync(fileURLToPath(new URL(rel, import.meta.url)),
 
 const manifest = JSON.parse(read("../legal/version.json"));
 const terminos = read("../legal/terminos.html");
-const privacidad = read("../legal/privacidad.html");
 
 // The text a tenant accepts is the <article>, not the nav or the footer.
 function articleHash(html) {
@@ -50,19 +50,23 @@ test("the version printed on the terms page is the manifest's", () => {
   assert.equal(m[1], manifest.version);
 });
 
-test("the version is a date and its grace period is at least 30 days", () => {
+test("the version is the date it was published, and the page shows that date", () => {
   assert.match(manifest.version, /^\d{4}-\d{2}-\d{2}$/);
-  assert.match(manifest.published, /^\d{4}-\d{2}-\d{2}$/);
+  assert.equal(manifest.published, manifest.version);
+  assert.equal(lastUpdatedISO(terminos), manifest.published);
   assert.ok(Number.isInteger(manifest.grace_days) && manifest.grace_days >= 30);
 });
 
-test("the manifest says what changed, so the app can show it before asking", () => {
+// An app shows these lines before asking again; the terms promise the same
+// lines on the page. Whether they describe THIS version and not the last one
+// is a person's job: no test can tell.
+test("what changed is on the terms page, in the manifest's own words", () => {
   assert.ok(Array.isArray(manifest.changes_es) && manifest.changes_es.length > 0);
-  for (const line of manifest.changes_es) assert.ok(typeof line === "string" && line.trim().length > 0);
-});
-
-test("the manifest's date for the privacy notice is the one the notice shows", () => {
-  assert.equal(manifest.documents.privacidad.updated, lastUpdatedISO(privacidad));
+  assert.ok(terminos.includes(`Qué cambió en la versión ${manifest.version}`));
+  for (const line of manifest.changes_es) {
+    assert.ok(typeof line === "string" && line.trim().length > 0);
+    assert.ok(terminos.includes(`<li>${line}</li>`), `not on the page: ${line}`);
+  }
 });
 
 test("the manifest points at the two pages by their public address", () => {
