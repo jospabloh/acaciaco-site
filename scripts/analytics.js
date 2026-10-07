@@ -26,6 +26,15 @@
   window.acaciaTrack = function (name, data) {
     try { window.va("event", { name: name, data: data || {} }); } catch (e) {}
   };
+  // Choosing "Solo esenciales" takes effect on this page too, not only on the
+  // next one: stop sending events the moment the button is pressed.
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (t && t.closest && t.closest('[data-cookies="essential"]')) {
+      window.acaciaTrack = function () {};
+      window.va = function () {};
+    }
+  }, true);
 
   // Analítica propia (first-party) → ACACIA Mission Control. Un pixel por vista,
   // sin cookies ni datos personales; el servidor sólo guarda la ruta + un hash
