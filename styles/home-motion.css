@@ -1,0 +1,402 @@
+/* ACACIA · Homepage-only layer (linked from index.html after base.css).
+ *
+ *   1. "App del mes" spotlight box   (scripts/app-spotlight.js fills it)
+ *   2. Marquee strip under the hero  (CSS only)
+ *   3. Motion pass: hero entrance, staggered reveals
+ *
+ * Rules every block here follows:
+ *   - Only transform and opacity are animated, with two deliberate exceptions
+ *     that run once and on one element: the H1 accent sweep (background-position).
+ *   - Every animation is declared inside @media (prefers-reduced-motion:
+ *     no-preference). Under "reduce" the default state of everything is its
+ *     final, fully visible state; nothing waits for an animation to show.
+ *   - Looping animations start paused and only run while on screen:
+ *     scripts/shared.js toggles .is-onscreen on [data-motion-watch].
+ *   - Colours come from base.css tokens; dark theme is restated where a
+ *     token alone would wash out.
+ */
+
+/* ───────────────────────── 1. App del mes ───────────────────────── */
+
+.spot {
+  --spot-r: 22px;
+  --spot-b: 1.5px;
+  --spot-beam: color-mix(in oklch, var(--primary) 85%, white);
+  --spot-sheen: color-mix(in srgb, var(--primary) 11%, transparent);
+  --spot-text: color-mix(in srgb, var(--text) 74%, transparent);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  padding: var(--spot-b);
+  border-radius: var(--spot-r);
+  background: var(--border);
+  box-shadow: var(--shadow-md), 0 24px 60px -34px var(--glow);
+  /* Reserve (measured at the tallest app) before JS adds the invisible per-app sizers. */
+  min-height: 24.5rem;
+}
+@media (min-width: 821px) and (max-width: 1180px) { .spot { min-height: 27.75rem; } }
+[data-theme="dark"] .spot {
+  --spot-beam: color-mix(in oklch, var(--primary) 70%, white);
+  --spot-sheen: rgba(255, 255, 255, 0.055);
+  --spot-text: color-mix(in srgb, var(--text) 78%, transparent);
+}
+
+/* The "brillito" #1: a beam of light that travels around the border. It is a
+   big conic gradient rotated with transform; the inner panel covers all of it
+   except the 1.5px frame, so only the frame lights up. */
+.spot::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  width: max(160%, 900px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(from 0deg,
+    transparent 0 52%,
+    color-mix(in oklch, var(--spot-beam) 25%, transparent) 68%,
+    var(--spot-beam) 82%,
+    transparent 90% 100%);
+  pointer-events: none;
+}
+
+.spot-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  padding: clamp(1.5rem, 3.5vw, 2.75rem);
+  overflow: hidden;
+  border-radius: calc(var(--spot-r) - var(--spot-b));
+  background:
+    radial-gradient(90% 120% at 0% 0%, color-mix(in srgb, var(--primary) 9%, var(--bg-card)), var(--bg-card) 62%);
+}
+
+/* The "brillito" #2: a soft band of light that sweeps across now and then. */
+.spot-inner::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 38%;
+  background: linear-gradient(100deg, transparent, var(--spot-sheen), transparent);
+  transform: translateX(-140%) skewX(-18deg);
+  pointer-events: none;
+}
+
+.spot-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.15rem;
+  min-width: 0;
+}
+
+.spot-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--primary);
+}
+[data-theme="dark"] .spot-eyebrow { color: color-mix(in oklch, var(--primary) 60%, white); }
+.spot-spark { flex: none; }
+
+.spot-id { display: flex; align-items: center; gap: 1rem; }
+.spot-logo {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  padding: 4px;
+  border-radius: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  color: var(--primary);
+}
+.spot-logo img, .spot-logo svg { width: 100%; height: 100%; object-fit: contain; border-radius: 12px; }
+.spot-id-text { display: flex; flex-direction: column; align-items: flex-start; gap: 0.35rem; min-width: 0; }
+.spot-id-text h3 { font-size: clamp(1.7rem, 3.2vw, 2.4rem); line-height: 1.05; overflow-wrap: anywhere; }
+
+.spot-tagline-cell { display: grid; width: 100%; }
+.spot-tagline-cell > *, .spot-list-cell > * { grid-area: 1 / 1; }
+.spot-tagline { font-size: 1.05rem; line-height: 1.55; color: var(--spot-text); max-width: 44ch; }
+
+.spot-ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: auto; padding-top: 0.25rem; }
+
+/* Sizer copies of every app's text (built by app-spotlight.js). */
+.spot-ghost { visibility: hidden; pointer-events: none; user-select: none; }
+
+.spot-features {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+  min-width: 0;
+  padding-left: clamp(1.25rem, 3vw, 2.75rem);
+  border-left: 1px solid var(--border);
+}
+.spot-features-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.spot-list-cell { display: grid; }
+.spot-list { list-style: none; display: block; }
+.spot-feat {
+  position: relative;
+  padding: 0.72rem 0 0.72rem 2.15rem;
+  font-size: 0.98rem;
+  line-height: 1.4;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+.spot-feat:last-child { border-bottom: 0; }
+/* check badge: a tinted disc with a drawn tick, all CSS */
+.spot-feat::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.8rem;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--primary) 16%, transparent);
+}
+.spot-feat::after {
+  content: "";
+  position: absolute;
+  left: 0.5rem;
+  top: 1.05rem;
+  width: 0.34rem;
+  height: 0.6rem;
+  border: solid var(--primary);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+[data-theme="dark"] .spot-feat::after { border-color: color-mix(in oklch, var(--primary) 60%, white); }
+
+@media (max-width: 820px) {
+  .spot { min-height: 0; }
+  .spot-inner { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+  .spot-features {
+    padding-left: 0;
+    padding-top: 1.25rem;
+    border-left: 0;
+    border-top: 1px solid var(--border);
+  }
+  .spot-ctas { margin-top: 0.25rem; }
+  .spot-ctas .btn { flex: 1 1 auto; justify-content: center; }
+}
+@media (max-width: 420px) {
+  .spot-logo { width: 56px; height: 56px; }
+  .spot-feat { font-size: 0.94rem; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Bullets and copy are hidden only once the script has armed the box, so a
+     script that never runs can never leave them invisible. */
+  .spot.is-armed:not(.is-in) .spot-copy > *,
+  .spot.is-armed:not(.is-in) .spot-feat { opacity: 0; }
+
+  .spot.is-in .spot-copy > * { animation: spot-rise 0.65s var(--ease-out) both; }
+  .spot.is-in .spot-copy > :nth-child(2) { animation-delay: 0.07s; }
+  .spot.is-in .spot-copy > :nth-child(3) { animation-delay: 0.14s; }
+  .spot.is-in .spot-copy > :nth-child(4) { animation-delay: 0.21s; }
+  /* the bullets: one after another, 120 ms apart */
+  .spot.is-in .spot-list:not(.spot-ghost) .spot-feat {
+    animation: spot-feat-in 0.6s var(--ease-out) both;
+    animation-delay: calc(0.28s + var(--i, 0) * 0.12s);
+  }
+
+  .spot::before { animation: spot-orbit 11s linear infinite paused; }
+  .spot-inner::after { animation: spot-sheen 8.5s ease-in-out infinite paused; }
+  .spot-spark { animation: spot-twinkle 3.4s ease-in-out infinite paused; }
+  .spot.is-onscreen::before,
+  .spot.is-onscreen .spot-inner::after,
+  .spot.is-onscreen .spot-spark { animation-play-state: running; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spot-inner::after { display: none; }
+}
+
+@keyframes spot-orbit {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes spot-sheen {
+  0%, 58%   { transform: translateX(-140%) skewX(-18deg); }
+  80%, 100% { transform: translateX(380%) skewX(-18deg); }
+}
+@keyframes spot-twinkle {
+  0%, 100% { opacity: 0.55; transform: scale(0.85) rotate(0deg); }
+  50%      { opacity: 1; transform: scale(1.15) rotate(18deg); }
+}
+@keyframes spot-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes spot-feat-in {
+  from { opacity: 0; transform: translateX(22px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ───────────────────────── 2. Marquee ───────────────────────── */
+
+.marquee {
+  padding: 1.15rem 0 1.3rem;
+  border-block: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-subtle) 55%, transparent);
+  overflow: hidden;
+}
+.marquee-cap {
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.55rem;
+}
+.marquee-viewport {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-viewport:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+  border-radius: 8px;
+}
+.marquee-track { display: flex; width: max-content; }
+.marquee-list { display: flex; flex: none; list-style: none; }
+.marquee-list li {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.marquee-list li::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  margin-inline: clamp(1.1rem, 2.4vw, 2rem);
+  border-radius: 50%;
+  background: var(--primary);
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .marquee-track { animation: marquee-scroll 52s linear infinite paused; }
+  .marquee-viewport.is-onscreen .marquee-track { animation-play-state: running; }
+  .marquee-viewport.is-onscreen:hover .marquee-track,
+  .marquee-viewport.is-onscreen:focus .marquee-track,
+  .marquee-viewport.is-onscreen:focus-within .marquee-track { animation-play-state: paused; }
+}
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+/* Still life for reduced motion: one wrapped, centred list, no copy. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-viewport { -webkit-mask-image: none; mask-image: none; }
+  .marquee-track { width: auto; justify-content: center; }
+  .marquee-list { flex-wrap: wrap; justify-content: center; row-gap: 0.35rem; padding-inline: var(--section-px); }
+  .marquee-copy { display: none; }
+  .marquee-list li:last-child::after { display: none; }
+}
+
+/* ───────────────────────── 3. Motion pass ───────────────────────── */
+
+/* Reveals: each item's --reveal-delay is set by shared.js and dropped after
+   the entrance. Equal specificity to the older nth-child stagger in base.css
+   and later in source, so this one decides. */
+[data-reveal-stagger] .reveal.in:nth-child(n) {
+  transition-delay: var(--reveal-delay, 0s);
+  will-change: auto;
+}
+
+/* Section heads: the block only fades; eyebrow, title and lead rise in turn. */
+[data-reveal-stagger] .section-head.reveal { transform: none; transition-duration: 0.3s; }
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal-stagger] .section-head.reveal.in > * { animation: spot-rise 0.7s var(--ease-out) both; }
+  [data-reveal-stagger] .section-head.reveal.in > :nth-child(2) { animation-delay: 0.09s; }
+  [data-reveal-stagger] .section-head.reveal.in > :nth-child(3) { animation-delay: 0.18s; }
+  [data-reveal-stagger] .section-head.reveal.in > :nth-child(4) { animation-delay: 0.27s; }
+
+  /* Hero: preview rows slide in one by one... */
+  .preview-row { animation: row-in 0.7s var(--ease-out) both; }
+  .preview-head + .preview-row { animation-delay: 0.35s; }
+  .preview-row + .preview-row { animation-delay: 0.5s; }
+  .preview-row + .preview-row + .preview-row { animation-delay: 0.65s; }
+
+  /* ...then the bars grow from zero in a wave and settle into a slow breath.
+     Only the breathing is paused off-screen (the growth must always run). */
+  .preview .preview-chart .bar {
+    --d: 0.7s;
+    animation:
+      bar-rise 0.9s var(--ease-out) var(--d) both,
+      bar-breathe 5.5s ease-in-out calc(var(--d) + 1.4s) infinite alternate;
+    animation-play-state: running, paused;
+  }
+  .hero-visual.is-onscreen .preview .preview-chart .bar { animation-play-state: running, running; }
+  .preview .preview-chart .bar:nth-child(1)  { --d: 0.70s; }
+  .preview .preview-chart .bar:nth-child(2)  { --d: 0.76s; }
+  .preview .preview-chart .bar:nth-child(3)  { --d: 0.82s; }
+  .preview .preview-chart .bar:nth-child(4)  { --d: 0.88s; }
+  .preview .preview-chart .bar:nth-child(5)  { --d: 0.94s; }
+  .preview .preview-chart .bar:nth-child(6)  { --d: 1.00s; }
+  .preview .preview-chart .bar:nth-child(7)  { --d: 1.06s; }
+  .preview .preview-chart .bar:nth-child(8)  { --d: 1.12s; }
+  .preview .preview-chart .bar:nth-child(9)  { --d: 1.18s; }
+  .preview .preview-chart .bar:nth-child(10) { --d: 1.24s; }
+  .preview .preview-chart .bar:nth-child(11) { --d: 1.30s; }
+  .preview .preview-chart .bar:nth-child(12) { --d: 1.36s; }
+  .preview .preview-chart .bar:nth-child(even) { animation-duration: 0.9s, 6.5s; }
+
+  /* The card floats only while it is on screen (base.css owns the float). */
+  .hero-visual:not(.is-onscreen) .preview { animation-play-state: paused; }
+
+  /* H1 accent words: one light sweep across the text, once. The single
+     paint-based animation on the page, on one element, for ~2 s. */
+  .hero h1 .accent {
+    --sweep: oklch(88% 0.09 235);
+    color: transparent;
+    background-image: linear-gradient(100deg,
+      var(--primary) 0 38%, var(--sweep) 50%, var(--primary) 62% 100%);
+    background-size: 280% 100%;
+    background-position: 100% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    animation: accent-sweep 2.2s var(--ease-out) 0.5s both;
+  }
+  [data-theme="light"] .hero h1 .accent { --sweep: oklch(40% 0.2 262); }
+}
+@keyframes row-in {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes bar-breathe {
+  from { transform: scaleY(1); }
+  to   { transform: scaleY(0.86); }
+}
+@keyframes accent-sweep {
+  from { background-position: 100% 0; }
+  to   { background-position: 0% 0; }
+}

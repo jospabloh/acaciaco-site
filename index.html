@@ -47,6 +47,9 @@
 
   <link rel="stylesheet" href="/assets/css/acacia-intro.css" />
   <link rel="stylesheet" href="/styles/base.css" />
+  <link rel="stylesheet" href="/styles/home-motion.css" />
+  <!-- If scripts never run, nothing may stay waiting for its scroll reveal. -->
+  <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 
   <!-- Alianzas estratégicas section styles -->
   <style>
@@ -239,7 +242,7 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" data-reveal-stagger>
 
     <!-- HERO -->
     <section class="hero section" id="inicio" aria-labelledby="hero-h1">
@@ -270,7 +273,7 @@
             </div>
           </div>
 
-          <div class="hero-visual reveal" data-reveal="scale" aria-hidden="true">
+          <div class="hero-visual reveal" data-reveal="scale" aria-hidden="true" data-motion-watch>
             <div class="preview">
               <div class="preview-head">
                 <div class="dots">
@@ -306,6 +309,21 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MARQUEE: kinds of systems built a la medida (CSS-only motion; the copy of the list is aria-hidden) -->
+    <section class="marquee" aria-label="Sistemas que ACACIA construye a la medida">
+      <p class="marquee-cap">Software a la medida para</p>
+      <div class="marquee-viewport" tabindex="0" role="group" aria-label="Tipos de sistemas a la medida" data-motion-watch>
+        <div class="marquee-track">
+          <ul class="marquee-list">
+            <li>Inventario</li><li>Punto de venta</li><li>Finanzas</li><li>Flotillas</li><li>Escuelas</li><li>Parroquias</li><li>Restaurantes</li><li>Lealtad</li><li>Asistencia</li><li>Sitios web</li><li>Integraciones</li>
+          </ul>
+          <ul class="marquee-list marquee-copy" aria-hidden="true">
+            <li>Inventario</li><li>Punto de venta</li><li>Finanzas</li><li>Flotillas</li><li>Escuelas</li><li>Parroquias</li><li>Restaurantes</li><li>Lealtad</li><li>Asistencia</li><li>Sitios web</li><li>Integraciones</li>
+          </ul>
         </div>
       </div>
     </section>
@@ -393,6 +411,46 @@
           <h2 id="apps-h2">Software diseñado para hacer crecer tu operación.</h2>
           <p>Once productos: siete disponibles con 30 días de prueba y cuatro en desarrollo que ya puedes probar — todos con soporte y acompañamiento.</p>
         </div>
+        <!-- APP DEL MES. Static default = StockFlow so the page is complete without JS
+             and for crawlers. scripts/apps-grid.js decides who leads and
+             scripts/app-spotlight.js swaps this content (data map lives there). -->
+        <section class="spot reveal" id="app-del-mes" aria-labelledby="spot-title" data-spot-slug="stockflow" data-motion-watch>
+          <div class="spot-inner">
+            <div class="spot-copy">
+              <p class="spot-eyebrow">
+                <svg class="spot-spark" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>
+                <span data-spot="eyebrow">App destacada</span>
+              </p>
+              <div class="spot-id">
+                <span class="spot-logo" data-spot="logo"><img src="/assets/stockflow-logo.png" alt="StockFlow" width="56" height="56" /></span>
+                <div class="spot-id-text">
+                  <h3 id="spot-title" data-spot="name">StockFlow</h3>
+                  <span class="badge available" data-spot="badge">Disponible</span>
+                </div>
+              </div>
+              <div class="spot-tagline-cell">
+                <p class="spot-tagline" data-spot="tagline">Control de inventario y cotizaciones con trazabilidad de cada movimiento.</p>
+              </div>
+              <div class="spot-ctas">
+                <a href="/trial#stockflow" class="btn btn-primary" data-spot="trial">Probar 30 días</a>
+                <a href="/apps/stockflow" class="btn btn-ghost" data-spot="more" aria-label="Conocer más sobre StockFlow">Conocer más →</a>
+              </div>
+            </div>
+            <div class="spot-features">
+              <p class="spot-features-title">Lo que hace</p>
+              <div class="spot-list-cell">
+                <ul class="spot-list" data-spot="features">
+                  <li class="spot-feat" style="--i:0">Inventario en tiempo real con mínimos por producto</li>
+                  <li class="spot-feat" style="--i:1">Cotizaciones en PDF que se convierten en venta</li>
+                  <li class="spot-feat" style="--i:2">Historial de entradas, salidas, devoluciones y ajustes</li>
+                  <li class="spot-feat" style="--i:3">Alertas cuando un producto llega a su mínimo</li>
+                  <li class="spot-feat" style="--i:4">Caja chica y utilidad real junto al inventario</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <!-- Static order: the 7 "Disponible" apps first, then the 4 "En desarrollo".
              scripts/apps-grid.js may re-rank these from data-status and real
              visit counts once /api/apps-visits resolves — see that file.
@@ -717,6 +775,9 @@
       </div>
     </section>
 
+    <!-- Approved customer testimonials: scripts/testimonials.js fills this only when there are any. -->
+    <div data-testimonials="*"></div>
+
     <!-- ALIANZAS ESTRATÉGICAS -->
     <section class="section" id="alianzas" aria-labelledby="alianzas-h2">
       <div class="container">
@@ -1007,7 +1068,9 @@
   <script src="/scripts/shared.js"></script>
   <script src="/scripts/analytics.js" defer></script>
   <script src="/scripts/home-tools-region.js" defer></script>
+  <script src="/scripts/app-spotlight.js" defer></script>
   <script src="/scripts/apps-grid.js" defer></script>
+  <script src="/scripts/testimonials.js" defer></script>
   <script defer src="/scripts/theme-switcher.js"></script>
 </body>
 </html>

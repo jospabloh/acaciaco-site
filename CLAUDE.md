@@ -652,3 +652,61 @@ Pendiente fuera de este repo cuando se escribió: las pantallas de planes
 dentro de varias apps (Puntos+, Rumbo, RADAR, LIUMA, FlowFin, StockFlow)
 todavía dicen "gratis", muestran niveles gratuitos o anuncian funciones por
 plan que el sitio ya no promete.
+
+## Ranking mensual, "App del mes", movimiento y opiniones (2026-10-07)
+
+**El orden de las tarjetas cambia una vez al mes.** `scripts/apps-grid.js` decide
+la métrica en un solo lugar, `metricFor(payload)`: si `/api/apps-visits` trae
+`month`, ordena por `visitsMonth` (visitas del mes calendario anterior, un número
+congelado hasta que cambie el mes); si no (Mission Control aún sin desplegar),
+cae a `visits30` como antes; sin respuesta no hace nada y queda el orden del HTML.
+Los empates —incluido todo en cero— conservan el orden estático (`__acaciaIdx`).
+Homepage: nivel 1 = `data-status="live"`, nivel 2 = `dev`; `data-free` ya no
+cuenta. `/apps` reordena `live` y `dev` (el grupo `demo` ya no existe) y
+`freeware` + el teaser `#gratis` usan la misma métrica. La etiqueta del líder
+dice "La más visitada de <mes>" (o "La más usada de <mes>" en freeware) y nunca
+sale en un empate en cero; con `month`, `topApp`/`topFreeware` del servidor
+mandan. Si las tarjetas cambian de lugar al llegar los datos se deslizan (FLIP,
+450 ms, sólo `transform`; se omite con reduced-motion y para tarjetas fuera de
+pantalla).
+
+**Recuadro "App del mes"** (`#app-del-mes` en `index.html`). El HTML trae StockFlow
+como valor por defecto (la página está completa sin JS). Los datos de las 11 apps
+viven en un solo mapa, `SPOTLIGHT_DATA` en `scripts/app-spotlight.js`: es una
+versión corta de lo que dice cada `apps/<slug>.html` y **hay que mantenerlo en
+sincronía a mano**; `tests/appSpotlight.test.ts` vigila la estructura (11 slugs,
+4–5 viñetas de ≤60 caracteres, existe la página, el estado coincide con el
+eyebrow del hero, nada de gratis/demo, RADAR sin WhatsApp, y que el HTML por
+defecto sea el de su entrada). Etiquetado honesto, decidido en
+`chooseSpotlight()`: `month`+`topApp` → "App del mes · la más visitada de
+<mes> <año>"; payload viejo con líder en `visits30` → "App más visitada ·
+últimos 30 días"; sin datos o todo en cero → "App destacada" con StockFlow. Para
+que un cambio de app no mueva el layout, el script mete copias invisibles
+(`.spot-ghost`) del texto de las 11 apps en la misma celda de grid: la caja mide
+lo que la más alta. Las viñetas sólo se ocultan cuando el script ya "armó" la
+caja (`.is-armed`), así que si el JS falla nunca quedan invisibles.
+
+**Reglas de movimiento** (`styles/home-motion.css`, sólo `index.html`): todo vive
+bajo `prefers-reduced-motion: no-preference`; el estado por defecto es el estado
+final visible. Sólo `transform`/`opacity`, con una excepción deliberada: el barrido
+del acento del H1 (`background-position`, una vez, ~2 s, un elemento). Las
+animaciones en bucle (brillo orbital, barrido de luz, marquesina, respiración de
+las barras) arrancan en pausa y sólo corren con `.is-onscreen`, que pone
+`shared.js` sobre los `[data-motion-watch]`. El retraso escalonado de los
+`.reveal` es `--reveal-delay`, que `shared.js` asigna sólo bajo `[data-reveal-stagger]`
+(`<main>` de la home) y quita al terminar. La home lleva
+`<noscript><style>.reveal{opacity:1!important…}` en el `<head>`.
+
+**Opiniones** (`scripts/testimonials.js`, en la home y las 11 páginas de app, que
+sólo ganaron el `<div data-testimonials="slug">` antes de "A LA MEDIDA" y el
+`<script defer>`). Pide `https://control.acaciaco.com.mx/api/testimonials[?app=]`
+(`connect-src 'self' https:` ya lo permite) con 2.5 s de tope y **no pinta nada**
+—ni encabezado ni marcador— si no hay endpoint, hay cero opiniones o algo falla:
+seguirá vacío hasta que Mission Control publique opiniones aprobadas. Sólo
+`textContent`, sin marcado JSON-LD de reseñas. Estilos en `styles/base.css`
+(`.tm-*`). Los nombres de app que usa están duplicados con el mapa del recuadro y
+un test los compara.
+
+`.app-card__popular-tag` tenía `position: relative` ganado por `.app-card > *`
+(misma especificidad, más abajo) y se veía como barra de ancho completo; se
+restauró el `absolute` con `.app-card > .app-card__popular-tag` en `base.css`.
