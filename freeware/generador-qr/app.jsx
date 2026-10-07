@@ -206,7 +206,7 @@ const FG_PRESETS = ["#11181f", "#1f4fd8", "#0f7a4f", "#6b21a8"];
 
 function detectLang() {
   try { const s = localStorage.getItem("acacia-lang"); if (s === "es" || s === "en") return s; } catch (e) {}
-  return (navigator.language || "es").toLowerCase().startsWith("en") ? "en" : "es";
+  return "es";
 }
 
 function App() {
@@ -230,7 +230,7 @@ function App() {
   const [margin, setMargin] = useState(4);
   const [logo, setLogo] = useState(null);
 
-  useEffect(() => { document.documentElement.setAttribute("lang", lang); try { localStorage.setItem("acacia-lang", lang); } catch (e) {} }, [lang]);
+  useEffect(() => { document.documentElement.setAttribute("lang", lang === "en" ? "en" : "es-MX"); try { localStorage.setItem("acacia-lang", lang); } catch (e) {} }, [lang]);
 
   const onLogo = useCallback((e) => {
     const file = e.target.files && e.target.files[0]; if (!file) return;

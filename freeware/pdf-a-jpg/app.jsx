@@ -35,7 +35,7 @@ const STRINGS = {
 function makeT(lang){return (k,v)=>{let s=(STRINGS[lang]&&STRINGS[lang][k])!=null?STRINGS[lang][k]:(STRINGS.es[k]!=null?STRINGS.es[k]:k);if(v&&typeof s==="string")for(var x in v)s=s.split("{"+x+"}").join(v[x]);return s;};}
 const LangContext=React.createContext("es");
 function triggerDownload(blob,filename){var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
-function detectLang(){try{var s=localStorage.getItem("acacia-lang");if(s==="es"||s==="en")return s;}catch(e){}return (navigator.language||"es").toLowerCase().indexOf("en")===0?"en":"es";}
+function detectLang(){try{var s=localStorage.getItem("acacia-lang");if(s==="es"||s==="en")return s;}catch(e){}return "es";}
 function PdfNav({t,current}){const items=[["unir-pdf","nav_merge"],["comprimir-pdf","nav_compress"],["dividir-pdf","nav_split"],["pdf-a-jpg","nav_p2j"],["jpg-a-pdf","nav_j2p"]];return <nav className="pdfnav" aria-label="PDF">{items.map(([s,k])=><a key={s} href={"/freeware/"+s} aria-current={current===s?"true":undefined}>{t(k)}</a>)}</nav>;}
 
 function App(){
@@ -44,7 +44,7 @@ function App(){
   const [name,setName]=useState(""); const [imgs,setImgs]=useState([]); // {url,blob,n}
   const [over,setOver]=useState(false); const [busy,setBusy]=useState(false); const [err,setErr]=useState("");
   const inputRef=useRef(null);
-  useEffect(()=>{document.documentElement.setAttribute("lang",lang);try{localStorage.setItem("acacia-lang",lang);}catch(e){}},[lang]);
+  useEffect(()=>{document.documentElement.setAttribute("lang", lang === "en" ? "en" : "es-MX");try{localStorage.setItem("acacia-lang",lang);}catch(e){}},[lang]);
 
   const convert=useCallback(async(f)=>{
     if(!f||!(f.type==="application/pdf"||/\.pdf$/i.test(f.name)))return;

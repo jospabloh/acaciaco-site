@@ -67,7 +67,7 @@ const uid = () => Math.random().toString(36).slice(2, 9);
 function formatBytes(b) { if (b < 1024) return b + " B"; if (b < 1048576) return (b / 1024).toFixed(1) + " KB"; return (b / 1048576).toFixed(2) + " MB"; }
 function triggerDownload(blob, filename) { var url = URL.createObjectURL(blob); var a = document.createElement("a"); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1500); }
 const QUALITY = { alta: { dpi: 150, q: 0.82 }, media: { dpi: 120, q: 0.65 }, baja: { dpi: 96, q: 0.5 } };
-function detectLang() { try { var s = localStorage.getItem("acacia-lang"); if (s === "es" || s === "en") return s; } catch (e) {} return (navigator.language || "es").toLowerCase().indexOf("en") === 0 ? "en" : "es"; }
+function detectLang() { try { var s = localStorage.getItem("acacia-lang"); if (s === "es" || s === "en") return s; } catch (e) {} return "es"; }
 
 async function compressPdf(file, preset) {
   const { dpi, q } = QUALITY[preset];
@@ -106,7 +106,7 @@ function App() {
   const [busy, setBusy] = useState(false);
   const inputRef = useRef(null);
 
-  useEffect(() => { document.documentElement.setAttribute("lang", lang); try { localStorage.setItem("acacia-lang", lang); } catch (e) {} }, [lang]);
+  useEffect(() => { document.documentElement.setAttribute("lang", lang === "en" ? "en" : "es-MX"); try { localStorage.setItem("acacia-lang", lang); } catch (e) {} }, [lang]);
 
   const addFiles = useCallback((list) => {
     const pdfs = [...list].filter((f) => f.type === "application/pdf" || /\.pdf$/i.test(f.name))

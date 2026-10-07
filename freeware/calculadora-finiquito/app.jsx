@@ -592,7 +592,7 @@ function detectLang() {
     const saved = localStorage.getItem("acacia-lang");
     if (saved === "es" || saved === "en") return saved;
   } catch (e) {}
-  return (navigator.language || "es").toLowerCase().startsWith("en") ? "en" : "es";
+  return "es";
 }
 
 function App() {
@@ -601,7 +601,7 @@ function App() {
   const t = makeT(lang);
 
   useEffect(() => {
-    document.documentElement.setAttribute("lang", lang);
+    document.documentElement.setAttribute("lang", lang === "en" ? "en" : "es-MX");
     try { localStorage.setItem("acacia-lang", lang); } catch (e) {}
   }, [lang]);
 

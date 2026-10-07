@@ -37,7 +37,7 @@ const LangContext=React.createContext("es");
 const mxn=new Intl.NumberFormat("es-MX",{style:"currency",currency:"MXN",minimumFractionDigits:2});
 const money=(n)=>isFinite(n)?mxn.format(Math.max(0,n)):"—";
 const num=(v)=>{const n=parseFloat(v);return isFinite(n)?n:0;};
-function detectLang(){try{var s=localStorage.getItem("acacia-lang");if(s==="es"||s==="en")return s;}catch(e){}return (navigator.language||"es").toLowerCase().indexOf("en")===0?"en":"es";}
+function detectLang(){try{var s=localStorage.getItem("acacia-lang");if(s==="es"||s==="en")return s;}catch(e){}return "es";}
 
 function App(){
   const [lang,setLang]=useState(detectLang);
@@ -45,7 +45,7 @@ function App(){
   const [tab,setTab]=useState("add");
   const [monto,setMonto]=useState("");
   const [rate,setRate]=useState(16);
-  useEffect(()=>{document.documentElement.setAttribute("lang",lang);try{localStorage.setItem("acacia-lang",lang);}catch(e){}},[lang]);
+  useEffect(()=>{document.documentElement.setAttribute("lang", lang === "en" ? "en" : "es-MX");try{localStorage.setItem("acacia-lang",lang);}catch(e){}},[lang]);
 
   const calc=useMemo(()=>{
     const m=num(monto), r=num(rate)/100;

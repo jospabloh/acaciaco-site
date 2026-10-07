@@ -35,7 +35,7 @@ const STRINGS = {
 };
 function makeT(lang){return (k,v)=>{let s=(STRINGS[lang]&&STRINGS[lang][k])!=null?STRINGS[lang][k]:(STRINGS.es[k]!=null?STRINGS.es[k]:k);if(v&&typeof s==="string")for(var x in v)s=s.split("{"+x+"}").join(v[x]);return s;};}
 const LangContext=React.createContext("es");
-function detectLang(){try{var s=localStorage.getItem("acacia-lang");if(s==="es"||s==="en")return s;}catch(e){}return (navigator.language||"es").toLowerCase().indexOf("en")===0?"en":"es";}
+function detectLang(){try{var s=localStorage.getItem("acacia-lang");if(s==="es"||s==="en")return s;}catch(e){}return "es";}
 function triggerDownload(text,filename){var blob=new Blob([text],{type:"text/plain"});var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
 
 function App(){
@@ -46,7 +46,7 @@ function App(){
   const [busy,setBusy]=useState(false); const [prog,setProg]=useState(0);
   const [text,setText]=useState(""); const [err,setErr]=useState(""); const [copied,setCopied]=useState(false);
   const inputRef=useRef(null); const [over,setOver]=useState(false);
-  useEffect(()=>{document.documentElement.setAttribute("lang",lang);try{localStorage.setItem("acacia-lang",lang);}catch(e){}},[lang]);
+  useEffect(()=>{document.documentElement.setAttribute("lang", lang === "en" ? "en" : "es-MX");try{localStorage.setItem("acacia-lang",lang);}catch(e){}},[lang]);
 
   const pick=useCallback((f)=>{ if(!f||!/image\//.test(f.type))return; setErr(""); setText(""); setFile(f); setUrl(u=>{ if(u)URL.revokeObjectURL(u); return URL.createObjectURL(f); }); },[]);
   const onDrop=(e)=>{e.preventDefault();setOver(false);if(e.dataTransfer.files&&e.dataTransfer.files[0])pick(e.dataTransfer.files[0]);};
