@@ -6,6 +6,16 @@
 (function () {
   if (window.__acaciaAnalytics) return;
   window.__acaciaAnalytics = true;
+  // Honour the cookie banner: "Solo esenciales" turns visit counting off.
+  // The key and shape are written by persistCookieChoice() in shared.js.
+  // acaciaTrack stays defined as a no-op so callers never have to check.
+  try {
+    var choice = JSON.parse(localStorage.getItem('acacia-cookies-consent') || 'null');
+    if (choice && choice.level === 'essential') {
+      window.acaciaTrack = function () {};
+      return;
+    }
+  } catch (e) {}
   // Cola de eventos de Vercel + carga del script de insights
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   var s = document.createElement("script");
