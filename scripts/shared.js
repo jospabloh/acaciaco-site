@@ -166,6 +166,8 @@
   }
 
   function initReveal() {
+    // Tells the homepage's inline safety net (html.js-reveal) that this script is alive.
+    document.documentElement.setAttribute('data-shared-ready', '1');
     var nodes = document.querySelectorAll('.reveal');
     assignRevealDelays();
     if (!('IntersectionObserver' in window) || !nodes.length) {

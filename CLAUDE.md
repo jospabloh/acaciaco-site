@@ -678,12 +678,17 @@ sincronía a mano**; `tests/appSpotlight.test.ts` vigila la estructura (11 slugs
 4–5 viñetas de ≤60 caracteres, existe la página, el estado coincide con el
 eyebrow del hero, nada de gratis/demo, RADAR sin WhatsApp, y que el HTML por
 defecto sea el de su entrada). Etiquetado honesto, decidido en
-`chooseSpotlight()`: `month`+`topApp` → "App del mes · la más visitada de
+`chooseSpotlight()` (que comparte con la etiqueta de la grilla un único
+`pickLeader()`, de modo que ambos nombran siempre la misma app; la lógica pura
+la prueba `tests/rankingLogic.test.ts`): `month`+`topApp` → "App del mes · la más visitada de
 <mes> <año>"; payload viejo con líder en `visits30` → "App más visitada ·
 últimos 30 días"; sin datos o todo en cero → "App destacada" con StockFlow. Para
 que un cambio de app no mueva el layout, el script mete copias invisibles
 (`.spot-ghost`) del texto de las 11 apps en la misma celda de grid: la caja mide
-lo que la más alta. Las viñetas sólo se ocultan cuando el script ya "armó" la
+lo que la más alta, y lo mismo con el eyebrow más largo, así que la altura es
+idéntica para cualquier app y cualquier etiqueta (CLS medido en 0 a 1440 y 390
+px con datos 0.3 s y 2 s tarde); el `min-height` de CSS (24.75rem; 27.75rem entre
+821 y 1180 px) sólo cubre el instante previo al JS. Las viñetas sólo se ocultan cuando el script ya "armó" la
 caja (`.is-armed`), así que si el JS falla nunca quedan invisibles.
 
 **Reglas de movimiento** (`styles/home-motion.css`, sólo `index.html`): todo vive
@@ -695,7 +700,21 @@ las barras) arrancan en pausa y sólo corren con `.is-onscreen`, que pone
 `shared.js` sobre los `[data-motion-watch]`. El retraso escalonado de los
 `.reveal` es `--reveal-delay`, que `shared.js` asigna sólo bajo `[data-reveal-stagger]`
 (`<main>` de la home) y quita al terminar. La home lleva
-`<noscript><style>.reveal{opacity:1!important…}` en el `<head>`.
+`<noscript><style>.reveal{opacity:1!important…}` en el `<head>`. Sólo en la home,
+además, `.reveal` es visible por defecto y se oculta únicamente mientras
+`<html>` lleva `.js-reveal`, que un script inline del `<head>` pone y quita a los
+3 s si `shared.js` no marcó `data-shared-ready`: un `shared.js` caído nunca deja
+la página en blanco. Sin soporte de `oklch()`/`color-mix()` todo sigue legible:
+el barrido del H1 va dentro de `@supports`, y `color-mix()` que lleva `var()` se
+declara en `@supports` (un respaldo en la misma regla NO sirve: una declaración
+con `var()` no se descarta al parsear y dejaría el fondo en blanco).
+
+**Claves que vienen del servidor** (`topApp`, `topFreeware`, `app` de una
+opinión, las claves de `visits`) sólo se buscan como propiedades propias
+(`Object.prototype.hasOwnProperty.call`): `"constructor"` o `"__proto__"` jamás
+resuelven a algo heredado. Un `topApp` se respeta únicamente si existe entre las
+tarjetas y su valor de la métrica activa es > 0; si no, manda el máximo real, y
+con máximo 0 no hay etiqueta ni afirmación.
 
 **Opiniones** (`scripts/testimonials.js`, en la home y las 11 páginas de app, que
 sólo ganaron el `<div data-testimonials="slug">` antes de "A LA MEDIDA" y el

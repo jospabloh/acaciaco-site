@@ -20,7 +20,7 @@
  * (class "is-armed") once it is running, so a script that fails to load can
  * never leave bullets hidden.
  *
- * Layout shift: every app's tagline and bullets are rendered, invisibly and
+ * Layout shift: every app's tagline and bullets, and the longest eyebrow, are rendered, invisibly and
  * stacked in the same grid cell as the real ones ("ghosts"), so the box is
  * always as tall as the tallest app at the current width and a swap cannot
  * change its height.
@@ -215,10 +215,12 @@
   }
 
   function show(slug, eyebrow) {
+    // Own keys only: a server-provided "constructor" must not resolve.
+    if (typeof slug !== 'string' || !Object.prototype.hasOwnProperty.call(SPOTLIGHT_DATA, slug)) return;
     var d = SPOTLIGHT_DATA[slug];
     if (!box || !d) return;
     var eb = q('[data-spot="eyebrow"]');
-    if (eb && eyebrow) eb.textContent = eyebrow;
+    if (eb && typeof eyebrow === 'string' && eyebrow) eb.textContent = eyebrow;
     if (slug === current) return;
     current = slug;
 
@@ -254,6 +256,14 @@
   // Invisible copies of every app's text, stacked in the same grid cell as the
   // real text, so the box always has the height of the tallest one.
   function buildGhosts() {
+    // The longest eyebrow either label can produce ("septiembre" is the longest
+    // month), so a late swap of the eyebrow never adds a line on narrow screens.
+    var ebCell = q('.spot-eyebrow-cell');
+    if (ebCell) {
+      var g = el('span', 'spot-ghost', 'App del mes · la más visitada de septiembre 2026');
+      g.setAttribute('aria-hidden', 'true');
+      ebCell.appendChild(g);
+    }
     var tagCell = q('.spot-tagline-cell');
     var listCell = q('.spot-list-cell');
     if (!tagCell || !listCell) return;

@@ -94,10 +94,35 @@
     return payload && parseMonth(payload.month) ? 'visitsMonth' : 'visits30';
   }
 
+  // Server-provided keys (slugs) are only ever looked up as OWN properties:
+  // "constructor" / "__proto__" must never resolve to something inherited.
+  function has(obj, key) {
+    return obj != null && typeof obj === 'object' && typeof key === 'string' &&
+      Object.prototype.hasOwnProperty.call(obj, key);
+  }
+
   function valueOf(bucket, slug, metric) {
-    var v = bucket && bucket[slug];
-    var n = v ? Number(v[metric]) : 0;
-    return n > 0 ? n : 0;
+    if (!has(bucket, slug)) return 0;
+    var v = bucket[slug];
+    var n = (v && typeof v === 'object') ? Number(v[metric]) : 0;
+    return n > 0 && isFinite(n) ? n : 0;
+  }
+
+  // THE one decision of "who leads", used by the grids' tag AND the box so they
+  // can never name different apps. The server's own pick (topApp/topFreeware)
+  // counts only if it is one of `slugs` AND has a real value for the active
+  // metric; otherwise the real maximum wins; a zero maximum means no leader.
+  function pickLeader(bucket, slugs, metric, serverSlug) {
+    if (typeof serverSlug === 'string' && slugs.indexOf(serverSlug) !== -1 &&
+        valueOf(bucket, serverSlug, metric) > 0) {
+      return serverSlug;
+    }
+    var best = null, bestV = 0;
+    slugs.forEach(function (k) {
+      var v = valueOf(bucket, k, metric);
+      if (v > bestV) { best = k; bestV = v; }
+    });
+    return best;
   }
 
   // `idx` is the card's position in the static HTML, captured the first time
@@ -154,16 +179,11 @@
     });
   }
 
-  // Draws the leader's tag. `serverSlug` is Mission Control's own pick
-  // (topApp / topFreeware) and wins when it names a card in this grid.
-  function tagLeader(scored, serverSlug, label) {
-    var top = null;
-    if (serverSlug) {
-      top = scored.filter(function (s) { return s.slug === serverSlug; })[0] || null;
-    }
-    if (!top) top = scored.reduce(function (a, b) { return b.value > a.value ? b : a; }, scored[0]);
-    // A zero tie is not a lead: no tag, no pulse.
-    if (!top || (top.value <= 0 && !serverSlug)) return null;
+  // Draws the leader's tag on the card `leaderSlug` (from pickLeader), if any.
+  function tagLeader(scored, leaderSlug, label) {
+    if (!leaderSlug) return null;
+    var top = scored.filter(function (s) { return s.slug === leaderSlug; })[0];
+    if (!top) return null;
     top.el.classList.add('is-top');
     var tag = document.createElement('span');
     tag.className = 'app-card__popular-tag';
@@ -209,32 +229,37 @@
 
       // The pulse is a signature moment for one card, not a status indicator.
       var month = payload && parseMonth(payload.month);
-      tagLeader(scored, month ? payload.topApp : null, leaderLabel(payload, 'La más visitada'));
+      var leader = pickLeader(bucket, scored.map(function (x) { return x.slug; }), metric,
+        month ? payload.topApp : null);
+      tagLeader(scored, leader, leaderLabel(payload, 'La más visitada'));
     });
 
     return cards;
   }
 
   // Which app the "app del mes" box features, and how to label it honestly.
-  // Returns null when the data does not name a leader (box keeps its default).
-  function chooseSpotlight(payload) {
-    if (!payload || !payload.visits) return null;
-    var known = (window.ACACIA_APP_SPOTLIGHT && window.ACACIA_APP_SPOTLIGHT.data) || {};
+  // Returns null when the data names no real leader (box keeps its default).
+  // Uses the same pickLeader as the homepage tag, over the same 11 slugs.
+  function chooseSpotlight(payload, knownMap) {
+    if (!payload || typeof payload !== 'object' || !payload.visits || typeof payload.visits !== 'object') return null;
+    var known = knownMap || (window.ACACIA_APP_SPOTLIGHT && window.ACACIA_APP_SPOTLIGHT.data) || {};
     var month = parseMonth(payload.month);
-    if (month) {
-      var slug = payload.topApp;
-      if (!slug || !known[slug]) return null;
-      var b = payload.visits[slug];
-      if (b && b.visitsMonth != null && !(Number(b.visitsMonth) > 0)) return null;
-      return { slug: slug, eyebrow: 'App del mes · la más visitada de ' + month.name + ' ' + month.year };
-    }
-    var best = null, bestV = 0;
-    Object.keys(known).forEach(function (k) {
-      var v = valueOf(payload.visits, k, 'visits30');
-      if (v > bestV) { best = k; bestV = v; }
-    });
-    return best ? { slug: best, eyebrow: 'App más visitada · últimos 30 días' } : null;
+    var slug = pickLeader(payload.visits, Object.keys(known), metricFor(payload), month ? payload.topApp : null);
+    if (!slug) return null;
+    return {
+      slug: slug,
+      eyebrow: month
+        ? 'App del mes · la más visitada de ' + month.name + ' ' + month.year
+        : 'App más visitada · últimos 30 días'
+    };
   }
+
+  // Pure decision logic, exposed for tests/rankingLogic.test.ts (no DOM needed).
+  if (typeof window !== 'undefined') {
+    window.ACACIA_RANKING = { metricFor: metricFor, valueOf: valueOf, pickLeader: pickLeader,
+      chooseSpotlight: chooseSpotlight, parseMonth: parseMonth, has: has };
+  }
+  if (typeof document === 'undefined') return;
 
   // Binds once per grid element (guarded by __acaciaMagnifyBound) and re-reads
   // its cards from the DOM on every move/leave rather than closing over the
@@ -311,7 +336,9 @@
       });
 
       var month = payload && parseMonth(payload.month);
-      tagLeader(scored, month ? payload.topFreeware : null, leaderLabel(payload, 'La más usada'));
+      var leader = pickLeader(bucket, scored.map(function (x) { return x.slug; }), metric,
+        month ? payload.topFreeware : null);
+      tagLeader(scored, leader, leaderLabel(payload, 'La más usada'));
     });
 
     return { grid: grid, cards: cards };
@@ -427,7 +454,6 @@
 
     var eligible = FREEWARE_CATALOG.filter(function (t) { return excludedSlugs.indexOf(t.slug) === -1; });
     var ranked = eligible.map(function (t) {
-      var v = freewareVisits[t.slug];
       return { slug: t.slug, value: valueOf(freewareVisits, t.slug, metric) };
     }).sort(function (a, b) { return b.value - a.value; });
 
@@ -482,7 +508,7 @@
 
     fetchVisits().then(function (data) {
       if (!data) return;
-      if (data.visits) {
+      if (data.visits && typeof data.visits === 'object') {
         rankHomepage(data);
         rankCatalogGroups(data);
         var pick = chooseSpotlight(data);
@@ -490,7 +516,7 @@
           window.ACACIA_APP_SPOTLIGHT.show(pick.slug, pick.eyebrow);
         }
       }
-      if (data.freeware) {
+      if (data.freeware && typeof data.freeware === 'object') {
         rankFreeware(data);
         rankGratisTeaser(data);
       }

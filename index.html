@@ -45,6 +45,18 @@
     })();
   </script>
 
+  <!-- Homepage-only reveal safety net: .reveal content is hidden (home-motion.css)
+       only while html.js-reveal is set, and only until shared.js reports in. -->
+  <script>
+    (function () {
+      var h = document.documentElement;
+      h.classList.add('js-reveal');
+      setTimeout(function () {
+        if (!h.hasAttribute('data-shared-ready')) h.classList.remove('js-reveal');
+      }, 3000);
+    })();
+  </script>
+
   <link rel="stylesheet" href="/assets/css/acacia-intro.css" />
   <link rel="stylesheet" href="/styles/base.css" />
   <link rel="stylesheet" href="/styles/home-motion.css" />
@@ -414,12 +426,12 @@
         <!-- APP DEL MES. Static default = StockFlow so the page is complete without JS
              and for crawlers. scripts/apps-grid.js decides who leads and
              scripts/app-spotlight.js swaps this content (data map lives there). -->
-        <section class="spot reveal" id="app-del-mes" aria-labelledby="spot-title" data-spot-slug="stockflow" data-motion-watch>
+        <section class="spot reveal" id="app-del-mes" aria-labelledby="spot-eyebrow spot-title" data-spot-slug="stockflow" data-motion-watch>
           <div class="spot-inner">
             <div class="spot-copy">
-              <p class="spot-eyebrow">
+              <p class="spot-eyebrow" id="spot-eyebrow">
                 <svg class="spot-spark" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z"/></svg>
-                <span data-spot="eyebrow">App destacada</span>
+                <span class="spot-eyebrow-cell"><span data-spot="eyebrow">App destacada</span></span>
               </p>
               <div class="spot-id">
                 <span class="spot-logo" data-spot="logo"><img src="/assets/stockflow-logo.png" alt="StockFlow" width="56" height="56" /></span>

@@ -21,9 +21,12 @@
 .spot {
   --spot-r: 22px;
   --spot-b: 1.5px;
-  --spot-beam: color-mix(in oklch, var(--primary) 85%, white);
-  --spot-sheen: color-mix(in srgb, var(--primary) 11%, transparent);
-  --spot-text: color-mix(in srgb, var(--text) 74%, transparent);
+  /* plain values first; refined below where color-mix() exists */
+  --spot-beam: #6aa6ff;
+  --spot-beam-soft: rgba(106, 166, 255, 0.25);
+  --spot-sheen: rgba(59, 110, 248, 0.1);
+  --spot-text: rgba(14, 13, 20, 0.74);
+  --spot-tint: rgba(59, 110, 248, 0.16);
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -33,13 +36,31 @@
   background: var(--border);
   box-shadow: var(--shadow-md), 0 24px 60px -34px var(--glow);
   /* Reserve (measured at the tallest app) before JS adds the invisible per-app sizers. */
-  min-height: 24.5rem;
+  min-height: 24.75rem;
 }
 @media (min-width: 821px) and (max-width: 1180px) { .spot { min-height: 27.75rem; } }
 [data-theme="dark"] .spot {
-  --spot-beam: color-mix(in oklch, var(--primary) 70%, white);
+  --spot-beam: #8fb6ff;
+  --spot-beam-soft: rgba(143, 182, 255, 0.25);
   --spot-sheen: rgba(255, 255, 255, 0.055);
-  --spot-text: color-mix(in srgb, var(--text) 78%, transparent);
+  --spot-text: rgba(240, 239, 248, 0.78);
+  --spot-eyebrow: #9db9ff;
+}
+@supports (color: color-mix(in srgb, red, blue)) {
+  .spot {
+    --spot-beam: color-mix(in oklch, var(--primary) 85%, white);
+    --spot-beam-soft: color-mix(in oklch, var(--spot-beam) 25%, transparent);
+    --spot-sheen: color-mix(in srgb, var(--primary) 11%, transparent);
+    --spot-text: color-mix(in srgb, var(--text) 74%, transparent);
+    --spot-tint: color-mix(in srgb, var(--primary) 16%, transparent);
+  }
+  [data-theme="dark"] .spot {
+    --spot-beam: color-mix(in oklch, var(--primary) 70%, white);
+    --spot-beam-soft: color-mix(in oklch, var(--spot-beam) 25%, transparent);
+    --spot-sheen: rgba(255, 255, 255, 0.055);
+    --spot-text: color-mix(in srgb, var(--text) 78%, transparent);
+    --spot-eyebrow: color-mix(in oklch, var(--primary) 60%, white);
+  }
 }
 
 /* The "brillito" #1: a beam of light that travels around the border. It is a
@@ -56,7 +77,7 @@
   transform: translate(-50%, -50%);
   background: conic-gradient(from 0deg,
     transparent 0 52%,
-    color-mix(in oklch, var(--spot-beam) 25%, transparent) 68%,
+    var(--spot-beam-soft) 68%,
     var(--spot-beam) 82%,
     transparent 90% 100%);
   pointer-events: none;
@@ -70,8 +91,15 @@
   padding: clamp(1.5rem, 3.5vw, 2.75rem);
   overflow: hidden;
   border-radius: calc(var(--spot-r) - var(--spot-b));
-  background:
-    radial-gradient(90% 120% at 0% 0%, color-mix(in srgb, var(--primary) 9%, var(--bg-card)), var(--bg-card) 62%);
+  background: var(--bg-card);
+}
+/* NOT a same-rule fallback: a declaration containing var() is never dropped at
+   parse time, so an unsupported color-mix() would blank the whole background.
+   @supports keeps the plain --bg-card above in force instead. */
+@supports (color: color-mix(in srgb, red, blue)) {
+  .spot-inner {
+    background: radial-gradient(90% 120% at 0% 0%, color-mix(in srgb, var(--primary) 9%, var(--bg-card)), var(--bg-card) 62%);
+  }
 }
 
 /* The "brillito" #2: a soft band of light that sweeps across now and then. */
@@ -104,7 +132,10 @@
   letter-spacing: 0.02em;
   color: var(--primary);
 }
-[data-theme="dark"] .spot-eyebrow { color: color-mix(in oklch, var(--primary) 60%, white); }
+[data-theme="dark"] .spot-eyebrow { color: var(--spot-eyebrow, #9db9ff); }
+.spot-eyebrow { min-width: 0; }
+.spot-eyebrow-cell { display: grid; min-width: 0; }
+.spot-eyebrow-cell > * { grid-area: 1 / 1; }
 .spot-spark { flex: none; }
 
 .spot-id { display: flex; align-items: center; gap: 1rem; }
@@ -170,7 +201,7 @@
   width: 1.3rem;
   height: 1.3rem;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--primary) 16%, transparent);
+  background: var(--spot-tint);
 }
 .spot-feat::after {
   content: "";
@@ -183,7 +214,7 @@
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
-[data-theme="dark"] .spot-feat::after { border-color: color-mix(in oklch, var(--primary) 60%, white); }
+[data-theme="dark"] .spot-feat::after { border-color: var(--spot-eyebrow, #9db9ff); }
 
 @media (max-width: 820px) {
   .spot { min-height: 0; }
@@ -255,8 +286,11 @@
 .marquee {
   padding: 1.15rem 0 1.3rem;
   border-block: 1px solid var(--border);
-  background: color-mix(in srgb, var(--bg-subtle) 55%, transparent);
+  background: var(--bg-subtle);
   overflow: hidden;
+}
+@supports (color: color-mix(in srgb, red, blue)) {
+  .marquee { background: color-mix(in srgb, var(--bg-subtle) 55%, transparent); }
 }
 .marquee-cap {
   text-align: center;
@@ -321,6 +355,13 @@
 
 /* ───────────────────────── 3. Motion pass ───────────────────────── */
 
+/* Resilience: on the homepage .reveal content is VISIBLE by default. It is only
+   hidden (base.css's own .reveal rules) while <html> carries .js-reveal, which a
+   tiny inline script in <head> sets and removes again if shared.js has not
+   initialised within ~3 s. A failed or blocked shared.js therefore never leaves
+   the page blank. Other pages are untouched: .js-reveal only exists here. */
+html:not(.js-reveal) [data-reveal-stagger] .reveal { opacity: 1; transform: none; }
+
 /* Reveals: each item's --reveal-delay is set by shared.js and dropped after
    the entrance. Equal specificity to the older nth-child stagger in base.css
    and later in source, so this one decides. */
@@ -371,22 +412,28 @@
   /* The card floats only while it is on screen (base.css owns the float). */
   .hero-visual:not(.is-onscreen) .preview { animation-play-state: paused; }
 
-  /* H1 accent words: one light sweep across the text, once. The single
-     paint-based animation on the page, on one element, for ~2 s. */
-  .hero h1 .accent {
-    --sweep: oklch(88% 0.09 235);
-    color: transparent;
-    background-image: linear-gradient(100deg,
-      var(--primary) 0 38%, var(--sweep) 50%, var(--primary) 62% 100%);
-    background-size: 280% 100%;
-    background-position: 100% 0;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
-    animation: accent-sweep 2.2s var(--ease-out) 0.5s both;
+}
+/* H1 accent words: one light sweep across the text, once. The single
+   paint-based animation on the page. Wrapped in @supports because it makes the
+   text transparent: without oklch() / background-clip:text the words must stay
+   plain, solid and legible. */
+@supports (color: oklch(50% 0 0)) and ((-webkit-background-clip: text) or (background-clip: text)) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero h1 .accent {
+      --sweep: oklch(88% 0.09 235);
+      color: transparent;
+      background-image: linear-gradient(100deg,
+        var(--primary) 0 38%, var(--sweep) 50%, var(--primary) 62% 100%);
+      background-size: 280% 100%;
+      background-position: 100% 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+      animation: accent-sweep 2.2s var(--ease-out) 0.5s both;
+    }
+    [data-theme="light"] .hero h1 .accent { --sweep: oklch(40% 0.2 262); }
   }
-  [data-theme="light"] .hero h1 .accent { --sweep: oklch(40% 0.2 262); }
 }
 @keyframes row-in {
   from { opacity: 0; transform: translateX(20px); }

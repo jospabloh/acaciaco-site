@@ -56,9 +56,16 @@
       .then(function (d) { if (timer) clearTimeout(timer); return d; });
   }
 
+  // Own keys only, so a server-provided "constructor" is never an app.
+  function known(slug) {
+    return typeof slug === 'string' && Object.prototype.hasOwnProperty.call(APP_NAMES, slug);
+  }
+
   function clean(item) {
     if (!item || typeof item !== 'object') return null;
-    var rating = Math.round(Number(item.rating));
+    var raw = Number(item.rating);
+    if (typeof item.rating === 'boolean' || item.rating === null || !isFinite(raw) || raw < 1 || raw > 5) return null;
+    var rating = Math.floor(raw);
     var body = typeof item.body === 'string' ? item.body.trim() : '';
     var name = typeof item.author_name === 'string' ? item.author_name.trim() : '';
     if (!(rating >= 1 && rating <= 5) || !body || !name) return null;
@@ -68,7 +75,7 @@
       body: body.length > BODY_MAX ? body.slice(0, BODY_MAX).replace(/\s+\S*$/, '') + '…' : body,
       name: name,
       role: typeof item.author_role === 'string' ? item.author_role.trim() : '',
-      month: typeof item.month === 'string' ? item.month : ''
+      month: monthLabel(item.month) ? item.month : ''
     };
   }
 
@@ -96,7 +103,7 @@
     c.style.setProperty('--tm-i', index);
     var head = el('div', 'tm-head');
     head.appendChild(stars(t.rating));
-    if (showApp && APP_NAMES[t.app]) head.appendChild(el('span', 'tm-app', APP_NAMES[t.app]));
+    if (showApp && known(t.app)) head.appendChild(el('span', 'tm-app', APP_NAMES[t.app]));
     c.appendChild(head);
     c.appendChild(el('blockquote', 'tm-body', t.body));
     var cap = el('figcaption', 'tm-cap');
@@ -111,9 +118,9 @@
   function render(mount, items, slug) {
     var home = slug === '*';
     var list = items.map(clean).filter(Boolean);
-    if (!home) list = list.filter(function (t) { return !t.app || t.app === slug; });
+    if (!home) list = list.filter(function (t) { return t.app === slug; });
     if (home) {
-      list = list.filter(function (t) { return !!APP_NAMES[t.app]; });
+      list = list.filter(function (t) { return known(t.app); });
       list.sort(function (a, b) { return a.month < b.month ? 1 : a.month > b.month ? -1 : 0; });
       list = list.slice(0, HOME_MAX);
     }
@@ -129,7 +136,7 @@
     eb.firstChild.setAttribute('aria-hidden', 'true');
     eb.appendChild(document.createTextNode(' Opiniones'));
     head.appendChild(eb);
-    var h2 = el('h2', null, home ? 'Lo que dicen quienes ya usan nuestras apps.' : 'Lo que dicen quienes usan ' + (APP_NAMES[slug] || 'esta app') + '.');
+    var h2 = el('h2', null, home ? 'Lo que dicen quienes ya usan nuestras apps.' : 'Lo que dicen quienes usan ' + (known(slug) ? APP_NAMES[slug] : 'esta app') + '.');
     h2.id = id;
     head.appendChild(h2);
     wrap.appendChild(head);
@@ -144,7 +151,9 @@
     var mounts = document.querySelectorAll('[data-testimonials]');
     Array.prototype.forEach.call(mounts, function (mount) {
       var slug = mount.getAttribute('data-testimonials');
-      if (slug !== '*' && !APP_NAMES[slug]) return;
+      if (mount.__acaciaTm) return; // two script tags must never render two sections
+      if (slug !== '*' && !known(slug)) return;
+      mount.__acaciaTm = true;
       var url = slug === '*' ? URL_BASE : URL_BASE + '?app=' + encodeURIComponent(slug);
       fetchJSON(url).then(function (data) { if (data) render(mount, data.items, slug); });
     });
