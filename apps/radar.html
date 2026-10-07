@@ -1,24 +1,26 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-MX">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RADAR · Control de asistencia y RR.HH. — ACACIA</title>
-  <meta name="description" content="Registro de asistencia por WhatsApp, aprobaciones, vacaciones y permisos, turnos y analítica de productividad en un solo lugar. RADAR está en demo — solicita acceso." />
+  <title>RADAR · Checador de asistencia para empleados — ACACIA</title>
+  <meta name="description" content="Sabe quién llegó, quién falta y qué espera tu aprobación. Checador de asistencia para empleados desde el navegador, en México. 30 días de prueba." />
   <link rel="canonical" href="https://acaciaco.com.mx/apps/radar" />
 
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="es_MX" />
   <meta property="og:url" content="https://acaciaco.com.mx/apps/radar" />
-  <meta property="og:title" content="RADAR · Control de asistencia y RR.HH. — ACACIA" />
-  <meta property="og:description" content="Registro de asistencia por WhatsApp, aprobaciones, vacaciones y permisos, turnos y analítica de productividad en un solo lugar." />
-  <meta property="og:image" content="https://acaciaco.com.mx/assets/acacia-logo.jpg" />
+  <meta property="og:title" content="RADAR · Checador de asistencia para empleados — ACACIA" />
+  <meta property="og:description" content="Sabe quién llegó, quién falta y qué espera tu aprobación. Checador de asistencia para empleados desde el navegador, en México. 30 días de prueba." />
+  <meta property="og:image" content="https://acaciaco.com.mx/assets/radar-og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta property="og:site_name" content="ACACIA Consultoría" />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="RADAR · Control de asistencia y RR.HH. — ACACIA" />
-  <meta name="twitter:description" content="Registro de asistencia por WhatsApp, aprobaciones, vacaciones y permisos, turnos y analítica de productividad en un solo lugar." />
-  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/acacia-logo.jpg" />
+  <meta name="twitter:title" content="RADAR · Checador de asistencia para empleados — ACACIA" />
+  <meta name="twitter:description" content="Sabe quién llegó, quién falta y qué espera tu aprobación. Checador de asistencia para empleados desde el navegador, en México. 30 días de prueba." />
+  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/radar-og.jpg" />
 
   <link rel="icon" href="/assets/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
@@ -50,6 +52,9 @@
     .radar-mark { color: #2563eb; }
   </style>
 
+  <!-- Every claim below was checked against the app's code on 2026-10-07.
+       WhatsApp check-in and WhatsApp notices do NOT exist in the app yet:
+       they may only appear in the "En camino" list, never as a feature. -->
   <script type="application/ld+json">
   [
     {
@@ -58,6 +63,7 @@
       "name": "RADAR",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web",
+      "url": "https://acaciaco.com.mx/apps/radar",
       "offers": {
         "@type": "AggregateOffer",
         "priceCurrency": "MXN",
@@ -65,17 +71,26 @@
         "highPrice": "999",
         "offerCount": "2",
         "availability": "https://schema.org/PreOrder",
-        "description": "Planes desde $499 MXN al mes. Acceso por invitación — demo privada."
+        "description": "Planes desde $499 MXN al mes. Precios de lanzamiento previstos, sujetos a confirmación."
       },
-      "provider": { "@type": "Organization", "name": "ACACIA Consultoría", "url": "https://acaciaco.com.mx" },
-      "description": "Control de asistencia y RR.HH.: registro por WhatsApp, aprobaciones, vacaciones y permisos, turnos y analítica de productividad."
+      "provider": { "@id": "https://acaciaco.com.mx/#organization" },
+      "description": "Checador de asistencia en línea para empleados: entrada y salida desde el navegador, aprobaciones de vacaciones, permisos y cambios de horario, turnos, incidencias y analítica por empleado.",
+      "featureList": [
+        "Registro de entrada y salida desde el navegador del empleado",
+        "Panel de aprobaciones para vacaciones, permisos, cambios de horario y extensiones de jornada",
+        "Plantillas de turno y horario semanal por empleado",
+        "Cierre automático de jornada y marcado de ausencias",
+        "Calendario mensual por empleado y panel de incidencias",
+        "Analítica por empleado: tardanzas, ausencias y minutos de extensión",
+        "Documentos que cada empleado sube a su perfil"
+      ]
     },
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://acaciaco.com.mx/" },
-        { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://acaciaco.com.mx/#apps" },
+        { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://acaciaco.com.mx/apps" },
         { "@type": "ListItem", "position": 3, "name": "RADAR", "item": "https://acaciaco.com.mx/apps/radar" }
       ]
     }
@@ -98,7 +113,7 @@
         <ul class="nav-links" role="list">
           <li><a href="/#como-trabajamos">Soluciones</a></li>
           <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
-          <li><a href="/#apps">Apps</a></li>
+          <li><a href="/apps">Apps</a></li>
           <li><a href="/servicios">Servicios</a></li>
           <li><a href="/contacto">Contacto</a></li>
         </ul>
@@ -138,25 +153,25 @@
               </svg>
               <span class="name">RADAR</span>
             </div>
-            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Demo · Acceso por invitación</span>
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> En desarrollo · disponible para probar</span>
             <h1 id="rd-h1">Sabe quién llegó, quién falta y quién necesita tu <span class="accent">aprobación</span> — sin perseguir a nadie.</h1>
-            <p class="lead">RADAR centraliza el registro de asistencia por WhatsApp, las solicitudes de vacaciones y permisos, los turnos y la analítica de productividad de tu equipo en un solo lugar, con aprobaciones que caben en un mensaje.</p>
+            <p class="lead">RADAR es un checador de asistencia en línea: cada empleado registra su entrada y su salida desde el navegador, sin instalar nada, y tú ves en un panel quién está presente, quién llegó tarde y qué solicitudes esperan tu aprobación.</p>
             <div class="hero-ctas">
-              <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20conocer%20la%20demo%20de%20RADAR" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Solicitar acceso a la demo →</a>
+              <!-- RADAR has no self-service trial yet, so the primary CTA is WhatsApp, not /trial#radar. -->
+              <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20RADAR%2030%20d%C3%ADas" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Pedir acceso de prueba</a>
               <a href="#planes" class="btn btn-ghost">Ver planes →</a>
-              <a href="/#apps" class="btn btn-ghost">← Volver a soluciones</a>
+              <a href="/apps" class="btn btn-ghost">← Volver a las apps</a>
             </div>
           </div>
 
           <div class="hero-visual reveal" aria-hidden="true">
             <div class="mock">
-              <span class="mock-corner-pill">Vista previa</span>
               <div class="mock-head">
                 <div class="dots"><span></span><span></span><span></span></div>
                 <span class="title">RADAR · Panel de asistencia</span>
               </div>
               <div class="mock-shot">
-                <img src="/assets/radar-hero.jpg" width="1600" height="1000" alt="Dashboard de RADAR con empleados presentes, tardanzas y extensiones pendientes" loading="eager" />
+                <img src="/assets/radar-hero.jpg" width="1600" height="1000" alt="Panel de RADAR con el total de empleados, presentes ahora, tardanzas, ausentes, permisos del día y extensiones pendientes, y la hora de entrada de cada empleado" loading="eager" />
               </div>
             </div>
           </div>
@@ -164,56 +179,78 @@
       </div>
     </section>
 
-    <!-- VALUE PROPS -->
+    <!-- VALUE PROPS — working features only; anything planned goes in EN CAMINO below -->
     <section class="section" id="capacidades" aria-labelledby="rd-vp-h2">
       <div class="container">
         <div class="section-head reveal">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Capacidades</span>
-          <h2 id="rd-vp-h2">Un solo lugar para la asistencia y la operación de tu equipo.</h2>
-          <p>Pensado para negocios con personal en campo, tienda o turnos, donde perseguir asistencia por hoja de cálculo o grupo de WhatsApp ya no alcanza.</p>
+          <h2 id="rd-vp-h2">Control de asistencia de empleados en un solo lugar.</h2>
+          <p>Pensado para negocios con personal en tienda, oficina o por turnos, donde llevar la asistencia en una hoja de cálculo o en un chat ya no alcanza.</p>
         </div>
         <div class="features-grid">
           <article class="feature reveal">
-            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
-            <h3>Registro de asistencia por WhatsApp</h3>
-            <p>Tu equipo hace check-in y check-out desde WhatsApp, sin instalar nada nuevo ni aprender una app distinta.</p>
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span>
+            <h3>Entrada y salida desde el navegador</h3>
+            <p>Cada empleado abre su portal web en el celular o la computadora y registra entrada y salida con un botón. No hay nada que instalar; si llega después de su hora, queda marcado como tardanza.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
             <h3>Aprobaciones en un lugar</h3>
-            <p>Vacaciones, permisos y cambios de horario llegan a un solo panel de aprobación — nada se pierde en el chat.</p>
+            <p>Tu equipo pide vacaciones, permisos o 30 minutos más de jornada desde su portal, y los cambios de horario los propone el gerente. Todo llega a un mismo panel, donde se aprueba o se rechaza.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
             <h3>Turnos y horarios</h3>
-            <p>Plantillas de turno, cobertura y solicitudes de cambio de horario, con visibilidad de quién cubre qué.</p>
+            <p>Guarda plantillas de turno con nombre, hora de entrada, hora de salida y días, y define el horario semanal de cada empleado, día por día.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></span>
+            <h3>Cierre automático y ausencias</h3>
+            <p>RADAR revisa la asistencia cada 15 minutos: marca la ausencia de quien no registró entrada 30 minutos después de su hora, y cierra la jornada de quien olvidó registrar su salida una hora después del fin de su turno.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+            <h3>Calendario e incidencias</h3>
+            <p>Un calendario mensual por empleado muestra sus días de trabajo, descansos y vacaciones o permisos aprobados. El panel de incidencias reúne ausencias y llegadas tarde, con espacio para anotar qué se hizo.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
-            <h3>Analítica de productividad</h3>
-            <p>Puntualidad, ausentismo y tendencias por empleado o equipo, para decidir con datos y no con memoria.</p>
+            <h3>Analítica por empleado</h3>
+            <p>Gráficas por empleado de tardanzas, ausencias y minutos de extensión acumulados, más un reporte por rango de fechas con horas trabajadas, días presentes, tardanzas, ausencias y permisos.</p>
           </article>
           <article class="feature reveal">
-            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
-            <h3>Expedientes de empleado</h3>
-            <p>Documentos, contratos y datos de cada colaborador ordenados en un mismo lugar, con acceso por rol.</p>
-          </article>
-          <article class="feature reveal">
-            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
-            <h3>Notificaciones automáticas</h3>
-            <p>Recordatorios y alertas por WhatsApp cuando algo necesita tu atención — nadie tiene que estar revisando el panel todo el día.</p>
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg></span>
+            <h3>Documentos del empleado</h3>
+            <p>Cada empleado sube sus documentos a su perfil, junto a sus datos y su fecha de contratación. Se guardan en almacenamiento privado y, por ahora, sólo los ve el propio empleado.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- PRICING -->
+    <!-- EN CAMINO — planned, NOT built. The only place WhatsApp may be named as a product feature. -->
+    <section class="section-feedback section" id="en-camino" aria-labelledby="rd-camino-h2">
+      <div class="container">
+        <div class="feedback-card reveal">
+          <div class="feedback-text">
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Todavía no disponible</span>
+            <h2 id="rd-camino-h2">En camino</h2>
+            <p>Estas funciones están planeadas y todavía no existen en RADAR:</p>
+            <ul class="pricing-features" style="margin-top:0.9rem; margin-bottom:0;">
+              <li>Registro de asistencia por WhatsApp</li>
+              <li>Avisos por WhatsApp</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING — the app does not gate features by plan; only the employee limit differs. -->
     <section class="section" id="planes" aria-labelledby="rd-price-h2">
       <div class="container">
         <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Planes RADAR</span>
           <h2 id="rd-price-h2">Un plan según el tamaño de tu equipo.</h2>
-          <p class="section-sub">RADAR está en demo — el acceso es por invitación. Los precios de abajo son reales; te confirmamos el tuyo el mismo día.</p>
+          <p class="section-sub">Todos los planes incluyen todas las funciones; cambia el número de empleados. Precios de lanzamiento previstos, sujetos a confirmación.</p>
         </div>
         <div class="pricing-grid pricing-grid-3">
 
@@ -223,10 +260,9 @@
             <div class="pricing-price"><span data-price="499">$499 MXN</span> <span class="pricing-unit">/ mes</span></div>
             <p class="pricing-desc">Para equipos pequeños que quieren dejar la hoja de cálculo.</p>
             <ul class="pricing-features">
-              <li>Registro de asistencia</li>
-              <li>Reportes básicos</li>
-              <li>Soporte por correo</li>
               <li>Hasta 15 empleados</li>
+              <li>Todas las funciones</li>
+              <li>Soporte por correo</li>
             </ul>
             <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20el%20plan%20RADAR%20Starter" target="_blank" rel="noopener" class="btn-mp">Solicitar →</a>
             <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20RADAR%20Starter" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
@@ -234,16 +270,14 @@
 
           <!-- Pro (FEATURED) -->
           <div class="reveal pricing-card featured">
-            <div class="pricing-badge">Más popular</div>
+            <div class="pricing-badge">Recomendado</div>
             <h3>RADAR Pro</h3>
             <div class="pricing-price"><span data-price="999">$999 MXN</span> <span class="pricing-unit">/ mes</span></div>
-            <p class="pricing-desc">Para equipos que ya necesitan aprobaciones y visibilidad real.</p>
+            <p class="pricing-desc">Para equipos medianos, con las mismas funciones.</p>
             <ul class="pricing-features">
-              <li>Todo en Starter</li>
-              <li>Aprobaciones</li>
-              <li>Notificaciones por WhatsApp</li>
-              <li>Analítica de productividad</li>
               <li>Hasta 50 empleados</li>
+              <li>Todas las funciones</li>
+              <li>Soporte por correo</li>
             </ul>
             <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20el%20plan%20RADAR%20Pro" target="_blank" rel="noopener" class="btn-mp">Solicitar →</a>
             <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20RADAR%20Pro" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
@@ -255,8 +289,8 @@
             <div class="pricing-price"><span>Personalizado</span></div>
             <p class="pricing-desc">Para operaciones con muchos empleados o necesidades a la medida.</p>
             <ul class="pricing-features">
-              <li>Todo en Pro</li>
               <li>Empleados ilimitados</li>
+              <li>Todas las funciones</li>
               <li>Soporte prioritario</li>
               <li>Integraciones a medida</li>
             </ul>
@@ -268,19 +302,33 @@
       </div>
     </section>
 
-    <!-- ACCESS REQUEST -->
+    <!-- A LA MEDIDA -->
+    <section class="section-feedback section" aria-labelledby="rd-medida-h2">
+      <div class="container">
+        <div class="feedback-card reveal">
+          <div class="feedback-text">
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Desarrollo a la medida</span>
+            <h2 id="rd-medida-h2">¿Tu operación necesita algo que RADAR todavía no hace?</h2>
+            <p>ACACIA desarrolla a la medida: adaptamos RADAR a tu proceso o construimos el sistema que te falta, con el mismo equipo que hizo esta app.</p>
+          </div>
+          <a href="/servicios" class="btn btn-primary">Ver desarrollo a la medida →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA STRIP (this page's closing call to action) -->
     <section class="section" id="solicitar" aria-labelledby="rd-req-h2">
       <div class="container">
         <div class="request-card reveal">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Empezar</span>
-          <h2 id="rd-req-h2">Pide una demo de RADAR</h2>
-          <p class="body">Te mostramos el panel con tu propio caso de uso y te ayudamos a cargar tu equipo desde el primer día.</p>
+          <h2 id="rd-req-h2">Prueba RADAR con tu equipo</h2>
+          <p class="body">Escríbenos y te damos acceso de prueba por 30 días. Te ayudamos a dar de alta a tu equipo desde el primer día.</p>
           <ul class="request-list">
-            <li>Demo con casos reales de tu operación</li>
+            <li>30 días de prueba, sin tarjeta</li>
             <li>Configuración inicial acompañada</li>
             <li>Soporte directo con el equipo de ACACIA</li>
           </ul>
-          <a href="https://wa.me/524498958291?text=Hola,%20quiero%20una%20demo%20de%20RADAR" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Pedir demo por WhatsApp →</a>
+          <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20RADAR%2030%20d%C3%ADas" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Pedir acceso de prueba →</a>
         </div>
       </div>
     </section>
@@ -300,6 +348,7 @@
       <div>
         <h4>Apps</h4>
         <ul>
+          <li><a href="/apps">Todas las apps</a></li>
           <li><a href="/apps/stockflow">StockFlow</a></li>
           <li><a href="/apps/flowfin">FlowFin</a></li>
           <li><a href="/apps/puntos-plus">Puntos+</a></li>
@@ -311,6 +360,7 @@
           <li><a href="/apps/kitchops">KitchOps</a></li>
           <li><a href="/apps/artiskids">ArtisKids</a></li>
           <li><a href="/apps/sommel">Sommel</a></li>
+          <li><a href="/freeware">Herramientas gratis</a></li>
         </ul>
       </div>
       <div>

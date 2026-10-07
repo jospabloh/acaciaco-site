@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-MX">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CateqHub · Asistencia de catecismo con QR — ACACIA</title>
-  <meta name="description" content="Lleva la asistencia de catecismo de tu parroquia con una tarjeta QR por niño: escaneo en segundos, grupos por catequista y reportes de asistencia al día. Desde $500 MXN al mes, con 30 días de prueba gratis." />
+  <meta name="description" content="Pase de lista de catequesis con tarjeta QR por niño: escaneo desde el celular, grupos y reportes para parroquias en México. 30 días de prueba." />
   <link rel="canonical" href="https://acaciaco.com.mx/apps/cateqhub" />
   <meta name="theme-color" content="#12274d" />
 
@@ -12,14 +12,16 @@
   <meta property="og:locale" content="es_MX" />
   <meta property="og:url" content="https://acaciaco.com.mx/apps/cateqhub" />
   <meta property="og:title" content="CateqHub · Asistencia de catecismo con QR — ACACIA" />
-  <meta property="og:description" content="Tarjeta QR por niño, escaneo en segundos y reportes de asistencia para parroquias. Desde $500 MXN al mes, con 30 días de prueba gratis." />
-  <meta property="og:image" content="https://acaciaco.com.mx/assets/cateqhub-logo.png" />
+  <meta property="og:description" content="Pase de lista de catequesis con tarjeta QR por niño: escaneo desde el celular, grupos y reportes para parroquias en México. 30 días de prueba." />
+  <meta property="og:image" content="https://acaciaco.com.mx/assets/acacia-og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta property="og:site_name" content="ACACIA Consultoría" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="CateqHub · Asistencia de catecismo con QR — ACACIA" />
-  <meta name="twitter:description" content="Tarjeta QR por niño, escaneo en segundos y reportes de asistencia para parroquias. Desde $500 MXN al mes, con 30 días de prueba gratis." />
-  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/cateqhub-logo.png" />
+  <meta name="twitter:description" content="Pase de lista de catequesis con tarjeta QR por niño: escaneo desde el celular, grupos y reportes para parroquias en México. 30 días de prueba." />
+  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/acacia-og.png" />
 
   <link rel="icon" type="image/png" href="/assets/cateqhub-logo.png" />
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
@@ -55,19 +57,27 @@
         "priceCurrency": "MXN",
         "lowPrice": "500",
         "highPrice": "900",
-        "offerCount": "3",
+        "offerCount": "2",
         "availability": "https://schema.org/InStock",
-        "description": "Un solo plan con todo incluido, desde $500 MXN al mes según niños activos, con 30 días de prueba gratuita."
+        "description": "Un solo plan con todas las funciones: $500 MXN al mes hasta 150 niños activos y $900 MXN de 151 a 500; 501 o más, a cotizar. Incluye 30 días de prueba, sin tarjeta."
       },
-      "provider": { "@type": "Organization", "name": "ACACIA Consultoría", "url": "https://acaciaco.com.mx" },
-      "description": "Sistema de asistencia de catecismo para parroquias: tarjeta QR por niño, escaneo por catequista, grupos, tutores y autorización de recogida, gafetes imprimibles con QR y reportes de asistencia. Un solo plan con todo incluido, desde $500 MXN al mes según niños activos, con 30 días de prueba gratuita."
+      "provider": { "@id": "https://acaciaco.com.mx/#organization" },
+      "featureList": [
+        "Tarjeta QR única por niño",
+        "Escaneo de asistencia desde el celular del catequista",
+        "Grupos y catequistas con permisos por rol",
+        "Tutores y autorización de recogida",
+        "Gafetes imprimibles con QR, en hoja o individuales",
+        "Reportes de asistencia por fecha y grupo, con faltas acumuladas por niño"
+      ],
+      "description": "Pase de lista de catequesis para parroquias: tarjeta QR por niño, escaneo por catequista, grupos, tutores y autorización de recogida, gafetes imprimibles con QR y reportes de asistencia. Un solo plan con todas las funciones, desde $500 MXN al mes según niños activos, con 30 días de prueba."
     },
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://acaciaco.com.mx/" },
-        { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://acaciaco.com.mx/#apps" },
+        { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://acaciaco.com.mx/apps" },
         { "@type": "ListItem", "position": 3, "name": "CateqHub", "item": "https://acaciaco.com.mx/apps/cateqhub" }
       ]
     }
@@ -90,7 +100,7 @@
         <ul class="nav-links" role="list">
           <li><a href="/#como-trabajamos">Soluciones</a></li>
           <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
-          <li><a href="/#apps">Apps</a></li>
+          <li><a href="/apps">Apps</a></li>
           <li><a href="/servicios">Servicios</a></li>
           <li><a href="/contacto">Contacto</a></li>
         </ul>
@@ -123,14 +133,11 @@
               <img src="/assets/cateqhub-logo.png" alt="CateqHub" width="56" height="56" style="border-radius:14px;" />
               <span class="name">CateqHub</span>
             </div>
-            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Disponible · 30 días gratis</span>
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Disponible · 30 días de prueba</span>
             <h1 id="ch-h1">La asistencia de tu catecismo, en <span class="accent">un escaneo</span>.</h1>
-            <p class="lead">Cada niño lleva su propia tarjeta QR. El catequista la escanea al llegar a clase y CateqHub registra la asistencia al instante — sin listas de papel, sin capturas manuales al final del mes.</p>
+            <p class="lead">El pase de lista de catequesis de tu parroquia, para primera comunión y confirmación: cada niño lleva su propia tarjeta QR, el catequista la escanea al llegar a clase y CateqHub registra la asistencia al instante — sin listas de papel, sin capturas manuales al final del mes.</p>
             <div class="hero-ctas">
-              <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20probar%20CateqHub%20gratis%2030%20d%C3%ADas" class="btn btn-primary" rel="noopener noreferrer" target="_blank">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.522 5.851L0 24l6.335-1.501A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.002-1.366l-.36-.214-3.757.89.936-3.657-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
-                Iniciar prueba gratis
-              </a>
+              <a href="/trial#cateqhub" class="btn btn-primary">Probar 30 días</a>
               <a href="#planes" class="btn btn-ghost">Ver planes →</a>
               <a href="/#apps" class="btn btn-ghost">← Volver a soluciones</a>
             </div>
@@ -143,7 +150,7 @@
                 <span class="title">CateqHub · Tu parroquia</span>
               </div>
               <div class="mock-shot">
-                <img src="/assets/cateqhub-hero.jpg" width="1600" height="1000" alt="Panel de inicio de CateqHub con asistencia del día, grupos y niños activos" loading="eager" />
+                <img src="/assets/cateqhub-hero.jpg" width="1600" height="500" alt="Panel de inicio de CateqHub: anillo con el porcentaje de asistencia del día, contadores de grupos y niños activos, y las acciones rápidas para escanear asistencia, ver niños y gestionar grupos" loading="eager" />
               </div>
             </div>
           </div>
@@ -156,14 +163,14 @@
       <div class="container">
         <div class="section-head reveal">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Capacidades</span>
-          <h2 id="ch-vp-h2">Todo lo que necesita la coordinación de catequesis.</h2>
-          <p>Pensado para parroquias con varios grupos, catequistas y niveles — de la tarjeta del niño al reporte del mes.</p>
+          <h2 id="ch-vp-h2">Pase de lista de catequesis con QR: todo lo que necesita tu coordinación.</h2>
+          <p>Pensado para parroquias con varios grupos y catequistas de primera comunión y confirmación — de la tarjeta del niño al reporte de asistencia.</p>
         </div>
         <div class="features-grid">
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><line x1="14" y1="14" x2="21" y2="14"/><line x1="14" y1="21" x2="21" y2="21"/><line x1="17.5" y1="14" x2="17.5" y2="21"/></svg></span>
             <h3>Tarjeta QR por niño</h3>
-            <p>Cada niño recibe un código QR único e infalsificable. La app arma el gafete y lo descargas en PNG, SVG o PDF, listo para imprimir.</p>
+            <p>Cada niño recibe su propio código QR, único por niño. La app arma los gafetes listos para imprimir: la hoja completa se descarga en PNG, SVG o PDF, y el gafete individual en PNG.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
@@ -173,7 +180,7 @@
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
             <h3>Grupos y catequistas</h3>
-            <p>Organiza por nivel y grupo, asigna catequistas responsables y controla quién tiene acceso a qué grupo.</p>
+            <p>Organiza a los niños por grupo o libro, asigna a cada catequista su grupo y decide si puede ver y escanear a niños de otros grupos.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><circle cx="18" cy="6" r="3" fill="currentColor" stroke="none"/></svg></span>
@@ -183,7 +190,7 @@
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg></span>
             <h3>Reportes de asistencia</h3>
-            <p>Historial de asistencia por niño, grupo o parroquia — listo para la coordinación y para cada catequista.</p>
+            <p>Asistencia por fecha, por grupo o de toda la parroquia, con las faltas acumuladas de cada niño y su detalle — para la coordinación y para cada catequista en su grupo.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>
@@ -200,7 +207,7 @@
         <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Planes CateqHub</span>
           <h2 id="ch-price-h2">Un solo plan. Precio según el tamaño de tu parroquia.</h2>
-          <p class="section-sub">Toda parroquia nueva arranca con 30 días gratis, sin tarjeta. Al día 31 se activa la suscripción.</p>
+          <p class="section-sub">Toda parroquia nueva arranca con 30 días de prueba, sin tarjeta. Al terminar, la parroquia confirma el plan que le corresponde según sus niños activos y ACACIA lo activa: no hay cobro automático.</p>
         </div>
 
         <!-- Paso 1 -->
@@ -208,7 +215,7 @@
           <div class="reveal pricing-card featured" id="cateqhub-prueba">
             <div class="pricing-badge">Días 1 – 30</div>
             <h3>Prueba</h3>
-            <div class="pricing-price">$0 <span class="pricing-unit">sin tarjeta</span></div>
+            <div class="pricing-price">30 días <span class="pricing-unit">de prueba, sin tarjeta</span></div>
             <p class="pricing-desc">La app completa durante 30 días: asistencia por QR, grupos y catequistas, tutores y autorización de recogida, gafetes imprimibles y reportes. No hay nada que cancelar ni tarjeta que dar de alta.</p>
             <a href="https://wa.me/524498958291?text=Hola,%20quiero%20dar%20de%20alta%20mi%20parroquia%20en%20CateqHub" target="_blank" rel="noopener" class="btn-mp">Dar de alta mi parroquia →</a>
             <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20CateqHub" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
@@ -217,14 +224,14 @@
 
         <!-- Paso 2 -->
         <div class="plan-fork reveal" role="presentation">
-          <span class="plan-fork-label">Al día 31</span>
+          <span class="plan-fork-label">Después de los 30 días</span>
         </div>
 
         <div class="plan-lead">
           <div class="reveal pricing-card featured" id="cateqhub-premium">
             <h3>CateqHub</h3>
             <div class="pricing-price">Desde <span data-price="500">$500 MXN</span> <span class="pricing-unit">/ mes</span></div>
-            <p class="pricing-desc">Un solo plan con todo incluido. Lo único que cambia con el tamaño de la parroquia es el precio.</p>
+            <p class="pricing-desc">Un solo plan con todas las funciones. Lo único que cambia con el tamaño de la parroquia es el precio.</p>
             <ul class="pricing-features">
               <li>Tarjeta QR, escaneo de asistencia y reportes</li>
               <li>Grupos, catequistas y permisos por rol</li>
@@ -248,7 +255,7 @@
               </table>
             </div>
 
-            <p class="pricing-desc">Pago anual disponible con 2 meses gratis.</p>
+            <p class="pricing-desc">Pago anual disponible: 12 meses al precio de 10.</p>
             <p class="pricing-desc">Soporte con prioridad hasta <strong>Alta</strong> incluido (respuesta en horas hábiles) — ver soporte adicional abajo.</p>
             <a href="https://wa.me/524498958291?text=Hola,%20quiero%20activar%20CateqHub%20en%20mi%20parroquia" target="_blank" rel="noopener" class="btn-mp">Activar CateqHub →</a>
             <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20los%20planes%20de%20CateqHub" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
@@ -265,7 +272,7 @@
         <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Opcional</span>
           <h2 id="ch-impl-h2">Implementación asistida y soporte adicional.</h2>
-          <p class="section-sub">El alta sigue siendo autoservicio y sin costo. Esto es para la parroquia que prefiere que ACACIA haga el trabajo pesado de arranque, o que necesita más soporte del que ya trae su suscripción.</p>
+          <p class="section-sub">El alta de la parroquia es autoservicio: la haces tú desde la app. Esto es para la parroquia que prefiere que ACACIA haga el trabajo pesado de arranque, o que necesita más soporte del que ya trae su suscripción.</p>
         </div>
 
         <div class="pricing-grid pricing-grid-3">
@@ -324,7 +331,7 @@
           <article class="step reveal">
             <span class="num">PASO 01</span>
             <h3>Da de alta tu parroquia</h3>
-            <p>Registra la parroquia, sus grupos por nivel y a los catequistas responsables de cada uno.</p>
+            <p>Registra la parroquia, sus grupos y a los catequistas de cada uno.</p>
           </article>
           <article class="step reveal">
             <span class="num">PASO 02</span>
@@ -339,24 +346,38 @@
           <article class="step reveal">
             <span class="num">PASO 04</span>
             <h3>Consulta los reportes</h3>
-            <p>La coordinación revisa asistencia por niño, grupo o parroquia cuando lo necesite.</p>
+            <p>La coordinación revisa la asistencia por fecha y grupo, y las faltas de cada niño, cuando lo necesite.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- ACCESS REQUEST -->
+    <!-- A LA MEDIDA -->
+    <section class="section-feedback section" aria-labelledby="ch-medida-h2">
+      <div class="container">
+        <div class="feedback-card reveal">
+          <div class="feedback-text">
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Desarrollo a la medida</span>
+            <h2 id="ch-medida-h2">¿Tu operación necesita algo que CateqHub todavía no hace?</h2>
+            <p>ACACIA desarrolla a la medida: adaptamos CateqHub a tu proceso o construimos el sistema que te falta, con el mismo equipo que hizo esta app.</p>
+          </div>
+          <a href="/servicios" class="btn btn-primary">Ver desarrollo a la medida →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA STRIP (this page's closing call to action) -->
     <section class="section" id="solicitar" aria-labelledby="ch-req-h2">
       <div class="container">
         <div class="request-card reveal">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Disponibilidad</span>
-          <h2 id="ch-req-h2">Empieza gratis hoy</h2>
-          <p class="body">Da de alta tu parroquia y arranca con 30 días gratis, sin tarjeta. Al terminar, activas la suscripción según cuántos niños tengas.</p>
+          <h2 id="ch-req-h2">Empieza hoy con 30 días de prueba</h2>
+          <p class="body">Da de alta tu parroquia y arranca con 30 días de prueba, sin tarjeta. Al terminar, confirmas el plan según cuántos niños activos tengas y ACACIA lo activa.</p>
           <ul class="request-list">
-            <li>30 días de prueba automáticos, sin costo</li>
-            <li>Todo incluido desde el primer día, sin funciones bloqueadas</li>
+            <li>30 días de prueba, sin tarjeta</li>
+            <li>Todas las funciones incluidas desde el primer día</li>
             <li>Soporte directo con el equipo de ACACIA</li>
-            <li>Precios públicos, sin cotización previa</li>
+            <li>Precios públicos hasta 500 niños activos</li>
           </ul>
           <a href="https://wa.me/524498958291?text=Hola,%20quiero%20empezar%20con%20CateqHub%20para%20mi%20parroquia" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Empezar por WhatsApp →</a>
           <p class="form-note">También puedes escribirnos a <a href="mailto:contacto@acaciaco.com.mx">contacto@acaciaco.com.mx</a>.</p>
@@ -379,6 +400,7 @@
       <div>
         <h4>Apps</h4>
         <ul>
+          <li><a href="/apps">Todas las apps</a></li>
           <li><a href="/apps/stockflow">StockFlow</a></li>
           <li><a href="/apps/flowfin">FlowFin</a></li>
           <li><a href="/apps/puntos-plus">Puntos+</a></li>
@@ -390,6 +412,7 @@
           <li><a href="/apps/kitchops">KitchOps</a></li>
           <li><a href="/apps/artiskids">ArtisKids</a></li>
           <li><a href="/apps/sommel">Sommel</a></li>
+          <li><a href="/freeware">Herramientas gratis</a></li>
         </ul>
       </div>
       <div>

@@ -1,25 +1,27 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-MX">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rumbo · Gestión de flotillas y conductores — ACACIA</title>
-  <meta name="description" content="Administra vehículos, conductores, mantenimiento, combustible, multas y costos por km en un solo lugar. Rumbo está en demo — solicita acceso. Software de flotillas para empresas en cualquier parte del mundo." />
+  <title>Rumbo · Control de flotillas y conductores — ACACIA</title>
+  <meta name="description" content="Controla vehículos, conductores, mantenimiento, combustible, multas y costo por km. Sistema para flotillas en México. 30 días de prueba, sin tarjeta." />
   <link rel="canonical" href="https://acaciaco.com.mx/apps/rumbo" />
   <meta name="theme-color" content="#3E6B5A" />
 
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="es_MX" />
   <meta property="og:url" content="https://acaciaco.com.mx/apps/rumbo" />
-  <meta property="og:title" content="Rumbo · Gestión de flotillas y conductores — ACACIA" />
-  <meta property="og:description" content="Administra vehículos, conductores, mantenimiento, combustible y costos por km. Rumbo está en demo — solicita acceso." />
-  <meta property="og:image" content="https://acaciaco.com.mx/assets/rumbo_logo.png" />
+  <meta property="og:title" content="Rumbo · Control de flotillas y conductores — ACACIA" />
+  <meta property="og:description" content="Controla vehículos, conductores, mantenimiento, combustible, multas y costo por km. Sistema para flotillas en México. 30 días de prueba, sin tarjeta." />
+  <meta property="og:image" content="https://acaciaco.com.mx/assets/rumbo-og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta property="og:site_name" content="ACACIA Consultoría" />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Rumbo · Gestión de flotillas y conductores — ACACIA" />
-  <meta name="twitter:description" content="Administra vehículos, conductores, mantenimiento, combustible y costos por km. Rumbo está en demo — solicita acceso." />
-  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/rumbo_logo.png" />
+  <meta name="twitter:title" content="Rumbo · Control de flotillas y conductores — ACACIA" />
+  <meta name="twitter:description" content="Controla vehículos, conductores, mantenimiento, combustible, multas y costo por km. Sistema para flotillas en México. 30 días de prueba, sin tarjeta." />
+  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/rumbo-og.jpg" />
 
   <link rel="icon" type="image/png" href="/assets/rumbo_logo.png" />
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
@@ -55,23 +57,19 @@
         "priceCurrency": "MXN",
         "lowPrice": "599",
         "highPrice": "1699",
-        "offerCount": "3",
-        "availability": "https://schema.org/PreOrder",
-        "description": "Planes desde $599 MXN al mes. Acceso por invitación — demo privada."
+        "offerCount": "2",
+        "availability": "https://schema.org/InStock",
+        "description": "Starter $599 MXN al mes (hasta 15 vehículos y 20 conductores) y Pro $1,699 MXN al mes (hasta 50 vehículos y 75 conductores). Flotilla: cotización. 30 días de prueba, sin tarjeta."
       },
-      "provider": {
-        "@type": "Organization",
-        "name": "ACACIA Consultoría",
-        "url": "https://acaciaco.com.mx"
-      },
-      "description": "Sistema de gestión de flotillas para administrar vehículos, conductores, mantenimiento, combustible, multas, rentas y costos por kilómetro."
+      "provider": { "@id": "https://acaciaco.com.mx/#organization" },
+      "description": "Sistema para el control de flotillas: vehículos, conductores, mantenimiento, refacciones, combustible, multas, siniestros, rentas y costo por kilómetro. La ubicación se pide al conductor bajo solicitud; no hay rastreo GPS continuo."
     },
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://acaciaco.com.mx/" },
-        { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://acaciaco.com.mx/#apps" },
+        { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://acaciaco.com.mx/apps" },
         { "@type": "ListItem", "position": 3, "name": "Rumbo", "item": "https://acaciaco.com.mx/apps/rumbo" }
       ]
     }
@@ -94,7 +92,7 @@
         <ul class="nav-links" role="list">
           <li><a href="/#como-trabajamos">Soluciones</a></li>
           <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
-          <li><a href="/#apps">Apps</a></li>
+          <li><a href="/apps">Apps</a></li>
           <li><a href="/servicios">Servicios</a></li>
           <li><a href="/contacto">Contacto</a></li>
         </ul>
@@ -127,14 +125,11 @@
               <img src="/assets/rumbo_logo.png" alt="Rumbo logo" width="56" height="56" style="border-radius:14px;" />
               <span class="name">Rumbo</span>
             </div>
-            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Demo · Acceso por invitación</span>
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Disponible · 30 días de prueba</span>
             <h1 id="rb-h1">Toda tu flotilla bajo <span class="accent">control</span>, sin hojas de cálculo.</h1>
-            <p class="lead">Rumbo reúne vehículos, conductores, mantenimiento, combustible, multas y costos por kilómetro en una sola plataforma clara y lista para operar.</p>
+            <p class="lead">Rumbo es un sistema para flotillas que reúne vehículos, conductores, mantenimiento, combustible, multas y costo por kilómetro en un solo lugar. Sin GPS continuo: la ubicación se le pide al conductor cuando la necesitas.</p>
             <div class="hero-ctas">
-              <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20conocer%20la%20demo%20de%20Rumbo" class="btn btn-primary" rel="noopener noreferrer" target="_blank">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.522 5.851L0 24l6.335-1.501A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.002-1.366l-.36-.214-3.757.89.936-3.657-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
-                Solicitar acceso a la demo
-              </a>
+              <a href="/trial#rumbo" class="btn btn-primary">Probar 30 días</a>
               <a href="#planes" class="btn btn-ghost">Ver planes →</a>
             </div>
           </div>
@@ -159,8 +154,8 @@
       <div class="container">
         <div class="section-head reveal">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Funcionalidades</span>
-          <h2 id="rb-feat-h2">Todo lo que tu operación necesita en un solo lugar.</h2>
-          <p>Sin libretas, sin recordatorios perdidos y sin sorpresas en el cierre de mes.</p>
+          <h2 id="rb-feat-h2">Control de flotillas: todo lo que tu operación necesita en un solo lugar.</h2>
+          <p>Sin libretas ni hojas de cálculo, y sin sorpresas en el cierre de mes.</p>
         </div>
         <div class="features-grid">
           <article class="feature reveal">
@@ -171,27 +166,27 @@
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
             <h3>Mantenimiento e inventario</h3>
-            <p>Programa servicios preventivos y correctivos, controla refacciones y evita paros inesperados.</p>
+            <p>Registra servicios preventivos y correctivos con su próxima fecha, y controla el stock de refacciones con un mínimo por pieza.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22h12V2H3z"/><path d="M15 9h3.5a2.5 2.5 0 0 1 2.5 2.5V17a2 2 0 0 1-4 0v-5"/><line x1="6" y1="6" x2="12" y2="6"/></svg></span>
             <h3>Combustible y costo por km</h3>
-            <p>Registra cargas, calcula rendimiento y conoce el costo real por kilómetro de cada vehículo.</p>
+            <p>Registra cada carga con litros, costo y odómetro, y conoce el costo por kilómetro de cada vehículo.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
             <h3>Multas, seguros y siniestros</h3>
-            <p>Lleva el control de infracciones, pólizas y siniestros para que nada se te escape.</p>
+            <p>Lleva el control de infracciones y siniestros, y guarda los datos de la póliza de cada vehículo: aseguradora, número y vencimiento.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
-            <h3>Ubicación y rentas</h3>
-            <p>Ubica tus unidades, administra rentas y mantén la asignación de conductores siempre clara.</p>
+            <h3>Ubicación bajo solicitud y rentas</h3>
+            <p>Pide la ubicación de una unidad y su conductor comparte un punto desde el teléfono; no hay rastreo GPS continuo. Administra rentas y la asignación de conductores.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
-            <h3>Alertas automáticas</h3>
-            <p>Recordatorios de verificación, pólizas, servicios y documentos antes de que venzan.</p>
+            <h3>Alertas de vencimientos</h3>
+            <p>Pulsa «Verificar ahora» y Rumbo genera las alertas de licencias, documentos, seguro, verificación y servicios que están por vencer.</p>
           </article>
         </div>
       </div>
@@ -202,31 +197,16 @@
       <div class="container">
         <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Planes Rumbo</span>
-          <h2 id="rb-price-h2">Empieza gratis. Crece con tu flotilla.</h2>
-          <p class="section-sub">Rumbo está en demo — el acceso es por invitación. Los precios de abajo son reales; te confirmamos el tuyo el mismo día.</p>
+          <h2 id="rb-price-h2">Empieza con 30 días de prueba. Crece con tu flotilla.</h2>
+          <p class="section-sub">Todos los planes incluyen todos los módulos, además de mensajería interna, importación por CSV, permisos por rol y el logo y los colores de tu empresa. Lo único que cambia es cuántos vehículos y conductores puedes tener en operación.</p>
         </div>
         <!-- Prices published 2026-08-26. Mercado Pago checkout stays off
              (preapproval_plan_id 3b0cb274f6e74eb4bae02d4cd6279921 for Starter,
-             a1e4fc2b0bc645d1ba4b47f250169582 for Pro, dormant) until Rumbo
-             leaves Demo status — access itself is still by invitation, only
-             the "Cotización" framing was hiding a real, already-decided price. -->
-        <div class="pricing-grid">
-
-          <!-- Demo -->
-          <div class="reveal pricing-card">
-            <h3>Demo</h3>
-            <div class="pricing-price"><span>Gratis</span></div>
-            <p class="pricing-desc">Para conocer Rumbo sin riesgo y ver todos los módulos.</p>
-            <ul class="pricing-features">
-              <li>Hasta 5 vehículos</li>
-              <li>Hasta 5 conductores</li>
-              <li>Todos los módulos</li>
-              <li>Todos los roles y permisos</li>
-              <li>Branding (logo y colores)</li>
-            </ul>
-            <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20conocer%20la%20demo%20de%20Rumbo" target="_blank" rel="noopener" class="btn-mp">Solicitar acceso a la demo →</a>
-            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20Rumbo" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
-          </div>
+             a1e4fc2b0bc645d1ba4b47f250169582 for Pro, both dormant): a paid
+             plan is requested over WhatsApp. The app does not gate modules by
+             plan — only the vehicle/driver quota differs (src/lib/plans.js in
+             the Rumbo app), so the cards must not list per-plan modules. -->
+        <div class="pricing-grid pricing-grid-3">
 
           <!-- Starter -->
           <div class="reveal pricing-card">
@@ -236,10 +216,7 @@
             <ul class="pricing-features">
               <li>Hasta 15 vehículos</li>
               <li>Hasta 20 conductores</li>
-              <li>Vehículos, conductores y rentas</li>
-              <li>Combustible, multas y alertas</li>
-              <li>Mensajería interna</li>
-              <li>Roles básicos</li>
+              <li>Todos los módulos</li>
               <li>Soporte por correo</li>
             </ul>
             <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20el%20plan%20Rumbo%20Starter" target="_blank" rel="noopener" class="btn-mp">Solicitar →</a>
@@ -248,19 +225,13 @@
 
           <!-- Pro (FEATURED) -->
           <div class="reveal pricing-card featured">
-            <div class="pricing-badge">Más popular</div>
             <h3>Rumbo Pro</h3>
             <div class="pricing-price"><span data-price="1699">$1,699 MXN</span> <span class="pricing-unit">/ mes</span></div>
-            <p class="pricing-desc">Para flotillas en crecimiento que necesitan más control y análisis.</p>
+            <p class="pricing-desc">Para flotillas en crecimiento que necesitan más unidades y más conductores.</p>
             <ul class="pricing-features">
               <li>Hasta 50 vehículos</li>
               <li>Hasta 75 conductores</li>
-              <li>Todo lo de Starter, y además:</li>
-              <li>Mantenimiento e inventario</li>
-              <li>Seguros y siniestros</li>
-              <li>Financiero (costo por km)</li>
-              <li>Importación CSV y ubicación</li>
-              <li>Permisos granulares por rol</li>
+              <li>Todos los módulos</li>
               <li>Soporte prioritario</li>
             </ul>
             <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20el%20plan%20Rumbo%20Pro" target="_blank" rel="noopener" class="btn-mp">Solicitar →</a>
@@ -271,13 +242,11 @@
           <div class="reveal pricing-card">
             <h3>Rumbo Flotilla</h3>
             <div class="pricing-price"><span>Cotización</span></div>
-            <p class="pricing-desc">Para operaciones grandes que requieren todo sin límites.</p>
+            <p class="pricing-desc">Para operaciones grandes, sin límite de vehículos ni de conductores.</p>
             <ul class="pricing-features">
               <li>Vehículos ilimitados</li>
               <li>Conductores ilimitados</li>
               <li>Todos los módulos</li>
-              <li>Permisos granulares + usuarios ilimitados</li>
-              <li>Branding white-label</li>
               <li>Soporte dedicado + onboarding asistido</li>
             </ul>
             <a href="https://wa.me/524498958291?text=Hola,%20quiero%20una%20cotizaci%C3%B3n%20de%20Rumbo%20Flotilla" target="_blank" rel="noopener" class="btn-mp">Solicitar cotización →</a>
@@ -285,18 +254,8 @@
           </div>
 
         </div>
+        <p class="pricing-note">La prueba de 30 días admite hasta 5 vehículos y 5 conductores.</p>
         <p class="pricing-note">¿Necesitas algo a la medida? <a href="https://wa.me/524498958291?text=Hola,%20necesito%20un%20plan%20personalizado%20para%20Rumbo" target="_blank" rel="noopener">Cuéntanos por WhatsApp</a></p>
-      </div>
-    </section>
-
-    <!-- TESTIMONIAL -->
-    <section class="section" aria-labelledby="rb-test-h2">
-      <div class="container">
-        <h2 id="rb-test-h2" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Testimonio</h2>
-        <div class="testimonial-single reveal">
-          <blockquote>“Con Rumbo dejamos las libretas: hoy sabemos qué unidad rinde, qué servicio toca y cuánto cuesta cada kilómetro.”</blockquote>
-          <cite><strong>Carlos Méndez</strong> Coordinador de flotilla</cite>
-        </div>
       </div>
     </section>
 
@@ -314,6 +273,20 @@
       </div>
     </section>
 
+    <!-- A LA MEDIDA -->
+    <section class="section-feedback section" aria-labelledby="rb-medida-h2">
+      <div class="container">
+        <div class="feedback-card reveal">
+          <div class="feedback-text">
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Desarrollo a la medida</span>
+            <h2 id="rb-medida-h2">¿Tu operación necesita algo que Rumbo todavía no hace?</h2>
+            <p>ACACIA desarrolla a la medida: adaptamos Rumbo a tu proceso o construimos el sistema que te falta, con el mismo equipo que hizo esta app.</p>
+          </div>
+          <a href="/servicios" class="btn btn-primary">Ver desarrollo a la medida →</a>
+        </div>
+      </div>
+    </section>
+
     <!-- CTA STRIP -->
     <section class="cta-section section" id="contacto" aria-labelledby="rb-cta-h2">
       <div class="container">
@@ -321,7 +294,7 @@
           <h2 id="rb-cta-h2">¿Listo para tomar el control de tu flotilla?</h2>
           <p>Te acompañamos en la activación, importamos tu información y arrancas con tu equipo desde el primer día.</p>
           <div class="btns">
-            <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20Rumbo%2030%20d%C3%ADas%20gratis" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Hablar por WhatsApp</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20Rumbo%2030%20d%C3%ADas" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Hablar por WhatsApp</a>
             <a href="mailto:contacto@acaciaco.com.mx" class="btn btn-ghost">Escribir por correo</a>
           </div>
         </div>
@@ -343,6 +316,7 @@
       <div>
         <h4>Apps</h4>
         <ul>
+          <li><a href="/apps">Todas las apps</a></li>
           <li><a href="/apps/rumbo">Rumbo</a></li>
           <li><a href="/apps/stockflow">StockFlow</a></li>
           <li><a href="/apps/flowfin">FlowFin</a></li>
@@ -354,6 +328,7 @@
           <li><a href="/apps/kitchops">KitchOps</a></li>
           <li><a href="/apps/artiskids">ArtisKids</a></li>
           <li><a href="/apps/sommel">Sommel</a></li>
+          <li><a href="/freeware">Herramientas gratis</a></li>
         </ul>
       </div>
       <div>

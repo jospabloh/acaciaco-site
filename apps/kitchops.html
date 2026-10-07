@@ -1,27 +1,28 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-MX">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>KitchOps · Gastos, cortes de delivery e inventario de tu cocina — ACACIA</title>
-  <meta name="description" content="Registra gastos desde la foto de un ticket por WhatsApp, concilia los cortes de Rappi, Uber Eats y Didi Food contra lo que sí se depositó, y controla tu inventario. Prueba KitchOps gratis." />
+  <title>KitchOps · Gastos de restaurante y cortes de delivery</title>
+  <meta name="description" content="Registra gastos de restaurante por WhatsApp y concilia cortes de Rappi, Uber Eats y Didi Food. Para restaurantes en México. 30 días de prueba, sin tarjeta." />
   <link rel="canonical" href="https://acaciaco.com.mx/apps/kitchops" />
 
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="es_MX" />
   <meta property="og:url" content="https://acaciaco.com.mx/apps/kitchops" />
-  <meta property="og:title" content="KitchOps · Gastos, cortes de delivery e inventario de tu cocina — ACACIA" />
-  <meta property="og:description" content="Registra gastos desde la foto de un ticket por WhatsApp, concilia los cortes de las plataformas de delivery y controla tu inventario." />
-  <!-- Horizontal lockup rather than the square mark: this is the only image
-       here with an OG-shaped aspect ratio, so it is the one that does not get
-       cropped into half a wordmark in a WhatsApp or Slack preview. -->
-  <meta property="og:image" content="https://acaciaco.com.mx/assets/kitchops-lockup.jpg" />
+  <meta property="og:title" content="KitchOps · Gastos de restaurante y cortes de delivery" />
+  <meta property="og:description" content="Registra gastos de restaurante por WhatsApp y concilia cortes de Rappi, Uber Eats y Didi Food. Para restaurantes en México. 30 días de prueba, sin tarjeta." />
+  <!-- Dedicated 1200×630 share card, so a WhatsApp or Slack preview shows the
+       whole image instead of a cropped wordmark. -->
+  <meta property="og:image" content="https://acaciaco.com.mx/assets/kitchops-og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta property="og:site_name" content="ACACIA Consultoría" />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="KitchOps · Gastos, cortes de delivery e inventario de tu cocina — ACACIA" />
-  <meta name="twitter:description" content="Registra gastos desde la foto de un ticket por WhatsApp, concilia los cortes de las plataformas de delivery y controla tu inventario." />
-  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/kitchops-lockup.jpg" />
+  <meta name="twitter:title" content="KitchOps · Gastos de restaurante y cortes de delivery" />
+  <meta name="twitter:description" content="Registra gastos de restaurante por WhatsApp y concilia cortes de Rappi, Uber Eats y Didi Food. Para restaurantes en México. 30 días de prueba, sin tarjeta." />
+  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/kitchops-og.jpg" />
 
   <link rel="icon" href="/assets/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
@@ -54,6 +55,7 @@
       "name": "KitchOps",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web",
+      "url": "https://acaciaco.com.mx/apps/kitchops",
       "offers": {
         "@type": "AggregateOffer",
         "priceCurrency": "MXN",
@@ -61,21 +63,28 @@
         "highPrice": "2499",
         "offerCount": "3",
         "availability": "https://schema.org/PreOrder",
-        "description": "Precios estimados de lanzamiento desde $699 MXN al mes. KitchOps está en desarrollo."
+        "description": "Start $699, Growth $1,399 y Pro $2,499 MXN al mes. Precios de lanzamiento previstos, sujetos a confirmación. KitchOps está en desarrollo y disponible para probar: 30 días de prueba, sin tarjeta."
       },
-      "provider": {
-        "@type": "Organization",
-        "name": "ACACIA Consultoría",
-        "url": "https://acaciaco.com.mx"
-      },
-      "description": "Control de gastos, cortes de plataformas de delivery, inventario y alertas para restaurantes independientes, con captura por WhatsApp."
+      "provider": { "@id": "https://acaciaco.com.mx/#organization" },
+      "description": "Gastos de restaurante, conciliación de cortes de Rappi, Uber Eats y Didi Food, inventario con mínimos y alertas, con captura desde la app o por WhatsApp.",
+      "featureList": [
+        "Registro de gastos desde la app o por WhatsApp, con lectura de monto, proveedor y fecha desde la foto del ticket",
+        "Conciliación de cortes de Rappi, Uber Eats y Didi Food contra lo depositado, semana por semana",
+        "Inventario con mínimos y alerta de stock bajo",
+        "Alertas de gasto alto, depósito faltante, stock bajo, tickets sin facturar y tarjeta por pagar",
+        "Asistente de WhatsApp que solo atiende a los números autorizados",
+        "Permisos por rol: dueño y personal",
+        "Bitácora de movimientos",
+        "Catálogo de proveedores",
+        "Exportación de datos en JSON desde Cuenta"
+      ]
     },
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://acaciaco.com.mx/" },
-        { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://acaciaco.com.mx/#apps" },
+        { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://acaciaco.com.mx/apps" },
         { "@type": "ListItem", "position": 3, "name": "KitchOps", "item": "https://acaciaco.com.mx/apps/kitchops" }
       ]
     },
@@ -86,22 +95,22 @@
         {
           "@type": "Question",
           "name": "¿Necesito que mi personal aprenda a usar un sistema?",
-          "acceptedAnswer": { "@type": "Answer", "text": "No. Quien está en la cocina le manda la foto del ticket por WhatsApp al número de tu negocio y ya queda registrado. La app es para ti, para revisar." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Para capturar, no. Quien está en la cocina le manda la foto del ticket por WhatsApp al número de tu negocio y el asistente registra el gasto con el monto, el proveedor y la fecha. La app es para revisar y para lo que no se hace por WhatsApp, como dar de alta insumos nuevos." }
         },
         {
           "@type": "Question",
           "name": "¿Cualquiera que tenga el número puede registrar gastos?",
-          "acceptedAnswer": { "@type": "Answer", "text": "No. Solo los números que tú das de alta, y cada uno con el mismo nivel de permiso que tiene dentro de la app. A cualquier otro número el asistente no le hace caso." }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Sirve si tengo más de un restaurante?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Sí. Cada negocio lleva sus propios gastos, cortes, inventario y equipo, separados entre sí, y cambias de uno a otro desde el mismo usuario." }
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Solo los números que tú das de alta, cada uno con el rol que le asignas (dueño o personal) y con los mismos permisos que ese rol tiene dentro de la app. A cualquier otro número el asistente le contesta que es un canal interno y no registra nada." }
         },
         {
           "@type": "Question",
           "name": "¿Puedo sacar mi información si dejo de usarlo?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Sí. Desde Cuenta exportas todo lo de tu negocio cuando quieras, sin pedirlo por soporte." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Sí. Desde Cuenta descargas un archivo JSON con tus gastos, cortes, inventario, proveedores y alertas cuando quieras, sin pedirlo por soporte." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo empiezo y cuánto dura la prueba?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Creas tu cuenta, das de alta tu negocio y empiezas con 30 días de prueba, sin tarjeta. KitchOps está en desarrollo: los precios publicados son los previstos para el lanzamiento." }
         }
       ]
     }
@@ -124,7 +133,7 @@
         <ul class="nav-links" role="list">
           <li><a href="/#como-trabajamos">Soluciones</a></li>
           <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
-          <li><a href="/#apps">Apps</a></li>
+          <li><a href="/apps">Apps</a></li>
           <li><a href="/servicios">Servicios</a></li>
           <li><a href="/contacto">Contacto</a></li>
         </ul>
@@ -157,15 +166,12 @@
               <img src="/assets/kitchops-logo.png" alt="KitchOps logo" width="56" height="56" />
               <span class="name">KitchOps</span>
             </div>
-            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> En desarrollo</span>
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> En desarrollo · disponible para probar</span>
             <h1 id="ko-h1">Los números de tu cocina, <span class="accent">al día</span> — sin sentarte a capturarlos.</h1>
-            <p class="lead">Tu personal manda la foto del ticket por WhatsApp y el gasto queda registrado. Tú abres la app cuando quieres revisar: cuánto llevas gastado, qué te falta por depositar de Rappi o Uber Eats, y qué se está acabando en la alacena.</p>
+            <p class="lead">KitchOps lleva los gastos de restaurante, los cortes de delivery y el inventario de tu cocina. Tu personal manda la foto del ticket por WhatsApp y el asistente registra el gasto. Tú abres la app cuando quieres revisar: cuánto llevas gastado, qué te falta por depositar de Rappi o Uber Eats, y qué se está acabando en la alacena.</p>
             <div class="hero-ctas">
-              <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20KitchOps%20%E2%80%94%20av%C3%ADsenme%20cuando%20est%C3%A9%20disponible" class="btn btn-primary" rel="noopener noreferrer" target="_blank">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.522 5.851L0 24l6.335-1.501A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.002-1.366l-.36-.214-3.757.89.936-3.657-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
-                Avísenme cuando esté listo
-              </a>
-              <a href="#planes" class="btn btn-ghost">Ver detalles →</a>
+              <a href="/trial#kitchops" class="btn btn-primary">Probar 30 días</a>
+              <a href="#planes" class="btn btn-ghost">Ver planes →</a>
             </div>
           </div>
 
@@ -176,7 +182,7 @@
                 <span class="title">KitchOps · Alertas</span>
               </div>
               <div class="mock-shot">
-                <img src="/assets/kitchops-hero.jpg" width="1600" height="1000" alt="Riel de alertas de KitchOps con diferencia de corte, stock bajo y gasto de nómina" loading="eager" />
+                <img src="/assets/kitchops-hero.jpg" width="1600" height="1000" alt="Pantalla de Alertas de KitchOps con tres pendientes de ejemplo por revisar: aceite vegetal por debajo del mínimo, diferencia en el corte de Rappi y un gasto de nómina registrado" loading="eager" />
               </div>
             </div>
           </div>
@@ -190,23 +196,23 @@
         <div class="section-head reveal">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Lo que lo hace distinto</span>
           <h2 id="ko-wa-h2">La captura pasa por WhatsApp, no por un sistema que nadie quiere abrir.</h2>
-          <p>El problema de un restaurante no es que falte software: es que a las once de la noche nadie se sienta a capturar veinte tickets. Por eso KitchOps entra por donde tu equipo ya está.</p>
+          <p>El problema de un restaurante no es que falte software: es que a las once de la noche nadie se sienta a capturar veinte tickets. Por eso KitchOps entra por donde tu equipo ya está. Para activarlo se conecta el número de WhatsApp Business de tu negocio; esa conexión la hacemos contigo.</p>
         </div>
         <div class="features-grid">
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
             <h3>Manda la foto del ticket</h3>
-            <p>El asistente lee el monto, el proveedor y la fecha, y registra el gasto. Si algo no se alcanza a leer, lo pregunta en vez de inventarlo.</p>
+            <p>El asistente lee el monto, el proveedor y la fecha, y registra el gasto. Sin monto o sin proveedor no registra nada: está instruido para preguntar lo que no alcanza a leer en vez de inventarlo. Si no hay fecha, usa la de hoy.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
             <h3>O simplemente escríbele</h3>
-            <p>«Se acabó el aceite», «cuánto llevamos de gastos esta semana», «llegaron 20 kilos de tortilla». Contesta y deja el registro hecho.</p>
+            <p>«Gasté 450 en gas», «cuánto llevamos de gastos esta semana», «llegaron 20 kilos de tortilla», «qué hay que pedir». Registra gastos y cortes, mueve las existencias de los insumos que ya tienes dados de alta y contesta consultas. Los insumos nuevos se crean en la app, y por WhatsApp no se borra nada.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></span>
             <h3>Solo los números que tú autorizas</h3>
-            <p>Das de alta quién puede darle órdenes al asistente y con qué nivel. Cualquier otro número no llega a nada — esto escribe en tus cuentas, no es un chatbot de dudas.</p>
+            <p>Das de alta quién puede darle órdenes al asistente y con qué rol: dueño o personal. A cualquier otro número le contesta que es un canal interno y no registra nada — esto escribe en tus cuentas, no es un chatbot de dudas.</p>
           </article>
         </div>
       </div>
@@ -217,118 +223,109 @@
       <div class="container">
         <div class="section-head reveal">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Funcionalidades</span>
-          <h2 id="ko-feat-h2">Lo que se te va en el día, junto y comparable.</h2>
+          <h2 id="ko-feat-h2">Gastos de restaurante y conciliación de cortes de Rappi, Uber Eats y Didi Food, en un solo lugar.</h2>
           <p>Cada restaurante ve solo lo suyo — aislado por diseño, no por convención.</p>
         </div>
         <div class="features-grid">
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l3-2 3 2 3-2 3 2 3-2V2l-3 2-3-2-3 2-3-2z"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="14" y2="13"/></svg></span>
             <h3>Gastos</h3>
-            <p>Cada compra con su proveedor, su categoría y su ticket, capturada desde la app o desde el celular de quien la hizo.</p>
+            <p>Cada compra con su proveedor, su categoría y su método de pago, capturada desde la app o por WhatsApp. Los gastos con tarjeta de crédito se marcan como facturados y como pagados.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><polyline points="7 14 11 10 15 13 21 7"/></svg></span>
             <h3>Cortes de delivery, conciliados</h3>
-            <p>Rappi, Uber Eats y Didi Food, semana por semana: lo que la plataforma reportó contra lo que de verdad cayó al banco, y la diferencia a la vista.</p>
+            <p>Rappi, Uber Eats y Didi Food, semana por semana: capturas lo que la plataforma reportó y lo que de verdad cayó al banco, y KitchOps calcula la diferencia y la deja a la vista.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
             <h3>Inventario</h3>
-            <p>Insumos con su mínimo. Cuando algo baja de ahí, se avisa antes de que te enteres a media comanda.</p>
+            <p>Insumos con sus existencias y su mínimo. Lo que llega al mínimo o baja de ahí genera una alerta de stock bajo.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
             <h3>Alertas que se cierran</h3>
-            <p>Gasto fuera de lo normal, depósito que no llegó, insumo bajo, pago pendiente. Son pendientes que despachas, no notificaciones que se acumulan.</p>
+            <p>Un proveedor con el que gastaste más que el mes pasado, un depósito que no llegó o llegó incompleto, un insumo bajo, tickets sin facturar, tarjeta por pagar. Son pendientes que marcas como listos, no notificaciones que se acumulan.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg></span>
-            <h3>Permisos por persona</h3>
-            <p>Defines qué puede ver y hacer cada quien. Lo que le quitas en la app también se le quita por WhatsApp — es el mismo permiso, no dos listas que se despegan.</p>
+            <h3>Permisos por rol</h3>
+            <p>Dos roles: dueño y personal. El dueño define, permiso por permiso, qué puede ver y hacer el personal. Lo que le quitas en la app también se le quita por WhatsApp — es el mismo permiso, no dos listas que se despegan.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></span>
             <h3>Bitácora</h3>
-            <p>Quién registró qué y cuándo, incluidos los movimientos que entraron por WhatsApp. Cuando un número no cuadra, hay a dónde ir a ver.</p>
+            <p>Quién registró qué y cuándo, incluidos los movimientos que entraron por WhatsApp. Cuando un número no cuadra, el dueño tiene a dónde ir a ver.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+            <h3>Tu equipo, con tu aprobación</h3>
+            <p>Compartes el código de tu negocio; cada persona pide entrar con él y tú apruebas la solicitud y eliges su rol. Sin tu aprobación no ve nada.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
+            <h3>Tus datos, descargables</h3>
+            <p>Desde Cuenta descargas un archivo JSON con tus gastos, cortes, inventario, proveedores y alertas cuando quieras, sin pedirlo por soporte.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- MULTI-SUCURSAL -->
-    <section class="section" id="multinegocio" aria-labelledby="ko-multi-h2" style="background: var(--bg-subtle);">
-      <div class="container">
-        <div class="section-head reveal">
-          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Más de un lugar</span>
-          <h2 id="ko-multi-h2">Si tienes dos cocinas, son dos juegos de números.</h2>
-          <p>Cada negocio lleva sus propios gastos, cortes, inventario y equipo, sin mezclarse. Cambias de uno a otro desde el mismo usuario, y quien trabaja en uno solo nunca ve el otro. Tu información se exporta completa desde Cuenta cuando la quieras — nunca quedas atrapado.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRICING -->
+    <!-- PRICING — the app stores a plan name but gates nothing by plan, and what
+         will differ between plans is not decided. The cards show the planned price
+         only; everything that works today is listed once, for all plans. -->
     <section class="section" id="planes" aria-labelledby="ko-price-h2">
       <div class="container">
         <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Planes KitchOps</span>
-          <h2 id="ko-price-h2">Empieza con una cocina. Crece cuando abras la siguiente.</h2>
-          <p class="section-sub">KitchOps está en desarrollo — estos son los precios con los que planeamos lanzar. Todos los planes empiezan con prueba gratis.</p>
+          <h2 id="ko-price-h2">Tres planes, con su precio de lanzamiento previsto.</h2>
+          <p class="section-sub">KitchOps está en desarrollo y ya se puede probar. Empieza con 30 días de prueba, sin tarjeta.</p>
         </div>
         <div class="pricing-grid pricing-grid-3">
 
           <div class="reveal pricing-card">
             <h3>KitchOps Start</h3>
             <div class="pricing-price"><span data-price="699">$699 MXN</span> <span class="pricing-unit">/ mes</span></div>
-            <p class="pricing-desc">Para un restaurante que quiere dejar de adivinar en qué se le va el dinero.</p>
-            <ul class="pricing-features">
-              <li>Un negocio</li>
-              <li>Gastos, inventario y alertas</li>
-              <li>Cortes de plataformas de delivery</li>
-              <li>Asistente de WhatsApp</li>
-              <li>Soporte por WhatsApp</li>
-              <li>Prueba gratis</li>
-            </ul>
-            <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20el%20plan%20KitchOps%20Start" target="_blank" rel="noopener" class="btn-mp">Solicitar →</a>
-            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20KitchOps" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
+            <p class="pricing-desc">El alcance de cada plan se confirma al lanzar.</p>
+            <a href="/trial#kitchops" class="btn-mp">Probar 30 días →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20KitchOps%20Start" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
           </div>
 
-          <div class="reveal pricing-card featured">
-            <div class="pricing-badge">Más popular</div>
+          <div class="reveal pricing-card">
             <h3>KitchOps Growth</h3>
             <div class="pricing-price"><span data-price="1399">$1,399 MXN</span> <span class="pricing-unit">/ mes</span></div>
-            <p class="pricing-desc">Para una cocina con equipo, donde ya importa quién puede hacer qué.</p>
-            <ul class="pricing-features">
-              <li>Todo lo de Start</li>
-              <li>Más personal dado de alta</li>
-              <li>Permisos por persona</li>
-              <li>Bitácora de movimientos</li>
-              <li>Proveedores y pagos pendientes</li>
-              <li>Soporte prioritario</li>
-              <li>Prueba gratis</li>
-            </ul>
-            <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20el%20plan%20KitchOps%20Growth" target="_blank" rel="noopener" class="btn-mp">Solicitar →</a>
+            <p class="pricing-desc">El alcance de cada plan se confirma al lanzar.</p>
+            <a href="/trial#kitchops" class="btn-mp">Probar 30 días →</a>
             <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20KitchOps%20Growth" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
           </div>
 
           <div class="reveal pricing-card">
             <h3>KitchOps Pro</h3>
             <div class="pricing-price"><span data-price="2499">$2,499 MXN</span> <span class="pricing-unit">/ mes</span></div>
-            <p class="pricing-desc">Para quien opera varias cocinas y las quiere comparar entre sí.</p>
-            <ul class="pricing-features">
-              <li>Todo lo de Growth</li>
-              <li>Varios negocios en un mismo usuario</li>
-              <li>Usuarios sin límite por negocio</li>
-              <li>Exportación de datos</li>
-              <li>Acompañamiento en la implementación</li>
-              <li>Soporte dedicado</li>
-              <li>Prueba gratis</li>
-            </ul>
-            <a href="https://wa.me/524498958291?text=Hola,%20me%20interesa%20el%20plan%20KitchOps%20Pro" target="_blank" rel="noopener" class="btn-mp">Solicitar →</a>
+            <p class="pricing-desc">El alcance de cada plan se confirma al lanzar.</p>
+            <a href="/trial#kitchops" class="btn-mp">Probar 30 días →</a>
             <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20KitchOps%20Pro" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
           </div>
 
         </div>
-        <p class="pricing-note">Precios estimados de lanzamiento, sujetos a confirmación. ¿Necesitas algo personalizado? <a href="https://wa.me/524498958291?text=Hola,%20necesito%20un%20plan%20personalizado%20para%20KitchOps" target="_blank" rel="noopener">Cuéntanos por WhatsApp</a></p>
+
+        <div class="request-card reveal" style="margin-top:2rem;">
+          <h3 style="margin-bottom:1rem;">Todos los planes incluyen</h3>
+          <ul class="request-list" style="margin-bottom:0;">
+            <li>Gastos, desde la app o por WhatsApp</li>
+            <li>Cortes de Rappi, Uber Eats y Didi Food, con su conciliación</li>
+            <li>Inventario con mínimos</li>
+            <li>Alertas que marcas como listas</li>
+            <li>Asistente de WhatsApp con números autorizados</li>
+            <li>Catálogo de proveedores y gastos con tarjeta marcados como pendientes de pago</li>
+            <li>Permisos por rol: dueño y personal</li>
+            <li>Bitácora de movimientos</li>
+            <li>Descarga de tus datos desde Cuenta (JSON)</li>
+            <li>Soporte desde la app y por WhatsApp</li>
+          </ul>
+        </div>
+
+        <p class="pricing-note">Precios de lanzamiento previstos, sujetos a confirmación. ¿Necesitas algo personalizado? <a href="https://wa.me/524498958291?text=Hola,%20necesito%20un%20plan%20personalizado%20para%20KitchOps" target="_blank" rel="noopener">Cuéntanos por WhatsApp</a></p>
       </div>
     </section>
 
@@ -342,38 +339,51 @@
         <div class="features-grid">
           <article class="feature reveal">
             <h3>¿Necesito que mi personal aprenda a usar un sistema?</h3>
-            <p>No. Quien está en la cocina le manda la foto del ticket por WhatsApp al número de tu negocio y ya quedó. La app es para ti, para revisar.</p>
+            <p>Para capturar, no. Quien está en la cocina le manda la foto del ticket por WhatsApp al número de tu negocio y el asistente registra el gasto con el monto, el proveedor y la fecha. La app es para revisar y para lo que no se hace por WhatsApp, como dar de alta insumos nuevos.</p>
           </article>
           <article class="feature reveal">
             <h3>¿Cualquiera que tenga el número puede registrar gastos?</h3>
-            <p>No. Solo los números que tú das de alta, y cada uno con el mismo nivel de permiso que tiene dentro de la app. A cualquier otro, el asistente no le hace caso.</p>
-          </article>
-          <article class="feature reveal">
-            <h3>¿Sirve si tengo más de un restaurante?</h3>
-            <p>Sí. Cada negocio lleva sus propios números y su propio equipo, separados entre sí, y cambias de uno a otro desde el mismo usuario.</p>
+            <p>No. Solo los números que tú das de alta, cada uno con el rol que le asignas (dueño o personal) y con los mismos permisos que ese rol tiene dentro de la app. A cualquier otro número el asistente le contesta que es un canal interno y no registra nada.</p>
           </article>
           <article class="feature reveal">
             <h3>¿Puedo sacar mi información si dejo de usarlo?</h3>
-            <p>Sí. Desde Cuenta exportas todo lo de tu negocio cuando quieras, sin pedirlo por soporte.</p>
+            <p>Sí. Desde Cuenta descargas un archivo JSON con tus gastos, cortes, inventario, proveedores y alertas cuando quieras, sin pedirlo por soporte.</p>
+          </article>
+          <article class="feature reveal">
+            <h3>¿Cómo empiezo y cuánto dura la prueba?</h3>
+            <p>Creas tu cuenta, das de alta tu negocio y empiezas con 30 días de prueba, sin tarjeta. KitchOps está en desarrollo: los precios publicados son los previstos para el lanzamiento.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- ACCESS REQUEST -->
+    <!-- ACCOMPANIED START — a service offer, not an application step: anyone can start a trial. -->
     <section class="section" id="solicitar" aria-labelledby="ko-req-h2">
       <div class="container">
         <div class="request-card reveal">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Empezar</span>
-          <h2 id="ko-req-h2">Pide una demo de KitchOps</h2>
-          <p class="body">Te mostramos el panel con una cocina de ejemplo, damos de alta tu negocio contigo y dejamos el asistente de WhatsApp funcionando con los números de tu equipo.</p>
+          <h2 id="ko-req-h2">¿Prefieres arrancar acompañado?</h2>
+          <p class="body">Puedes empezar por tu cuenta con la prueba de 30 días. Si prefieres hacerlo con nosotros, damos de alta tu negocio contigo y dejamos el asistente de WhatsApp conectado con los números de tu equipo.</p>
           <ul class="request-list">
-            <li>Demo con casos reales de tu operación</li>
             <li>Alta de tu negocio y tu equipo acompañada</li>
             <li>Asistente de WhatsApp configurado con tus números</li>
             <li>Soporte directo con el equipo de ACACIA</li>
           </ul>
-          <a href="https://wa.me/524498958291?text=Hola,%20quiero%20una%20demo%20de%20KitchOps" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Pedir demo por WhatsApp →</a>
+          <a href="https://wa.me/524498958291?text=Hola,%20quiero%20ayuda%20para%20empezar%20con%20KitchOps" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Pedir acompañamiento por WhatsApp →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- A LA MEDIDA -->
+    <section class="section-feedback section" aria-labelledby="ko-medida-h2">
+      <div class="container">
+        <div class="feedback-card reveal">
+          <div class="feedback-text">
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Desarrollo a la medida</span>
+            <h2 id="ko-medida-h2">¿Tu operación necesita algo que KitchOps todavía no hace?</h2>
+            <p>ACACIA desarrolla a la medida: adaptamos KitchOps a tu proceso o construimos el sistema que te falta, con el mismo equipo que hizo esta app.</p>
+          </div>
+          <a href="/servicios" class="btn btn-primary">Ver desarrollo a la medida →</a>
         </div>
       </div>
     </section>
@@ -385,7 +395,7 @@
           <h2 id="ko-cta-h2">¿Listo para dejar de capturar tickets de madrugada?</h2>
           <p>Te acompañamos en la activación y arrancas con tu equipo desde el primer día.</p>
           <div class="btns">
-            <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20KitchOps%20gratis" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Hablar por WhatsApp</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20quiero%20probar%20KitchOps%2030%20d%C3%ADas" class="btn btn-primary" rel="noopener noreferrer" target="_blank">Hablar por WhatsApp</a>
             <a href="mailto:contacto@acaciaco.com.mx" class="btn btn-ghost">Escribir por correo</a>
           </div>
         </div>
@@ -407,6 +417,7 @@
       <div>
         <h4>Apps</h4>
         <ul>
+          <li><a href="/apps">Todas las apps</a></li>
           <li><a href="/apps/stockflow">StockFlow</a></li>
           <li><a href="/apps/flowfin">FlowFin</a></li>
           <li><a href="/apps/puntos-plus">Puntos+</a></li>
@@ -418,6 +429,7 @@
           <li><a href="/apps/kitchops">KitchOps</a></li>
           <li><a href="/apps/artiskids">ArtisKids</a></li>
           <li><a href="/apps/sommel">Sommel</a></li>
+          <li><a href="/freeware">Herramientas gratis</a></li>
         </ul>
       </div>
       <div>
