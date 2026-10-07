@@ -1,0 +1,20 @@
+{
+  "version": "2026-10-07",
+  "published": "2026-10-07",
+  "grace_days": 30,
+  "documents": {
+    "terminos": {
+      "url": "https://acaciaco.com.mx/legal/terminos",
+      "sha256": "eae6cf15e7709987ffa5d6458abecc7bba796dcf6257bf0853a21c2ab760f470"
+    },
+    "privacidad": {
+      "url": "https://acaciaco.com.mx/legal/privacidad",
+      "updated": "2026-10-07"
+    }
+  },
+  "changes_es": [
+    "Los términos nombran todas las apps de ACACIA y su razón social y domicilio completos.",
+    "Se agregan las condiciones para el tratamiento de datos personales: qué se obliga a hacer ACACIA con los datos que tu organización registra y qué le corresponde a tu organización.",
+    "Se explica cómo se aceptan los términos dentro de la app y qué pasa si se rechazan."
+  ]
+}
