@@ -5,7 +5,7 @@
   "documents": {
     "terminos": {
       "url": "https://acaciaco.com.mx/legal/terminos",
-      "sha256": "8376d6cb9a4c908c8c68ce7c87a69ca6b6b2184a30104baaf62b836474897043"
+      "sha256": "6ff496c98ab84a0ddf5c5864d86b6edf7acde50b1a1c2277ec52a73591ffacfe"
     },
     "privacidad": {
       "url": "https://acaciaco.com.mx/legal/privacidad"
@@ -15,6 +15,6 @@
     "Los términos nombran todas las apps de ACACIA y su razón social y domicilio completos.",
     "Se agregan las condiciones para el tratamiento de datos personales: a qué se obliga ACACIA con los datos que tu organización registra y qué le corresponde a tu organización.",
     "Se explica cómo se aceptan los términos dentro de la app y qué pasa si se rechazan.",
-    "La renovación automática se cobra el día 1 de cada mes, y las condiciones de la prueba gratuita de cada app se consultan en acaciaco.com.mx/trial."
+    "La renovación automática se cobra el día 1 de cada mes, y las condiciones de la prueba gratuita son las que publica la página de cada app."
   ]
 }
