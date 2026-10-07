@@ -6,6 +6,16 @@
 (function () {
   if (window.__acaciaAnalytics) return;
   window.__acaciaAnalytics = true;
+  // Honour the cookie banner: "Solo esenciales" turns visit counting off.
+  // The key and shape are written by persistCookieChoice() in shared.js.
+  // acaciaTrack stays defined as a no-op so callers never have to check.
+  try {
+    var choice = JSON.parse(localStorage.getItem('acacia-cookies-consent') || 'null');
+    if (choice && choice.level === 'essential') {
+      window.acaciaTrack = function () {};
+      return;
+    }
+  } catch (e) {}
   // Cola de eventos de Vercel + carga del script de insights
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   var s = document.createElement("script");
@@ -16,6 +26,15 @@
   window.acaciaTrack = function (name, data) {
     try { window.va("event", { name: name, data: data || {} }); } catch (e) {}
   };
+  // Choosing "Solo esenciales" takes effect on this page too, not only on the
+  // next one: stop sending events the moment the button is pressed.
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (t && t.closest && t.closest('[data-cookies="essential"]')) {
+      window.acaciaTrack = function () {};
+      window.va = function () {};
+    }
+  }, true);
 
   // Analítica propia (first-party) → ACACIA Mission Control. Un pixel por vista,
   // sin cookies ni datos personales; el servidor sólo guarda la ruta + un hash
