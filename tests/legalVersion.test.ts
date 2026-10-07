@@ -6,8 +6,9 @@
 // the one being served: change a word of the terms and this fails until
 // someone decides whether it is a new version (bump `version`, write
 // `changes_es`, every tenant accepts again) or a correction of form (update
-// only the hash). Each published version is tagged in this repo as
-// `legal-terms-<version>`, so the text behind a stored hash can be found.
+// only the hash). The text behind a stored hash is this repo's terms page at
+// the commit where legal/version.json first carried that hash:
+//   git log -S <hash> -- legal/version.json
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
