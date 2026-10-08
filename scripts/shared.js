@@ -132,8 +132,44 @@
   }
 
   /* ---------- Reveal on scroll ---------- */
+  // Pages that opt in with [data-reveal-stagger] (the homepage) give each
+  // .reveal a --reveal-delay by its place among its reveal siblings, so a grid
+  // of cards enters one after another instead of all at once. The delay is
+  // dropped once the entrance is over, so it can never slow a later hover.
+  var STAGGER_STEP_MS = 70;
+  var STAGGER_MAX_STEPS = 6;
+
+  function assignRevealDelays() {
+    var root = document.querySelector('[data-reveal-stagger]');
+    if (!root || prefersReducedMotion()) return;
+    var parents = [];
+    var nodes = root.querySelectorAll('.reveal');
+    for (var i = 0; i < nodes.length; i++) {
+      var p = nodes[i].parentElement;
+      if (parents.indexOf(p) === -1) parents.push(p);
+    }
+    parents.forEach(function (parent) {
+      var n = 0;
+      for (var c = parent.firstElementChild; c; c = c.nextElementSibling) {
+        if (!c.classList.contains('reveal')) continue;
+        c.style.setProperty('--reveal-delay', (Math.min(n, STAGGER_MAX_STEPS) * STAGGER_STEP_MS) + 'ms');
+        n++;
+      }
+    });
+  }
+
+  function markRevealed(node) {
+    node.classList.add('in');
+    if (node.style.getPropertyValue('--reveal-delay')) {
+      setTimeout(function () { node.style.removeProperty('--reveal-delay'); }, 1200);
+    }
+  }
+
   function initReveal() {
+    // Tells the homepage's inline safety net (html.js-reveal) that this script is alive.
+    document.documentElement.setAttribute('data-shared-ready', '1');
     var nodes = document.querySelectorAll('.reveal');
+    assignRevealDelays();
     if (!('IntersectionObserver' in window) || !nodes.length) {
       for (var i = 0; i < nodes.length; i++) nodes[i].classList.add('in');
       return;
@@ -141,12 +177,26 @@
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          entry.target.classList.add('in');
+          markRevealed(entry.target);
           io.unobserve(entry.target);
         }
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
     for (var j = 0; j < nodes.length; j++) io.observe(nodes[j]);
+  }
+
+  /* ---------- Pause looping animations while off-screen ---------- */
+  // Elements marked [data-motion-watch] start paused in CSS and only run while
+  // they are on screen (.is-onscreen). Without JS they simply stay still.
+  function initMotionWatch() {
+    var nodes = document.querySelectorAll('[data-motion-watch]');
+    if (!nodes.length || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        entry.target.classList.toggle('is-onscreen', entry.isIntersecting);
+      });
+    }, { rootMargin: '80px 0px' });
+    for (var i = 0; i < nodes.length; i++) io.observe(nodes[i]);
   }
 
   /* ---------- Cookie banner ---------- */
@@ -288,6 +338,7 @@
     initMenu();
     initStickyNav();
     initReveal();
+    initMotionWatch();
     initCookies();
     initScrollProgress();
     initCountUp();
