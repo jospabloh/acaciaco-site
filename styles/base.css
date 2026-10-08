@@ -2621,3 +2621,16 @@ details.faq-item[open] { border-color: var(--primary); }
   .preview { transform: rotate(-1.5deg) !important; }
   .scroll-progress { display: none; }
 }
+
+/* Entry price line on app cards (home) and trial blocks. The number itself is
+   a [data-price] span, so the MXN/USD toggle converts it with every other price. */
+.app-price {
+  display: block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin-top: 0.25rem;
+}
+.pricing-card .app-price { margin: 0.5rem 0 0.75rem; }
