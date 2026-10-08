@@ -37,7 +37,12 @@
   box-shadow: var(--shadow-md), 0 24px 60px -34px var(--glow);
   /* Reserve (measured at the tallest app) before JS adds the invisible per-app sizers. */
   min-height: 24.75rem;
+  /* The inner panel fills that reserve; otherwise the --border background
+     shows as a thick band under a shorter panel instead of a 1.5px frame. */
+  display: flex;
+  flex-direction: column;
 }
+.spot > .spot-inner { flex: 1 1 auto; }
 @media (min-width: 821px) and (max-width: 1180px) { .spot { min-height: 27.75rem; } }
 [data-theme="dark"] .spot {
   --spot-beam: #8fb6ff;
