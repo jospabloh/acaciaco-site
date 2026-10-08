@@ -612,3 +612,43 @@ just the IntersectionObserver never firing during a scripted `scrollTo` with
 short waits. Forcing `.reveal { opacity: 1 !important }` before capture
 confirmed the content was always there; a real visitor scrolling normally
 never sees this.
+
+## Estado, precio y prueba de las apps — reglas del dueño (2026-10-07)
+
+Decididas por JP tras una auditoría que comparó cada página contra el código
+de su app. Aplican a `index.html`, `apps/`, `pricing/` y `trial/`:
+
+- **Solo hay dos estados.** `Disponible · 30 días de prueba` (StockFlow,
+  FlowFin, CateqHub, Puntos+, LIUMA, Rumbo, ArtisKids) y `En desarrollo ·
+  disponible para probar` (Sommel, KitchOps, CtrlHQ, RADAR). No existe "Demo"
+  ni acceso por invitación. Mover una app de grupo es decisión del dueño.
+- **Nada es gratis.** Ninguna app tiene plan gratuito ni "$0". La prueba se
+  escribe "30 días de prueba, sin tarjeta" — nunca "prueba gratis". La palabra
+  "gratis" queda reservada a las herramientas de `freeware/`.
+- **Toda app publica precio**, también las que están en desarrollo ("Precios
+  de lanzamiento previstos, sujetos a confirmación"). El mismo precio tiene
+  que leerse igual en la página de la app, el inicio, `/apps`, `/pricing`,
+  `/trial` y el JSON-LD: son seis lugares y se cambian juntos.
+- **El botón principal de cada app lleva a `/trial#<slug>`**, y `/trial` tiene
+  un bloque con ese `id` por app con sus límites de prueba (2 usuarios en
+  StockFlow, 4 miembros en FlowFin, 5/5 en Rumbo, 500 MB en ArtisKids…). Una
+  app nueva necesita su bloque ahí y su tarjeta con `id` en `/pricing`.
+  RADAR es la excepción: su prueba la activa ACACIA, así que su bloque lleva a
+  WhatsApp.
+- **Una página solo afirma lo que la app hace hoy.** Lo que el código no
+  respalda se quita; lo que existe a medias se describe como es. Las apps en
+  desarrollo pueden listar lo planeado únicamente en una lista aparte titulada
+  "En camino". Si una diferencia entre planes no se aplica en el código, la
+  tarjeta dice "Todas las funciones" y solo el límite que sí cambia.
+- **Sin testimonios escritos a mano.** Los tres que había no tenían respaldo
+  y salieron. Los próximos llegan desde Soporte dentro de cada app, con
+  consentimiento y revisión en Mission Control (Módulo 29 del estándar).
+- **Capturas:** son pantallas reales de cuentas demo. La de CateqHub está
+  recortada (1600×500) para no mostrar el plan Gratis retirado; hay que
+  volver a tomarla, igual que las de RADAR y CtrlHQ. Sommel y ArtisKids no
+  tienen captura y no se les inventa una.
+
+Pendiente fuera de este repo cuando se escribió: las pantallas de planes
+dentro de varias apps (Puntos+, Rumbo, RADAR, LIUMA, FlowFin, StockFlow)
+todavía dicen "gratis", muestran niveles gratuitos o anuncian funciones por
+plan que el sitio ya no promete.

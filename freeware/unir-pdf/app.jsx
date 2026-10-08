@@ -54,7 +54,7 @@ const LangContext = React.createContext("es");
 
 const uid = () => Math.random().toString(36).slice(2, 9);
 function triggerDownload(blob, filename) { var url = URL.createObjectURL(blob); var a = document.createElement("a"); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1500); }
-function detectLang() { try { var s = localStorage.getItem("acacia-lang"); if (s === "es" || s === "en") return s; } catch (e) {} return (navigator.language || "es").toLowerCase().indexOf("en") === 0 ? "en" : "es"; }
+function detectLang() { try { var s = localStorage.getItem("acacia-lang"); if (s === "es" || s === "en") return s; } catch (e) {} return "es"; }
 
 function App() {
   const [lang, setLang] = useState(detectLang);
@@ -65,7 +65,7 @@ function App() {
   const [busy, setBusy] = useState(false);
   const inputRef = useRef(null);
 
-  useEffect(() => { document.documentElement.setAttribute("lang", lang); try { localStorage.setItem("acacia-lang", lang); } catch (e) {} }, [lang]);
+  useEffect(() => { document.documentElement.setAttribute("lang", lang === "en" ? "en" : "es-MX"); try { localStorage.setItem("acacia-lang", lang); } catch (e) {} }, [lang]);
 
   const addFiles = useCallback(async (list) => {
     const pdfs = [...list].filter((f) => f.type === "application/pdf" || /\.pdf$/i.test(f.name));

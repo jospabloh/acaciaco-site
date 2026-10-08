@@ -56,7 +56,7 @@ const STRINGS = {
 };
 function makeT(lang){return (k,v)=>{let s=(STRINGS[lang]&&STRINGS[lang][k])!=null?STRINGS[lang][k]:(STRINGS.es[k]!=null?STRINGS.es[k]:k);if(v&&typeof s==="string")for(var x in v)s=s.split("{"+x+"}").join(v[x]);return s;};}
 const LangContext=React.createContext("es");
-function detectLang(){try{var s=localStorage.getItem("acacia-lang");if(s==="es"||s==="en")return s;}catch(e){}return (navigator.language||"es").toLowerCase().indexOf("en")===0?"en":"es";}
+function detectLang(){try{var s=localStorage.getItem("acacia-lang");if(s==="es"||s==="en")return s;}catch(e){}return "es";}
 
 function App(){
   const [lang,setLang]=useState(detectLang);
@@ -64,7 +64,7 @@ function App(){
   const [f,setF]=useState({role:"",task:"",context:"",audience:"",format:"free",tone:"t_pro",length:"l_medium",language:"",constraints:"",examples:""});
   const [step,setStep]=useState(true); const [ask,setAsk]=useState(false);
   const [copied,setCopied]=useState(false);
-  useEffect(()=>{document.documentElement.setAttribute("lang",lang);try{localStorage.setItem("acacia-lang",lang);}catch(e){}},[lang]);
+  useEffect(()=>{document.documentElement.setAttribute("lang", lang === "en" ? "en" : "es-MX");try{localStorage.setItem("acacia-lang",lang);}catch(e){}},[lang]);
   const set=(k,v)=>setF(p=>({...p,[k]:v}));
 
   const applyPreset=(p)=>{

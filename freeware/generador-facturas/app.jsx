@@ -51,7 +51,7 @@ function makeT(lang){return (k,v)=>{let s=(STRINGS[lang]&&STRINGS[lang][k])!=nul
 const LangContext=React.createContext("es");
 const uid=()=>Math.random().toString(36).slice(2,9);
 const num=(v)=>{const n=parseFloat(v);return isFinite(n)?n:0;};
-function detectLang(){try{var s=localStorage.getItem("acacia-lang");if(s==="es"||s==="en")return s;}catch(e){}return (navigator.language||"es").toLowerCase().indexOf("en")===0?"en":"es";}
+function detectLang(){try{var s=localStorage.getItem("acacia-lang");if(s==="es"||s==="en")return s;}catch(e){}return "es";}
 function fmtMoney(n,sym){ n=Math.round((n+Number.EPSILON)*100)/100; const parts=n.toFixed(2).split("."); parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g,","); return (sym||"$")+parts.join("."); }
 function dataUrlToBytes(durl){ const b64=durl.split(",")[1]; const bin=atob(b64); const arr=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i); return arr; }
 
@@ -153,7 +153,7 @@ function App() {
   const [remember, setRemember] = useState(true);
   const logoRef = useRef(null);
 
-  useEffect(() => { document.documentElement.setAttribute("lang", lang); try { localStorage.setItem("acacia-lang", lang); } catch (e) {} }, [lang]);
+  useEffect(() => { document.documentElement.setAttribute("lang", lang === "en" ? "en" : "es-MX"); try { localStorage.setItem("acacia-lang", lang); } catch (e) {} }, [lang]);
   // cargar emisor recordado
   useEffect(() => {
     try { const s = JSON.parse(localStorage.getItem("acacia-fact-emisor") || "null"); if (s) { if (s.em) setEm(s.em); if (s.logo) setLogo(s.logo); if (s.currencyCode) setCurrencyCode(s.currencyCode); if (s.currencySym) setCurrencySym(s.currencySym); } } catch (e) {}

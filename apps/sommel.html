@@ -1,24 +1,26 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-MX">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sommel · POS para wine bars y cafeterías de especialidad — ACACIA</title>
-  <meta name="description" content="Comandas en tablet, cocina y barra con tiempos, cobro con varias formas de pago, turno y corte al correo, inventario y checador del equipo. Sommel, el POS para wine bars y cafeterías de especialidad." />
+  <title>Sommel · Punto de venta (POS) para wine bars y cafeterías</title>
+  <meta name="description" content="Toma comandas en tablet, coordina cocina y barra y cobra la cuenta. Sommel, punto de venta (POS) para wine bars y cafeterías en México. 30 días de prueba." />
   <link rel="canonical" href="https://acaciaco.com.mx/apps/sommel" />
 
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="es_MX" />
   <meta property="og:url" content="https://acaciaco.com.mx/apps/sommel" />
-  <meta property="og:title" content="Sommel · POS para wine bars y cafeterías de especialidad — ACACIA" />
-  <meta property="og:description" content="Comandas en tablet, cocina y barra con tiempos, cobro, turno y corte al correo. El POS para wine bars y cafeterías de especialidad." />
-  <meta property="og:image" content="https://acaciaco.com.mx/assets/sommel-logo.jpg" />
+  <meta property="og:title" content="Sommel · Punto de venta (POS) para wine bars y cafeterías" />
+  <meta property="og:description" content="Toma comandas en tablet, coordina cocina y barra y cobra la cuenta. Sommel, punto de venta (POS) para wine bars y cafeterías en México. 30 días de prueba." />
+  <meta property="og:image" content="https://acaciaco.com.mx/assets/acacia-og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta property="og:site_name" content="ACACIA Consultoría" />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Sommel · POS para wine bars y cafeterías de especialidad — ACACIA" />
-  <meta name="twitter:description" content="Comandas en tablet, cocina y barra con tiempos, cobro, turno y corte al correo. El POS para wine bars y cafeterías de especialidad." />
-  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/sommel-logo.jpg" />
+  <meta name="twitter:title" content="Sommel · Punto de venta (POS) para wine bars y cafeterías" />
+  <meta name="twitter:description" content="Toma comandas en tablet, coordina cocina y barra y cobra la cuenta. Sommel, punto de venta (POS) para wine bars y cafeterías en México. 30 días de prueba." />
+  <meta name="twitter:image" content="https://acaciaco.com.mx/assets/acacia-og.png" />
 
   <link rel="icon" href="/assets/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
@@ -51,19 +53,38 @@
       "name": "Sommel",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web",
-      "provider": {
-        "@type": "Organization",
-        "name": "ACACIA Consultoría",
-        "url": "https://acaciaco.com.mx"
+      "url": "https://acaciaco.com.mx/apps/sommel",
+      "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "MXN",
+        "lowPrice": "699",
+        "highPrice": "2499",
+        "offerCount": "3",
+        "availability": "https://schema.org/PreOrder",
+        "description": "Start $699, Growth $1,399 y Pro $2,499 MXN al mes. Precios de lanzamiento previstos, sujetos a confirmación. Sommel está en desarrollo y disponible para probar: 30 días de prueba, sin tarjeta."
       },
-      "description": "POS para wine bars y cafeterías de especialidad: comandas en tablet, cocina y barra con tiempos, cobro con varias formas de pago, turno y corte al correo, inventario, reportes, ticket impreso y checador del equipo."
+      "provider": { "@id": "https://acaciaco.com.mx/#organization" },
+      "description": "Punto de venta (POS) para wine bars y cafeterías de especialidad: comandas en tablet, cocina y barra con tiempos, cobro con varias formas de pago, turno con corte al correo, inventario, reportes, ticket impreso y checador del equipo.",
+      "featureList": [
+        "Comandas por mesa desde tablet o celular",
+        "Pantallas de cocina y de barra: cada una muestra sus productos y el tiempo que lleva cada pedido",
+        "Cobro con efectivo, tarjeta y transferencia en una misma cuenta",
+        "División de la cuenta en partes iguales o por productos",
+        "Apertura y cierre de turno con conteo de caja",
+        "Corte enviado por correo al cerrar cada turno",
+        "Inventario que se descuenta al cobrar los productos ligados a un insumo",
+        "Menú con productos, categorías y variantes",
+        "Reportes de ventas por producto, categoría, persona, forma de pago y hora",
+        "Ticket impreso",
+        "Checador del equipo con PIN y permisos para administrador y personal"
+      ]
     },
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://acaciaco.com.mx/" },
-        { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://acaciaco.com.mx/#apps" },
+        { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://acaciaco.com.mx/apps" },
         { "@type": "ListItem", "position": 3, "name": "Sommel", "item": "https://acaciaco.com.mx/apps/sommel" }
       ]
     }
@@ -86,7 +107,7 @@
         <ul class="nav-links" role="list">
           <li><a href="/#como-trabajamos">Soluciones</a></li>
           <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
-          <li><a href="/#apps">Apps</a></li>
+          <li><a href="/apps">Apps</a></li>
           <li><a href="/servicios">Servicios</a></li>
           <li><a href="/contacto">Contacto</a></li>
         </ul>
@@ -119,13 +140,12 @@
               <img src="/assets/sommel-logo.jpg" alt="Sommel logo" width="56" height="56" />
               <span class="name">Sommel</span>
             </div>
-            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Prueba gratis por 30 días</span>
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> En desarrollo · disponible para probar</span>
             <h1 id="sm-h1">El POS para wine bars y cafeterías de <span class="accent">especialidad</span>.</h1>
-            <p class="lead">Comandas en tablet, cocina y barra sincronizadas, cobro y corte del día en un solo lugar. Sommel te da el pulso de tu servicio sin complicarte la noche.</p>
+            <p class="lead">Comandas en tablet, cocina y barra sincronizadas, cobro y corte de turno en un solo lugar. Sommel te da el pulso de tu servicio sin complicarte la noche.</p>
             <div class="hero-ctas">
-              <a href="https://sommel.acaciaco.com.mx/register" class="btn btn-primary" rel="noopener">Crear mi bar de prueba</a>
-              <a href="/contacto" class="btn btn-ghost">Cotiza Sommel</a>
-              <a href="#features" class="btn btn-ghost">Ver funcionalidades →</a>
+              <a href="/trial#sommel" class="btn btn-primary">Probar 30 días</a>
+              <a href="#planes" class="btn btn-ghost">Ver planes →</a>
             </div>
           </div>
 
@@ -143,7 +163,7 @@
       <div class="container">
         <div class="section-head reveal">
           <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Funcionalidades</span>
-          <h2 id="sm-feat-h2">De la comanda al corte, sin fricción.</h2>
+          <h2 id="sm-feat-h2">Un punto de venta (POS) para wine bars y cafeterías de especialidad, de la comanda al corte.</h2>
           <p>Todo lo que pasa en el servicio, desde que el cliente pide hasta que cierras caja.</p>
         </div>
         <div class="features-grid">
@@ -160,22 +180,22 @@
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span>
             <h3>Cobro con varias formas de pago</h3>
-            <p>Efectivo, tarjeta y transferencia en una misma cuenta, con división entre comensales.</p>
+            <p>Efectivo, tarjeta y transferencia en una misma cuenta, que puedes dividir entre comensales en partes iguales o por productos.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span>
             <h3>Turno y corte al correo</h3>
-            <p>Abre y cierra turno con caja clara, y el corte llega a tu correo al terminar el día.</p>
+            <p>Abre y cierra turno contando la caja: Sommel compara lo contado con lo esperado, y el corte llega al correo al cerrar cada turno.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
             <h3>Inventario</h3>
-            <p>Botellas, insumos y existencias que se descuentan con lo que vendes, con un menú que tú controlas.</p>
+            <p>Botellas e insumos con entradas, mermas y conteos. Al cobrar se descuentan solo los productos que ligues a un insumo, con un menú que tú controlas.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
             <h3>Reportes</h3>
-            <p>Ventas por día, por producto y por turno para decidir con números y no con corazonadas.</p>
+            <p>Ventas por producto, categoría, persona, forma de pago y hora, de hoy, de la semana o del rango que elijas.</p>
           </article>
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></span>
@@ -185,24 +205,65 @@
           <article class="feature reveal">
             <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
             <h3>Checador del equipo</h3>
-            <p>Entradas y salidas de tu equipo registradas, con permisos distintos para administrador y personal.</p>
+            <p>Entradas y salidas de tu equipo registradas con PIN, con permisos distintos para administrador y personal.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- COTIZA (sin precio publicado) -->
-    <section class="section" id="cotiza" aria-labelledby="sm-price-h2">
+    <!-- PRICING — the app has no plan catalog and gates nothing by plan (WineBar.plan
+         is a free-text field only the platform writes), and what will differ between
+         plans is not decided. The cards show the planned launch price only. -->
+    <section class="section" id="planes" aria-labelledby="sm-price-h2">
       <div class="container">
         <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
-          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Precio</span>
-          <h2 id="sm-price-h2">Cotiza Sommel para tu local.</h2>
-          <p class="section-sub">Cada bar es distinto: cuéntanos cuántas mesas, áreas y personas trabajan contigo y te armamos una propuesta.</p>
-          <div class="hero-ctas" style="justify-content:center;">
-            <a href="https://sommel.acaciaco.com.mx/register" class="btn btn-primary" rel="noopener">Crear mi bar de prueba</a>
-            <a href="mailto:soporte@acaciaco.com.mx?subject=Cotizaci%C3%B3n%20Sommel" class="btn btn-ghost">Escribir a soporte@acaciaco.com.mx</a>
-            <a href="/contacto" class="btn btn-ghost">Ir a contacto</a>
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Planes Sommel</span>
+          <h2 id="sm-price-h2">Tres planes, con su precio de lanzamiento previsto.</h2>
+          <p class="section-sub">Sommel está en desarrollo y ya se puede probar. Empieza con 30 días de prueba, sin tarjeta.</p>
+        </div>
+        <div class="pricing-grid pricing-grid-3">
+
+          <div class="reveal pricing-card">
+            <h3>Sommel Start</h3>
+            <div class="pricing-price"><span data-price="699">$699 MXN</span> <span class="pricing-unit">/ mes</span></div>
+            <p class="pricing-desc">El alcance de cada plan se confirma al lanzar.</p>
+            <a href="/trial#sommel" class="btn-mp">Probar 30 días →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20Sommel%20Start" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
           </div>
+
+          <div class="reveal pricing-card">
+            <h3>Sommel Growth</h3>
+            <div class="pricing-price"><span data-price="1399">$1,399 MXN</span> <span class="pricing-unit">/ mes</span></div>
+            <p class="pricing-desc">El alcance de cada plan se confirma al lanzar.</p>
+            <a href="/trial#sommel" class="btn-mp">Probar 30 días →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20Sommel%20Growth" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
+          </div>
+
+          <div class="reveal pricing-card">
+            <h3>Sommel Pro</h3>
+            <div class="pricing-price"><span data-price="2499">$2,499 MXN</span> <span class="pricing-unit">/ mes</span></div>
+            <p class="pricing-desc">El alcance de cada plan se confirma al lanzar.</p>
+            <a href="/trial#sommel" class="btn-mp">Probar 30 días →</a>
+            <a href="https://wa.me/524498958291?text=Hola,%20tengo%20dudas%20sobre%20Sommel%20Pro" target="_blank" rel="noopener" class="wa-link">¿Tienes dudas? Escríbenos</a>
+          </div>
+
+        </div>
+
+        <p class="pricing-note">Precios de lanzamiento previstos, sujetos a confirmación. Al terminar la prueba, la licencia se activa con ACACIA: escríbenos a <a href="mailto:soporte@acaciaco.com.mx?subject=Licencia%20de%20Sommel">soporte@acaciaco.com.mx</a>.</p>
+        <p class="pricing-note" style="margin-top:0.5rem;">¿Prefieres entrar directo? <a href="https://sommel.acaciaco.com.mx/register" rel="noopener">Crear mi bar de prueba</a></p>
+      </div>
+    </section>
+
+    <!-- A LA MEDIDA -->
+    <section class="section-feedback section" aria-labelledby="sm-medida-h2">
+      <div class="container">
+        <div class="feedback-card reveal">
+          <div class="feedback-text">
+            <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Desarrollo a la medida</span>
+            <h2 id="sm-medida-h2">¿Tu operación necesita algo que Sommel todavía no hace?</h2>
+            <p>ACACIA desarrolla a la medida: adaptamos Sommel a tu proceso o construimos el sistema que te falta, con el mismo equipo que hizo esta app.</p>
+          </div>
+          <a href="/servicios" class="btn btn-primary">Ver desarrollo a la medida →</a>
         </div>
       </div>
     </section>
@@ -214,7 +275,8 @@
           <h2 id="sm-cta-h2">¿Listo para ordenar tu servicio?</h2>
           <p>Te acompañamos en la puesta en marcha para que tu equipo arranque con Sommel desde el primer turno.</p>
           <div class="btns">
-            <a href="/contacto" class="btn btn-primary">Contactar a ACACIA</a>
+            <a href="/trial#sommel" class="btn btn-primary">Probar 30 días</a>
+            <a href="/contacto" class="btn btn-ghost">Contactar a ACACIA</a>
             <a href="mailto:soporte@acaciaco.com.mx" class="btn btn-ghost">Escribir por correo</a>
           </div>
         </div>
@@ -236,6 +298,7 @@
       <div>
         <h4>Apps</h4>
         <ul>
+          <li><a href="/apps">Todas las apps</a></li>
           <li><a href="/apps/stockflow">StockFlow</a></li>
           <li><a href="/apps/flowfin">FlowFin</a></li>
           <li><a href="/apps/puntos-plus">Puntos+</a></li>
@@ -247,6 +310,7 @@
           <li><a href="/apps/kitchops">KitchOps</a></li>
           <li><a href="/apps/artiskids">ArtisKids</a></li>
           <li><a href="/apps/sommel">Sommel</a></li>
+          <li><a href="/freeware">Herramientas gratis</a></li>
         </ul>
       </div>
       <div>

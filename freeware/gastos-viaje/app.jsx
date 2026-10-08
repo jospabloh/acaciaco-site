@@ -249,7 +249,7 @@ function makeT(lang) {
 
 function detectLang() {
   try { const s = localStorage.getItem("acacia-lang"); if (s === "es" || s === "en") return s } catch (e) {}
-  return (navigator.language || "es").toLowerCase().indexOf("en") === 0 ? "en" : "es"
+  return "es"
 }
 
 const RECEIPT_TYPES = ["image/jpeg", "image/png", "image/webp", "application/pdf"]
@@ -549,7 +549,7 @@ function App() {
   const [message, setMessage] = useState(null)   // { kind: 'warn'|'plain', text }
   const importRef = useRef(null)
 
-  useEffect(() => { try { localStorage.setItem("acacia-lang", lang) } catch (e) {}; document.documentElement.lang = lang }, [lang])
+  useEffect(() => { try { localStorage.setItem("acacia-lang", lang) } catch (e) {}; document.documentElement.lang = lang === "en" ? "en" : "es-MX" }, [lang])
 
   useEffect(() => {
     Store.load().then((saved) => {

@@ -82,7 +82,7 @@ function genPhrase(count, sep, cap, addnum) {
   return s;
 }
 
-function detectLang() { try { var s = localStorage.getItem("acacia-lang"); if (s === "es" || s === "en") return s; } catch (e) {} return (navigator.language || "es").toLowerCase().indexOf("en") === 0 ? "en" : "es"; }
+function detectLang() { try { var s = localStorage.getItem("acacia-lang"); if (s === "es" || s === "en") return s; } catch (e) {} return "es"; }
 
 function App() {
   const [lang, setLang] = useState(detectLang);
@@ -98,7 +98,7 @@ function App() {
   const [value, setValue] = useState("");
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => { document.documentElement.setAttribute("lang", lang); try { localStorage.setItem("acacia-lang", lang); } catch (e) {} }, [lang]);
+  useEffect(() => { document.documentElement.setAttribute("lang", lang === "en" ? "en" : "es-MX"); try { localStorage.setItem("acacia-lang", lang); } catch (e) {} }, [lang]);
 
   const anySet = opts.upper || opts.lower || opts.numbers || opts.symbols;
 

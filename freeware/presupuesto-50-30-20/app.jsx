@@ -40,7 +40,7 @@ const LangContext=React.createContext("es");
 const mxn=new Intl.NumberFormat("es-MX",{style:"currency",currency:"MXN",minimumFractionDigits:2});
 const money=(n)=>isFinite(n)?mxn.format(Math.max(0,n)):"—";
 const num=(v)=>{const n=parseFloat(v);return isFinite(n)?n:0;};
-function detectLang(){try{var s=localStorage.getItem("acacia-lang");if(s==="es"||s==="en")return s;}catch(e){}return (navigator.language||"es").toLowerCase().indexOf("en")===0?"en":"es";}
+function detectLang(){try{var s=localStorage.getItem("acacia-lang");if(s==="es"||s==="en")return s;}catch(e){}return "es";}
 
 function App(){
   const [lang,setLang]=useState(detectLang);
@@ -48,7 +48,7 @@ function App(){
   const [income,setIncome]=useState("");
   const [preset,setPreset]=useState("503020");
   const [pct,setPct]=useState({n:50,w:30,s:20});
-  useEffect(()=>{document.documentElement.setAttribute("lang",lang);try{localStorage.setItem("acacia-lang",lang);}catch(e){}},[lang]);
+  useEffect(()=>{document.documentElement.setAttribute("lang", lang === "en" ? "en" : "es-MX");try{localStorage.setItem("acacia-lang",lang);}catch(e){}},[lang]);
 
   const choosePreset=(p)=>{setPreset(p);if(p==="503020")setPct({n:50,w:30,s:20});else if(p==="702010")setPct({n:70,w:20,s:10});};
   const setP=(k,v)=>{setPreset("custom");setPct(p=>({...p,[k]:Math.max(0,Math.min(100,parseInt(v)||0))}));};

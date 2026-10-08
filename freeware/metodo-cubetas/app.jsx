@@ -126,7 +126,7 @@ const money = (n) => (isFinite(n) ? mxn.format(Math.max(0, n)) : "—");
 const money2 = (n) => (isFinite(n) ? mxn2.format(Math.max(0, n)) : "—");
 const num = (v) => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
 const PERIOD_TO_MONTH = { month: 1, fortnight: 2, week: 4.333 };
-function detectLang() { try { var s = localStorage.getItem("acacia-lang"); if (s === "es" || s === "en") return s; } catch (e) {} return (navigator.language || "es").toLowerCase().indexOf("en") === 0 ? "en" : "es"; }
+function detectLang() { try { var s = localStorage.getItem("acacia-lang"); if (s === "es" || s === "en") return s; } catch (e) {} return "es"; }
 
 function App() {
   const [lang, setLang] = useState(detectLang);
@@ -142,7 +142,7 @@ function App() {
 
   const method = useMemo(() => METHODS.find((m) => m.id === methodId) || METHODS[0], [methodId]);
 
-  useEffect(() => { document.documentElement.setAttribute("lang", lang); try { localStorage.setItem("acacia-lang", lang); } catch (e) {} }, [lang]);
+  useEffect(() => { document.documentElement.setAttribute("lang", lang === "en" ? "en" : "es-MX"); try { localStorage.setItem("acacia-lang", lang); } catch (e) {} }, [lang]);
 
   const pickMethod = (id) => {
     const m = METHODS.find((x) => x.id === id) || METHODS[0];

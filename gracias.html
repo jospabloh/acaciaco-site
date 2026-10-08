@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-MX">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -64,7 +64,7 @@
         <ul class="nav-links" role="list">
           <li><a href="/#como-trabajamos">Soluciones</a></li>
           <li><a href="/#como-trabajamos">Cómo trabajamos</a></li>
-          <li><a href="/#apps">Apps</a></li>
+          <li><a href="/apps">Apps</a></li>
           <li><a href="/servicios">Servicios</a></li>
           <li><a href="/contacto">Contacto</a></li>
         </ul>
@@ -172,9 +172,7 @@
 
     var headlineMap = {
       'pago':                     ['¡Gracias por confiar en ACACIA!',  'Tu suscripción fue activada. En las próximas 24 horas hábiles te contactamos para arrancar.'],
-      'contacto':                 ['¡Mensaje recibido!',               'Te respondemos en menos de 24 horas hábiles. Estamos revisando tu consulta.'],
-      'puntos-plus-invitation':   ['¡Solicitud recibida, gracias!',    'Revisamos cada solicitud manualmente. Te respondemos sobre tu acceso a Puntos+ en 3 a 5 días hábiles.'],
-      'liuma-invitation':         ['¡Solicitud recibida, gracias!',    'Revisamos cada solicitud manualmente. Te respondemos sobre tu acceso a LIUMA en 3 a 5 días hábiles.']
+      'contacto':                 ['¡Mensaje recibido!',               'Te respondemos en menos de 24 horas hábiles. Estamos revisando tu consulta.']
     };
     var pair = headlineMap[from] || headlineMap['pago'];
     document.getElementById('graciasH1').textContent = pair[0];
@@ -218,16 +216,6 @@
         { n: '01', title: 'Mensaje recibido',      desc: 'Lo estamos leyendo. Respondemos en menos de 24 horas hábiles.' },
         { n: '02', title: 'Respuesta por correo',  desc: 'Te respondemos al correo que nos dejaste con toda la información.' },
         { n: '03', title: '¿Es urgente?',          desc: 'Escríbenos directo por WhatsApp.', wa: true }
-      ],
-      'puntos-plus-invitation': [
-        { n: '01', title: 'Revisión en curso',     desc: 'Evaluamos cada solicitud para garantizar el fit correcto con Puntos+.' },
-        { n: '02', title: 'Respuesta en 3-5 días', desc: 'Te escribimos con la decisión y, si aplicas, con los próximos pasos.' },
-        { n: '03', title: '¿Tienes preguntas?',    desc: 'Escríbenos mientras esperas.', wa: true }
-      ],
-      'liuma-invitation': [
-        { n: '01', title: 'Revisión en curso',     desc: 'Evaluamos cada solicitud para confirmar el fit institucional con LIUMA.' },
-        { n: '02', title: 'Respuesta en 3-5 días', desc: 'Te escribimos con la decisión y los siguientes pasos de onboarding.' },
-        { n: '03', title: '¿Tienes preguntas?',    desc: 'Escríbenos mientras esperas.', wa: true }
       ]
     };
     var steps = stepsMap[from] || stepsMap['pago'];
