@@ -168,6 +168,7 @@
     var countEl = document.getElementById('es-count');
     var listEl = document.getElementById('es-list');
     var input = document.getElementById('es-query');
+    var submitBtn = form.querySelector('button[type="submit"]');
 
     var LABELS = {
       fecha_solicitud: 'Solicitada el',
@@ -231,6 +232,7 @@
       e.preventDefault();
       var q = input.value.trim();
       if (!q) return;
+      if (submitBtn) submitBtn.disabled = true;
       resultsEl.classList.remove('show');
       statusEl.className = '';
       statusEl.textContent = 'Buscando\u2026';
@@ -256,6 +258,9 @@
         .catch(function () {
           statusEl.className = 'error';
           statusEl.textContent = 'No se pudo consultar el estatus. Intenta de nuevo en un momento.';
+        })
+        .finally(function () {
+          if (submitBtn) submitBtn.disabled = false;
         });
     });
 
