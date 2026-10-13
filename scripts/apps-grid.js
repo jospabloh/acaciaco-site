@@ -1,39 +1,56 @@
 /* ACACIA · Card grid ranking + interaction.
  *
- * Ranks cards by the signals asked for: free apps, live status, and real
- * visit counts (Mission Control's public /api/apps-visits, backed by the
- * analytics.js pixel every apps/*.html and freeware/*.html page already
- * fires on load). Nothing is ever hidden — every card stays visible, only
- * reordered and resized:
- *   - homepage (#apps .apps-grid): a free-or-live app gets the larger "hero"
- *     card, everything else gets a smaller "compact" one; within each tier,
- *     real visit counts (once they exist) decide the order.
- *   - apps/index.html's status groups (data-apps-group="live"/"demo"/"dev"):
- *     reorder-only, same visits signal, no resizing — that page is a spec
- *     sheet, not a discovery grid, so tiering there would fight its own
- *     layout.
+ * Ranks cards by REAL visits to each app's own page (Mission Control's public
+ * /api/apps-visits, backed by the analytics.js pixel every apps/*.html and
+ * freeware/*.html page already fires on load). Nothing is ever hidden — every
+ * card stays visible, only reordered (and, on the homepage, resized).
+ *
+ * THE METRIC — decided in one place, metricFor(payload):
+ *   - payload has `month` ("YYYY-MM", added by Mission Control): rank by
+ *     `visitsMonth`, the pageviews of the PREVIOUS calendar month. That number
+ *     is frozen until the month rolls over, so the order changes once a month
+ *     and never reshuffles under a returning visitor.
+ *   - payload without `month` (older Mission Control): rank by `visits30`
+ *     (rolling 30 days), the original behaviour.
+ *   - no response at all (2.5 s cap, offline, blocked): nothing happens; the
+ *     static HTML order stands.
+ * Ties — including the all-zero case — keep the static HTML order (stable
+ * sort on each card's original index). `data-free` no longer affects ranking
+ * (no app is free); the attribute is left in the markup, harmless.
+ *
+ * WHAT EACH GRID DOES:
+ *   - homepage (#apps .apps-grid): tier 1 = data-status="live" cards (the
+ *     larger "hero" card), tier 2 = data-status="dev" (the "compact" card);
+ *     inside each tier, ordered by the metric.
+ *   - apps/index.html's status groups (data-apps-group="live"/"dev"):
+ *     reorder-only by the same metric, no resizing.
  *   - freeware/index.html's catalog (data-apps-group="freeware"): every tool
- *     is equally free and equally live, so there's no free/status tiebreak
- *     to lean on — the top 5 by real visits get the hero card, the rest
- *     compact. Falls back to the page's own declared order (a stable sort
- *     of an all-zero score changes nothing) until real numbers arrive.
- *   - homepage's #gratis teaser (data-apps-group="gratis"): the one place
- *     this file changes SELECTION, not just order/size — it's a 6-tool
- *     curated teaser out of freeware/index.html's 21, so "rank by visits"
- *     here means swapping which tools appear. The 6 already in the markup
- *     stay untouched until real freeware visit numbers exist (see
- *     rankGratisTeaser's own comment for the fallback/fill rules). Also
- *     reads window.ACACIA_MX_ONLY_SUBSTITUTES (set synchronously by
- *     scripts/home-tools-region.js, which loads first and runs before this
- *     one's async visits fetch resolves) so a real-visits rebuild never
- *     reintroduces a Mexico-only tool to a visitor that script already
- *     determined isn't in Mexico.
- * Runs the same ranking twice: once immediately from each card's own
- * data-free/data-status (a real, sensible order with zero network wait —
- * see each page's own markup, which is already written in that order), then
- * again once /api/apps-visits resolves. A failed or slow fetch (2.5s cap)
- * just means the second pass never happens — the page never blocks or
- * breaks on it, matching every other best-effort beacon on this site.
+ *     is equally free and live, so only the metric orders them; the top 5 get
+ *     the hero card, the rest compact.
+ *   - homepage's #gratis teaser (data-apps-group="gratis"): the one place this
+ *     file changes SELECTION, not just order — a 6-tool teaser out of
+ *     freeware/index.html's 21, so "rank" means swapping which tools appear.
+ *     The 6 already in the markup stay until real freeware numbers exist (see
+ *     rankGratisTeaser). Also honours window.ACACIA_MX_ONLY_SUBSTITUTES
+ *     (set synchronously by scripts/home-tools-region.js).
+ *
+ * THE LEADER'S TAG ("La más visitada de septiembre" / "La más visitada") is
+ * only drawn when someone actually leads (value > 0) — never on a zero tie.
+ * With the month payload the server's own `topApp` / `topFreeware` wins.
+ *
+ * THE "APP DEL MES" BOX (index.html #app-del-mes, filled by
+ * scripts/app-spotlight.js) features the leader, labelled honestly by chooseSpotlight():
+ *   - `month` + `topApp`        -> "App del mes · la más visitada de <mes> <año>"
+ *   - old payload, visits30 > 0 -> "App más visitada · últimos 30 días"
+ *   - otherwise                 -> the static "App destacada" default stays.
+ *
+ * MOVEMENT: when data arrives and cards really change position they glide to
+ * the new place (FLIP, ~450 ms, transform only). Users whose order did not
+ * change see nothing; prefers-reduced-motion skips it.
+ *
+ * Runs twice: once immediately (static order, zero network wait), then again
+ * once /api/apps-visits resolves. A failed or slow fetch just means the second
+ * pass never happens — the page never blocks or breaks on it.
  */
 (function () {
   'use strict';
@@ -64,27 +81,94 @@
       .then(function (v) { if (timer) clearTimeout(timer); return v; });
   }
 
-  // Free and real visits dominate; status is only a tiebreaker for the (very
-  // likely, early on) case where every app's visits30 is still zero — it
-  // keeps the fallback order sensible (live products before demos, demos
-  // before in-development ones) instead of an arbitrary tie.
-  function scoreOf(el, visits) {
+  /* ---------- The metric: the one place that decides it ---------- */
+  var MONTHS_ES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
+    'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+  function parseMonth(month) {
+    var m = /^(\d{4})-(0[1-9]|1[0-2])$/.exec(typeof month === 'string' ? month : '');
+    return m ? { year: m[1], name: MONTHS_ES[parseInt(m[2], 10) - 1] } : null;
+  }
+
+  function metricFor(payload) {
+    return payload && parseMonth(payload.month) ? 'visitsMonth' : 'visits30';
+  }
+
+  // Server-provided keys (slugs) are only ever looked up as OWN properties:
+  // "constructor" / "__proto__" must never resolve to something inherited.
+  function has(obj, key) {
+    return obj != null && typeof obj === 'object' && typeof key === 'string' &&
+      Object.prototype.hasOwnProperty.call(obj, key);
+  }
+
+  function valueOf(bucket, slug, metric) {
+    if (!has(bucket, slug)) return 0;
+    var v = bucket[slug];
+    var n = (v && typeof v === 'object') ? Number(v[metric]) : 0;
+    return n > 0 && isFinite(n) ? n : 0;
+  }
+
+  // THE one decision of "who leads", used by the grids' tag AND the box so they
+  // can never name different apps. The server's own pick (topApp/topFreeware)
+  // counts only if it is one of `slugs` AND has a real value for the active
+  // metric; otherwise the real maximum wins; a zero maximum means no leader.
+  function pickLeader(bucket, slugs, metric, serverSlug) {
+    if (typeof serverSlug === 'string' && slugs.indexOf(serverSlug) !== -1 &&
+        valueOf(bucket, serverSlug, metric) > 0) {
+      return serverSlug;
+    }
+    var best = null, bestV = 0;
+    slugs.forEach(function (k) {
+      var v = valueOf(bucket, k, metric);
+      if (v > bestV) { best = k; bestV = v; }
+    });
+    return best;
+  }
+
+  // `idx` is the card's position in the static HTML, captured the first time
+  // it is seen, so ties always fall back to the authored order.
+  function scoreOf(el, bucket, metric, tieIdx) {
     var slug = el.getAttribute('data-app');
-    var v = (visits && visits[slug]) || null;
-    var visits30 = v ? (v.visits30 || 0) : 0;
-    var free = el.getAttribute('data-free') === 'true';
-    var status = el.getAttribute('data-status'); // 'live' | 'demo' | 'dev'
-    var statusWeight = status === 'live' ? 2 : status === 'demo' ? 1 : 0;
+    if (el.__acaciaIdx == null) el.__acaciaIdx = tieIdx;
     return {
-      el: el, slug: slug, visits30: visits30, free: free, status: status,
-      score: visits30 * 1000 + (free ? 2 : 0) + statusWeight,
+      el: el, slug: slug, idx: el.__acaciaIdx,
+      status: el.getAttribute('data-status'), // 'live' | 'dev'
+      value: valueOf(bucket, slug, metric),
     };
   }
+
+  function byRank(a, b) { return (b.value - a.value) || (a.idx - b.idx); }
 
   // appendChild on an already-attached node MOVES it — reorders in place
   // without cloning, so event listeners and any live state survive.
   function reorder(container, items) {
     items.forEach(function (it) { container.appendChild(it.el); });
+  }
+
+  /* FLIP: record where every card is, run the DOM change, then play each moved
+     card from its old spot to its new one. Transform only; skipped for
+     reduced-motion, for cards that stay put and for cards far off-screen. */
+  function withFlip(cards, mutate) {
+    var animate = !prefersReducedMotion() && cards.length && cards[0].animate;
+    var before = null;
+    if (animate) {
+      before = cards.map(function (c) { return c.getBoundingClientRect(); });
+    }
+    mutate();
+    if (!animate) return;
+    var vh = window.innerHeight || 800;
+    cards.forEach(function (c, i) {
+      var a = before[i];
+      var b = c.getBoundingClientRect();
+      var dx = a.left - b.left, dy = a.top - b.top;
+      if (Math.abs(dx) < 2 && Math.abs(dy) < 2) return;
+      var offscreen = (a.bottom < -300 || a.top > vh + 300) && (b.bottom < -300 || b.top > vh + 300);
+      if (offscreen) return;
+      c.animate(
+        [{ transform: 'translate(' + dx + 'px,' + dy + 'px)' }, { transform: 'translate(0,0)' }],
+        { duration: 450, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+      );
+    });
   }
 
   function clearPopularTag(cards) {
@@ -95,47 +179,87 @@
     });
   }
 
+  // Draws the leader's tag on the card `leaderSlug` (from pickLeader), if any.
+  function tagLeader(scored, leaderSlug, label) {
+    if (!leaderSlug) return null;
+    var top = scored.filter(function (s) { return s.slug === leaderSlug; })[0];
+    if (!top) return null;
+    top.el.classList.add('is-top');
+    var tag = document.createElement('span');
+    tag.className = 'app-card__popular-tag';
+    tag.textContent = label;
+    top.el.appendChild(tag);
+    return top;
+  }
+
+  function leaderLabel(payload, base) {
+    var m = payload && parseMonth(payload.month);
+    return m ? base + ' de ' + m.name : base;
+  }
+
   /* ---------- Homepage: hero/compact tiers ---------- */
-  function rankHomepage(visits) {
+  function rankHomepage(payload) {
     var grid = document.querySelector('#apps .apps-grid');
     if (!grid) return null;
     var cards = Array.prototype.slice.call(grid.querySelectorAll('.app-card[data-app]'));
     if (!cards.length) return null;
 
-    var scored = cards.map(function (el) { return scoreOf(el, visits); });
-    var hero = scored.filter(function (s) { return s.free || s.status === 'live'; });
-    var compact = scored.filter(function (s) { return !(s.free || s.status === 'live'); });
-    hero.sort(function (a, b) { return b.score - a.score; });
-    compact.sort(function (a, b) { return b.score - a.score; });
+    var metric = metricFor(payload);
+    var bucket = payload && payload.visits;
+    var scored = cards.map(function (el, i) { return scoreOf(el, bucket, metric, i); });
+    var hero = scored.filter(function (s) { return s.status === 'live'; });
+    var compact = scored.filter(function (s) { return s.status !== 'live'; });
+    hero.sort(byRank);
+    compact.sort(byRank);
 
-    reorder(grid, hero.concat(compact));
-    clearPopularTag(cards);
+    withFlip(cards, function () {
+      reorder(grid, hero.concat(compact));
+      clearPopularTag(cards);
 
-    hero.forEach(function (s, i) {
-      s.el.classList.add('app-card--hero');
-      s.el.classList.remove('app-card--compact');
-      s.el.style.setProperty('--max-grow', i === 0 ? '0.09' : '0.06');
+      hero.forEach(function (s, i) {
+        s.el.classList.add('app-card--hero');
+        s.el.classList.remove('app-card--compact');
+        s.el.style.setProperty('--max-grow', i === 0 ? '0.09' : '0.06');
+      });
+      compact.forEach(function (s) {
+        s.el.classList.add('app-card--compact');
+        s.el.classList.remove('app-card--hero');
+        s.el.style.setProperty('--max-grow', '0.035');
+      });
+
+      // The pulse is a signature moment for one card, not a status indicator.
+      var month = payload && parseMonth(payload.month);
+      var leader = pickLeader(bucket, scored.map(function (x) { return x.slug; }), metric,
+        month ? payload.topApp : null);
+      tagLeader(scored, leader, leaderLabel(payload, 'La más visitada'));
     });
-    compact.forEach(function (s) {
-      s.el.classList.add('app-card--compact');
-      s.el.classList.remove('app-card--hero');
-      s.el.style.setProperty('--max-grow', '0.035');
-    });
-
-    // The pulse is a signature moment for one card, not a status indicator —
-    // only light it up once a card has an actual visit lead, never on a
-    // zero-visits tie (which would just be pulsing an arbitrary card).
-    var top = scored.reduce(function (a, b) { return b.visits30 > a.visits30 ? b : a; }, scored[0]);
-    if (top.visits30 > 0) {
-      top.el.classList.add('is-top');
-      var tag = document.createElement('span');
-      tag.className = 'app-card__popular-tag';
-      tag.textContent = 'La más visitada';
-      top.el.appendChild(tag);
-    }
 
     return cards;
   }
+
+  // Which app the "app del mes" box features, and how to label it honestly.
+  // Returns null when the data names no real leader (box keeps its default).
+  // Uses the same pickLeader as the homepage tag, over the same 11 slugs.
+  function chooseSpotlight(payload, knownMap) {
+    if (!payload || typeof payload !== 'object' || !payload.visits || typeof payload.visits !== 'object') return null;
+    var known = knownMap || (window.ACACIA_APP_SPOTLIGHT && window.ACACIA_APP_SPOTLIGHT.data) || {};
+    var month = parseMonth(payload.month);
+    var slug = pickLeader(payload.visits, Object.keys(known), metricFor(payload), month ? payload.topApp : null);
+    if (!slug) return null;
+    return {
+      slug: slug,
+      eyebrow: month
+        ? 'App del mes · la más visitada de ' + month.name + ' ' + month.year
+        : 'App más visitada · últimos 30 días'
+    };
+  }
+
+  // Pure decision logic, exposed for tests/rankingLogic.test.ts (no DOM needed).
+  if (typeof window !== 'undefined') {
+    window.ACACIA_RANKING = { metricFor: metricFor, valueOf: valueOf, pickLeader: pickLeader,
+      chooseSpotlight: chooseSpotlight, parseMonth: parseMonth, has: has };
+  }
+  if (typeof document === 'undefined') return;
 
   // Binds once per grid element (guarded by __acaciaMagnifyBound) and re-reads
   // its cards from the DOM on every move/leave rather than closing over the
@@ -173,48 +297,49 @@
   }
 
   /* ---------- apps/index.html's status groups: reorder only ---------- */
-  function rankCatalogGroups(visits) {
-    var groups = document.querySelectorAll('[data-apps-group="live"], [data-apps-group="demo"], [data-apps-group="dev"]');
+  function rankCatalogGroups(payload) {
+    var metric = metricFor(payload);
+    var bucket = payload && payload.visits;
+    var groups = document.querySelectorAll('[data-apps-group="live"], [data-apps-group="dev"]');
     groups.forEach(function (group) {
-      var items = Array.prototype.slice.call(group.querySelectorAll('[data-app]'))
-        .map(function (el) { return scoreOf(el, visits); });
-      items.sort(function (a, b) { return b.score - a.score; });
-      reorder(group, items);
+      var els = Array.prototype.slice.call(group.querySelectorAll('[data-app]'));
+      var items = els.map(function (el, i) { return scoreOf(el, bucket, metric, i); });
+      items.sort(byRank);
+      withFlip(els, function () { reorder(group, items); });
     });
   }
 
   /* ---------- freeware/index.html: hero/compact by visits alone ---------- */
   var FREEWARE_HERO_COUNT = 5;
 
-  function rankFreeware(freewareVisits) {
+  function rankFreeware(payload) {
     var grid = document.querySelector('[data-apps-group="freeware"]');
     if (!grid) return null;
     var cards = Array.prototype.slice.call(grid.querySelectorAll('.app-card[data-app]'));
     if (!cards.length) return null;
 
-    // scoreOf's free/status terms are moot here (no card carries those
-    // attributes, so both default to falsy/zero) — score reduces to plain
-    // visits30, which is exactly the ranking this catalog needs.
-    var scored = cards.map(function (el) { return scoreOf(el, freewareVisits); });
-    scored.sort(function (a, b) { return b.score - a.score; });
-    reorder(grid, scored);
-    clearPopularTag(cards);
+    // No card carries data-status here, so the score reduces to the metric.
+    var metric = metricFor(payload);
+    var bucket = payload && payload.freeware;
+    var scored = cards.map(function (el, i) { return scoreOf(el, bucket, metric, i); });
+    scored.sort(byRank);
 
-    scored.forEach(function (s, i) {
-      var hero = i < FREEWARE_HERO_COUNT;
-      s.el.classList.toggle('app-card--hero', hero);
-      s.el.classList.toggle('app-card--compact', !hero);
-      s.el.style.setProperty('--max-grow', hero ? (i === 0 ? '0.09' : '0.06') : '0.035');
+    withFlip(cards, function () {
+      reorder(grid, scored);
+      clearPopularTag(cards);
+
+      scored.forEach(function (s, i) {
+        var hero = i < FREEWARE_HERO_COUNT;
+        s.el.classList.toggle('app-card--hero', hero);
+        s.el.classList.toggle('app-card--compact', !hero);
+        s.el.style.setProperty('--max-grow', hero ? (i === 0 ? '0.09' : '0.06') : '0.035');
+      });
+
+      var month = payload && parseMonth(payload.month);
+      var leader = pickLeader(bucket, scored.map(function (x) { return x.slug; }), metric,
+        month ? payload.topFreeware : null);
+      tagLeader(scored, leader, leaderLabel(payload, 'La más usada'));
     });
-
-    var top = scored[0];
-    if (top && top.visits30 > 0) {
-      top.el.classList.add('is-top');
-      var tag = document.createElement('span');
-      tag.className = 'app-card__popular-tag';
-      tag.textContent = 'La más usada';
-      top.el.appendChild(tag);
-    }
 
     return { grid: grid, cards: cards };
   }
@@ -305,7 +430,9 @@
     return a;
   }
 
-  function rankGratisTeaser(freewareVisits) {
+  function rankGratisTeaser(payload) {
+    var freewareVisits = payload && payload.freeware;
+    var metric = metricFor(payload);
     // No real data yet — the static markup already IS the sensible fallback
     // here (unlike the other grids, there's no data-free/data-status to fall
     // back to for a selection decision), so there is nothing to do.
@@ -327,11 +454,10 @@
 
     var eligible = FREEWARE_CATALOG.filter(function (t) { return excludedSlugs.indexOf(t.slug) === -1; });
     var ranked = eligible.map(function (t) {
-      var v = freewareVisits[t.slug];
-      return { slug: t.slug, visits30: v ? (v.visits30 || 0) : 0 };
-    }).sort(function (a, b) { return b.visits30 - a.visits30; });
+      return { slug: t.slug, value: valueOf(freewareVisits, t.slug, metric) };
+    }).sort(function (a, b) { return b.value - a.value; });
 
-    var picked = ranked.filter(function (r) { return r.visits30 > 0; })
+    var picked = ranked.filter(function (r) { return r.value > 0; })
       .slice(0, GRATIS_COUNT)
       .map(function (r) { return r.slug; });
     if (picked.length < GRATIS_COUNT) {
@@ -382,13 +508,17 @@
 
     fetchVisits().then(function (data) {
       if (!data) return;
-      if (data.visits) {
-        rankHomepage(data.visits);
-        rankCatalogGroups(data.visits);
+      if (data.visits && typeof data.visits === 'object') {
+        rankHomepage(data);
+        rankCatalogGroups(data);
+        var pick = chooseSpotlight(data);
+        if (pick && window.ACACIA_APP_SPOTLIGHT) {
+          window.ACACIA_APP_SPOTLIGHT.show(pick.slug, pick.eyebrow);
+        }
       }
-      if (data.freeware) {
-        rankFreeware(data.freeware);
-        rankGratisTeaser(data.freeware);
+      if (data.freeware && typeof data.freeware === 'object') {
+        rankFreeware(data);
+        rankGratisTeaser(data);
       }
     });
   });
