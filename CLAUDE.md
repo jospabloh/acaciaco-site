@@ -414,6 +414,23 @@ cotizaciones**, y la copy lo dice; si se cambian, que siga diciéndolo. "Tabla
 rápida de precios" usa `priceSteps()`, escalado para que el paso menor sea
 ~1 USD en la moneda destino. Las dos se prenden/apagan con el tweak `showCosts`.
 
+### 2026-10-14: sin Supabase
+
+Plink FX ya no tiene inicio de sesión ni sincronización en la nube: es 100 %
+local y no pide cuenta. Se quitaron el cliente de Supabase, `useSupabaseAuth`,
+`AuthButton`, `AuthModal`, las llamadas a `user_tweaks`, las claves i18n
+`auth_*` y el script vendorizado `assets/vendor/supabase-js@2.46.1/`. El motivo:
+el proyecto de Supabase tenía 0 usuarios y 0 filas, y se apaga para liberar el
+espacio de proyecto del plan gratuito. Nadie pierde nada.
+
+Presupuesto y gastos (`budget`, `spent`) **ahora sí se guardan en
+localStorage** (`plinkfx.tweaks`) junto con el resto de los ajustes, así que
+sobreviven a una recarga. Se quedan solo en este dispositivo y se borran solos
+al terminar el viaje (a los `GRACE_DAYS` días); "Eliminar datos" también los
+pone en cero. `BudgetOptInCard` ya no tiene paso de login: "Sí" solo enciende
+el seguimiento. Los textos que hablaban de "nuestros servidores" ahora dicen
+"este dispositivo".
+
 ## Environment
 
 See `.env.example`. All secrets are server-only — this site has no client-side

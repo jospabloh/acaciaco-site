@@ -134,14 +134,6 @@ const FALLBACK_RATES = {
   BGN: 1.80
 };
 
-// --- Supabase (optional cloud sync) ---
-const SUPABASE_URL = "https://lsylxcraugllwegjjvaq.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_60mTi34vt4cEbjEFBeL9Kg_NQGf6Rf3";
-const supabaseClient = (typeof window !== "undefined" && window.supabase && SUPABASE_URL && SUPABASE_ANON_KEY)
-  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-    })
-  : null;
 const LOCAL_TWEAKS_KEY = "plinkfx.tweaks";
 
 // --- Cookies (trip name persistence) ---
@@ -168,9 +160,6 @@ function localeForCurrency(code) {
 
 const STRINGS = {
   en: {
-    sign_in: "Sign in",
-    account: "Account",
-    sign_out: "Sign out",
     tracking_label: "Tracking",
     tracking_sub: "currencies for this trip",
     add_currency: "Add currency",
@@ -229,43 +218,20 @@ const STRINGS = {
     prices_desc: "Round prices you'll see at each destination, already in {base}.",
     prices_in: "Prices in {country}",
     add_another_currency: "Add another currency above to see conversions.",
-    auth_signin_title: "Sign in",
-    auth_signup_title: "Create account",
-    auth_subtitle: "Your expense log travels with you — sign in and it follows you to any device.",
-    auth_email: "Email",
-    auth_password: "Password",
-    auth_signin_btn: "Sign in",
-    auth_signup_btn: "Create account",
-    auth_working: "Working…",
-    auth_toggle_to_signup: "No account? Create one",
-    auth_toggle_to_signin: "Already have an account? Sign in",
-    auth_note: "Skip this — your tweaks already save locally to this browser.",
-    auth_confirm_email: "Check your inbox to confirm your email, then sign in.",
-    auth_pw_hint: "6 characters or more",
-    auth_pw_show: "Show password",
-    auth_pw_hide: "Hide password",
     pass_eyebrow: "Expense pass",
     pass_valid: "Valid",
     pass_route: "Route",
-    auth_unavailable: "Sign-in isn't loading right now. Check your connection and reload the page — the converter keeps working either way.",
-    err_invalid_credentials: "That email and password don't match. Check them, or create an account below.",
-    err_user_exists: "That email already has an account. Sign in instead.",
-    err_weak_password: "Use a password of 6 characters or more.",
-    err_email_not_confirmed: "Confirm your email first — check your inbox for the link we sent.",
-    err_rate_limit: "Too many attempts. Wait a minute and try again.",
-    err_network: "Couldn't reach the server. Check your connection and try again.",
     close_label: "Close",
     budget_cta_title: "Track your expenses on this trip?",
     budget_cta_desc: "Set a budget, log what you spend, watch it tick down across every currency on the trip. Optional — say no and the page keeps working as a converter.",
     budget_cta_note_label: "How your data is handled.",
-    budget_cta_note_body: "Expense numbers are saved only when you're signed in, and they're wiped automatically when the trip ends{date_hint}. We don't keep an archive. You can download a PDF summary before the data is removed.",
-    budget_cta_yes_signed_in: "Yes, track expenses",
-    budget_cta_yes_sign_in: "Sign in & track expenses",
+    budget_cta_note_body: "Expense numbers stay only on this device (in this browser) and are wiped automatically when the trip ends{date_hint}. They never leave your device and we keep no archive. You can download a PDF summary before the data is removed.",
+    budget_cta_yes: "Yes, track expenses",
     budget_cta_no: "No thanks",
     expiry_notice: "Expense data wipes automatically on {date}. Download a PDF summary anytime — we won't keep an archive.",
     summary_eyebrow: "Trip ended",
     summary_wrapped: "{name} — wrapped",
-    summary_desc: "Your expense data is about to be permanently removed from our servers. Download a PDF before it goes, if you want a copy.",
+    summary_desc: "Your expense data is about to be permanently removed from this device. Download a PDF before it goes, if you want a copy.",
     summary_dates: "Dates",
     summary_budget: "Budget",
     summary_spent: "Spent",
@@ -280,7 +246,7 @@ const STRINGS = {
     pdf_budget: "Budget",
     pdf_spent: "Spent",
     pdf_remaining: "Remaining",
-    pdf_footer: "Generated on {date}. Plink FX does not retain a copy of this data — once the trip ended, it was removed from our servers.",
+    pdf_footer: "Generated on {date}. Plink FX does not retain a copy of this data — once the trip ended, it was removed from this device.",
     calc_title: "Calculator",
     calc_open: "Open calculator",
     calc_minimize: "Minimize calculator",
@@ -289,9 +255,6 @@ const STRINGS = {
     calc_drag: "Drag to move",
   },
   es: {
-    sign_in: "Iniciar sesión",
-    account: "Cuenta",
-    sign_out: "Cerrar sesión",
     tracking_label: "Monedas",
     tracking_sub: "del viaje",
     add_currency: "Añadir moneda",
@@ -350,43 +313,20 @@ const STRINGS = {
     prices_desc: "Precios redondos que verás en cada destino, ya convertidos a {base}.",
     prices_in: "Precios en {country}",
     add_another_currency: "Añade otra moneda arriba para ver conversiones.",
-    auth_signin_title: "Iniciar sesión",
-    auth_signup_title: "Crear cuenta",
-    auth_subtitle: "Tu registro de gastos viaja contigo — inicia sesión y te sigue a cualquier dispositivo.",
-    auth_email: "Correo",
-    auth_password: "Contraseña",
-    auth_signin_btn: "Iniciar sesión",
-    auth_signup_btn: "Crear cuenta",
-    auth_working: "Procesando…",
-    auth_toggle_to_signup: "¿No tienes cuenta? Crea una",
-    auth_toggle_to_signin: "¿Ya tienes cuenta? Inicia sesión",
-    auth_note: "Sáltalo — tus ajustes ya se guardan localmente.",
-    auth_confirm_email: "Revisa tu correo para confirmar, luego inicia sesión.",
-    auth_pw_hint: "6 caracteres o más",
-    auth_pw_show: "Mostrar contraseña",
-    auth_pw_hide: "Ocultar contraseña",
     pass_eyebrow: "Pase de gastos",
     pass_valid: "Válido",
     pass_route: "Ruta",
-    auth_unavailable: "El inicio de sesión no está cargando. Revisa tu conexión y recarga la página — el convertidor sigue funcionando igual.",
-    err_invalid_credentials: "Ese correo y contraseña no coinciden. Revísalos o crea una cuenta abajo.",
-    err_user_exists: "Ese correo ya tiene cuenta. Mejor inicia sesión.",
-    err_weak_password: "Usa una contraseña de 6 caracteres o más.",
-    err_email_not_confirmed: "Confirma tu correo primero — busca el enlace que te enviamos.",
-    err_rate_limit: "Demasiados intentos. Espera un minuto y vuelve a intentar.",
-    err_network: "No pudimos contactar al servidor. Revisa tu conexión e inténtalo de nuevo.",
     close_label: "Cerrar",
     budget_cta_title: "¿Quieres llevar el control de gastos?",
     budget_cta_desc: "Establece un presupuesto, registra tus gastos y observa cómo disminuye en cada moneda del viaje. Opcional — di no y la página sigue funcionando como convertidor.",
     budget_cta_note_label: "Cómo manejamos tus datos.",
-    budget_cta_note_body: "Los gastos solo se guardan si iniciaste sesión, y se eliminan automáticamente al terminar el viaje{date_hint}. No guardamos archivo. Puedes descargar un PDF antes de que se eliminen.",
-    budget_cta_yes_signed_in: "Sí, llevar gastos",
-    budget_cta_yes_sign_in: "Iniciar sesión y llevar gastos",
+    budget_cta_note_body: "Los gastos se quedan solo en este dispositivo (en este navegador) y se eliminan automáticamente al terminar el viaje{date_hint}. Nunca salen de tu dispositivo y no guardamos archivo. Puedes descargar un PDF antes de que se eliminen.",
+    budget_cta_yes: "Sí, llevar gastos",
     budget_cta_no: "No, gracias",
     expiry_notice: "Los datos de gastos se eliminan automáticamente el {date}. Descarga un PDF cuando quieras — no guardamos archivo.",
     summary_eyebrow: "Viaje terminado",
     summary_wrapped: "{name} — completado",
-    summary_desc: "Tus datos de gastos están a punto de eliminarse de nuestros servidores. Descarga un PDF antes de que desaparezcan.",
+    summary_desc: "Tus datos de gastos están a punto de eliminarse de este dispositivo. Descarga un PDF antes de que desaparezcan.",
     summary_dates: "Fechas",
     summary_budget: "Presupuesto",
     summary_spent: "Gastado",
@@ -401,7 +341,7 @@ const STRINGS = {
     pdf_budget: "Presupuesto",
     pdf_spent: "Gastado",
     pdf_remaining: "Disponible",
-    pdf_footer: "Generado el {date}. Plink FX no conserva una copia de estos datos — una vez terminado el viaje, se eliminaron de nuestros servidores.",
+    pdf_footer: "Generado el {date}. Plink FX no conserva una copia de estos datos — una vez terminado el viaje, se eliminaron de este dispositivo.",
     calc_title: "Calculadora",
     calc_open: "Abrir calculadora",
     calc_minimize: "Minimizar calculadora",
@@ -886,240 +826,6 @@ function BudgetBar({ budget, spent, baseAmount, baseCode, rates, otherCodes }) {
   );
 }
 
-// --- Auth ---
-function useSupabaseAuth() {
-  const [session, setSession] = useState(null);
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    if (!supabaseClient) { setReady(true); return; }
-    let mounted = true;
-    supabaseClient.auth.getSession().then(({ data }) => {
-      if (!mounted) return;
-      setSession(data.session || null);
-      setReady(true);
-    });
-    const { data: sub } = supabaseClient.auth.onAuthStateChange((_event, s) => {
-      setSession(s || null);
-    });
-    return () => { mounted = false; sub.subscription.unsubscribe(); };
-  }, []);
-  return { session, user: session?.user || null, ready };
-}
-
-function AuthButton({ user, onOpen, onSignOut }) {
-  const lang = React.useContext(LangContext);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const ref = useRef(null);
-  useClickOutside(ref, () => setMenuOpen(false), menuOpen);
-  if (!user) {
-    return (
-      <button className="auth-btn" onClick={onOpen} title={tr(lang, "sign_in")}>
-        <span aria-hidden="true">↗</span>
-        <span>{tr(lang, "sign_in")}</span>
-      </button>
-    );
-  }
-  const display = user.user_metadata?.full_name || user.user_metadata?.name || user.email || "";
-  const initials = display
-    .split(/\s+/).map(s => s[0]).filter(Boolean).slice(0, 2).join("").toUpperCase() || "?";
-  const avatar = user.user_metadata?.avatar_url;
-  return (
-    <div className="auth-wrap" ref={ref}>
-      <button className="auth-btn" onClick={() => setMenuOpen(o => !o)}>
-        <span className="auth-avatar">{avatar ? <img src={avatar} alt="" referrerPolicy="no-referrer" /> : initials}</span>
-        <span>{tr(lang, "account")}</span>
-      </button>
-      {menuOpen && (
-        <div className="auth-menu">
-          <div className="auth-menu-email">{user.email || display}</div>
-          <button className="auth-menu-item" onClick={() => { setMenuOpen(false); onSignOut(); }}>{tr(lang, "sign_out")}</button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Supabase speaks English and speaks in system terms. Travelers here mostly
-// don't, so translate the handful of failures a sign-in form can actually hit
-// and let anything unrecognised through as-is rather than swallowing it.
-function authErrorKey(error) {
-  const code = error && error.code;
-  const msg = ((error && error.message) || "").toLowerCase();
-  if (code === "invalid_credentials" || msg.includes("invalid login credentials")) return "err_invalid_credentials";
-  if (code === "user_already_exists" || msg.includes("already registered")) return "err_user_exists";
-  if (code === "weak_password" || msg.includes("password should be at least")) return "err_weak_password";
-  if (code === "email_not_confirmed" || msg.includes("email not confirmed")) return "err_email_not_confirmed";
-  if (code === "over_request_rate_limit" || code === "over_email_send_rate_limit" || msg.includes("rate limit")) return "err_rate_limit";
-  if (error && error.name === "AuthRetryableFetchError") return "err_network";
-  if (msg.includes("failed to fetch") || msg.includes("networkerror")) return "err_network";
-  return null;
-}
-
-function AuthModal({ onClose, trip }) {
-  const lang = React.useContext(LangContext);
-  const [mode, setMode] = useState("signin");
-  const [email, setEmail] = useState("");
-  const [pw, setPw] = useState("");
-  const [showPw, setShowPw] = useState(false);
-  const [err, setErr] = useState("");
-  const [info, setInfo] = useState("");
-  const [loading, setLoading] = useState(false);
-  const modalRef = useRef(null);
-  const firstFieldRef = useRef(null);
-
-  const fail = useCallback((error) => {
-    const key = authErrorKey(error);
-    setErr(key ? tr(lang, key) : error.message);
-  }, [lang]);
-
-  // Escape closes, focus starts on the first field and returns where it was.
-  useEffect(() => {
-    const restoreTo = document.activeElement;
-    if (firstFieldRef.current) firstFieldRef.current.focus();
-    const onKey = (e) => {
-      if (e.key === "Escape") { e.stopPropagation(); onClose(); return; }
-      if (e.key !== "Tab" || !modalRef.current) return;
-      const focusable = modalRef.current.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
-      if (!focusable.length) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-    };
-    document.addEventListener("keydown", onKey, true);
-    return () => {
-      document.removeEventListener("keydown", onKey, true);
-      if (restoreTo && restoreTo.focus) restoreTo.focus();
-    };
-  }, [onClose]);
-
-  // If the Supabase SDK never loaded, say so instead of letting every button
-  // no-op — a dead form reads as "the site is rejecting me".
-  const unavailable = !supabaseClient;
-
-  // No "Continue with Google" here on purpose. The Google provider has never
-  // been enabled on the Supabase project — the button answered every click with
-  // {"code":400,"error_code":"validation_failed","msg":"Unsupported provider:
-  // provider is not enabled"}. To bring it back, enable Google under
-  // Authentication → Providers (Client ID + Secret from Google Cloud, with
-  // https://lsylxcraugllwegjjvaq.supabase.co/auth/v1/callback as the authorized
-  // redirect URI) and allowlist this page under URL Configuration. Until then a
-  // button that cannot work is worse than no button.
-
-  const submit = async (e) => {
-    e.preventDefault();
-    if (!supabaseClient) { setErr(tr(lang, "auth_unavailable")); return; }
-    setLoading(true); setErr(""); setInfo("");
-    try {
-      if (mode === "signin") {
-        const { error } = await supabaseClient.auth.signInWithPassword({ email, password: pw });
-        if (error) fail(error);
-        else onClose();
-      } else {
-        const { error, data } = await supabaseClient.auth.signUp({
-          email,
-          password: pw,
-          options: { emailRedirectTo: window.location.href }
-        });
-        if (error) fail(error);
-        else if (data.session) onClose();
-        else setInfo(tr(lang, "auth_confirm_email"));
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // The stub is printed from the trip the traveler is actually looking at —
-  // their name for it, their legs, their dates. It's the reason to sign in,
-  // stated as an object rather than as a sentence.
-  const passName = (trip && trip.name && trip.name.trim()) || tr(lang, "pdf_untitled");
-  const passLegs = (trip && trip.currencies) || [];
-  const passRange = formatRange(parseISO(trip && trip.start), parseISO(trip && trip.end), lang);
-
-  return (
-    <div className="auth-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="auth-pass" ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="auth-pass-title">
-        <button className="auth-modal-close" onClick={onClose} aria-label={tr(lang, "close_label")}>×</button>
-
-        <div className="auth-pass-stub">
-          <div className="pass-brand">
-            <span className="pass-wordmark">PLINK<span>FX</span></span>
-            <span className="pass-eyebrow">{tr(lang, "pass_eyebrow")}</span>
-          </div>
-          <h2 id="auth-pass-title" className="pass-trip">{passName}</h2>
-          {passLegs.length > 0 && (
-            <div className="pass-row">
-              <span className="pass-label">{tr(lang, "pass_route")}</span>
-              <span className="pass-legs">
-                {passLegs.map((c, i) => (
-                  <React.Fragment key={c}>
-                    {i > 0 && <span className="pass-leg-sep">·</span>}
-                    <span className="pass-leg">
-                      <span className="leg-dot" style={{ background: `var(--c-${c})` }} />{c}
-                    </span>
-                  </React.Fragment>
-                ))}
-              </span>
-            </div>
-          )}
-          <div className="pass-row">
-            <span className="pass-label">{tr(lang, "pass_valid")}</span>
-            <span className="pass-dates mono">{passRange}</span>
-          </div>
-        </div>
-
-        <div className="auth-pass-tear" aria-hidden="true" />
-
-        <div className="auth-pass-body">
-          <p className="pass-subtitle">{tr(lang, "auth_subtitle")}</p>
-
-          {unavailable && (
-            <p className="auth-error auth-error-block" role="alert">{tr(lang, "auth_unavailable")}</p>
-          )}
-
-          <form onSubmit={submit}>
-            <input ref={firstFieldRef} className="auth-field" type="email" required placeholder={tr(lang, "auth_email")}
-                   value={email} onChange={e => setEmail(e.target.value)} autoComplete="email" disabled={unavailable} />
-            <div className="auth-field-pw">
-              <input className="auth-field" type={showPw ? "text" : "password"} required
-                     placeholder={tr(lang, "auth_password")} minLength={6}
-                     value={pw} onChange={e => setPw(e.target.value)} disabled={unavailable}
-                     autoComplete={mode === "signin" ? "current-password" : "new-password"} />
-              <button type="button" className="auth-pw-toggle" onClick={() => setShowPw(s => !s)}
-                      aria-label={tr(lang, showPw ? "auth_pw_hide" : "auth_pw_show")} aria-pressed={showPw}>
-                {showPw ? (
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true">
-                    <path d="M2 8s2.4-4 6-4 6 4 6 4-2.4 4-6 4-6-4-6-4z"/><circle cx="8" cy="8" r="1.6"/><path d="m3 13 10-10"/>
-                  </svg>
-                ) : (
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true">
-                    <path d="M2 8s2.4-4 6-4 6 4 6 4-2.4 4-6 4-6-4-6-4z"/><circle cx="8" cy="8" r="1.6"/>
-                  </svg>
-                )}
-              </button>
-            </div>
-            {mode === "signup" && !err && !info && <p className="auth-hint">{tr(lang, "auth_pw_hint")}</p>}
-            {err && <p className="auth-error" role="alert">{err}</p>}
-            {info && <p className="auth-info" role="status">{info}</p>}
-            <button className="auth-submit" type="submit" disabled={loading || unavailable}>
-              {loading ? tr(lang, "auth_working") : tr(lang, mode === "signin" ? "auth_signin_btn" : "auth_signup_btn")}
-            </button>
-          </form>
-
-          <button className="auth-toggle" onClick={() => { setErr(""); setInfo(""); setMode(m => m === "signin" ? "signup" : "signin"); }}>
-            {tr(lang, mode === "signin" ? "auth_toggle_to_signup" : "auth_toggle_to_signin")}
-          </button>
-
-          <p className="auth-note">{tr(lang, "auth_note")}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // --- Date range picker ---
 const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const MONTH_SHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -1294,7 +1000,7 @@ function DateRangePicker({ startISO, endISO, onChange }) {
   );
 }
 
-const GRACE_DAYS = 7; // server-side hard-delete this many days after tripEnd
+const GRACE_DAYS = 7; // local hard-delete this many days after tripEnd
 
 function startOfToday() {
   const d = new Date();
@@ -1314,7 +1020,7 @@ function formatDateLong(d, lang = "en") {
 }
 
 // --- Budget opt-in card ---
-function BudgetOptInCard({ tripEndISO, signedIn, onYes, onNo }) {
+function BudgetOptInCard({ tripEndISO, onYes, onNo }) {
   const lang = React.useContext(LangContext);
   const end = parseISO(tripEndISO);
   const dateHint = end ? ` (${formatDateLong(end, lang)})` : "";
@@ -1326,7 +1032,7 @@ function BudgetOptInCard({ tripEndISO, signedIn, onYes, onNo }) {
       </p>
       <div className="budget-cta-actions">
         <button className="btn-primary" onClick={onYes}>
-          {signedIn ? tr(lang, "budget_cta_yes_signed_in") : tr(lang, "budget_cta_yes_sign_in")}
+          {tr(lang, "budget_cta_yes")}
         </button>
         <button className="btn-ghost" onClick={onNo}>{tr(lang, "budget_cta_no")}</button>
       </div>
@@ -1449,9 +1155,6 @@ async function downloadTripSummaryPDF({ lang, tripName, tripStart, tripEnd, base
 // focus to whatever was focused before the dialog opened. WCAG 2.1 §2.1.2
 // (No Keyboard Trap requires an escape) and §2.4.3 (Focus Order).
 //
-// AuthModal carries its own copy of this, deliberately: it listens in the
-// capture phase and stops propagation so Escape closes the sign-in sheet
-// without also dismissing anything underneath it.
 function useFocusTrap(ref, onClose) {
   const closeRef = useRef(onClose);
   closeRef.current = onClose;
@@ -1932,11 +1635,7 @@ function FxThemeSwitcher({ value, onChange }) {
 
 function App() {
   const [t, setTweakBase] = useTweaks(INITIAL_TWEAKS);
-  const { user, ready: authReady } = useSupabaseAuth();
-  const [authOpen, setAuthOpen] = useState(false);
   const hydratedLocalRef = useRef(false);
-  const hydratedCloudFor = useRef(null);
-  const cloudDebounceRef = useRef(null);
   const latestTRef = useRef(t);
   latestTRef.current = t;
 
@@ -1952,60 +1651,18 @@ function App() {
     } catch (e) {}
   }, []);
 
-  // When user signs in: pull cloud row or seed with current state if missing
-  useEffect(() => {
-    if (!authReady || !user || !supabaseClient) return;
-    if (hydratedCloudFor.current === user.id) return;
-    hydratedCloudFor.current = user.id;
-    let cancelled = false;
-    (async () => {
-      const { data, error } = await supabaseClient
-        .from("user_tweaks")
-        .select("tweaks")
-        .eq("user_id", user.id)
-        .maybeSingle();
-      if (cancelled) return;
-      if (!error && data && data.tweaks) {
-        setTweakBase(data.tweaks);
-      } else if (!error) {
-        await supabaseClient
-          .from("user_tweaks")
-          .insert({ user_id: user.id, tweaks: latestTRef.current });
-      }
-    })();
-    return () => { cancelled = true; };
-  }, [authReady, user]);
-
-  // Sign-out resets cloud hydration so a different user re-pulls.
-  useEffect(() => { if (!user) hydratedCloudFor.current = null; }, [user]);
-
   const setTweak = useCallback((keyOrEdits, val) => {
     setTweakBase(keyOrEdits, val);
     const edits = typeof keyOrEdits === "object" && keyOrEdits !== null ? keyOrEdits : { [keyOrEdits]: val };
     const next = { ...latestTRef.current, ...edits };
-    // Expense data (budget, spent) never touches localStorage — it lives only
-    // in memory until the user signs in, then syncs to Supabase. After the
-    // trip ends it's wiped server-side.
+    // Everything, expense data included (budget, spent), is saved to
+    // localStorage so a reload keeps it. The data stays only on this device
+    // (no account, no server) and is wiped automatically after the trip:
+    // see the GRACE_DAYS hard-delete below and deleteTripData.
     try {
-      const local = { ...next };
-      delete local.budget;
-      delete local.spent;
-      localStorage.setItem(LOCAL_TWEAKS_KEY, JSON.stringify(local));
+      localStorage.setItem(LOCAL_TWEAKS_KEY, JSON.stringify(next));
     } catch (e) {}
-    if (user && supabaseClient) {
-      if (cloudDebounceRef.current) clearTimeout(cloudDebounceRef.current);
-      cloudDebounceRef.current = setTimeout(() => {
-        supabaseClient
-          .from("user_tweaks")
-          .upsert({ user_id: user.id, tweaks: next, updated_at: new Date().toISOString() }, { onConflict: "user_id" })
-          .then(undefined, () => {});
-      }, 600);
-    }
-  }, [user, setTweakBase]);
-
-  const signOut = useCallback(async () => {
-    if (supabaseClient) await supabaseClient.auth.signOut();
-  }, []);
+  }, [setTweakBase]);
 
   const selected = t.selectedCurrencies || ["USD", "MXN", "CRC"];
 
@@ -2035,7 +1692,7 @@ function App() {
   const tracking = t.trackExpenses === "yes";
   const hasExpenseData = !!t.budget || !!t.spent;
 
-  // Hard-delete: trip ended more than GRACE_DAYS ago → wipe locally and in cloud,
+  // Hard-delete: trip ended more than GRACE_DAYS ago → wipe the local data,
   // no questions asked, no UI shown.
   useEffect(() => {
     const end = parseISO(t.tripEnd);
@@ -2045,10 +1702,7 @@ function App() {
     if (startOfToday().getTime() <= cutoff.getTime()) return;
     if (!hasExpenseData) return;
     setTweak({ budget: 0, spent: 0, trackExpenses: "ask" });
-    if (user && supabaseClient) {
-      supabaseClient.from("user_tweaks").delete().eq("user_id", user.id).then(undefined, () => {});
-    }
-  }, [t.tripEnd, user, hasExpenseData]);
+  }, [t.tripEnd, hasExpenseData]);
 
   const downloadSummary = useCallback(() => {
     const baseCode = (t.selectedCurrencies && t.selectedCurrencies[0]) || "USD";
@@ -2065,13 +1719,10 @@ function App() {
     });
   }, [effectiveLang, t.tripName, t.tripStart, t.tripEnd, t.selectedCurrencies, t.budget, t.spent]);
 
-  const deleteTripData = useCallback(async () => {
-    if (user && supabaseClient) {
-      await supabaseClient.from("user_tweaks").delete().eq("user_id", user.id);
-    }
+  const deleteTripData = useCallback(() => {
     setTweak({ budget: 0, spent: 0, trackExpenses: "ask" });
     setSummaryDismissed(true);
-  }, [user, setTweak]);
+  }, [setTweak]);
 
   // --- Cookie consent + trip name persistence ---
   const [cookieConsent, setCookieConsent] = useState(() => cookieGet(COOKIE_CONSENT) === "1");
@@ -2285,7 +1936,6 @@ function App() {
           />
         </div>
         <div className="trip-rates">
-          <AuthButton user={user} onOpen={() => setAuthOpen(true)} onSignOut={signOut} />
           <button className="rate-refresh" onClick={fetchRates} title={tt("rate_refresh")}>
             <span className={"pulse-dot " + rateStatus}/>
             {rateStatus === "loading" && tt("rate_loading")}
@@ -2412,7 +2062,7 @@ function App() {
         </section>
 
         {t.showBudget && t.trackExpenses !== "no" && (
-          t.trackExpenses === "yes" && user ? (
+          t.trackExpenses === "yes" ? (
             <section>
               <ExpiryNotice tripEndISO={t.tripEnd} />
               <BudgetBar
@@ -2427,11 +2077,7 @@ function App() {
           ) : (
             <BudgetOptInCard
               tripEndISO={t.tripEnd}
-              signedIn={!!user}
-              onYes={() => {
-                setTweak("trackExpenses", "yes");
-                if (!user) setAuthOpen(true);
-              }}
+              onYes={() => setTweak("trackExpenses", "yes")}
               onNo={() => setTweak("trackExpenses", "no")}
             />
           )
@@ -2513,13 +2159,6 @@ function App() {
           </div>
         </TweakSection>
       </TweaksPanel>
-
-      {authOpen && (
-        <AuthModal
-          onClose={() => setAuthOpen(false)}
-          trip={{ name: t.tripName, start: t.tripStart, end: t.tripEnd, currencies: selected }}
-        />
-      )}
 
       {tripOver && tracking && hasExpenseData && !summaryDismissed && (
         <TripSummaryOverlay
