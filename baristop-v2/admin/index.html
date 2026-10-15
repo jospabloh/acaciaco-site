@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+<head>
+<script>
+(function () {
+  // Base folder with trailing slash (spec 3.0); first in head so preloads resolve.
+  var p = location.pathname;
+  var last = p.slice(p.lastIndexOf("/") + 1);
+  if (last.indexOf(".") !== -1) p = p.slice(0, p.lastIndexOf("/") + 1);
+  else if (p.charAt(p.length - 1) !== "/") p += "/";
+  var b = document.createElement("base");
+  b.href = location.origin + p;
+  document.head.appendChild(b);
+  // Relative assets are injected only now, so the preload scanner cannot
+  // fetch them against the un-based document URL (no 404 noise at /admin).
+  document.write('<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">' +
+    '<link rel="stylesheet" href="css/admin.css">');
+  document.addEventListener("DOMContentLoaded", function () {
+    var im = document.querySelectorAll("img[data-src]");
+    for (var i = 0; i < im.length; i++) im[i].src = im[i].getAttribute("data-src");
+  });
+})();
+</script>
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<title>Panel de Baristop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700&family=Inter:wght@400;500;600;700&display=swap">
+</head>
+<body>
+<noscript><p style="padding:24px;font-family:sans-serif">Necesitas activar JavaScript para usar el panel de Baristop.</p></noscript>
+
+<!-- Login -->
+<main id="view-login" class="login-wrap" hidden>
+  <form id="login-form" class="login-card" novalidate>
+    <img data-src="../assets/baristop-logo.png" alt="Baristop" width="96" height="96">
+    <h1>Panel de Baristop</h1>
+    <div id="login-info" class="login-info" role="status" hidden></div>
+    <div class="field">
+      <label for="login-password">Contraseña</label>
+      <input id="login-password" name="password" type="password" autocomplete="current-password" required>
+    </div>
+    <div id="login-error" class="login-error" role="alert" hidden></div>
+    <button id="login-submit" class="btn btn-primary" type="submit">Entrar</button>
+  </form>
+</main>
+
+<!-- Loading / fatal error -->
+<main id="view-loading" class="panel-center" hidden>
+  <div id="loading-box" class="skeleton" aria-live="polite">
+    <p id="loading-text">Cargando contenido… (la primera carga puede tardar unos segundos)</p>
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+  </div>
+  <div id="load-error" hidden>
+    <p id="load-error-text" class="login-error" role="alert"></p>
+    <p><button id="load-retry" class="btn btn-primary" type="button">Reintentar</button></p>
+  </div>
+</main>
+
+<!-- Shell -->
+<div id="view-shell" hidden>
+  <header class="app-header">
+    <div class="brand">
+      <img data-src="../assets/baristop-logo.png" alt="" width="38" height="38">
+      <h1>Panel de Baristop</h1>
+    </div>
+    <div class="header-actions">
+      <a id="preview-link" class="btn btn-secondary" href="../?nocache=1" target="_blank" rel="noopener">Vista previa ↗</a>
+      <button id="logout-btn" class="btn btn-secondary" type="button">Salir</button>
+    </div>
+    <div id="demo-badge" class="demo-badge" role="note" hidden>Modo demo (sin conexión a Google): los cambios se guardan solo en este navegador.</div>
+  </header>
+  <div class="layout">
+    <div class="nav-select-wrap">
+      <label for="nav-select">Sección</label>
+      <select id="nav-select"></select>
+    </div>
+    <nav class="side-nav" aria-label="Secciones del panel"><ul id="side-nav-list"></ul></nav>
+    <main id="content" class="content" tabindex="-1"></main>
+  </div>
+  <footer class="app-footer" id="app-footer">
+    <span>Panel de Baristop</span>
+    <button id="reset-demo" class="btn btn-secondary btn-small" type="button" hidden>Restablecer demo</button>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var f = ["../config.js", "../js/schema.js", "js/ui.js", "js/api.js", "js/images.js", "js/sections.js", "js/admin.js"];
+  for (var i = 0; i < f.length; i++) document.write('<script src="' + f[i] + '"><\/script>');
+})();
+</script>
+</body>
+</html>

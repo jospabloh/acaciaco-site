@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.0",
+    "@vercel/functions": "^3.10.1",
     "@vercel/node": "^5.5.28",
     "googleapis": "^171.1.0",
     "resend": "^6.18.1",
