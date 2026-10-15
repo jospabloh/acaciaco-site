@@ -513,8 +513,8 @@ function setup() {
   Shared.SECTION_NAMES.forEach(function (name) {
     var def = Shared.SCHEMA.sections[name];
     var sheet = ensureSheet_(ss, def.tab, sectionHeaders_(def), report);
+    seedTab_(sheet, name, def, report); // before formatTab_: checkboxes fill every row
     formatTab_(sheet, def);
-    seedTab_(sheet, name, def, report);
   });
   var q = Shared.SCHEMA.logs.quotes;
   var logSheet = ensureSheet_(ss, q.tab, q.headers, report);
@@ -593,7 +593,7 @@ function formatTab_(sheet, def) {
 
 function seedTab_(sheet, name, def, report) {
   var d = DEFAULT_CONTENT;
-  if (sheet.getLastRow() > 1) return;
+  if (tabHasData_(sheet)) return;
   if (name === "site") {
     var flat = {};
     Object.keys(d.site).forEach(function (k) { flat[k] = d.site[k]; });
@@ -619,6 +619,14 @@ function seedTab_(sheet, name, def, report) {
   var out = Shared.itemsToRows(name, head, items);
   writeRows_(sheet, def, head, out);
   report.push("Datos iniciales cargados en " + def.tab);
+}
+
+// getLastRow() counts checkbox rows, so look for a row with real content instead.
+function tabHasData_(sheet) {
+  var lastRow = sheet.getLastRow();
+  if (lastRow < 2) return false;
+  var rows = sheet.getRange(2, 1, lastRow - 1, Math.max(sheet.getLastColumn(), 1)).getValues();
+  return rows.some(function (row) { return !Shared.isBlankRow(row); });
 }
 
 // Reads ADMIN_PASSWORD_PLAIN, stores its SHA-256, deletes the plain value.

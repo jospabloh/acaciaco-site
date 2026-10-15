@@ -70,7 +70,7 @@ until we switch).
   (client will send images + specs). Admin manages machines per category.
 - Insumos: remove **Tapioca y boba**. Remaining and their copy:
   - **Café** — "Trabajamos con una finca en Coatepec, Veracruz. Sin intermediarios."
-  - **Polvos y bases** — frappé, chai, taro, matcha (brands Sahu, Samlet).
+  - **Polvos y bases** — frappé, chai, taro, matcha (brands Saju, Samlet).
   - **Jarabes y salsas** — "Proveedor autorizado Yalini".
   - **Tisanas** (not "Tés y tisanas") — "Proveedor autorizado Soy Té".
   - Each with an image (editable).
@@ -108,7 +108,7 @@ until we switch).
 - **"Baristop en tu ciudad"** — franchise invitation ("Franquicias abiertas. ¿Te
   interesa tener Baristop en tu ciudad? Contáctanos.") with CTA.
 - **Alianzas estratégicas** ("con los mejores") near the bottom — logos: Coffee
-  Solutions, Soy Té, Yalini, Sahu, Samlet (Samlet = Julieta y Samuel's brand).
+  Solutions, Soy Té, Yalini, Saju, Samlet (Samlet = Julieta y Samuel's brand).
   Logos editable in admin.
 - Admin also manages **Promos** and **Anuncios** (announcement bar / promo cards)
   — requested by José Pablo; show nothing when empty.
