@@ -239,8 +239,8 @@ var DEFAULT_CONTENT = {
       "visible": true,
       "name": "Polvos y bases",
       "tagline": "Frappé, chai, taro y matcha",
-      "description": "Bases para frappé, chai, taro y matcha. Marcas Sahu y Samlet.",
-      "image": "assets/ejemplo/frappe-taro.jpg"
+      "description": "Bases para frappé, chai, taro y matcha. Marcas Saju y Samlet.",
+      "image": "assets/ejemplo/frappe-capuchino.jpg"
     },
     {
       "id": "jarabes",
@@ -307,10 +307,10 @@ var DEFAULT_CONTENT = {
       "url": ""
     },
     {
-      "id": "sahu",
+      "id": "saju",
       "order": 40,
       "visible": true,
-      "name": "Sahu",
+      "name": "Saju",
       "logo": "",
       "url": ""
     },

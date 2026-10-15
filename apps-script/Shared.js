@@ -372,8 +372,11 @@ var Shared = (function () {
     return /^(true|verdadero|si|sí|1|x|yes)$/.test(s);
   }
 
+  // Checkbox cells hold true/false on every row of the tab, so they never make a
+  // row count as content on their own.
   function isBlankRow(row) {
     for (var i = 0; i < row.length; i++) {
+      if (typeof row[i] === "boolean") continue;
       if (cellToString(row[i]).trim() !== "") return false;
     }
     return true;
@@ -868,6 +871,7 @@ var Shared = (function () {
     isTokenValid: isTokenValid,
     headerIndex: headerIndex,
     rowsToItems: rowsToItems,
+    isBlankRow: isBlankRow,
     itemsToRows: itemsToRows,
     settingsToObject: settingsToObject,
     objectToSettings: objectToSettings,

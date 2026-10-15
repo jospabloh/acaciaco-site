@@ -541,3 +541,16 @@ test("isSafeSvgText rechaza scripts y manejadores", () => {
   assert.equal(S.isSafeSvgText('<svg><a href="javascript:alert(1)"/></svg>'), false);
   assert.equal(S.isSafeSvgText("<html></html>"), false);
 });
+
+test("rowsToItems omite filas que solo tienen la casilla Visible sin marcar", () => {
+  // A checkbox column makes every row of the sheet hold `false`, so a fresh tab
+  // returns ~999 rows of [ "", "", false, "", ... ] from getValues().
+  var header = headerFor("branches");
+  var visibleCol = header.indexOf("Visible");
+  var blank = header.map(() => "");
+  var unchecked = blank.slice();
+  (unchecked as any)[visibleCol] = false;
+  var checked = blank.slice();
+  (checked as any)[visibleCol] = true;
+  assert.equal(S.rowsToItems("branches", header, [unchecked, unchecked, checked, blank]).length, 0);
+});
