@@ -673,7 +673,8 @@ function testQuote() {
     branchId: branch.id,
     name: "Prueba de cotización",
     business: "Baristop web",
-    contact: Session.getEffectiveUser().getEmail() || "0000000000",
+    // Not Session.getEffectiveUser(): that needs the userinfo.email scope.
+    contact: String((content.site || {}).quoteAlwaysTo || "").split(/[,\s]+/)[0] || "0000000000",
     need: Shared.QUOTE_NEEDS[0],
     message: "Correo de prueba enviado desde el editor de Apps Script.",
   }, branch, content.site || {});
