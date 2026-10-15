@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Imagen pendiente: 1200 × 900 px · JPG, WebP o PNG">
+  <rect width="1200" height="900" fill="#FBF3E6"/>
+  <rect x="27" y="27" width="1146" height="846" rx="18" fill="none" stroke="#2B1A14" stroke-opacity=".14" stroke-width="3"/>
+  <g transform="translate(600 396) scale(2.55) translate(-60 -60)" fill="none" stroke="#7A6253" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 50h66v22a24 24 0 0 1-24 24H46a24 24 0 0 1-24-24V50z"/>
+    <path d="M88 56h6a10 10 0 0 1 0 20h-8"/>
+    <path d="M14 106h82"/>
+    <path d="M42 36c-5-6 5-9 0-16M58 36c-5-6 5-9 0-16M74 36c-5-6 5-9 0-16" stroke-opacity=".7"/>
+  </g>
+  <text x="600" y="702" text-anchor="middle" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-weight="500" font-size="55" fill="#7A6253">1200 × 900 px · JPG, WebP o PNG</text>
+</svg>

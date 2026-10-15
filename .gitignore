@@ -17,3 +17,4 @@ playwright-report/
 
 # Subagent-driven-development scratch (task briefs, reports, review packages)
 .superpowers/
+docs/superpowers/specs/baristop-v2-cliente/

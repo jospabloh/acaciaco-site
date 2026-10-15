@@ -1,0 +1,323 @@
+{
+  "version": 1,
+  "updatedAt": "2026-10-15T00:00:00.000Z",
+  "site": {
+    "navCta": "Cotiza tu equipo e insumos",
+    "heroEyebrow": "Insumos y Maquinaria para Cafetería",
+    "heroTitle": "Todo para tu cafetería y",
+    "heroTitleAccent": "barra de bebidas",
+    "heroSubtitle": "Maquinaria profesional y consumibles para cafeterías, restaurantes y barras. Contamos con presencia en Aguascalientes y Durango. Enviamos a toda la República.",
+    "heroStandout": "Un solo proveedor, una sola entrega.",
+    "heroSecondaryCta": "Ver catálogo",
+    "heroTrustHours": "Lun a Vie desde 9:00 am · Sáb en Durango",
+    "strip1Title": "Maquinaria + Insumos",
+    "strip1Text": "Todo en un mismo lugar",
+    "strip2Title": "Asesoría",
+    "strip2Text": "Te ayudamos a elegir",
+    "strip3Title": "Envíos",
+    "strip3Text": "A toda la República",
+    "strip4Title": "Dos sucursales",
+    "strip4Text": "Aguascalientes y Durango",
+    "offerTitle": "Dos cosas que tu barra no puede improvisar.",
+    "offerIntro": "El equipo que sostiene tu operación y los consumibles que salen en cada bebida, surtidos por el mismo proveedor.",
+    "offerMachineryTitle": "Maquinaria profesional",
+    "offerMachineryText": "Cafeteras, molinos y licuadoras. Equipo confiable para operar sin pausas, con asesoría para elegir lo que tu volumen necesita.",
+    "offerSuppliesTitle": "Insumos para bebidas",
+    "offerSuppliesText": "Café, polvos y bases, jarabes y salsas, y tisanas. Todo para que tu carta salga igual, turno tras turno, sin quedarte corto.",
+    "catalogTitle": "Surtimos tu barra de principio a fin.",
+    "catalogIntro": "Una cotización para todo: del equipo a los consumibles. Estas son las líneas que más nos piden cafeterías y restaurantes.",
+    "whyTitle": "El proveedor que entiende la barra.",
+    "whyIntro": "Trabajamos con quienes viven la operación todos los días. Menos proveedores, menos pendientes y más tiempo para atender a tu cliente.",
+    "why1Title": "Todo en un lugar",
+    "why1Text": "Equipo y consumibles con un solo pedido y una sola factura.",
+    "why2Title": "Asesoría real",
+    "why2Text": "Te ayudamos a elegir el equipo y la receta según tu volumen.",
+    "why3Title": "Envíos a toda la República",
+    "why3Text": "Te lo enviamos a tu negocio, en Aguascalientes, Durango o cualquier estado, sin que pares la barra.",
+    "why4Title": "Dos sucursales",
+    "why4Text": "Atención cercana desde Aguascalientes y Durango.",
+    "processTitle": "De la cotización a tu barra en tres pasos.",
+    "step1Title": "Cuéntanos tu barra",
+    "step1Text": "Qué preparas, tu volumen y qué equipo o insumos buscas. Por WhatsApp o aquí mismo.",
+    "step2Title": "Te asesoramos y cotizamos",
+    "step2Text": "Elegimos contigo el equipo y los consumibles correctos.",
+    "step3Title": "Te lo enviamos",
+    "step3Text": "Recibes tu pedido en tu negocio, en cualquier parte de la República, listo para operar. Reabasteces cuando lo necesites.",
+    "recipesTitle": "Lo que puedes preparar con nuestros productos.",
+    "recipesIntro": "Ideas de bebidas con las bases, jarabes y tisanas que distribuimos. Fotos y videos para inspirar tu carta.",
+    "recipesEmpty": "Muy pronto: recetas con nuestros productos.",
+    "franchiseTitle": "Franquicias abiertas.",
+    "franchiseText": "¿Te interesa tener Baristop en tu ciudad? Contáctanos y te contamos cómo funciona.",
+    "franchiseCta": "Quiero más información",
+    "franchiseWhatsapp": "524491784526",
+    "quoteTitle": "Surtamos tu barra.",
+    "quoteIntro": "Cuéntanos qué necesitas — equipo, insumos o ambos.",
+    "quoteSuccess": "¡Listo! Recibimos tu solicitud. Te respondemos en horario de atención.",
+    "quoteAlwaysTo": "roseta.cafeteria@gmail.com",
+    "quoteFallbackTo": "ventas.baristop@gmail.com",
+    "alliancesTitle": "Trabajamos con los mejores.",
+    "alliancesIntro": "Marcas y proveedores con los que surtimos tu barra.",
+    "footerTagline": "Insumos y maquinaria para cafeterías, restaurantes y barras de bebidas. Aguascalientes · Durango · Envíos a toda la República.",
+    "legalName": "Baristop Distribuidora"
+  },
+  "social": [
+    {
+      "id": "instagram",
+      "order": 10,
+      "visible": true,
+      "name": "Instagram",
+      "handle": "@baristop_distribuidora",
+      "url": "https://www.instagram.com/baristop_distribuidora/"
+    },
+    {
+      "id": "facebook",
+      "order": 20,
+      "visible": true,
+      "name": "Facebook",
+      "handle": "Baristop Distribuidora",
+      "url": "https://www.facebook.com/p/Baristop-Distribuidora-100095085646432/"
+    }
+  ],
+  "branches": [
+    {
+      "id": "ags",
+      "order": 10,
+      "visible": true,
+      "name": "Aguascalientes",
+      "whatsapp": "524491784526",
+      "phone": "4491784526",
+      "address": "Cordillera de los Alpes 199, esq. Monte Blanco, Jardines de la Concepción II Sección, C.P. 20120, Aguascalientes, Ags.",
+      "mapUrl": "",
+      "emails": [
+        "ventas.baristop@gmail.com"
+      ],
+      "hours": [
+        "Lunes a Viernes · 9:00 am – 4:00 pm"
+      ],
+      "photo": "",
+      "quoteRecipients": [
+        "ventas.baristop@gmail.com"
+      ],
+      "subjectTag": "[BARISTOP AGS]"
+    },
+    {
+      "id": "durango",
+      "order": 20,
+      "visible": true,
+      "name": "Durango",
+      "whatsapp": "526181812019",
+      "phone": "6181812019",
+      "address": "Prolongación Gómez Palacio 448 Ote., Local 5, Zona Centro, C.P. 34000, Durango, Dgo.",
+      "mapUrl": "",
+      "emails": [
+        "karime.baristop@gmail.com"
+      ],
+      "hours": [
+        "Lunes a Viernes · 9:00 am – 5:00 pm",
+        "Sábado · 10:00 am – 2:00 pm"
+      ],
+      "photo": "",
+      "quoteRecipients": [
+        "karime.baristop@gmail.com"
+      ],
+      "subjectTag": "[BARISTOP DGO]"
+    }
+  ],
+  "heroImages": [
+    {
+      "id": "maquinaria",
+      "order": 10,
+      "visible": true,
+      "title": "Maquinaria",
+      "image": "",
+      "alt": "Maquinaria para cafetería"
+    },
+    {
+      "id": "salsas",
+      "order": 20,
+      "visible": true,
+      "title": "Salsas",
+      "image": "",
+      "alt": "Salsas para bebidas"
+    },
+    {
+      "id": "jarabes",
+      "order": 30,
+      "visible": true,
+      "title": "Jarabes",
+      "image": "",
+      "alt": "Jarabes para bebidas"
+    },
+    {
+      "id": "polvos",
+      "order": 40,
+      "visible": true,
+      "title": "Polvos",
+      "image": "",
+      "alt": "Polvos y bases para bebidas"
+    }
+  ],
+  "machineryCategories": [
+    {
+      "id": "cafeteras",
+      "order": 10,
+      "visible": true,
+      "name": "Cafeteras espresso",
+      "tagline": "Semi y automáticas",
+      "description": "Equipos semiautomáticos y automáticos para barra, con asesoría según tu volumen.",
+      "image": ""
+    },
+    {
+      "id": "molinos",
+      "order": 20,
+      "visible": true,
+      "name": "Molinos",
+      "tagline": "Molienda constante",
+      "description": "Molinos para espresso y filtrado, de uso continuo.",
+      "image": ""
+    },
+    {
+      "id": "licuadoras",
+      "order": 30,
+      "visible": true,
+      "name": "Licuadoras",
+      "tagline": "Para frappés y smoothies",
+      "description": "Licuadoras de alto rendimiento para bebidas frías.",
+      "image": ""
+    }
+  ],
+  "machines": [
+    {
+      "id": "cafeteras-modelo",
+      "order": 10,
+      "visible": false,
+      "categoryId": "cafeteras",
+      "name": "Equipo de ejemplo",
+      "description": "Descripción del equipo",
+      "specs": "",
+      "image": ""
+    },
+    {
+      "id": "molinos-modelo",
+      "order": 10,
+      "visible": false,
+      "categoryId": "molinos",
+      "name": "Equipo de ejemplo",
+      "description": "Descripción del equipo",
+      "specs": "",
+      "image": ""
+    },
+    {
+      "id": "licuadoras-modelo",
+      "order": 10,
+      "visible": false,
+      "categoryId": "licuadoras",
+      "name": "Equipo de ejemplo",
+      "description": "Descripción del equipo",
+      "specs": "",
+      "image": ""
+    }
+  ],
+  "insumos": [
+    {
+      "id": "cafe",
+      "order": 10,
+      "visible": true,
+      "name": "Café",
+      "tagline": "Finca en Coatepec, Veracruz",
+      "description": "Trabajamos con una finca en Coatepec, Veracruz. Sin intermediarios.",
+      "image": ""
+    },
+    {
+      "id": "polvos",
+      "order": 20,
+      "visible": true,
+      "name": "Polvos y bases",
+      "tagline": "Frappé, chai, taro y matcha",
+      "description": "Bases para frappé, chai, taro y matcha. Marcas Sahu y Samlet.",
+      "image": "assets/ejemplo/frappe-taro.jpg"
+    },
+    {
+      "id": "jarabes",
+      "order": 30,
+      "visible": true,
+      "name": "Jarabes y salsas",
+      "tagline": "Proveedor autorizado Yalini",
+      "description": "Jarabes y salsas para bebidas frías y calientes. Proveedor autorizado Yalini.",
+      "image": ""
+    },
+    {
+      "id": "tisanas",
+      "order": 40,
+      "visible": true,
+      "name": "Tisanas",
+      "tagline": "Proveedor autorizado Soy Té",
+      "description": "Infusiones de origen para tu carta. Proveedor autorizado Soy Té.",
+      "image": ""
+    }
+  ],
+  "recipes": [
+    {
+      "id": "frappe-capuchino",
+      "order": 10,
+      "visible": false,
+      "title": "Frappé capuchino",
+      "description": "Descripción corta de la receta",
+      "photo": "assets/ejemplo/frappe-capuchino.jpg",
+      "videoUrl": ""
+    },
+    {
+      "id": "frappe-taro",
+      "order": 20,
+      "visible": false,
+      "title": "Frappé de taro",
+      "description": "Descripción corta de la receta",
+      "photo": "assets/ejemplo/frappe-taro.jpg",
+      "videoUrl": ""
+    }
+  ],
+  "alliances": [
+    {
+      "id": "coffee-solutions",
+      "order": 10,
+      "visible": true,
+      "name": "Coffee Solutions",
+      "logo": "",
+      "url": ""
+    },
+    {
+      "id": "soy-te",
+      "order": 20,
+      "visible": true,
+      "name": "Soy Té",
+      "logo": "",
+      "url": ""
+    },
+    {
+      "id": "yalini",
+      "order": 30,
+      "visible": true,
+      "name": "Yalini",
+      "logo": "",
+      "url": ""
+    },
+    {
+      "id": "sahu",
+      "order": 40,
+      "visible": true,
+      "name": "Sahu",
+      "logo": "",
+      "url": ""
+    },
+    {
+      "id": "samlet",
+      "order": 50,
+      "visible": true,
+      "name": "Samlet",
+      "logo": "",
+      "url": ""
+    }
+  ],
+  "announcements": [],
+  "promos": []
+}
