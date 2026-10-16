@@ -1,0 +1,18 @@
+/* Book sales page (/libro). Used only by libro/index.html; reuses base.css tokens. */
+.libro-cover { display: flex; justify-content: center; }
+.libro-cover img {
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+.libro-price { margin: 1.25rem 0 0.5rem; display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+.libro-amount { font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--text); }
+.libro-currency { color: var(--text-muted); font-size: 0.95rem; }
+.libro-note { font-size: 0.9rem; margin-top: 0.75rem; }
+@media (max-width: 860px) {
+  .libro-cover { order: -1; }
+  .libro-cover img { max-width: 240px; }
+}
+.libro-autor { margin-top: 3.5rem; }
