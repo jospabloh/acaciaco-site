@@ -14,6 +14,41 @@
   function $(sel, root) { return (root || document).querySelector(sel); }
   function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
 
+  /* ---------- same-page anchors ----------
+   * The <base> bootstrap ends in "/", so on a clean-URL host (/baristop-v2, no slash)
+   * href="#recetas" resolves to /baristop-v2/#recetas: a different document. The browser
+   * then reloads the whole page through a 308 back to /baristop-v2, and on a phone the
+   * jump is lost while the page re-renders — the menu "does nothing". Keep those links
+   * inside the current document. Handlers that already dealt with a click (quote list,
+   * dialogs) call preventDefault first, so they are left alone. */
+
+  function stripSlash(p) { return p.length > 1 ? p.replace(/\/+$/, "") : p; }
+
+  function samePageHash(a) {
+    var raw = a.getAttribute("href") || "";
+    if (raw.charAt(0) === "#") return raw.length > 1 ? raw : "";
+    var u;
+    try { u = new URL(a.href, document.baseURI); } catch (err) { return ""; }
+    if (!u.hash || u.origin !== location.origin) return "";
+    if (stripSlash(u.pathname) !== stripSlash(location.pathname) || u.search !== location.search) return "";
+    return u.hash;
+  }
+
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest ? e.target.closest("a[href]") : null;
+    if (!a || a.target === "_blank") return;
+    var hash = samePageHash(a);
+    if (!hash) return;
+    e.preventDefault();
+    if (location.hash === hash) {
+      var target = document.getElementById(decodeURIComponent(hash.slice(1)));
+      if (target) target.scrollIntoView();
+    } else {
+      location.hash = hash; // same-document navigation: native scroll + hashchange, no reload
+    }
+  });
+
   /* ---------- condensing nav ---------- */
 
   var nav = $("header.nav");

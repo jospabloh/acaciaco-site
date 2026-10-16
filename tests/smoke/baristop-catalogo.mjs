@@ -89,6 +89,25 @@ for (const [label, base] of forms) {
   await ctx.close();
 }
 
+// ---- 3b. same-page menu links (Chrome on a Galaxy S25 Ultra: the menu "did nothing") ---------
+// With the <base> bootstrap, href="#recetas" on /baristop-v2 resolved to /baristop-v2/#recetas,
+// so every tap reloaded the page through a 308 and the jump was lost on a real phone.
+{
+  const { ctx, page } = await open(CLEAN + '/baristop-v2', { width: 412, height: 915 });
+  const navs = [];
+  page.on('request', (r) => { if (r.isNavigationRequest()) navs.push(r.url()); });
+  await page.evaluate(() => { window.__sameDoc = 1; });
+  await page.locator('.nav-toggle').click();
+  await page.locator('a.drawer-plain', { hasText: 'Recetas' }).first().click();
+  await page.waitForTimeout(800);
+  check('phone: drawer "Recetas" stays in the same document', await page.evaluate(() => window.__sameDoc === 1), navs.join(', '));
+  check('phone: drawer "Recetas" makes no navigation request', navs.length === 0, navs.join(', '));
+  check('phone: drawer "Recetas" scrolls to the section', await page.evaluate(() => {
+    const r = document.getElementById('recetas').getBoundingClientRect(); return r.top < 200 && r.bottom > 0;
+  }));
+  await ctx.close();
+}
+
 // ---- 4. phone drawer ---------------------------------------------------------------------
 {
   const { ctx, page } = await open(CLEAN + '/baristop-v2/catalogo?p=' + PRODUCT, { width: 360, height: 740 });
