@@ -152,7 +152,8 @@
   function uploadImage(p) {
     return post({
       action: "uploadImage", section: p.section, itemId: p.itemId, field: p.field,
-      name: p.name, mime: p.mime, dataBase64: p.dataBase64
+      name: p.name, mime: p.mime, dataBase64: p.dataBase64,
+      index: p.index  // position of the photo in a multi-photo field (products.photos)
     }, { auth: true });
   }
 

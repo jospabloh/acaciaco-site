@@ -75,8 +75,8 @@ huella cifrada y **borra** esta propiedad.
    *Contraseña del panel guardada (cifrada)*.
 6. **Verifica:**
    - La hoja ahora tiene pestañas: Ajustes, Redes, Sucursales, Portada,
-     CategoriasMaquinaria, Maquinas, Insumos, Recetas, Alianzas, Anuncios, Promos y
-     Cotizaciones, con los datos iniciales.
+     CategoriasMaquinaria, Maquinas, Insumos, Categorias, Productos, Variantes, Recetas,
+     Alianzas, Anuncios, Promos y Cotizaciones, con los datos iniciales.
    - En <https://drive.google.com> existe la carpeta **Baristop web — imágenes**.
    - En Configuración del proyecto ya no aparece `ADMIN_PASSWORD_PLAIN`; ahora hay
      `ADMIN_PASSWORD_SHA256`.
@@ -158,6 +158,36 @@ cambia**; si creas una "Nueva implementación" sí cambiaría y habría que actu
 Si agregaste columnas nuevas a una hoja ya existente, ejecuta **setup** otra vez: agrega
 al final las columnas que falten sin tocar tus datos.
 
+### Actualizar a la versión con catálogo
+
+La versión con catálogo agrega tres pestañas (**Categorias**, **Productos**, **Variantes**) y
+una columna **Productos** al final de **Cotizaciones**. No borra nada de lo que ya tienes.
+
+1. En el editor de Apps Script pega el contenido nuevo de los cuatro archivos
+   (`Code.gs`, `Shared.js`, `DefaultContent.js` y `appsscript.json`) y guarda.
+2. Elige **setup** y pulsa **Ejecutar**. Es seguro con la hoja ya llena. En el registro
+   debe aparecer algo como `Catálogo migrado: 7 categorías, 3 productos, 3 variantes`
+   y `Ejemplos agregados: 7 productos` (los números dependen de lo que tengas).
+3. **Implementar → Administrar implementaciones →** el lápiz **→ Versión: Nueva versión →
+   Implementar**. La URL no cambia.
+4. Revisa la hoja:
+   - **Categorias** tiene una fila por cada línea de maquinaria y de insumos.
+   - **Productos** tiene una fila por cada máquina que ya tenías, con su nombre y
+     especificaciones tal cual, y cada una con una presentación **Modelo estándar** sin
+     precio. Los productos que dicen **(ejemplo)** son de muestra: edítalos o bórralos.
+   - **Variantes** tiene las presentaciones, con su precio, unidad y existencias.
+5. Las pestañas antiguas **CategoriasMaquinaria**, **Maquinas** e **Insumos** se quedan
+   como están (puedes borrarlas después). Mientras **Categorias** tenga filas, el sitio
+   ya no las lee y el catálogo se edita desde el panel, en **Catálogo**.
+
+Si más adelante vacías **Categorias** a propósito y quieres traer otra vez las pestañas
+antiguas, ejecuta la función **migrateCatalog**. Volver a ejecutar **setup** nunca vuelve a
+migrar: lo hace una sola vez, aunque después vacíes **Categorias** (y no revive los
+ejemplos que borraste).
+
+**Límites.** Hasta 300 productos y 500 presentaciones; con más de 150 productos la página
+tarda un poco más en cargar en celulares, avísanos antes de llegar ahí.
+
 ### Editar a mano en la hoja
 
 Se puede, pero con cuidado:
@@ -219,7 +249,7 @@ borrada dejaría un recuadro vacío en el sitio.
   rechaza archivos de más del 120 % del peso indicado para cada campo y solo acepta
   JPG, PNG, WebP (y SVG en logos).
 - **Registro de cotizaciones.** La pestaña **Cotizaciones** guarda cada solicitud con
-  fecha, destinatarios y estatus. Nunca se muestra en el sitio ni en el panel. No la
+  fecha, destinatarios, estatus y los productos de la lista (columna **Productos**). Nunca se muestra en el sitio ni en el panel. No la
   borres si quieres tener historial.
 - **Cuenta dueña.** Si la cuenta que instaló el script se suspende o se elimina, deja
   de funcionar todo. Haz una copia de la hoja de vez en cuando

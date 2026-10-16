@@ -15,8 +15,18 @@
  *   DRIVE_FOLDER_ID        folder that receives uploaded images (created by setup())
  */
 
-var CONTENT_CACHE_KEY = "content:v1";
+var CONTENT_CACHE_KEY = "content:v1"; // legacy single-value key, only removed now
+var CACHE_PREFIX = "content:v2:";      // gzip+base64 content split in <= 90 KB chunks (CacheService caps a value at 100 KB)
+var CACHE_CHUNK = 90000;
 var CONTENT_TTL_SEC = 300;
+var CATALOG_SECTIONS = ["categories", "products", "variants"]; // never seeded by the setup loop (see migrateCatalog_)
+// Site keys introduced with the catalog; setup() appends the ones missing from Ajustes.
+var CATALOG_SITE_KEYS = [
+  "navGroupMachinery", "navGroupSupplies", "navCtaShort", "catalogIndexTitle", "catalogIndexIntro",
+  "groupMachineryIntro", "groupSuppliesIntro", "featuredTitle", "featuredIntro", "variantLabel",
+  "priceNote", "priceToQuoteNote", "availabilityNote", "catalogEmptyCategory",
+  "quoteListTitle", "quoteListIntro", "quoteListSuccess"
+];
 var TOKEN_TTL_SEC = 12 * 3600;
 var DRIVE_FOLDER_NAME = "Baristop web — imágenes";
 var MAX_BODY_CHARS = 1500000;
@@ -195,7 +205,11 @@ function buildContent_() {
   var tabs = {};
   for (var i = 0; i < Shared.SECTION_NAMES.length; i++) {
     var name = Shared.SECTION_NAMES[i];
-    tabs[Shared.SCHEMA.sections[name].tab] = readTab_(ss, name);
+    var def = Shared.SCHEMA.sections[name];
+    // Catalog tabs appear with setup(); until then the section is simply empty, so a new
+    // script version keeps serving the round-1 content.
+    if (CATALOG_SECTIONS.indexOf(name) !== -1 && !ss.getSheetByName(def.tab)) continue;
+    tabs[def.tab] = readTab_(ss, name);
   }
   try {
     return Shared.rowsToContent(tabs);
@@ -205,20 +219,62 @@ function buildContent_() {
 }
 
 function putCache_(content) {
+  var cache = CacheService.getScriptCache();
   try {
-    CacheService.getScriptCache().put(CONTENT_CACHE_KEY, JSON.stringify(content), CONTENT_TTL_SEC);
+    var json = JSON.stringify(content);
+    var gz = Utilities.gzip(Utilities.newBlob(json, "text/plain", "content.json"));
+    var chunks = Shared.chunkString(Utilities.base64Encode(gz.getBytes()), CACHE_CHUNK);
+    var entries = {};
+    chunks.forEach(function (c, i) { entries[CACHE_PREFIX + i] = c; });
+    entries[CACHE_PREFIX + "index"] = JSON.stringify({ n: chunks.length, bytes: json.length, savedAt: nowSec_() });
+    cache.putAll(entries, CONTENT_TTL_SEC);
   } catch (e) {
-    // Too large or cache unavailable: the next read simply goes to the Sheet.
+    // Too large or cache unavailable: drop the index so no reader mixes chunks; the next read goes to the Sheet.
+    try { cache.remove(CACHE_PREFIX + "index"); } catch (e2) {}
   }
+}
+
+function readCache_() {
+  try {
+    var cache = CacheService.getScriptCache();
+    var raw = cache.get(CACHE_PREFIX + "index");
+    if (!raw) return null;
+    var idx = JSON.parse(raw);
+    if (!idx || idx.n !== Math.floor(idx.n) || idx.n < 1 || idx.n > 20) return null;
+    var keys = [];
+    for (var i = 0; i < idx.n; i++) keys.push(CACHE_PREFIX + i);
+    var got = cache.getAll(keys);
+    var parts = [];
+    for (var k = 0; k < keys.length; k++) {
+      if (got[keys[k]] == null) return null; // a missing chunk: rebuild from the Sheet
+      parts.push(got[keys[k]]);
+    }
+    var bytes = Utilities.base64Decode(Shared.joinChunks(parts));
+    var json = Utilities.ungzip(Utilities.newBlob(bytes, "application/x-gzip")).getDataAsString("UTF-8");
+    if (json.length !== idx.bytes) return null; // chunks from two different writes
+    return JSON.parse(json);
+  } catch (e) {
+    return null;
+  }
+}
+
+function clearCache_() {
+  var cache = CacheService.getScriptCache();
+  var keys = [CONTENT_CACHE_KEY, CACHE_PREFIX + "index"];
+  var n = 10;
+  try {
+    var idx = JSON.parse(cache.get(CACHE_PREFIX + "index") || "null");
+    if (idx && idx.n > 0 && idx.n <= 20) n = idx.n;
+  } catch (e) {}
+  for (var i = 0; i < n; i++) keys.push(CACHE_PREFIX + i);
+  cache.removeAll(keys);
 }
 
 // Full document (private fields included). Callers decide what to expose.
 function loadContent_(forceFresh) {
   if (!forceFresh) {
-    var cached = CacheService.getScriptCache().get(CONTENT_CACHE_KEY);
-    if (cached) {
-      try { return JSON.parse(cached); } catch (e) { /* rebuild below */ }
-    }
+    var cached = readCache_();
+    if (cached) return cached;
   }
   var content = buildContent_();
   putCache_(content);
@@ -232,7 +288,9 @@ function getContent_(body) {
   if (hasToken) requireAuth_(body.token);
   if (body.fresh === true && !hasToken) throwApi_("UNAUTHORIZED", "Tu sesión expiró. Vuelve a entrar.");
   var content = loadContent_(body.fresh === true);
-  return hasToken ? content : Shared.stripPrivate(content);
+  if (hasToken) return content;
+  // Public: legacy arrays only travel while the catalog is empty (they would duplicate it).
+  return Shared.dropLegacyWhenCatalog(Shared.stripPrivate(content));
 }
 
 function login_(body) {
@@ -274,6 +332,12 @@ function saveSection_(body) {
     var catTab = readTab_(ss, "machineryCategories");
     var cats = Shared.rowsToItems("machineryCategories", catTab.header, catTab.rows);
     ctx.categoryIds = cats.map(function (c) { return c.id; });
+  } else if (section === "products") {
+    var lineTab = readTab_(ss, "categories");
+    ctx.categoryIds = Shared.rowsToItems("categories", lineTab.header, lineTab.rows).map(function (c) { return c.id; });
+  } else if (section === "variants") {
+    var prodTab = readTab_(ss, "products");
+    ctx.productIds = Shared.rowsToItems("products", prodTab.header, prodTab.rows).map(function (p) { return p.id; });
   }
   var check = Shared.validateSection(section, rows, ctx);
   if (!check.ok) {
@@ -316,18 +380,19 @@ function clearBody_(sheet) {
 
 // Writes rows below the header. Every text column is forced to plain-text format first,
 // so a value such as "=1+1" or "@usuario" is stored literally and never evaluated as a formula.
-function writeRows_(sheet, def, header, data) {
+function writeRows_(sheet, def, header, data, startRow) {
   if (!data.length) return;
-  ensureRows_(sheet, data.length + 1);
+  var at = startRow || 2;
+  ensureRows_(sheet, at + data.length - 1);
   var names = header.map(function (v) { return String(v).trim(); });
   var textHeaders = def.kind === "settings" ? def.headers : def.fields.filter(function (f) {
-    return f.type !== "boolean" && f.type !== "number";
+    return f.type !== "boolean" && f.type !== "number" && f.type !== "money";
   }).map(function (f) { return f.header; });
   textHeaders.forEach(function (h) {
     var col = names.indexOf(h) + 1;
-    if (col > 0) sheet.getRange(2, col, data.length, 1).setNumberFormat("@");
+    if (col > 0) sheet.getRange(at, col, data.length, 1).setNumberFormat("@");
   });
-  sheet.getRange(2, 1, data.length, header.length).setValues(data);
+  sheet.getRange(at, 1, data.length, header.length).setValues(data);
 }
 
 // Replaces the body of a tab with rollback: the previous body is snapshotted first and
@@ -345,7 +410,7 @@ function replaceBody_(sheet, def, header, data) {
       if (snapshot.length) sheet.getRange(2, 1, snapshot.length, lastCol).setValues(snapshot);
     } catch (restoreErr) {
       // Restore failed too: drop the cache so the next read reflects the sheet as it is.
-      try { CacheService.getScriptCache().remove(CACHE_KEY); } catch (e) {}
+      try { clearCache_(); } catch (e) {}
     }
     throw err;
   }
@@ -430,7 +495,7 @@ function uploadImage_(body) {
   }
 
   var stamp = Utilities.formatDate(new Date(), "America/Mexico_City", "yyyyMMdd-HHmmss");
-  var fileName = body.section + "-" + body.itemId + "-" + stamp + "." + meta.ext;
+  var fileName = Shared.uploadFileName(body, stamp, meta.ext);
   var file = DriveApp.getFolderById(folderId).createFile(Utilities.newBlob(bytes, body.mime, fileName));
   file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   var id = file.getId();
@@ -441,26 +506,32 @@ function submitQuote_(body) {
   var content = loadContent_(false);
   var visible = (content.branches || []).filter(function (b) { return b.visible !== false; });
   var check = Shared.validateQuote(body, { branchIds: visible.map(function (b) { return b.id; }) });
-  if (check.silent) return { sent: true, recipientsCount: 0 };
-  if (!check.ok) throwApi_("VALIDATION", "Revisa los datos del formulario.", check.errors);
+  if (check.silent) return { sent: true, recipientsCount: 0, lines: 0 };
+  if (!check.ok) {
+    var itemsOnly = check.errors.every(function (e) { return e.field === "items"; });
+    throwApi_("VALIDATION", itemsOnly ? "Revisa los productos de tu lista." : "Revisa los datos del formulario.", check.errors);
+  }
 
   var contactKey = "quote:contact:" + sha256Hex_(String(body.contact).trim().toLowerCase());
   if (!hit_("quote:minute", 10, 60) || !hit_("quote:hour", 60, 3600) || !hit_(contactKey, 3, 3600)) {
     throwApi_("RATE_LIMITED", MSG_RATE_QUOTE);
   }
   var branch = visible.filter(function (b) { return b.id === body.branchId; })[0];
-  return deliverQuote_(body, branch, content.site || {});
+  // Every line is re-resolved from the Sheet: client labels and prices are never trusted.
+  var lines = Shared.resolveQuoteLines(check.items, content);
+  return deliverQuote_(body, branch, content.site || {}, lines);
 }
 
 // Sends the mail and logs the row. Mail first, log second.
-function deliverQuote_(body, branch, site) {
+function deliverQuote_(body, branch, site, lines) {
+  var items = lines || [];
   var to = Shared.resolveRecipients(branch, site);
   if (to.length === 0) {
     throwApi_("NOT_CONFIGURED", "El formulario aún no tiene destinatarios. Escríbenos por WhatsApp.");
   }
   var now = new Date();
   var when = Utilities.formatDate(now, "America/Mexico_City", "dd/MM/yyyy HH:mm");
-  var mail = Shared.buildQuoteEmail(body, branch, site, now.toISOString(), when);
+  var mail = Shared.buildQuoteEmail(body, branch, site, now.toISOString(), when, items);
   var status = "Enviado";
   var failure = null;
   try {
@@ -475,21 +546,25 @@ function deliverQuote_(body, branch, site) {
     status = "Error: " + String(err && err.message ? err.message : err).slice(0, 200);
     failure = err;
   }
-  logQuote_([
-    when, branch.name, body.name, body.business || "", body.contact, body.need, body.message || "",
-    to.join(", "), status,
-  ]);
+  logQuote_({
+    "Fecha": when, "Sucursal": branch.name, "Nombre": body.name, "Negocio": body.business || "",
+    "Contacto": body.contact, "Qué busca": body.need, "Mensaje": body.message || "",
+    "Destinatarios": to.join(", "), "Estatus envío": status, "Productos": Shared.quoteLinesToCell(items)
+  });
   if (failure) {
     throwApi_("SERVER_ERROR", "No pudimos enviar tu solicitud. Intenta de nuevo o escríbenos por WhatsApp.");
   }
-  return { sent: true, recipientsCount: to.length };
+  return { sent: true, recipientsCount: to.length, lines: items.length };
 }
 
-function logQuote_(cells) {
+// byHeader: { <header name>: value }. The row is as wide as the live header row and each value
+// lands under its own header, so an appended, reordered or owner-inserted column never shifts data.
+function logQuote_(byHeader) {
   try {
     var sheet = spreadsheet_().getSheetByName(Shared.SCHEMA.logs.quotes.tab);
     if (!sheet) return;
-    var row = cells.map(function (c) { return String(c == null ? "" : c); });
+    var head = sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), 1)).getValues()[0];
+    var row = Shared.logRowFromHeaders(head, byHeader);
     var lock = LockService.getScriptLock();
     var locked = false;
     try { locked = lock.tryLock(5000); } catch (e) { locked = false; }
@@ -513,13 +588,22 @@ function setup() {
   Shared.SECTION_NAMES.forEach(function (name) {
     var def = Shared.SCHEMA.sections[name];
     var sheet = ensureSheet_(ss, def.tab, sectionHeaders_(def), report);
-    seedTab_(sheet, name, def, report); // before formatTab_: checkboxes fill every row
+    // The catalog tabs are NOT seeded here: migrateCatalog_ below must see them empty so the
+    // owner's real machines reach the catalog before any example is added.
+    if (CATALOG_SECTIONS.indexOf(name) === -1) seedTab_(sheet, name, def, report); // before formatTab_: checkboxes fill every row
     formatTab_(sheet, def);
   });
+  // Migrate only once: after the first run the flag stays set, so emptying Categorias on purpose
+  // and re-running setup() does not resurrect legacy rows or examples (use migrateCatalog()).
+  if (props_().getProperty("CATALOG_MIGRATED") !== "1") {
+    migrateCatalog_(ss, report);
+    props_().setProperty("CATALOG_MIGRATED", "1");
+  }
+  seedMissingSettings_(ss, report);
   var q = Shared.SCHEMA.logs.quotes;
   var logSheet = ensureSheet_(ss, q.tab, q.headers, report);
-  logSheet.setColumnWidths(1, q.headers.length, 160);
-  logSheet.getRange(2, 1, Math.max(logSheet.getMaxRows() - 1, 1), q.headers.length).setNumberFormat("@");
+  logSheet.setColumnWidths(1, logSheet.getLastColumn(), 160);
+  logSheet.getRange(2, 1, Math.max(logSheet.getMaxRows() - 1, 1), logSheet.getLastColumn()).setNumberFormat("@");
 
   var p = props_();
   if (!p.getProperty("ADMIN_TOKEN_SECRET")) {
@@ -537,7 +621,8 @@ function setup() {
     report.push('Se creó la carpeta de Drive "' + DRIVE_FOLDER_NAME + '".');
   }
   report.push(applyAdminPassword_());
-  CacheService.getScriptCache().remove(CONTENT_CACHE_KEY);
+  setUpdatedAt_(ss, new Date().toISOString());
+  clearCache_();
   console.log("setup() terminó:\n- " + report.join("\n- "));
 }
 
@@ -585,7 +670,12 @@ function formatTab_(sheet, def) {
     var range = sheet.getRange(2, col, rows, 1);
     if (f.type === "boolean") {
       range.setDataValidation(SpreadsheetApp.newDataValidation().requireCheckbox().build());
-    } else if (f.type === "digits" || f.type === "date" || f.key === "id" || f.key === "categoryId") {
+    } else if (f.type === "enum") {
+      range.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(f.values, true).setAllowInvalid(false).build());
+    } else if (f.type === "money") {
+      range.setNumberFormat("#,##0.00");
+    } else if (f.type === "digits" || f.type === "date" || f.key === "id" || f.key === "categoryId" ||
+               f.key === "productId" || f.key === "slug" || f.key === "sku") {
       range.setNumberFormat("@"); // keep leading zeros and ISO dates as typed
     }
   });
@@ -619,6 +709,109 @@ function seedTab_(sheet, name, def, report) {
   var out = Shared.itemsToRows(name, head, items);
   writeRows_(sheet, def, head, out);
   report.push("Datos iniciales cargados en " + def.tab);
+}
+
+// Row number of the last row with real content (1 = only the header).
+function lastDataRow_(sheet) {
+  var lastRow = sheet.getLastRow();
+  if (lastRow < 2) return 1;
+  var rows = sheet.getRange(2, 1, lastRow - 1, Math.max(sheet.getLastColumn(), 1)).getValues();
+  for (var i = rows.length - 1; i >= 0; i--) if (!Shared.isBlankRow(rows[i])) return i + 2;
+  return 1;
+}
+
+function existingIds_(ss, name) {
+  var tab = readTab_(ss, name);
+  var ids = {};
+  Shared.rowsToItems(name, tab.header, tab.rows).forEach(function (it) { ids[it.id] = true; });
+  return ids;
+}
+
+// Appends items below the last real row of a catalog tab.
+function appendItems_(ss, name, items) {
+  if (!items.length) return;
+  var def = Shared.SCHEMA.sections[name];
+  var sheet = ss.getSheetByName(def.tab);
+  var head = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  writeRows_(sheet, def, head, Shared.itemsToRows(name, head, items), lastDataRow_(sheet) + 1);
+  formatTab_(sheet, def);
+}
+
+// Round 1 -> catalog (spec 16.7). Runs only while Categorias has no rows, and setup() calls it
+// once (script property CATALOG_MIGRATED), so re-running setup() changes nothing and never
+// resurrects an example the owner deleted. migrateCatalog() is the explicit re-run.
+//  1. the live CategoriasMaquinaria / Insumos / Maquinas rows become categories / products / variants;
+//  2. then the DEFAULT_CONTENT examples are appended, but only under lines that have no visible
+//     product of their own (an example never sits next to one of the owner's real machines).
+function migrateCatalog_(ss, report) {
+  var catDef = Shared.SCHEMA.sections.categories;
+  var catSheet = ss.getSheetByName(catDef.tab);
+  if (!catSheet || tabHasData_(catSheet)) return;
+
+  var legacy = {};
+  ["machineryCategories", "machines", "insumos"].forEach(function (name) {
+    var def = Shared.SCHEMA.sections[name];
+    if (!ss.getSheetByName(def.tab)) { legacy[name] = []; return; }
+    var tab = readTab_(ss, name);
+    legacy[name] = Shared.rowsToItems(name, tab.header, tab.rows);
+  });
+  var cat = Shared.legacyToCatalog(legacy);
+
+  var haveProducts = existingIds_(ss, "products");
+  var haveVariants = existingIds_(ss, "variants");
+  var products = cat.products.filter(function (p) { return !haveProducts[p.id]; });
+  var variants = cat.variants.filter(function (v) { return !haveVariants[v.id]; });
+
+  var d = DEFAULT_CONTENT;
+  var haveCat = {};
+  var visibleIn = {};
+  cat.categories.forEach(function (c) { haveCat[c.id] = true; });
+  products.forEach(function (p) { if (p.visible) visibleIn[p.categoryId] = true; });
+  var categories = cat.categories.slice();
+  (d.categories || []).forEach(function (c) {
+    if (!haveCat[c.id]) { categories.push(JSON.parse(JSON.stringify(c))); haveCat[c.id] = true; }
+  });
+  var addedProducts = {};
+  var examples = 0;
+  (d.products || []).forEach(function (p) {
+    if (!haveCat[p.categoryId] || visibleIn[p.categoryId] || haveProducts[p.id] || addedProducts[p.id]) return;
+    products.push(JSON.parse(JSON.stringify(p)));
+    addedProducts[p.id] = true;
+    examples++;
+  });
+  (d.variants || []).forEach(function (v) {
+    if (addedProducts[v.productId] && !haveVariants[v.id]) variants.push(JSON.parse(JSON.stringify(v)));
+  });
+
+  appendItems_(ss, "categories", categories);
+  appendItems_(ss, "products", products);
+  appendItems_(ss, "variants", variants);
+  report.push("Catálogo migrado: " + cat.categories.length + " categorías, " + cat.products.length + " productos, " + cat.variants.length + " variantes");
+  if (examples) report.push("Ejemplos agregados: " + examples + " productos");
+}
+
+// Appends the site keys introduced with the catalog that Ajustes does not have yet.
+function seedMissingSettings_(ss, report) {
+  var tab = readTab_(ss, "site");
+  var sheet = ss.getSheetByName(Shared.SCHEMA.sections.site.tab);
+  var idx = Shared.headerIndex(tab.header, "site");
+  var have = {};
+  tab.rows.forEach(function (r) { have[String(r[idx.key] == null ? "" : r[idx.key]).trim()] = true; });
+  var labels = {};
+  Shared.SCHEMA.siteKeys.forEach(function (k) { labels[k.key] = k.label; });
+  var data = [];
+  CATALOG_SITE_KEYS.forEach(function (k) {
+    if (have[k] || DEFAULT_CONTENT.site[k] == null) return;
+    var row = [];
+    for (var c = 0; c < tab.header.length; c++) row.push("");
+    row[idx.key] = k;
+    row[idx.value] = DEFAULT_CONTENT.site[k];
+    if (idx.description !== -1) row[idx.description] = labels[k] || "";
+    data.push(row);
+  });
+  if (!data.length) return;
+  writeRows_(sheet, Shared.SCHEMA.sections.site, tab.header, data, lastDataRow_(sheet) + 1);
+  report.push("Textos nuevos agregados a Ajustes: " + data.length);
 }
 
 // getLastRow() counts checkbox rows, so look for a row with real content instead.
@@ -661,8 +854,24 @@ function rotateTokenSecret() {
 }
 
 function clearCache() {
-  CacheService.getScriptCache().remove(CONTENT_CACHE_KEY);
+  clearCache_();
   console.log("Caché de contenido borrada.");
+}
+
+// Editor entry point: Ejecutar -> migrateCatalog. Use it when the owner emptied the Categorias
+// tab on purpose and wants the legacy Maquinaria / Insumos tabs migrated again.
+function migrateCatalog() {
+  var ss = spreadsheet_();
+  var report = [];
+  CATALOG_SECTIONS.forEach(function (name) {
+    var def = Shared.SCHEMA.sections[name];
+    formatTab_(ensureSheet_(ss, def.tab, sectionHeaders_(def), report), def);
+  });
+  migrateCatalog_(ss, report);
+  props_().setProperty("CATALOG_MIGRATED", "1");
+  setUpdatedAt_(ss, new Date().toISOString());
+  clearCache_();
+  console.log("migrateCatalog() terminó:\n- " + (report.join("\n- ") || "Categorias ya tenía datos: no se hizo nada."));
 }
 
 function testQuote() {
