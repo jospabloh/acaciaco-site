@@ -63,7 +63,24 @@ var DEFAULT_CONTENT = {
     "alliancesTitle": "Trabajamos con los mejores.",
     "alliancesIntro": "Marcas y proveedores con los que surtimos tu barra.",
     "footerTagline": "Insumos y maquinaria para cafeterías, restaurantes y barras de bebidas. Aguascalientes · Durango · Envíos a toda la República.",
-    "legalName": "Baristop Distribuidora"
+    "legalName": "Baristop Distribuidora",
+    "navGroupMachinery": "Maquinaria",
+    "navGroupSupplies": "Insumos",
+    "navCtaShort": "Cotiza",
+    "catalogIndexTitle": "Catálogo",
+    "catalogIndexIntro": "Equipo y consumibles para tu barra. Elige una línea o busca un producto.",
+    "groupMachineryIntro": "Cafeteras, molinos y licuadoras con asesoría para elegir según tu volumen.",
+    "groupSuppliesIntro": "Café, bases, jarabes, salsas y tisanas para que tu carta salga igual en cada turno.",
+    "featuredTitle": "Lo que más piden las barras.",
+    "featuredIntro": "Una selección de equipo e insumos para empezar.",
+    "variantLabel": "Presentación",
+    "priceNote": "Precios en MXN. Confirma IVA y vigencia al cotizar.",
+    "priceToQuoteNote": "Te lo cotizamos por WhatsApp o desde tu lista.",
+    "availabilityNote": "Existencias actualizadas por sucursal. Confirma al cotizar.",
+    "catalogEmptyCategory": "Estamos cargando los productos de esta línea. Cotiza por WhatsApp y te enviamos opciones.",
+    "quoteListTitle": "Mi cotización",
+    "quoteListIntro": "Agrega lo que necesites y envíanos la lista. Te respondemos con precios y disponibilidad.",
+    "quoteListSuccess": "¡Listo! Recibimos tu lista. Te respondemos en horario de atención."
   },
   "social": [
     {
@@ -277,7 +294,7 @@ var DEFAULT_CONTENT = {
       "visible": false,
       "title": "Frappé de taro",
       "description": "Descripción corta de la receta",
-      "photo": "assets/ejemplo/frappe-taro.jpg",
+      "photo": "assets/placeholders/recipe-4x5.svg",
       "videoUrl": ""
     }
   ],
@@ -324,7 +341,393 @@ var DEFAULT_CONTENT = {
     }
   ],
   "announcements": [],
-  "promos": []
+  "promos": [],
+  "categories": [
+    {
+      "id": "cafeteras",
+      "order": 10,
+      "visible": true,
+      "group": "maquinaria",
+      "name": "Cafeteras espresso",
+      "tagline": "Semi y automáticas",
+      "description": "Equipos semiautomáticos y automáticos para barra, con asesoría según tu volumen.",
+      "image": ""
+    },
+    {
+      "id": "molinos",
+      "order": 20,
+      "visible": true,
+      "group": "maquinaria",
+      "name": "Molinos",
+      "tagline": "Molienda constante",
+      "description": "Molinos para espresso y filtrado, de uso continuo.",
+      "image": ""
+    },
+    {
+      "id": "licuadoras",
+      "order": 30,
+      "visible": true,
+      "group": "maquinaria",
+      "name": "Licuadoras",
+      "tagline": "Para frappés y smoothies",
+      "description": "Licuadoras de alto rendimiento para bebidas frías.",
+      "image": ""
+    },
+    {
+      "id": "cafe",
+      "order": 40,
+      "visible": true,
+      "group": "insumos",
+      "name": "Café",
+      "tagline": "Finca en Coatepec, Veracruz",
+      "description": "Trabajamos con una finca en Coatepec, Veracruz. Sin intermediarios.",
+      "image": ""
+    },
+    {
+      "id": "polvos",
+      "order": 50,
+      "visible": true,
+      "group": "insumos",
+      "name": "Polvos y bases",
+      "tagline": "Frappé, chai, taro y matcha",
+      "description": "Bases para frappé, chai, taro y matcha. Marcas Saju y Samlet.",
+      "image": "assets/ejemplo/frappe-capuchino.jpg"
+    },
+    {
+      "id": "jarabes",
+      "order": 60,
+      "visible": true,
+      "group": "insumos",
+      "name": "Jarabes y salsas",
+      "tagline": "Proveedor autorizado Yalini",
+      "description": "Jarabes y salsas para bebidas frías y calientes. Proveedor autorizado Yalini.",
+      "image": ""
+    },
+    {
+      "id": "tisanas",
+      "order": 70,
+      "visible": true,
+      "group": "insumos",
+      "name": "Tisanas",
+      "tagline": "Proveedor autorizado Soy Té",
+      "description": "Infusiones de origen para tu carta. Proveedor autorizado Soy Té.",
+      "image": ""
+    }
+  ],
+  "products": [
+    {
+      "id": "cafetera-ejemplo",
+      "order": 10,
+      "visible": true,
+      "categoryId": "cafeteras",
+      "brand": "",
+      "name": "Cafetera espresso de 2 grupos (ejemplo)",
+      "slug": "cafetera-espresso-2-grupos-ejemplo",
+      "summary": "Producto de ejemplo: edítalo o bórralo desde el panel.",
+      "description": "Este es un producto de ejemplo para mostrar cómo se ve una ficha. Sustituye el nombre, la marca, las fotos, las especificaciones y la guía de uso por los datos reales del equipo.",
+      "photos": [],
+      "specs": [
+        "Grupos: Por definir",
+        "Caldera: Por definir",
+        "Voltaje: Por definir",
+        "Dimensiones: Por definir"
+      ],
+      "usage": "Para quién: barras con volumen medio y alto.\n- Dosis sugerida: por definir según el molino y el café.\n- Incluye asesoría de instalación y puesta en marcha.",
+      "relatedRecipes": [],
+      "relatedProducts": [
+        "molino-ejemplo"
+      ],
+      "featured": true
+    },
+    {
+      "id": "molino-ejemplo",
+      "order": 10,
+      "visible": true,
+      "categoryId": "molinos",
+      "brand": "",
+      "name": "Molino para espresso (ejemplo)",
+      "slug": "molino-espresso-ejemplo",
+      "summary": "Producto de ejemplo: edítalo o bórralo desde el panel.",
+      "description": "Producto de ejemplo. Describe aquí el tipo de molienda, el uso recomendado y qué lo distingue.",
+      "photos": [],
+      "specs": [
+        "Tipo de muela: Por definir",
+        "Capacidad de tolva: Por definir",
+        "Voltaje: Por definir"
+      ],
+      "usage": "Para quién: cafeterías que preparan espresso todo el día.\n- Calibra la molienda cada vez que cambies de café.",
+      "relatedRecipes": [],
+      "relatedProducts": [
+        "cafetera-ejemplo"
+      ],
+      "featured": false
+    },
+    {
+      "id": "licuadora-ejemplo",
+      "order": 10,
+      "visible": true,
+      "categoryId": "licuadoras",
+      "brand": "",
+      "name": "Licuadora para frappés (ejemplo)",
+      "slug": "licuadora-frappes-ejemplo",
+      "summary": "Producto de ejemplo: edítalo o bórralo desde el panel.",
+      "description": "Producto de ejemplo. Describe la potencia, el vaso y los programas.",
+      "photos": [],
+      "specs": [
+        "Potencia: Por definir",
+        "Vaso: Por definir",
+        "Programas: Por definir"
+      ],
+      "usage": "Para quién: barras con carta de bebidas frías.\n- Usa hielo en cubo pequeño para proteger las aspas.",
+      "relatedRecipes": [
+        "frappe-taro"
+      ],
+      "relatedProducts": [
+        "saju-taro-ejemplo"
+      ],
+      "featured": false
+    },
+    {
+      "id": "cafe-coatepec-ejemplo",
+      "order": 10,
+      "visible": true,
+      "categoryId": "cafe",
+      "brand": "Por definir",
+      "name": "Café de Coatepec (ejemplo)",
+      "slug": "cafe-coatepec-ejemplo",
+      "summary": "Producto de ejemplo: edítalo o bórralo desde el panel.",
+      "description": "Producto de ejemplo. Describe el origen, el tueste y las notas.",
+      "photos": [],
+      "specs": [
+        "Origen: Coatepec, Veracruz",
+        "Tueste: Por definir",
+        "Presentaciones: Por definir"
+      ],
+      "usage": "Para quién: espresso y métodos de filtrado.\n- Dosis sugerida: por definir según tu receta.",
+      "relatedRecipes": [],
+      "relatedProducts": [
+        "molino-ejemplo"
+      ],
+      "featured": true
+    },
+    {
+      "id": "saju-taro-ejemplo",
+      "order": 10,
+      "visible": true,
+      "categoryId": "polvos",
+      "brand": "Saju",
+      "name": "Base para frappé sabor taro (ejemplo)",
+      "slug": "saju-taro-ejemplo",
+      "summary": "Producto de ejemplo: edítalo o bórralo desde el panel.",
+      "description": "Producto de ejemplo. Describe el sabor, el rendimiento por bolsa y con qué se combina.",
+      "photos": [],
+      "specs": [
+        "Marca: Saju",
+        "Presentación: Por definir",
+        "Rendimiento: Por definir"
+      ],
+      "usage": "Sugerencia de uso: por definir (gramos por bebida, leche o agua, hielo).\n- Combina con un jarabe de la línea Yalini (sabor por definir).",
+      "relatedRecipes": [
+        "frappe-taro"
+      ],
+      "relatedProducts": [
+        "samlet-moca-ejemplo",
+        "licuadora-ejemplo"
+      ],
+      "featured": true
+    },
+    {
+      "id": "samlet-moca-ejemplo",
+      "order": 20,
+      "visible": true,
+      "categoryId": "polvos",
+      "brand": "Samlet",
+      "name": "Base para frappé sabor moca (ejemplo)",
+      "slug": "samlet-moca-ejemplo",
+      "summary": "Producto de ejemplo: edítalo o bórralo desde el panel.",
+      "description": "Producto de ejemplo. Describe el sabor y el rendimiento por bolsa.",
+      "photos": [],
+      "specs": [
+        "Marca: Samlet",
+        "Presentación: Por definir",
+        "Rendimiento: Por definir"
+      ],
+      "usage": "Sugerencia de uso: por definir.",
+      "relatedRecipes": [
+        "frappe-capuchino"
+      ],
+      "relatedProducts": [
+        "saju-taro-ejemplo"
+      ],
+      "featured": false
+    },
+    {
+      "id": "yalini-jarabe-ejemplo",
+      "order": 10,
+      "visible": true,
+      "categoryId": "jarabes",
+      "brand": "Yalini",
+      "name": "Jarabe para bebidas (ejemplo)",
+      "slug": "yalini-jarabe-ejemplo",
+      "summary": "Producto de ejemplo: edítalo o bórralo desde el panel.",
+      "description": "Producto de ejemplo. Cada sabor va como una presentación distinta.",
+      "photos": [],
+      "specs": [
+        "Marca: Yalini",
+        "Presentación: Por definir",
+        "Sabores: Por definir"
+      ],
+      "usage": "Sugerencia de uso: por definir (ml por bebida).",
+      "relatedRecipes": [],
+      "relatedProducts": [
+        "saju-taro-ejemplo"
+      ],
+      "featured": true
+    },
+    {
+      "id": "soyte-tisana-ejemplo",
+      "order": 10,
+      "visible": true,
+      "categoryId": "tisanas",
+      "brand": "Soy Té",
+      "name": "Tisana de origen (ejemplo)",
+      "slug": "soyte-tisana-ejemplo",
+      "summary": "Producto de ejemplo: edítalo o bórralo desde el panel.",
+      "description": "Producto de ejemplo. Describe la mezcla y el tiempo de infusión.",
+      "photos": [],
+      "specs": [
+        "Marca: Soy Té",
+        "Presentación: Por definir",
+        "Infusión: Por definir"
+      ],
+      "usage": "Sugerencia de uso: por definir (gramos, temperatura y tiempo).",
+      "relatedRecipes": [],
+      "relatedProducts": [],
+      "featured": false
+    }
+  ],
+  "variants": [
+    {
+      "id": "cafetera-ejemplo-2g",
+      "order": 10,
+      "visible": true,
+      "productId": "cafetera-ejemplo",
+      "name": "2 grupos",
+      "sku": "",
+      "price": null,
+      "unit": "pieza",
+      "availability": {},
+      "image": ""
+    },
+    {
+      "id": "molino-ejemplo-std",
+      "order": 10,
+      "visible": true,
+      "productId": "molino-ejemplo",
+      "name": "Modelo estándar",
+      "sku": "",
+      "price": null,
+      "unit": "pieza",
+      "availability": {},
+      "image": ""
+    },
+    {
+      "id": "licuadora-ejemplo-std",
+      "order": 10,
+      "visible": true,
+      "productId": "licuadora-ejemplo",
+      "name": "Modelo estándar",
+      "sku": "",
+      "price": null,
+      "unit": "pieza",
+      "availability": {},
+      "image": ""
+    },
+    {
+      "id": "cafe-coatepec-p1",
+      "order": 10,
+      "visible": true,
+      "productId": "cafe-coatepec-ejemplo",
+      "name": "Presentación 1 (ejemplo)",
+      "sku": "",
+      "price": null,
+      "unit": "",
+      "availability": {},
+      "image": ""
+    },
+    {
+      "id": "cafe-coatepec-p2",
+      "order": 20,
+      "visible": true,
+      "productId": "cafe-coatepec-ejemplo",
+      "name": "Presentación 2 (ejemplo)",
+      "sku": "",
+      "price": null,
+      "unit": "",
+      "availability": {},
+      "image": ""
+    },
+    {
+      "id": "saju-taro-p1",
+      "order": 10,
+      "visible": true,
+      "productId": "saju-taro-ejemplo",
+      "name": "Presentación 1 (ejemplo)",
+      "sku": "",
+      "price": null,
+      "unit": "",
+      "availability": {},
+      "image": ""
+    },
+    {
+      "id": "samlet-moca-p1",
+      "order": 10,
+      "visible": true,
+      "productId": "samlet-moca-ejemplo",
+      "name": "Presentación 1 (ejemplo)",
+      "sku": "",
+      "price": null,
+      "unit": "",
+      "availability": {},
+      "image": ""
+    },
+    {
+      "id": "yalini-sabor-1",
+      "order": 10,
+      "visible": true,
+      "productId": "yalini-jarabe-ejemplo",
+      "name": "Sabor 1 (ejemplo)",
+      "sku": "",
+      "price": null,
+      "unit": "",
+      "availability": {},
+      "image": ""
+    },
+    {
+      "id": "yalini-sabor-2",
+      "order": 20,
+      "visible": true,
+      "productId": "yalini-jarabe-ejemplo",
+      "name": "Sabor 2 (ejemplo)",
+      "sku": "",
+      "price": null,
+      "unit": "",
+      "availability": {},
+      "image": ""
+    },
+    {
+      "id": "soyte-tisana-p1",
+      "order": 10,
+      "visible": true,
+      "productId": "soyte-tisana-ejemplo",
+      "name": "Presentación 1 (ejemplo)",
+      "sku": "",
+      "price": null,
+      "unit": "",
+      "availability": {},
+      "image": ""
+    }
+  ]
 };
 
 if (typeof module === "object" && module.exports) module.exports = DEFAULT_CONTENT;

@@ -45,6 +45,12 @@
       help: "Puedes subir la foto tal cual sale de tu teléfono (hasta 12 MB); la ajustamos automáticamente a 1080 × 1350 px. Foto vertical de la bebida. Formatos: JPG o WebP." },
     "alliances.logo": { w: 600, h: 300, maxKB: 150, keepAlpha: true, allowSvg: true, placeholder: "logo-2x1.svg",
       help: "Puedes subir la foto tal cual sale de tu teléfono (hasta 12 MB); la ajustamos automáticamente a 600 × 300 px. Logo con fondo transparente. Formatos: PNG o SVG." },
+    "categories.image": { w: 1200, h: 800, maxKB: 400, keepAlpha: false, allowSvg: false, placeholder: "category-3x2.svg",
+      help: "Foto representativa de la línea, 1200 × 800 px, JPG o WebP, máx. 400 KB. Se ve en el menú y en las tarjetas." },
+    "products.photos": { w: 1200, h: 1200, maxKB: 400, keepAlpha: true, allowSvg: false, placeholder: "product-1x1.svg",
+      help: "Fotos cuadradas del producto sobre fondo claro, 1200 × 1200 px, JPG, WebP o PNG, máx. 400 KB cada una. La primera es la principal; hasta 6." },
+    "variants.image": { w: 1200, h: 1200, maxKB: 400, keepAlpha: true, allowSvg: false, placeholder: "product-1x1.svg",
+      help: "Opcional: foto de esta presentación o sabor, 1200 × 1200 px. Si la dejas vacía se usan las fotos del producto." },
     "promos.image": { w: 1200, h: 675, maxKB: 350, keepAlpha: false, allowSvg: false, placeholder: "promo-16x9.svg",
       help: "Puedes subir la foto tal cual sale de tu teléfono (hasta 12 MB); la ajustamos automáticamente a 1200 × 675 px. Imagen horizontal. Formatos: JPG o WebP." }
   };
@@ -56,7 +62,10 @@
 
   var SITE_GROUPS = [
     { title: "Menú y botón principal", fields: [
-      t("navCta", "Texto del botón principal", { help: "Aparece en el menú y en la portada." })
+      t("navCta", "Texto del botón principal", { help: "Aparece en el menú y en la portada." }),
+      t("navCtaShort", "Texto corto del botón (pantallas medianas)", { help: "Se usa en lugar del texto principal cuando el menú se queda sin espacio." }),
+      t("navGroupMachinery", "Menú: nombre del grupo de maquinaria", { help: "Por ejemplo Maquinaria." }),
+      t("navGroupSupplies", "Menú: nombre del grupo de insumos", { help: "Por ejemplo Insumos." })
     ] },
     { title: "Portada", fields: [
       t("heroEyebrow", "Frase pequeña (en tinto)"),
@@ -83,7 +92,18 @@
     ] },
     { title: "Catálogo", fields: [
       t("catalogTitle", "Título de la sección"),
-      t("catalogIntro", "Introducción", { long: true })
+      t("catalogIntro", "Introducción", { long: true }),
+      t("catalogIndexTitle", "Página del catálogo — título"),
+      t("catalogIndexIntro", "Página del catálogo — introducción", { long: true, help: "Déjalo vacío para no mostrarlo." }),
+      t("groupMachineryIntro", "Página de maquinaria — introducción", { long: true, help: "Déjalo vacío para no mostrarlo." }),
+      t("groupSuppliesIntro", "Página de insumos — introducción", { long: true, help: "Déjalo vacío para no mostrarlo." }),
+      t("featuredTitle", "Productos destacados — título"),
+      t("featuredIntro", "Productos destacados — introducción", { long: true, help: "Déjalo vacío para no mostrarlo." }),
+      t("variantLabel", "Nombre del selector de presentaciones", { help: "Por ejemplo Presentación, Sabor o Modelo." }),
+      t("priceNote", "Nota debajo de los precios", { long: true, help: "Por ejemplo si los precios incluyen IVA y cuánto duran." }),
+      t("priceToQuoteNote", "Nota cuando no hay precio", { long: true }),
+      t("availabilityNote", "Nota debajo de las existencias", { long: true, help: "Déjalo vacío para no mostrarla." }),
+      t("catalogEmptyCategory", "Mensaje de una línea sin productos", { long: true })
     ] },
     { title: "Por qué Baristop", fields: [
       t("whyTitle", "Título de la sección"),
@@ -113,7 +133,10 @@
     { title: "Cotiza (textos del formulario)", fields: [
       t("quoteTitle", "Título"),
       t("quoteIntro", "Introducción", { long: true }),
-      t("quoteSuccess", "Mensaje al enviar la solicitud", { long: true })
+      t("quoteSuccess", "Mensaje al enviar la solicitud", { long: true }),
+      t("quoteListTitle", "Mi cotización — título"),
+      t("quoteListIntro", "Mi cotización — introducción", { long: true, help: "Déjalo vacío para no mostrarla." }),
+      t("quoteListSuccess", "Mi cotización — mensaje al enviar la lista", { long: true })
     ] },
     { title: QUOTE_GROUP, help:
       "Estos correos reciben una copia de todas las solicitudes de cotización, de las dos sucursales. No puede quedar vacío. Separa varios correos con comas. Los correos de cada sucursal se editan en Sucursales.",
@@ -133,7 +156,7 @@
   function f(key, label, type, o) {
     o = o || {};
     return { key: key, label: label, type: type || "text", required: !!o.required, help: o.help || "",
-      placeholder: o.placeholder || "", max: o.max || 0, ph: o.ph || "" };
+      placeholder: o.placeholder || "", max: o.max || 0, ph: o.ph || "", options: o.options || null };
   }
 
   var HOURS_HELP = "Una línea por horario";
@@ -177,6 +200,21 @@
         f("title", "Título (se muestra sobre la foto)", "text", { required: true, help: "Por ejemplo Maquinaria, Salsas, Jarabes o Polvos." }),
         f("image", "Imagen", "image"),
         f("alt", "Descripción de la imagen", "text", { help: "Para personas que no ven la imagen. Por ejemplo \"Cafetera espresso en una barra\"." })
+      ]
+    },
+    categories: {
+      content: "categories", idPrefix: "lineas", noun: "línea", addLabel: "+ Agregar línea", idFromName: true,
+      title: function (it) { return it.name || "Sin nombre"; },
+      subtitle: function (it) { return it.tagline || ""; },
+      imageKey: "image", imageSpec: "categories.image",
+      emptyText: "Todavía no hay líneas. Usa \"+ Agregar línea\" para crear la primera (por ejemplo Molinos o Jarabes).",
+      fields: [
+        f("group", "Grupo", "select", { required: true, help: "Define en qué parte del menú aparece la línea.",
+          options: [{ value: "maquinaria", label: "Maquinaria" }, { value: "insumos", label: "Insumos" }] }),
+        f("name", "Nombre", "text", { required: true, max: 60, ph: "Molinos" }),
+        f("tagline", "Subtítulo", "text", { help: "Texto corto debajo del nombre." }),
+        f("description", "Descripción", "textarea"),
+        f("image", "Imagen", "image")
       ]
     },
     machineryCategories: {
@@ -290,7 +328,10 @@
     "insumos.image": "foto vertical; la ajustamos a 1200 × 1500 px.",
     "recipes.photo": "foto vertical; la ajustamos a 1080 × 1350 px.",
     "alliances.logo": "logo con fondo transparente; lo ajustamos a 600 × 300 px (PNG o SVG).",
-    "promos.image": "foto horizontal; la ajustamos a 1200 × 675 px."
+    "promos.image": "foto horizontal; la ajustamos a 1200 × 675 px.",
+    "categories.image": "foto representativa de la línea, 1200 × 800 px, JPG o WebP, máx. 400 KB. Se ve en el menú y en las tarjetas.",
+    "products.photos": "fotos cuadradas sobre fondo claro, 1200 × 1200 px, JPG, WebP o PNG, máx. 400 KB cada una. La primera es la principal; hasta 6.",
+    "variants.image": "opcional, 1200 × 1200 px. Si la dejas vacía se usan las fotos del producto."
   };
   function specLine(key, prefix) {
     var txt = SPEC_SHORT[key];
@@ -314,12 +355,10 @@
     { id: "promos", label: "Promos", kind: "list", contents: ["promos"], def: "promos",
       help: "Tarjetas con imagen, texto y botón. Usa \"Desde\" y \"Hasta\" para que se oculten solas. Sin promos visibles, la sección no aparece.",
       specs: [specLine("promos.image")] },
-    { id: "machinery", label: "Maquinaria", kind: "machinery", contents: ["machineryCategories", "machines"],
-      help: "Primero las categorías (Cafeteras espresso, Molinos, Licuadoras). Dentro de cada una agrega los equipos con su foto, descripción y especificaciones (una por línea).",
-      specs: [specLine("machineryCategories.image", "Categoría: "), specLine("machines.image", "Equipo: ")] },
-    { id: "insumos", label: "Insumos", kind: "list", contents: ["insumos"], def: "insumos",
-      help: "Una tarjeta por línea de insumos. El texto corto va debajo del nombre; la descripción se muestra completa.",
-      specs: [specLine("insumos.image")] },
+    { id: "catalog", label: "Catálogo", kind: "catalog", contents: ["categories", "products", "variants"],
+      help: "Primero las líneas (categorías), luego los productos de cada línea y, dentro de cada producto, sus presentaciones (sabor, tamaño o modelo) con precio y existencias por sucursal. Los productos que dicen \"(ejemplo)\" son de muestra: edítalos o bórralos. Deja el precio vacío para mostrar \"Precio a cotizar\".",
+      helpAfter: "Las pestañas antiguas Maquinaria e Insumos de la hoja ya no se usan; el catálogo se edita aquí.",
+      specs: [specLine("categories.image", "Línea: "), specLine("products.photos", "Producto: "), specLine("variants.image", "Presentación: ")] },
     { id: "recipes", label: "Recetas", kind: "list", contents: ["recipes"], def: "recipes",
       help: "Sube una foto y/o pega el enlace del video (YouTube, Instagram o TikTok). Las recetas se abren en una pestaña nueva al tocar la tarjeta.",
       specs: [specLine("recipes.photo")] },
@@ -354,7 +393,7 @@
     def.fields.forEach(function (fd) {
       var v = item[fd.key];
       var str = typeof v === "string" ? v.trim() : v;
-      if (fd.required && fd.type !== "category" && (str === "" || str == null)) { errs[fd.key] = MSG.required; return; }
+      if (fd.required && fd.type !== "category" && fd.type !== "select" && (str === "" || str == null)) { errs[fd.key] = MSG.required; return; }
       switch (fd.type) {
         case "url":
           if (str && !isSafeHttpsUrl(str)) errs[fd.key] = MSG.url;
@@ -376,13 +415,16 @@
         case "date":
           if (str && !isYmd(str)) errs[fd.key] = MSG.date;
           break;
+        case "select":
+          if (!fd.options.some(function (o) { return o.value === str; })) errs[fd.key] = fd.key === "group" ? "Elige Maquinaria o Insumos." : MSG.required;
+          break;
         case "category":
           if (!str || (ctx && ctx.categoryIds && ctx.categoryIds.indexOf(str) === -1)) errs[fd.key] = "Elige una categoría.";
           break;
         default:
           break;
       }
-      if (fd.max && typeof str === "string" && str.length > fd.max) errs[fd.key] = MSG.tag;
+      if (fd.max && typeof str === "string" && str.length > fd.max) errs[fd.key] = fd.key === "subjectTag" ? MSG.tag : "Máximo " + fd.max + " caracteres.";
     });
     if (contentKey === "branches") {
       var tag = (item.subjectTag || "").trim();

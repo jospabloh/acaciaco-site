@@ -7,6 +7,7 @@
   var api = window.AdminApi;
   var S = window.AdminSections;
   var IMG = window.AdminImages;
+  var CAT = window.AdminCatalog;
   var el = ui.el;
 
   var DEMO_KEY = "baristop-v2:demo-content";
@@ -26,9 +27,15 @@
     saving: false,
     fieldErrors: {},      // Textos: { key: message }
     errorBox: [],         // [{ text }]
-    errorRows: {},        // list sections: { rowIndex: true }
-    machineryCat: null    // category id being viewed, or "__none"
+    errorRows: {},        // list sections: { "<key>:<id>": true }
+    cat: null,            // Catálogo view: { tab, group, catId, productId }
+    catErrors: {},        // Catálogo inline errors: { "<key>:<id>:<field>": message }
+    priceRaw: {},         // price boxes holding text that is not a valid price yet: { variantId: text }
+    catImported: false,   // the catalog was derived from the legacy Maquinaria / Insumos tabs
+    busy: 0               // uploads in flight inside the Catálogo editor
   };
+  var catalog = null;     // AdminCatalog instance (created in boot)
+  var lastImported = false;
 
   var $ = function (id) { return document.getElementById(id); };
   var dom = {};
@@ -92,8 +99,11 @@
     S.SITE_GROUPS.forEach(function (g) {
       g.fields.forEach(function (fd) { if (c.site[fd.key] == null) c.site[fd.key] = ""; });
     });
+    lastImported = CAT.normalize(c).imported;
     return c;
   }
+
+  function defaultCat() { return { tab: "lines", group: "all", catId: null, productId: null }; }
 
   function loadDefaults() {
     if (state.defaults) return Promise.resolve(state.defaults);
@@ -212,12 +222,14 @@
    * ============================================================ */
   function init(content) {
     state.content = normalizeContent(content);
+    state.catImported = lastImported;
     buildNav();
     showView("shell");
     dom["demo-badge"].hidden = !DEMO;
     dom["reset-demo"].hidden = !DEMO;
     dom["logout-btn"].hidden = DEMO;
     var saved = ui.ls.get(SECTION_KEY);
+    if (saved === "machinery" || saved === "insumos") saved = "catalog";
     var first = sectionById(state.section) || sectionById(saved) || S.SECTIONS[0];
     state.section = null;
     enterSection(first.id);
@@ -260,7 +272,10 @@
     state.fieldErrors = {};
     state.errorBox = [];
     state.errorRows = {};
-    state.machineryCat = null;
+    state.catErrors = {};
+    state.priceRaw = {};
+    state.cat = defaultCat();
+    state.busy = 0;
     state.saving = false;
     buildDraft(sec);
     syncNav();
@@ -275,6 +290,8 @@
       state.draft[k] = ui.clone(state.content[k]);
       state.snapshot[k] = JSON.stringify(state.draft[k]);
     });
+    // A catalog derived from the legacy tabs is unsaved by definition: force it dirty.
+    if (sec.kind === "catalog" && state.catImported) CAT.KEYS.forEach(function (k) { state.snapshot[k] = "imported"; });
   }
 
   function dirtyKeys() {
@@ -297,9 +314,7 @@
     var main = dom["content"];
     ui.clear(main);
 
-    var title = sec.label;
-    if (sec.kind === "machinery" && state.machineryCat) title = "Maquinaria";
-    main.appendChild(el("div", { cls: "section-head" }, el("h2", { text: title, attrs: { id: "section-title" } })));
+    main.appendChild(el("div", { cls: "section-head" }, el("h2", { text: sec.label, attrs: { id: "section-title", tabindex: "-1" } })));
     main.appendChild(buildHelp(sec));
 
     var errBox = el("div", { cls: "errors-box", attrs: { role: "alert", tabindex: "-1", id: "errors-box" } });
@@ -315,7 +330,7 @@
 
     if (sec.kind === "site") main.appendChild(renderSite(sec));
     else if (sec.kind === "list") main.appendChild(renderList(S.DEFS[sec.def], state.draft[sec.contents[0]], null));
-    else main.appendChild(renderMachinery());
+    else main.appendChild(catalog.render());
 
     main.appendChild(buildBar());
     refreshBar();
@@ -413,7 +428,7 @@
   /* ---------- list sections ---------- */
   function visibleSubset(list, filterFn) { return filterFn ? list.filter(filterFn) : list.slice(); }
 
-  /* opts: { filter, extraDefaults, extraActions(item) -> [nodes], addLabel, onDelete(item) -> Promise<bool>|undefined, itemBadge(item) } */
+  /* opts: { filter, extraDefaults, extraActions(item) -> [nodes], addLabel, emptyText, onDelete(item), itemBadge(item) -> string, itemBadges(item) -> [string] } */
   function renderList(def, list, opts) {
     opts = opts || {};
     var wrap = el("div");
@@ -481,6 +496,9 @@
       var b = opts.itemBadge(item);
       if (b) text.appendChild(el("span", { cls: "badge", text: b }));
     }
+    if (opts.itemBadges) {
+      opts.itemBadges(item).forEach(function (t) { if (t) text.appendChild(el("span", { cls: "badge", text: t })); });
+    }
     if (state.errorRows[def.content + ":" + item.id]) text.appendChild(el("span", { cls: "badge badge-warn", text: "Revisar" }));
     main.appendChild(text);
     li.appendChild(main);
@@ -522,70 +540,15 @@
   }
 
   function removeItem(def, list, item, opts) {
+    if (opts.onDelete) { opts.onDelete(item); return; }
     var name = def.title(item);
     var msg = "¿Eliminar «" + name + "»? Desaparecerá del sitio cuando guardes los cambios.";
-    var machinesOf = [];
-    if (def.content === "machineryCategories") {
-      machinesOf = state.draft.machines.filter(function (m) { return m.categoryId === item.id; });
-      if (machinesOf.length) msg = "Esta categoría tiene " + machinesOf.length + (machinesOf.length === 1 ? " equipo" : " equipos") + ". Se eliminarán también. Desaparecerán del sitio cuando guardes los cambios.";
-    }
     ui.confirm(msg, { title: "Eliminar", confirmLabel: "Eliminar", danger: true }).then(function (ok) {
       if (!ok) return;
       list.splice(list.indexOf(item), 1);
-      if (machinesOf.length) {
-        state.draft.machines = state.draft.machines.filter(function (m) { return m.categoryId !== item.id; });
-      }
       markDirty();
       render();
     });
-  }
-
-  /* ---------- Maquinaria (two levels) ---------- */
-  function renderMachinery() {
-    var cats = state.draft.machineryCategories;
-    var machines = state.draft.machines;
-    var wrap = el("div");
-    var catIds = cats.map(function (c) { return c.id; });
-
-    if (!state.machineryCat) {
-      var counts = {};
-      machines.forEach(function (m) { counts[m.categoryId] = (counts[m.categoryId] || 0) + 1; });
-      wrap.appendChild(el("p", { cls: "note", text: "Categorías. Abre una para ver y editar sus equipos." }));
-      wrap.appendChild(renderList(S.DEFS.machineryCategories, cats, {
-        itemBadge: function (it) { var n = counts[it.id] || 0; return n + (n === 1 ? " equipo" : " equipos"); },
-        extraActions: function (it) {
-          return [el("button", { cls: "btn btn-primary btn-small", text: "Ver equipos →", attrs: { type: "button", "aria-label": "Ver equipos de " + (it.name || "categoría") },
-            on: { click: function () { state.machineryCat = it.id; render(); window.scrollTo(0, 0); } } })];
-        }
-      }));
-      var orphans = machines.filter(function (m) { return catIds.indexOf(m.categoryId) === -1; });
-      if (orphans.length) {
-        wrap.appendChild(el("div", { cls: "item-card" }, [
-          el("div", { cls: "item-text" }, [
-            el("div", { cls: "item-title", text: "Sin categoría" }),
-            el("div", { cls: "item-sub", text: orphans.length + (orphans.length === 1 ? " equipo" : " equipos") + " sin una categoría válida. Ábrelos para asignarles una." })
-          ]),
-          el("div", { cls: "item-actions" }, el("button", { cls: "btn btn-secondary btn-small", text: "Ver equipos →", attrs: { type: "button" },
-            on: { click: function () { state.machineryCat = "__none"; render(); window.scrollTo(0, 0); } } }))
-        ]));
-      }
-      return wrap;
-    }
-
-    var isNone = state.machineryCat === "__none";
-    var cat = cats.filter(function (c) { return c.id === state.machineryCat; })[0];
-    var catName = isNone ? "Sin categoría" : (cat ? cat.name : "Categoría");
-    wrap.appendChild(el("div", { cls: "crumbs" }, [
-      el("button", { cls: "btn btn-secondary btn-small", text: "← Categorías", attrs: { type: "button" }, on: { click: function () { state.machineryCat = null; render(); } } }),
-      el("h3", { text: catName })
-    ]));
-    wrap.appendChild(renderList(S.DEFS.machines, machines, {
-      filter: function (m) { return isNone ? catIds.indexOf(m.categoryId) === -1 : m.categoryId === state.machineryCat; },
-      extraDefaults: isNone ? {} : { categoryId: state.machineryCat },
-      addLabel: "+ Agregar equipo",
-      emptyText: "Esta categoría todavía no tiene equipos. Usa \"+ Agregar equipo\"."
-    }));
-    return wrap;
   }
 
   /* ============================================================
@@ -598,6 +561,16 @@
       id = base + "-" + Date.now().toString(36) + (Math.random() < 0.5 ? "" : Math.floor(Math.random() * 36).toString(36));
     } while (list.some(function (x) { return x.id === id; }));
     return id.slice(0, 40);
+  }
+
+  /* Readable, unique id for a new line: it ends up in the public URL (catalogo?c=<id>). */
+  function idFromName(name, list) {
+    var base = (CAT.slugify(name) || "linea").slice(0, 36).replace(/-+$/, "");
+    if (base.length < 2) base = "linea";
+    var id = base;
+    var n = 2;
+    while (list.some(function (x) { return x.id === id; })) { id = base + "-" + n; n += 1; }
+    return id;
   }
 
   function emptyItem(def, list, extra) {
@@ -652,8 +625,7 @@
             return false;
           }
           normalizeWork();
-          var ctx = { categoryIds: state.draft.machineryCategories ? state.draft.machineryCategories.map(function (c) { return c.id; }) : [] };
-          var errs = S.validateItem(def.content, work, ctx);
+          var errs = S.validateItem(def.content, work, { categoryIds: [] });
           var keys = Object.keys(errs);
           // refresh inputs that were normalised (digits, trimmed text)
           def.fields.forEach(function (fd) { if (controls[fd.key].sync) controls[fd.key].sync(); });
@@ -666,6 +638,7 @@
             return false;
           }
           if (isNew) {
+            if (def.idFromName) work.id = idFromName(work.name, list);
             list.push(work);
           } else {
             var target = list.indexOf(item);
@@ -763,9 +736,24 @@
         syncFn = function () { rebuild(); };
         break;
       }
+      case "select": {
+        control = el("select", { attrs: { id: id } });
+        control.appendChild(el("option", { text: "Elige una opción…", props: { value: "" } }));
+        fd.options.forEach(function (o) { control.appendChild(el("option", { text: o.label, props: { value: o.value } })); });
+        control.value = work[fd.key] || "";
+        if (control.value !== (work[fd.key] || "")) control.value = "";
+        control.addEventListener("change", function () { work[fd.key] = control.value; });
+        describe(control);
+        if (fd.required) control.setAttribute("aria-required", "true");
+        focusNode = control; invalidTargets = [control];
+        syncFn = function () { control.value = work[fd.key] || ""; };
+        wrap.appendChild(el("label", { attrs: { for: id } }, labelContent));
+        wrap.appendChild(control);
+        break;
+      }
       case "category": {
         control = el("select", { attrs: { id: id } });
-        var cats = state.draft.machineryCategories || [];
+        var cats = [];
         control.appendChild(el("option", { text: "Elige una categoría…", props: { value: "" } }));
         cats.forEach(function (c) { control.appendChild(el("option", { text: c.name || c.id, props: { value: c.id } })); });
         control.value = work[fd.key] || "";
@@ -825,7 +813,7 @@
   }
 
   /* ---------- image field ---------- */
-  function buildImageControl(def, fd, work, id, busyFn) {
+  function buildImageControl(def, fd, work, id, busyFn, onChange) {
     var spec = S.IMAGE_SPECS[def.content + "." + fd.key];
     var node = el("div", { cls: "image-field" });
     var previewBox = el("div", { cls: "image-preview" });
@@ -851,7 +839,7 @@
       var cur = work[fd.key];
       var src = localPreview || resolveImg(cur);
       img.onerror = function () {
-        img.onerror = null;
+        img.onerror = function () { img.onerror = null; img.removeAttribute("src"); };
         img.src = placeholderSrc(spec.placeholder);
       };
       img.src = src || placeholderSrc(spec.placeholder);
@@ -878,6 +866,7 @@
       }).then(function (data) {
         if (myToken !== token) { busyFn(-1); return; }
         work[fd.key] = data.url;
+        if (onChange) onChange();
         pending = null;
         busyFn(-1);
         var dims = res.svg ? "SVG" : res.width + " × " + res.height;
@@ -932,6 +921,7 @@
       token += 1;
       revokeLocal();
       work[fd.key] = "";
+      if (onChange) onChange();
       retryBtn.hidden = true;
       setStatus("", "");
       refresh();
@@ -971,7 +961,8 @@
       bar.msg.textContent = st.text;
       bar.msg.className = "save-msg " + (st.kind === "ok" ? "ok" : "err");
     } else if (dirty) {
-      bar.msg.textContent = "Cambios sin publicar — pulsa «Guardar cambios» para que se vean en el sitio.";
+      var note = catalog && state.section === "catalog" ? catalog.barNote() : "";
+      bar.msg.textContent = "Cambios sin publicar — pulsa «Guardar cambios» para que se vean en el sitio." + (note ? " " + note : "");
     } else {
       bar.msg.textContent = "";
     }
@@ -989,10 +980,9 @@
   function discardChanges() {
     ui.confirm("¿Descartar todos los cambios sin guardar de esta sección?", { title: "Descartar cambios", confirmLabel: "Descartar", danger: true }).then(function (ok) {
       if (!ok) return;
-      var cat = state.machineryCat;
       buildDraft(sectionById(state.section));
       state.status = null; state.fieldErrors = {}; state.errorBox = []; state.errorRows = {};
-      state.machineryCat = cat;
+      state.catErrors = {}; state.priceRaw = {};
       render();
     });
   }
@@ -1017,10 +1007,15 @@
       });
       return msgs;
     }
-    var catIds = (state.draft.machineryCategories || state.content.machineryCategories).map(function (c) { return c.id; });
+    if (sec.kind === "catalog") {
+      catalog.validate().forEach(function (r) {
+        msgs.push((r.label ? "\"" + r.label + "\" — " : "") + (r.fieldLabel ? r.fieldLabel + ": " : "") + r.message);
+      });
+      return msgs;
+    }
     sec.contents.forEach(function (k) {
       var list = state.draft[k];
-      var res = S.validateRows(k, list, { categoryIds: catIds });
+      var res = S.validateRows(k, list, { categoryIds: [] });
       res.forEach(function (r) {
         var line = (r.label ? "\"" + r.label + "\" — " : "") + (r.fieldLabel ? r.fieldLabel + ": " : "") + r.message;
         msgs.push(line);
@@ -1033,6 +1028,11 @@
   function save_() {
     if (state.saving) return;
     var sec = sectionById(state.section);
+    if (state.busy > 0) {
+      state.status = { kind: "err", text: "Espera a que termine de subirse la imagen.", retry: false };
+      refreshBar();
+      return;
+    }
     var msgs = validateDraft(sec);
     if (msgs.length) {
       state.errorBox = msgs;
@@ -1053,9 +1053,9 @@
       if (!DEMO) {
         ui.ls.set(CACHE_KEY, JSON.stringify({ savedAt: Date.now(), content: stripPrivate(content) }));
       }
-      var cat = state.machineryCat;
+      state.catImported = false;
+      state.catErrors = {}; state.priceRaw = {};
       buildDraft(sec);
-      state.machineryCat = cat;
       state.saving = false;
       state.status = { kind: "ok", text: "Guardado · " + ui.timeHm() + " · Ya está en el sitio (puede tardar hasta 5 min en verse).", retry: false };
       render();
@@ -1081,39 +1081,8 @@
   }
 
   function saveLive(sec) {
-    var steps = [];
-    var dk = dirtyKeys();
-    if (sec.kind === "machinery") {
-      var catsDirty = dk.indexOf("machineryCategories") !== -1;
-      var machDirty = dk.indexOf("machines") !== -1;
-      var origCats = state.content.machineryCategories;
-      var finalIds = state.draft.machineryCategories.map(function (c) { return c.id; });
-      var removed = origCats.filter(function (c) { return finalIds.indexOf(c.id) === -1; });
-      var origIds = origCats.map(function (c) { return c.id; });
-      var added = finalIds.filter(function (id) { return origIds.indexOf(id) === -1; });
-      var catsFinal = sectionPayload("machineryCategories");
-      if (catsDirty) {
-        if (removed.length) {
-          // New categories must exist before machines reference them, and removed ones
-          // must outlive the machines that still point at them: union first, final last.
-          if (added.length) steps.push({ section: "machineryCategories", rows: catsFinal.concat(rewriteOrder(removed)).map(function (r, i) { r.order = (i + 1) * 10; return r; }) });
-        } else {
-          steps.push({ section: "machineryCategories", rows: catsFinal });
-        }
-      }
-      if (machDirty) steps.push({ section: "machines", rows: sectionPayload("machines") });
-      if (catsDirty && removed.length) steps.push({ section: "machineryCategories", rows: catsFinal });
-    } else {
-      steps.push({ section: sec.contents[0], rows: sectionPayload(sec.contents[0]) });
-    }
-    var last = null;
-    return steps.reduce(function (p, step) {
-      return p.then(function () {
-        return api.saveSection(step.section, step.rows).then(function (c) { last = c; });
-      });
-    }, Promise.resolve()).then(function () {
-      return last || state.content;
-    });
+    if (sec.kind === "catalog") return catalog.save();
+    return api.saveSection(sec.contents[0], sectionPayload(sec.contents[0]));
   }
 
   function saveDemo(sec) {
@@ -1150,8 +1119,48 @@
     }
   }
 
+  /* ---------- Catálogo wiring: view changes go through the history so Back climbs one level ---------- */
+  function catView() { var v = state.cat; return { tab: v.tab, group: v.group, catId: v.catId, productId: v.productId }; }
+
+  function goCat(patch, opts) {
+    opts = opts || {};
+    try { history.replaceState({ cat: catView() }, ""); } catch (e) { /* ignore */ }
+    Object.keys(patch).forEach(function (k) { state.cat[k] = patch[k]; });
+    try {
+      if (opts.replace) history.replaceState({ cat: catView() }, "");
+      else history.pushState({ cat: catView() }, "");
+    } catch (e) { /* history unavailable: the view still changes */ }
+    render(opts.focus);
+    if (!opts.replace) {
+      window.scrollTo(0, 0);
+      var h = $("section-title");
+      if (h) h.focus({ preventScroll: true });
+    }
+  }
+
+  function createCatalog() {
+    catalog = CAT.create({
+      state: state, DEMO: DEMO,
+      markDirty: markDirty, refreshBar: refreshBar, rerender: render, go: goCat,
+      renderList: renderList, resolveImg: resolveImg, placeholderSrc: placeholderSrc,
+      buildImageControl: buildImageControl,
+      busy: function (d) { state.busy = Math.max(0, state.busy + d); },
+      dirtyKeys: dirtyKeys,
+      payload: sectionPayload,
+      payloadOf: rewriteOrder,
+      normalizeContent: normalizeContent
+    });
+  }
+
   function boot() {
     collectDom();
+    createCatalog();
+    window.addEventListener("popstate", function (e) {
+      if (!catalog || state.section !== "catalog" || !state.draft) return;
+      var c = e.state && e.state.cat;
+      state.cat = c ? Object.assign(defaultCat(), c) : defaultCat();
+      render();
+    });
     var previewUrl = new URL("../?nocache=1", document.baseURI);
     if (DEMO) previewUrl.searchParams.set("demo", "1");
     dom["preview-link"].href = previewUrl.href;
